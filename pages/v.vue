@@ -4,7 +4,7 @@
       <v-col cols="12" class="px-0">
         <v-row>
           <v-col
-            cols="2"
+            cols="3"
             align="center"
             justify="center"
             @mouseleave="colortext = false"
@@ -48,18 +48,14 @@
               </v-btn>
             </v-list-item>
           </v-col>
-          <v-col
-            cols="2"
-            class="px-0 text-center"
-            @mouseleave="colortext = false"
-          >
+          <v-col cols="3" class="px-0">
             <v-btn
               height="100%"
-              width="100%"
               class="pa-0"
               text
               style="background-color: transparent; color: transparent"
               @mouseenter="colortext = 'web'"
+              @mouseleave="colortext = false"
             >
               <v-card-actions class="pa-0">
                 <v-card-text
@@ -71,77 +67,30 @@
                   Web
                 </v-card-text>
               </v-card-actions>
-              <v-card
-                v-if="colortext === 'web'"
-                flat
-                max-width="250"
-                class="mx-auto pa-"
-                style="top: 95%; position: fixed; max-height: 200px"
-              >
-                <v-list three-line class="pa-0 ma-0">
-                  <template v-for="(item, index) in itemsss">
-                    <v-btn
-                      class="pa-0 rounded-0"
-                      :key="index"
-                      style="
-                        width: 99%;
-                        min-height: 60px;
-                        max-height: 65px;
-                        background-color: #ffffb3;
-                      "
-                      @click="openLinkInNewTab(item.link)"
-                    >
-                      <v-list-item :key="item.title" class="py-0 my-0">
-                        <v-list-item-avatar color="my-auto">
-                          <v-img :src="item.avatar"></v-img>
-                        </v-list-item-avatar>
-
-                        <v-list-item-content>
-                          <v-list-item-title>{{
-                            sanitizeHtml(item.title)
-                          }}</v-list-item-title>
-                          <!-- <v-list-item-subtitle>{{
-                              sanitizeHtml(item.subtitle)
-                            }}</v-list-item-subtitle> -->
-                        </v-list-item-content>
-                      </v-list-item>
-                    </v-btn>
-                  </template>
-                </v-list>
-              </v-card>
             </v-btn>
+            
           </v-col>
-
-          <v-col cols="8" class="text-right" @mouseleave="colortext = false">
+          <v-col cols="6" class="text-right" @mouseleave="colortext = false">
             <v-card-text class="pa-0 text-right pr-12">
-              <v-tooltip bottom class="px-4">
-                <template #activator="{ on, attrs }">
-                  <v-btn
-                    height="100%"
-                    class="pa-0"
-                    text
-                    v-bind="attrs"
-                    v-on="on"
-                    style="background-color: transparent; color: transparent"
-                    @mouseenter="startTimer"
-                    @mouseleave="clearTimer"
-                    @click="$router.push('/pagetable')"
+              <v-btn
+                height="100%"
+                class="pa-0"
+                text
+                style="background-color: transparent; color: transparent"
+                @mouseenter="colortext = 'number'"
+                @mouseleave="colortext = false"
+                @click="$router.push('/pagetable')"
+              >
+                <v-card-actions class="pa-0">
+                  <v-card-text
+                    :style="{
+                      color: colortext === 'number' ? '#ffff00' : '#000',
+                    }"
                   >
-                    <v-card-actions class="pa-0">
-                      <v-card-text
-                        :style="{
-                          color: colortext === 'number' ? '#ffff00' : '#000',
-                        }"
-                      >
-                        view TICKET
-                      </v-card-text>
-                    </v-card-actions>
-                  </v-btn>
-                </template>
-                <span class="tooltip" ref="tooltip"
-                  >View or Download TICKET File</span
-                >
-              </v-tooltip>
+                    view Number
+                  </v-card-text>
+                </v-card-actions>
+              </v-btn>
               <v-btn
                 height="100%"
                 text
@@ -202,7 +151,6 @@
       </v-col>
       <!-- Sta baton Search -->
     </v-app-bar>
-
     <v-main>
       <v-divider style="background-color: #ffff00"></v-divider>
       <Nuxt />
@@ -242,35 +190,18 @@
 </template>
 
 <script>
-import DOMPurify from 'dompurify'
 export default {
   name: 'DefaultLayout',
   data() {
     return {
       selectedItem: 1,
-      itemsss: [
-        {
-          avatar: 'https://tplus.la/Black-Tplus-logo.png',
-          title: 'MyCCare web',
-          subtitle: 'ff',
-          link: 'http://10.30.6.94:7878/Replaceisdn/index.php',
-        },
-        {
-          avatar:
-            'https://tse4.mm.bing.net/th?id=OIP.Es4Sc4gJqjV7Lh9BDs21WwHaEK&pid=Api&P=0&h=220',
-          title: 'TPLUS',
-          subtitle: 'ff',
-          link: 'http://0.30.6.94:9999/Hlred.php',
-        },
-        {
-          avatar:
-            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqufX2HiXw-7qV1mSUg6KiZKeQQ9RBX1F-Yly5uj5AyBmdZ5rU0lg_76ol3kXnv3CsDWs&usqp=CAU',
-          title: 'TPLUS',
-          subtitle: 'ff',
-          link: 'http://2.28.17.137:7789/Services/?mode=login',
-        },
+      itemsweb: [
+        [
+        { text: 'Real-Time', icon: 'mdi-clock' },
+      { text: 'Audience', icon: 'mdi-account' },
+      { text: 'Conversions', icon: 'mdi-flag' },
+        ],
       ],
-
       link: [
         'https://tplus.la/tplus/about-us',
         'https://tplus.la/new-number/sim/',
@@ -316,36 +247,12 @@ export default {
       mini: true,
       rightDrawer: false,
       title: 'Vuetify.js',
-      tooltipTimer: null,
     }
   },
   methods: {
     openLinkInNewTab(link) {
       window.open(link, '_blank')
     },
-    sanitizeHtml(html) {
-      return DOMPurify.sanitize(html)
-    },
-    startTimer() {
-      this.colortext = 'number'
-      this.tooltipTimer = setTimeout(() => {
-        this.$refs.tooltip.classList.add('visible') // Add a class to make the tooltip visible
-      }, 800 ) // 2000 milliseconds = 2 seconds
-    },
-    clearTimer() {
-      this.colortext=false
-      clearTimeout(this.tooltipTimer)
-      this.$refs.tooltip.classList.remove('visible') // Remove the class to hide the tooltip
-    },
   },
 }
 </script>
-<style scoped>
-.tooltip {
-  display: none;
-}
-
-.tooltip.visible {
-  display: inline-block;
-}
-</style>

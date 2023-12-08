@@ -36,7 +36,7 @@
           </div>
         </v-btn>
         <v-expand-x-transition v-else>
-          <v-card  v-show="expand" class="mt-1">
+          <v-card v-show="expand" class="mt-1">
             <v-btn
               style="
                 border-bottom-left-radius: 0%;
@@ -46,12 +46,13 @@
               color="rgb(41, 163, 41)"
               @mouseenter="expand = true"
             >
-
-              
-              <div @click="expand=false" style="display: fixed; align-items: start">
+              <div
+                @click="expand = false"
+                style="display: fixed; align-items: start"
+              >
                 <v-icon>mdi-tray-arrow-up</v-icon>
               </div>
-              <div @click="expand=false">Download</div>
+              <div @click="expand = false">Download</div>
             </v-btn>
           </v-card>
         </v-expand-x-transition>
@@ -125,23 +126,24 @@
       </div>
     </div>
 
-<!-- tart table-->
-<v-col class="pa-0">
-  <v-card :dark="dark">
-
-  </v-card>
-</v-col>
+    <!-- tart table-->
+    <v-col class="pa-0">
+      <v-card :dark="dark"> </v-card>
+    </v-col>
     <v-row :dark="dark">
       <v-col class="px-0" :dark="dark" cols="12" sm="3">
         <v-card :dark="dark" class="rounded-0 px-4"> dd </v-card>
       </v-col>
-      <v-col :dark="dark" cols="12" sm="9" style="background-color: hsl(0, 0%, 96%)">
+      <v-col
+        :dark="dark"
+        cols="12"
+        sm="9"
+        style="background-color: hsl(0, 0%, 96%)"
+      >
         <v-card-title>
-          <h3 style="color: #595959;">Page Title</h3>
+          <h3 style="color: #595959">Page Title</h3>
         </v-card-title>
-        <v-card-text style=" color: #595959;">
-        Dta table title
-        </v-card-text>
+        <v-card-text style="color: #595959"> Dta table title </v-card-text>
         <v-card outlined class="ma-1">
           <v-simple-table max-height="450px">
             <template #default>
@@ -179,6 +181,7 @@
 import * as XLSX from 'xlsx'
 export default {
   Currency: 'DefaultLayout',
+  
   data() {
     return {
       dark: true,

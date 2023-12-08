@@ -340,32 +340,22 @@
         <!--Sto title page-->
 
         <!--Sta table---------------------------------------------------------------------------------------------------------------------->
-        <v-card-actions class="expandable-row py-0">
-          <div @mousedown="startResize" ref="resizableCol2" class="my-4 ">
+        <v-row>
+          <v-col cols="12" sm="2" class="pr-0">
             <v-card
-
               width="100%"
-              height="80%"
-              :style="{ width: col1Width + 'px' }"
-              class="rounded-0 "
+              :style="{ maxWidth: colWidth }"
+              class="rounded-0"
               color="#ffff00"
               outlined
             >
               <v-toolbar color="#000" dark>
-                <v-toolbar-title style="color: #ffff00">
-                  <div>Table display</div>
-                  <input
-                    class="resizable"
-                    type="range"
-                    color="#ffff00"
-                    v-model="col1Width"
-                    :min="minCol1Width"
-                    :max="maxCol1Width"
-                  />
+                <v-toolbar-title style="color: #ffff00"
+                  >Table display
                 </v-toolbar-title>
               </v-toolbar>
               <v-list subheader two-line flat>
-                <v-list-item-group class="table-title-hiegth">
+                <v-list-item-group class="table-container">
                   <v-list-item v-for="item in columns" :key="item.key">
                     <template v-slot:default="{ active }">
                       <v-list-item-action>
@@ -383,12 +373,12 @@
                 </v-list-item-group>
               </v-list>
             </v-card>
-          </div>
-          <v-col class="py-0 pl-0" >
+          </v-col>
+          <v-col cols="12" sm="10" class="pl-0">
             <v-card
               outlined
               style="background-color: #ffff00"
-              class="table-hiegth text-center"
+              class="table-container text-center"
             >
               <v-card-text v-if="loading" class="pa-0">
                 <v-progress-linear
@@ -400,13 +390,13 @@
                 dense
                 :headers="visibleHeaders"
                 :items="visibleItems"
-                :items-per-page="10"
+                :items-per-page="8"
                 item-key="name"
                 class="elevation-1 ma-1"
               ></v-data-table>
             </v-card>
           </v-col>
-        </v-card-actions>
+        </v-row>
       </v-col>
     </v-row>
 
@@ -470,7 +460,7 @@ export default {
         { key: 'PROVINCE', title: 'PROVINCE', active: true },
         { key: 'DISTRICT', title: 'DISTRICT', active: true },
         { key: 'VILLAGE', title: 'VILLAGE', active: true },
-        { key: 'TIME_CARE', title: 'TIME_CARE (n)', active: true },
+        { key: 'TIME_CARE', title: 'TIME_CARE', active: true },
         { key: 'TIME_DO', title: 'TIME_DO', active: true },
         { key: 'COMPLAIN_BY', title: 'COMPLAIN_BY', active: true },
         { key: 'CLOSE_DATE', title: 'CLOSE_DATE', active: true },
@@ -521,10 +511,6 @@ export default {
         { text: 'STATUS_TICKET', value: 'STATUS_TICKET' },
         { text: 'TIME_CLOSE_BY_CENTER', value: 'TIME_CLOSE_BY_CENTER' },
       ],
-      col1Width: 150,
-      minCol1Width: 60,
-      maxCol1Width: 250,
-      resizing: false,
       yd: false,
       shows: false,
       dark: true,
@@ -592,9 +578,6 @@ export default {
       const [month, day, year] = date.split('/')
       return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
     },
-
-    // ------------- function craet
-
     async someAsyncFunction() {
       try {
         const exportedFileName = await this.exportToExcel()
@@ -603,89 +586,81 @@ export default {
         console.error('Error exporting file:', error)
       }
     },
-    // ------------- function Get data in server
     async getData() {
       this.loading = true
 
       try {
         const startDate = this.date
         const endDate = this.dates
+        const config = {
+          headers: {
+            'ngrok-skip-browser-warning': 'true', // Include the custom header
+          },
+        }
 
         const res = await this.$axios.$get(
-          `http://172.28.26.23:3000/ticket?startDate=${encodeURIComponent(
+          `https://a347-115-84-68-228.ngrok-free.app/ticket?startDate=${encodeURIComponent(
             startDate
-          )}&endDate=${encodeURIComponent(endDate)}`
+          )}&endDate=${encodeURIComponent(endDate)}`,
+          config
         )
+        const uniqueDesserts = res.filter(
+          (value, index, self) =>
+            self.findIndex((item) => item.TICKETID === value.TICKETID) === index
+        )
+// -------------------------------- index object
+        res.forEach((object, index) => {
+          console.log(
+            `Index: ${index}, TICKETID: ${object.TICKETID}, CLASSIFICATION: ${object.CLASSIFICATION}`
+          )
+          // You can access other properties of the object here
+        })
+        // console.log(res)
+        // console.log(uniqueDesserts)
+        // this.r=res
 
-        // --------- loop data in lastindex of Object in group ID
-        const lastIndexes = {}
-        const firstIndexes = {}
-        const resolvebyIndex = {}
-        const indateIndex = {}
-        const inownerIndex = {}
+        this.desserts = uniqueDesserts.map((item, index) => {
+          // const modifiedIndex1 = index === 0 ? index : index * 5 // Increase the index by 5 from the second item onwards
+          const inprogressowner = index === 0 ? index + 2 : index * 5 + 2 // Increase the index by 5 from the second item onwards
+          const inprogressownerValue = res[inprogressowner]?.QUEUED_OWNER || ''
 
-        for (let i = res.length - 1; i >= 0; i--) {
-          const currentTicketID = res[i].TICKETID
+          const resolveowner = index === 0 ? index + 2 : index * 5 + 2 // Increase the index by 5 from the second item onwards
+          const resolveownerValue = res[resolveowner]?.QUEUED_OWNER || ''
 
-          if (typeof inownerIndex[currentTicketID] === 'undefined') {
-            inownerIndex[currentTicketID] = i - 3
-          }
-        }
+          const resolveownergroup = index === 0 ? index + 3 : index * 5 + 3 // Increase the index by 5 from the second item onwards
+          const resolveownergroupValue =
+            res[resolveownergroup]?.OWNERGROUP || ''
 
-        for (let i = res.length - 1; i >= 0; i--) {
-          const currentTicketID = res[i].TICKETID
+          const inprogresschangeby = index === 0 ? index + 3 : index * 5 + 3 // Increase the index by 5 from the second item onwards
+          const inprogresschangeValue =
+            res[inprogresschangeby]?.INPROGRESS_CHANGEBY || ''
 
-          if (typeof lastIndexes[currentTicketID] === 'undefined') {
-            lastIndexes[currentTicketID] = i
-          }
-        }
+          const resolvechangeby = index === 0 ? index + 3 : index * 5 + 3 // Increase the index by 5 from the second item onwards
+          const rsolvechangebyValue =
+            res[resolvechangeby]?.INPROGRESS_CHANGEBY || ''
 
-        for (let i = res.length - 1; i >= 0; i--) {
-          const currentTicketID = res[i].TICKETID
+          const closeby = index === 0 ? index + 4 : index * 5 + 4 // Increase the index by 5 from the second item onwards
+          const closebyValue = res[closeby]?.INPROGRESS_CHANGEBY || ''
 
-          if (typeof indateIndex[currentTicketID] === 'undefined') {
-            indateIndex[currentTicketID] = i - 2
-          }
-        }
+          const statusticket = index === 0 ? index + 4 : index * 5 + 4 // Increase the index by 5 from the second item onwards
+          const statusticketValue = res[statusticket]?.STATUS || ''
 
-        for (let i = res.length - 1; i >= 0; i--) {
-          const currentTicketID = res[i].TICKETID
+          const inprogressdate = index === 0 ? index + 2 : index * 5 + 2 // Increase the index by 5 from the second item onwards
+          const inprogressdateValue = res[inprogressdate]?.QUEUED_DATE || ''
 
-          if (typeof resolvebyIndex[currentTicketID] === 'undefined') {
-            resolvebyIndex[currentTicketID] = i - 1
-          }
-        }
+          const resolvedate = index === 0 ? index + 3 : index * 5 + 3 // Increase the index by 5 from the second item onwards
+          const resolvedateValue = res[resolvedate]?.QUEUED_DATE || ''
 
-        for (let i = 0; i < res.length; i++) {
-          const currentTicketID = res[i].TICKETID
-          if (typeof firstIndexes[currentTicketID] === 'undefined') {
-            firstIndexes[currentTicketID] = i
-          }
-        }
+          const qeuredate = index === 0 ? index : index * 5 // Increase the index by 5 from the second item onwards
+          const qeuredateValue = res[qeuredate]?.QUEUED_DATE || ''
 
-        // --------- last  data in lastindex of Object in group ID
+          const colsedate = index === 0 ? index + 4 : index * 5 + 4 // Increase the index by 5 from the second item onwards
+          const colsedateValue = res[colsedate]?.QUEUED_DATE || ''
 
-        const desserts = Object.values(firstIndexes).map((firstIndex) => {
-          // ---------------- fech data in desserts
-          const firstItem = res[firstIndex]
-          const lastItemIndex = lastIndexes[firstItem.TICKETID]
-          const lastItem = res[lastItemIndex]
-          const resolveItemIndex = resolvebyIndex[firstItem.TICKETID]
-          const resolveItem =
-            resolveItemIndex !== undefined ? res[resolveItemIndex] : null
-          const inprogressItemIndex = indateIndex[firstItem.TICKETID]
-          const inprogressItem = //  -2
-            inprogressItemIndex !== undefined ? res[inprogressItemIndex] : null
-          const inownerItemIndex = inownerIndex[firstItem.TICKETID]
-          const inownerItem =
-            inownerItemIndex !== undefined ? res[inownerItemIndex] : null
-
-          const date1 = new Date(inprogressItem.QUEUED_DATE)
-          const date2 = new Date(firstItem.QUEUED_DATE)
-          const date3 = new Date(resolveItem.QUEUED_DATE)
-          const date4 = new Date(lastItem.QUEUED_DATE)
-
-          // const time  care  tplus = resolvedateValue.getDate() - qeuredateValue.getDate()
+          const date1 = new Date(inprogressdateValue)
+          const date2 = new Date(qeuredateValue)
+          const date3 = new Date(resolvedateValue)
+          const date4 = new Date(colsedateValue)
 
           const timecare = date1 - date2
           const hours = Math.floor(timecare / (1000 * 60 * 60))
@@ -709,53 +684,72 @@ export default {
             (timecenter % (1000 * 60 * 60)) / (1000 * 60)
           )
           const timecolsebycenter = (timecenter, hourscenter, minutescenter)
-          //  data in desertes
           return {
-            TICKETID: firstItem.TICKETID,
-            CLASSIFICATION: firstItem.CLASSIFICATION,
-            MSISDN: firstItem.MSISDN,
-            SERVICE_GROUP: firstItem.SERVICE_GROUP,
-            COMMODITY: firstItem.COMMODITY,
-            CREATEDBY: firstItem.CREATEDBY,
-            CREATIONDATE: firstItem.CREATIONDATE,
-            QUEUED_DATE: firstItem.QUEUED_DATE,
-            QUEUED_OWNERGROUP: firstItem.OWNERGROUP,
-            INPROGRESS_DATE: inprogressItem.QUEUED_DATE,
-            INPROGRESS_OWNER: inownerItem.QUEUED_OWNER,
-            INPROGRESS_OWNERGROUP: firstItem.OWNERGROUP,
-            INPROGRESS_CHANGBY: inownerItem.INPROGRESS_CHANGEBY,
-            RESOLVE_DATE: resolveItem.QUEUED_DATE,
-            RESOLVE_OWNER: inprogressItem.QUEUED_OWNER,
-            RESOLVE_OWNERGROUP: inprogressItem.OWNERGROUP,
-            RESOLVE_CHANGBY: inprogressItem.INPROGRESS_CHANGEBY,
+            TICKETID: item.TICKETID,
+            CLASSIFICATION: item.CLASSIFICATION,
+            MSISDN: item.MSISDN,
+            SERVICE_GROUP: item.SERVICE_GROUP,
+            COMMODITY: item.COMMODITY,
+            CREATEDBY: item.CREATEDBY,
+            CREATIONDATE: item.CREATIONDATE,
+            QUEUED_DATE: qeuredateValue,
+            QUEUED_OWNERGROUP: item.OWNERGROUP,
+            INPROGRESS_DATE: inprogressdateValue,
+            INPROGRESS_OWNER: inprogressownerValue,
+            INPROGRESS_OWNERGROUP: item.OWNERGROUP,
+            INPROGRESS_CHANGBY: inprogresschangeValue,
+            RESOLVE_DATE: resolvedateValue,
+            RESOLVE_OWNER: resolveownerValue,
+            RESOLVE_OWNERGROUP: resolveownergroupValue,
+            RESOLVE_CHANGBY: rsolvechangebyValue,
             TIME_CARE_TPLUS: timecaretplus, // inprogressdateValue - qeuredateValue
             TIME_DO_TPLUS: timedotplus, // resolvedateValue - qeuredateValue
-            WORKLONG_DESCRIPTOIN: firstItem.FIRST_WORKLOG_DESCRIPTION,
-            MODIFY_DATE: resolveItem.QUEUED_DATE,
-            MODIFYBY: firstItem.FIRST_WORKLOG_MODIFYBY,
-            PROVINCE: firstItem.PROVINCE,
-            DISTRICT: firstItem.DISTRICT,
-            VILLAGE: firstItem.VILLAGE,
-            COMPLAIN_BY: firstItem.COMPLAIN_BY,
-            CLOSE_DATE: lastItem.QUEUED_DATE,
-            CLOSE_BY: lastItem.INPROGRESS_CHANGEBY,
-            STATUS_TICKET: lastItem.STATUS,
+            WORKLONG_DESCRIPTOIN: item.FIRST_WORKLOG_DESCRIPTION,
+            MODIFY_DATE: resolvedateValue,
+            MODIFYBY: item.FIRST_WORKLOG_MODIFYBY,
+            PROVINCE: item.PROVINCE,
+            DISTRICT: item.DISTRICT,
+            VILLAGE: item.VILLAGE,
+            COMPLAIN_BY: item.COMPLAIN_BY,
+            CLOSE_DATE: colsedateValue,
+            CLOSE_BY: closebyValue,
+            STATUS_TICKET: statusticketValue,
             TIME_CLOSE_BY_CENTER: timecolsebycenter, // colsedateValue - resolvedateValue
           }
         })
-
-        console.log(desserts)
-
-        this.desserts = desserts
       } catch (error) {
         console.error('Error fetching data:', error)
         // Handle errors as needed, e.g., show an error message to the user
       }
-
+      // console.log(this.desserts)
       this.loading = false
     },
+    // download file PDF
+    // async exportToPDF() {
+    //   try {
+    //     const content = this.$refs.pdfContent // Use a ref on the content you want to convert to PDF
+    //     const pdfOptions = {
+    //       margin: 10,
+    //       filename: 'your_pdf_filename.pdf',
+    //       image: { type: 'jpeg', quality: 0.98 },
+    //       html2canvas: { scale: 2 },
+    //       jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+    //     }
 
+    //     const pdf = await html2pdf().from(content).set(pdfOptions).outputPdf()
+
+    //     const blob = new Blob([pdf], { type: 'application/pdf' })
+    //     const link = document.createElement('a')
+    //     link.href = URL.createObjectURL(blob)
+    //     link.download = 'your_pdf_filename.pdf'
+    //     link.click()
+    //   } catch (error) {
+    //     console.error('Error exporting PDF:', error)
+    //   }
+    // },
     coloricon() {
+      // Your getData() logic here
+
       // Change button and icon colors every second
       setInterval(() => {
         this.buttonColor = this.getRandomColor(['#ffff00', '#000'])
@@ -767,20 +761,6 @@ export default {
       // Function to select a random color from the provided options
       const randomIndex = Math.floor(Math.random() * colorOptions.length)
       return colorOptions[randomIndex]
-    },
-    // - width title diplay ---------------------
-    startResize(event) {
-      this.resizing = true
-      document.addEventListener('mousemove', this.handleMouseMove)
-      document.addEventListener('mouseup', this.handleMouseUp)
-    },
-
-    handleMouseUp() {
-      if (this.resizing) {
-        this.resizing = false
-        document.removeEventListener('mousemove', this.handleMouseMove)
-        document.removeEventListener('mouseup', this.handleMouseUp)
-      }
     },
   },
   computed: {
@@ -813,10 +793,10 @@ export default {
   position: absolute;
   width: 100%;
 }
-/* .table-container {
+.table-container {
   max-height: 450px;
   overflow-y: auto;
-} */
+}
 .table-container ::-webkit-scrollbar {
   width: 2px;
 }
@@ -824,20 +804,9 @@ export default {
   background-color: #ffff00;
   border-radius: 4px;
 }
-.table-container ::-webkit-scrollbar-corner {
+table-container ::-webkit-scrollbar-corner {
   background-color: #ffff00;
   border-radius: 4px;
-}
-.resizable {
-  cursor: ew-resize;
-}
-.table-hiegth {
-  max-height: 474px;
-  overflow-y: auto;
-}
-.table-title-hiegth {
-  max-height: 400px;
-  overflow-y: auto;
 }
 </style>
   
