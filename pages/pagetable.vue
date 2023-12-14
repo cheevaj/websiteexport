@@ -4,150 +4,103 @@
     <!-- start button download----------------------------------------------------------------------------------------------->
     <div class="shrink">
       <!--Sta book use------------------------------------------------------------------------------------------------------------------->
-      <div
-        class="text-right"
-        style="
+      <div class="text-right" style="
           min-height: 1px;
           max-width: 180px;
           position: fixed;
           z-index: 100;
           top: 68px;
           right: 20px;
-        "
-      >
-        <v-btn
-          text
-          fab
-          small
-          color="#000"
-          @click="shows = !shows"
-          style="z-index: 100"
-        >
+        ">
+        <v-btn text fab small color="#000" style="z-index: 100" @click="shows = !shows">
           <v-icon color="#000">mdi-clipboard-text-multiple-outline</v-icon>
         </v-btn>
       </div>
       <!--Sto book---------------------------------------------->
+      <!-- sta alert file download---------------------------------------------------------------->
+      <!-- <v-card v-if="alert !== false" flat outline class="rounded-0 pa-0"
+        style="position: absolute; z-index:100; top: 20%; right: 5px;">
+        <v-alert class="ma-0" style="width: 350px;" :value="alert === 'alertsuccess' ? true : false" text type="success"
+          icon="mdi-check-circle-outline" transition="scale-transition" @mouseenter="stopalert()"
+          @mouseleave="closealrt(alert='alertsuccess')">
+          Download the file successfully.
+        </v-alert>
+        <v-alert class="ma-0" style="width: 350px;" :value="(alert !== 'alertsuccess' && alert !== false) ? true : false"
+          text type="error" icon="mdi-close-circle-outline" transition="scale-transition" @mouseenter="stopalert()"
+          @mouseleave="closealrt()">
+          Download the file is error.
+          <v-divider style="background-color: rgb(183, 183, 183);"></v-divider>
+          <small>{{ alert }}</small>
+        </v-alert>
+      </v-card> -->
+      <!---stop alert file download-------------------------------------------------------------------------------------->
 
       <!-- Sta slid baton Download------------------------------------------------------------------------------------------------------------------->
-      <div
-        class="text-right"
-        style="
+      <div class="text-right" style="
           min-height: 1px;
           max-width: 180px;
           position: fixed;
           z-index: 100;
           top: 110px;
           right: 20px;
-        "
-        @mouseleave="expand = false"
-      >
-        <v-btn
-          v-if="!expand"
-          fab
-          small
-          color="#000"
-          @mouseenter="expand = true"
-        >
+        " @mouseleave="expand = false">
+        <v-btn v-if="(!expand && !overlay)" fab small color="#000" @mouseenter="expand = true">
           <div>
             <v-icon color="#ffff00">mdi-tray-arrow-up</v-icon>
           </div>
         </v-btn>
+        <v-btn v-else-if="(expand && overlay )" fab small color="#000" @mouseenter="expand = true">
+          <div>
+            <v-icon color="#ffff00">mdi-close</v-icon>
+          </div>
+        </v-btn>
         <v-expand-x-transition v-else>
           <v-card v-show="expand" class="mt-1">
-            <v-btn
-              style="
+            <v-btn style="
                 border-bottom-left-radius: 0%;
                 border-bottom-right-radius: 0%;
-              "
-              width="100%"
-              color="#000"
-              @mouseenter="expand = true"
-            >
-              <div
-                style="display: fixed; align-items: start"
-                @click="expand = false"
-              >
+              " width="100%" color="#000" @mouseenter="expand = true">
+              <div style="display: fixed; align-items: start" @click="expand = false">
                 <v-icon style="color: #ffff00">mdi-tray-arrow-up</v-icon>
               </div>
-              <div @click="expand = false" style="color: #ffff00">Download</div>
+              <div style="color: #ffff00" @click="expand = false">Download</div>
             </v-btn>
           </v-card>
         </v-expand-x-transition>
         <!-- Sta slid baton Download------------------------------------------------------------------------------------------------------------------->
         <v-expand-transition>
-          <v-card
-            v-show="expand"
-            style="
+          <v-card v-show="expand" style="
               border-top-left-radius: 0%;
               border-top-right-radius: 0%;
               background-color: #ffffcc;
-            "
-            outlined
-          >
+            " outlined>
             <v-col>
               <!-- Sta slid baton Download Excel------------------------------------------------------------------------------------------------------------------->
-              <v-btn
-                class="mt-2"
-                :style="{
-                  boxShadow: show ? '#00ff55' : 'rgb(217, 217, 217)',
-                }"
-                text
-                height="25%"
-                width="100%"
-                small
-                color="#009933"
-                :outlined="show === 'button1' ? false : true"
-                @mouseenter="setOutlined('button1')"
-                @mouseleave="detOutlined(true)"
-                @click="exportToExcel"
-              >
-                <v-icon
-                  style="background-color: #009933; border-radius=50%"
-                  size="35"
-                  color="#ffffff"
-                  >mdi-microsoft-excel</v-icon
-                >
-                <v-card-text
-                  :style="{
-                    color: show === 'button1' ? '#009933' : '#000',
-                  }"
-                  >Excel</v-card-text
-                >
+              <v-btn class="mt-2" :style="{
+                boxShadow: show ? '#00ff55' : 'rgb(217, 217, 217)',
+              }" text height="25%" width="100%" small color="#009933" :outlined="show === 'button1' ? false : true"
+                @mouseenter="setOutlined('button1')" @mouseleave="detOutlined(true)" @click="someAsyncFunction()">
+                <v-icon style="background-color: #009933; border-radius=50%" size="35"
+                  color="#ffffff">mdi-microsoft-excel</v-icon>
+                <v-card-text :style="{
+                  color: show === 'button1' ? '#009933' : '#000',
+                }">Excel</v-card-text>
               </v-btn>
 
               <!-- Sta slid baton Download CSV------------------------------------------------------------------------------------------------------------------->
 
               <v-tooltip bottom>
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn
-                    v-bind="attrs"
-                    v-on="on"
-                    class="mt-2"
-                    text
-                    height="25%"
-                    width="100%"
-                    small
-                    :style="{
-                      boxShadow: show ? '#00ff55' : 'rgb(217, 217, 217)',
-                    }"
-                    color="#ff3333"
-                    :outlined="show === 'button2' ? false : true"
-                    @mouseenter="setOutlined('button2')"
-                    @mouseleave="detOutlined(true)"
-                  >
-                    <v-icon
-                      style="background-color: #ff3333; border-radius=50%"
-                      size="35"
-                      color="#ffffff"
-                      >mdi-file-pdf-box</v-icon
-                    >
-                    <v-card-text
-                      :style="{
-                        color: show === 'button2' ? '#ff3333' : '#000',
-                      }"
-                    >
-                      PDF</v-card-text
-                    >
+                <template #activator="{ on, attrs }">
+                  <v-btn v-bind="attrs" class="mt-2" text height="25%" width="100%" small :style="{
+                    boxShadow: show ? '#00ff55' : 'rgb(217, 217, 217)',
+                  }" color="#ff3333" :outlined="show === 'button2' ? false : true" v-on="on"
+                    @mouseenter="setOutlined('button2')" @mouseleave="detOutlined(true)">
+                    <v-icon style="background-color: #ff3333; border-radius=50%" size="35"
+                      color="#ffffff">mdi-file-pdf-box</v-icon>
+                    <v-card-text :style="{
+                      color: show === 'button2' ? '#ff3333' : '#000',
+                    }">
+                      PDF</v-card-text>
                   </v-btn>
                 </template>
                 <span>PDF can not download</span>
@@ -169,13 +122,7 @@
             <v-col cols="12" sm="4" class="py-1">
               <div>
                 <v-card-actions class="py-0">
-                  <v-btn
-                    fab
-                    x-small
-                    text
-                    style="background-color: #ffff00"
-                    @click="$router.go(-1)"
-                  >
+                  <v-btn fab x-small text style="background-color: #ffff00" @click="$router.go(-1)">
                     <v-icon color="#000" size="25">mdi-arrow-left</v-icon>
                   </v-btn>
                   <v-card-title>
@@ -185,16 +132,8 @@
                     </h3>
                   </v-card-title>
                   <div class="mt-4">
-                    <v-btn
-                      small
-                      fab
-                      outlined
-                      color="#ffff00"
-                      @mouseenter="dateshow = true"
-                    >
-                      <v-icon size="30" :color="buttonColor"
-                        >mdi-calendar-search</v-icon
-                      >
+                    <v-btn small fab outlined color="#ffff00" @mouseenter="dateshow = true">
+                      <v-icon size="30" :color="buttonColor">mdi-calendar-search</v-icon>
                     </v-btn>
                   </div>
                 </v-card-actions>
@@ -206,17 +145,9 @@
             <!--Sto title table-->
 
             <!--Sta date range----------------------------------------------------------------------------------------------------------->
-            <v-col cols="12" sm="6" v-if="dateshow" class="py-0">
-              <v-card
-                outlined
-                class="my-3 px-0"
-                flat
-                style="background-color: #ffffbc"
-              >
-                <v-card-text
-                  class="pa-0 text-right"
-                  style="background-color: #ffff00"
-                >
+            <v-col v-if="dateshow" cols="12" sm="6" class="py-0">
+              <v-card outlined class="my-3 px-0" flat style="background-color: #ffffbc">
+                <v-card-text class="pa-0 text-right" style="background-color: #ffff00">
                   <v-btn text x-small @click="dateshow = false">
                     <v-icon size="20">mdi-close</v-icon>
                   </v-btn>
@@ -224,44 +155,18 @@
                 <v-row>
                   <!--Sta date Start-------------------------------------------------------------------------------->
                   <v-col cols="12" sm="4" md="4" class="pl-4">
-                    <v-menu
-                      ref="menu"
-                      v-model="menu"
-                      :close-on-content-click="false"
-                      :return-value.sync="date"
-                      transition="scale-transition"
-                      offset-y
-                      min-width="auto"
-                    >
-                      <template v-slot:activator="{ on, attrs }">
-                        <v-text-field
-                          v-model="date"
-                          label="Start Date"
-                          prepend-icon="mdi-calendar"
-                          readonly
-                          v-bind="attrs"
-                          v-on="on"
-                        ></v-text-field>
+                    <v-menu ref="menu" v-model="menu" :close-on-content-click="false" :return-value.sync="date"
+                      transition="scale-transition" offset-y min-width="auto">
+                      <template #activator="{ on, attrs }">
+                        <v-text-field v-model="date" label="Start Date" prepend-icon="mdi-calendar" readonly
+                          v-bind="attrs" v-on="on"></v-text-field>
                       </template>
-                      <v-date-picker
-                        v-model="date"
-                        no-title
-                        scrollable
-                        color="yellow "
-                      >
+                      <v-date-picker v-model="date" no-title scrollable color="yellow ">
                         <v-spacer></v-spacer>
-                        <v-btn
-                          text
-                          style="color: #ff4d4d"
-                          @click="menu = false"
-                        >
+                        <v-btn text style="color: #ff4d4d" @click="menu = false">
                           Cancel
                         </v-btn>
-                        <v-btn
-                          outlined
-                          color="primary"
-                          @click="$refs.menu.save(date)"
-                        >
+                        <v-btn outlined color="primary" @click="$refs.menu.save(date)">
                           save
                         </v-btn>
                       </v-date-picker>
@@ -275,44 +180,18 @@
                   </v-col>
                   <!--Sta Date stop------------------------------------------------------------------------------------------------->
                   <v-col cols="12" sm="4" md="4">
-                    <v-menu
-                      ref="menus"
-                      v-model="menus"
-                      :close-on-content-click="false"
-                      :return-value.sync="dates"
-                      transition="scale-transition"
-                      offset-y
-                      min-width="auto"
-                    >
-                      <template v-slot:activator="{ on, attrs }">
-                        <v-text-field
-                          v-model="dates"
-                          label="End Date"
-                          prepend-icon="mdi-calendar"
-                          readonly
-                          v-bind="attrs"
-                          v-on="on"
-                        ></v-text-field>
+                    <v-menu ref="menus" v-model="menus" :close-on-content-click="false" :return-value.sync="dates"
+                      transition="scale-transition" offset-y min-width="auto">
+                      <template #activator="{ on, attrs }">
+                        <v-text-field v-model="dates" label="End Date" prepend-icon="mdi-calendar" readonly v-bind="attrs"
+                          v-on="on"></v-text-field>
                       </template>
-                      <v-date-picker
-                        v-model="dates"
-                        no-title
-                        scrollable
-                        color="yellow "
-                      >
+                      <v-date-picker v-model="dates" no-title scrollable color="yellow ">
                         <v-spacer></v-spacer>
-                        <v-btn
-                          text
-                          style="color: #ff4d4d"
-                          @click="menus = false"
-                        >
+                        <v-btn text style="color: #ff4d4d" @click="menus = false">
                           Cancel
                         </v-btn>
-                        <v-btn
-                          outlined
-                          color="primary"
-                          @click="$refs.menus.save(dates)"
-                        >
+                        <v-btn outlined color="primary" @click="$refs.menus.save(dates)">
                           save
                         </v-btn>
                       </v-date-picker>
@@ -321,8 +200,20 @@
                   <!--Sto Date stop-->
                   <!-- Sta baton search date------------------------------------------------------------------------------------>
                   <v-col cols="12" sm="4" md="3">
+                    <v-overlay class="text-center" :absolute="absolute" :value="overlay">
+                      <p>Date start should lower than Date stop.
+                        <span style="background-color: #ffff00; color: #000;">
+                          {{ date }}
+                        </span><span class="text-h5"> |</span><span style="background-color: #ffff00; color: #000;">
+                          {{ dates }}
+                        </span>
+                      </p>
+                      <v-btn style="background-color: #ffff00; color: #000; " @click="overlay = false">
+                        Ok, I see
+                      </v-btn>
+                    </v-overlay>
                     <v-card-text class="text-right" @mouseenter="j = true">
-                      <v-btn fab small color="#000" @click="getData()">
+                      <v-btn fab small color="#000" @mouseenter="datelang()" @click="getData()">
                         <v-icon :color="iconColor"> mdi-magnify </v-icon>
                       </v-btn>
                       Search
@@ -341,38 +232,22 @@
 
         <!--Sta table---------------------------------------------------------------------------------------------------------------------->
         <v-card-actions class="expandable-row py-0">
-          <div @mousedown="startResize" ref="resizableCol2" class="my-4 ">
-            <v-card
-
-              width="100%"
-              height="80%"
-              :style="{ width: col1Width + 'px' }"
-              class="rounded-0 "
-              color="#ffff00"
-              outlined
-            >
+          <div ref="resizableCol2" class="my-4 " @mousedown="startResize">
+            <v-card class="rounded-0 " width="100%" height="80%" :style="{ width: col1Width + 'px' }" color="#ffff00"
+              outlined>
               <v-toolbar color="#000" dark>
                 <v-toolbar-title style="color: #ffff00">
                   <div>Table display</div>
-                  <input
-                    class="resizable"
-                    type="range"
-                    color="#ffff00"
-                    v-model="col1Width"
-                    :min="minCol1Width"
-                    :max="maxCol1Width"
-                  />
+                  <input v-model="col1Width" class="resizable" type="range" color="#ffff00" :min="minCol1Width"
+                    :max="maxCol1Width" />
                 </v-toolbar-title>
               </v-toolbar>
               <v-list subheader two-line flat>
                 <v-list-item-group class="table-title-hiegth">
                   <v-list-item v-for="item in columns" :key="item.key">
-                    <template v-slot:default="{ active }">
+                    <template #default="{ active }">
                       <v-list-item-action>
-                        <v-checkbox
-                          v-model="item.active"
-                          :input-value="active"
-                        ></v-checkbox>
+                        <v-checkbox v-model="item.active" :input-value="active"></v-checkbox>
                       </v-list-item-action>
 
                       <v-list-item-content>
@@ -384,26 +259,38 @@
               </v-list>
             </v-card>
           </div>
-          <v-col class="py-0 pl-0" >
-            <v-card
-              outlined
-              style="background-color: #ffff00"
-              class="table-hiegth text-center"
-            >
+          <v-col class="py-0 pl-0">
+            <v-card outlined style="background-color: #ffff00" class="table-hiegth text-center">
               <v-card-text v-if="loading" class="pa-0">
-                <v-progress-linear
-                  indeterminate
-                  color="#4d3d00"
-                ></v-progress-linear>
+                <v-progress-linear indeterminate color="#4d3d00"></v-progress-linear>
               </v-card-text>
-              <v-data-table
-                dense
-                :headers="visibleHeaders"
-                :items="visibleItems"
-                :items-per-page="10"
-                item-key="name"
-                class="elevation-1 ma-1"
-              ></v-data-table>
+              <v-data-table v-if="!overlay" dense :headers="visibleHeaders" :items="visibleItems" :items-per-page="10"
+                item-key="name" class="elevation-1 ma-1">
+              </v-data-table>
+              <v-card-text v-else class="pa-1">
+                <v-card flat min-height="474px" class="text-h5">
+                  <span style="color: #cccccc;">
+                    Data Not found
+                  </span>
+                  <v-divider></v-divider>
+                  <br>
+                  <br>
+                  <br>
+                  <br>
+                  <br>
+                  <span>
+                    <v-card-text>
+                      <span style="color: #595959;">
+                        Check date again Date start should lower than Date stop.
+                      </span>
+                      <br>
+                      <span style="color: #595959;">
+                        Data Not found because : The Date stop is less than Date start or Net word Error.
+                      </span>
+                    </v-card-text>
+                  </span>
+                </v-card>
+              </v-card-text>
             </v-card>
           </v-col>
         </v-card-actions>
@@ -422,6 +309,9 @@ export default {
   Currency: 'DefaultLayout',
   data() {
     return {
+      alert: false,
+      absolute: true,
+      overlay: false,
       loading: false,
       colWidth: 'auto',
       buttonColor: '#ffff00',
@@ -525,7 +415,6 @@ export default {
       minCol1Width: 60,
       maxCol1Width: 250,
       resizing: false,
-      yd: false,
       shows: false,
       dark: true,
       expand: false,
@@ -533,8 +422,8 @@ export default {
       color: '#e5e5e5',
       date: new Date(
         Date.now() -
-          24 * 60 * 60 * 1000 -
-          new Date().getTimezoneOffset() * 60000
+        24 * 60 * 60 * 1000 -
+        new Date().getTimezoneOffset() * 60000
       )
         .toISOString()
         .substr(0, 10), // + 'T00:00:00.000Z',
@@ -543,13 +432,33 @@ export default {
         .toISOString()
         .substr(0, 10), // + 'T00:00:00.000Z',
       menus: false,
-      dateshow: false,
+      dateshow: true,
       // r:[],
     }
+  },
+  computed: {
+    visibleHeaders() {
+      return this.headers.filter((header) => {
+        const column = this.columns.find((col) => col.key === header.value)
+        return column ? column.active : false
+      })
+    },
+    visibleItems() {
+      return this.desserts.map((item) => {
+        const newItem = { ...item }
+        this.columns.forEach((col) => {
+          if (!col.active) {
+            newItem[col.key] = undefined
+          }
+        })
+        return newItem
+      })
+    },
   },
   mounted() {
     this.getData()
     this.coloricon()
+    // this.closealrt()
   },
   methods: {
     setOutlined(value) {
@@ -566,18 +475,54 @@ export default {
       XLSX.utils.book_append_sheet(workbook, worksheet, 'Currency Data')
 
       // Generate a unique filename or use a timestamp for the file
-      const filename = `currency_data_${Date.now()}.xlsx`
+      const filename = `Ticket data ${Date.now()}.xlsx`
 
       // Wrap the writeFile function in a Promise
       return new Promise((resolve, reject) => {
         try {
           XLSX.writeFile(workbook, filename)
           resolve(filename)
+          this.alert = 'alertsuccess';
         } catch (error) {
           reject(error)
+          // this.alert = error;
+
         }
       })
     },
+
+    // ------------- function craet
+    async someAsyncFunction() {
+      try {
+        const exportedFileName = await this.exportToExcel()
+
+        console.log(`File exported successfully: ${exportedFileName}`)
+
+      } catch (error) {
+
+        const errors = (error === 'undefined' || null) ? '' : error;
+        console.error('Error exporting file:', error)
+        this.alert = errors;
+      }
+    },
+    // sta function alert file download success---------------------------------------------------------------->
+
+    // stopalert() {
+    //   clearInterval(this.autosavealert, this.autosavealert)
+    // },
+
+    // closealrt(alert) {
+    //   if (this.alert === 'alertsuccess') {
+    //     this.autosavealert = setInterval(() => {
+    //       this.alert = false
+    //     }, 3000)
+    //   } else {
+    //     this.autosavealert = setInterval(() => {
+    //       this.alert = false
+    //     }, 7500)
+    //   }
+    // },
+    // sto function alert file download success---------------------------------------------------------------->
 
     formatDate(date) {
       if (!date) return null
@@ -593,18 +538,26 @@ export default {
       return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
     },
 
-    // ------------- function craet
 
-    async someAsyncFunction() {
-      try {
-        const exportedFileName = await this.exportToExcel()
-        console.log(`File exported successfully: ${exportedFileName}`)
-      } catch (error) {
-        console.error('Error exporting file:', error)
+    // ------------- function Get data in server
+
+    datelang() {
+      const datestart = new Date(this.date)
+      const datestop = new Date(this.dates)
+      const datelang = datestop - datestart
+      if (datelang >= 0) {
+        this.overlay = false;
+      }
+      else {
+        this.overlay = true;
       }
     },
-    // ------------- function Get data in server
     async getData() {
+
+      // const hours = Math.floor(datelang / (1000 * 60 * 60))
+      // if (datelang >= 0) {
+
+      // console.log(hours)
       this.loading = true
 
       try {
@@ -744,15 +697,18 @@ export default {
           }
         })
 
-        console.log(desserts)
+        // console.log(desserts)
 
         this.desserts = desserts
       } catch (error) {
         console.error('Error fetching data:', error)
         // Handle errors as needed, e.g., show an error message to the user
       }
-
       this.loading = false
+      // }
+      // else {
+      //   console.log("hi")
+      // }
     },
 
     coloricon() {
@@ -783,25 +739,7 @@ export default {
       }
     },
   },
-  computed: {
-    visibleHeaders() {
-      return this.headers.filter((header) => {
-        const column = this.columns.find((col) => col.key === header.value)
-        return column ? column.active : false
-      })
-    },
-    visibleItems() {
-      return this.desserts.map((item) => {
-        const newItem = { ...item }
-        this.columns.forEach((col) => {
-          if (!col.active) {
-            newItem[col.key] = undefined
-          }
-        })
-        return newItem
-      })
-    },
-  },
+
 }
 </script>
 <style>
@@ -813,6 +751,7 @@ export default {
   position: absolute;
   width: 100%;
 }
+
 /* .table-container {
   max-height: 450px;
   overflow-y: auto;
@@ -820,21 +759,26 @@ export default {
 .table-container ::-webkit-scrollbar {
   width: 2px;
 }
+
 .table-container ::-webkit-scrollbar-thumb {
   background-color: #ffff00;
   border-radius: 4px;
 }
+
 .table-container ::-webkit-scrollbar-corner {
   background-color: #ffff00;
   border-radius: 4px;
 }
+
 .resizable {
   cursor: ew-resize;
 }
+
 .table-hiegth {
   max-height: 474px;
   overflow-y: auto;
 }
+
 .table-title-hiegth {
   max-height: 400px;
   overflow-y: auto;

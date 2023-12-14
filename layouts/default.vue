@@ -330,7 +330,7 @@ export default {
       this.colortext = 'number'
       this.tooltipTimer = setTimeout(() => {
         this.$refs.tooltip.classList.add('visible') // Add a class to make the tooltip visible
-      }, 800 ) // 2000 milliseconds = 2 seconds
+      }, 700) // 2000 milliseconds = 2 seconds
     },
     clearTimer() {
       this.colortext=false
