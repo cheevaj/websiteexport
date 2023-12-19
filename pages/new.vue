@@ -1,10 +1,13 @@
 <template>
     <v-container fluid>
-        <div v-if="graphdisplay ==='Variant'">
-            <v-sparkline :fill="fill" :gradient="graphstyle[0]" :line-width="width" :padding="padding" :smooth="radius || false"
-            :value="value" auto-draw></v-sparkline>  
-        </div>
-        
+        <v-card-text min-height="340px">
+
+            <div v-if="graphdisplay === 'Variant'">
+                <v-sparkline :fill="fill" :gradient="graphstyle[0]" :line-width="width" :padding="padding"
+                    :smooth="radius || false" :value="value" auto-draw></v-sparkline>
+            </div>
+
+        </v-card-text>
         <v-divider></v-divider>
 
         <v-row>

@@ -49,7 +49,7 @@
             <v-icon color="#ffff00">mdi-tray-arrow-up</v-icon>
           </div>
         </v-btn>
-        <v-btn v-else-if="(expand && overlay )" fab small color="#000" @mouseenter="expand = true">
+        <v-btn v-else-if="(expand && overlay)" fab small color="#000" @mouseenter="expand = true">
           <div>
             <v-icon color="#ffff00">mdi-close</v-icon>
           </div>
@@ -145,87 +145,107 @@
             <!--Sto title table-->
 
             <!--Sta date range----------------------------------------------------------------------------------------------------------->
-            <v-col v-if="dateshow" cols="12" sm="6" class="py-0">
-              <v-card outlined class="my-3 px-0" flat style="background-color: #ffffbc">
-                <v-card-text class="pa-0 text-right" style="background-color: #ffff00">
-                  <v-btn text x-small @click="dateshow = false">
-                    <v-icon size="20">mdi-close</v-icon>
-                  </v-btn>
-                </v-card-text>
-                <v-row>
-                  <!--Sta date Start-------------------------------------------------------------------------------->
-                  <v-col cols="12" sm="4" md="4" class="pl-4">
-                    <v-menu ref="menu" v-model="menu" :close-on-content-click="false" :return-value.sync="date"
-                      transition="scale-transition" offset-y min-width="auto">
-                      <template #activator="{ on, attrs }">
-                        <v-text-field v-model="date" label="Start Date" prepend-icon="mdi-calendar" readonly
-                          v-bind="attrs" v-on="on"></v-text-field>
-                      </template>
-                      <v-date-picker v-model="date" no-title scrollable color="yellow ">
-                        <v-spacer></v-spacer>
-                        <v-btn text style="color: #ff4d4d" @click="menu = false">
-                          Cancel
+            <v-col cols="12" sm="6" class="py-0">
+              <div v-if="dateshow">
+                <v-card outlined class="my-3 px-0" flat style="background-color: #ffffbc">
+                  <v-card-text class="pa-0 text-right" style="background-color: #ffff00">
+                    <v-btn text x-small @click="dateshow = false">
+                      <v-icon size="20">mdi-close</v-icon>
+                    </v-btn>
+                  </v-card-text>
+                  <v-row>
+                    <!--Sta date Start-------------------------------------------------------------------------------->
+                    <v-col cols="12" sm="4" md="4" class="pl-4">
+                      <v-menu ref="menu" v-model="menu" :close-on-content-click="false" :return-value.sync="date"
+                        transition="scale-transition" offset-y min-width="auto">
+                        <template #activator="{ on, attrs }">
+                          <v-text-field v-model="date" label="Start Date" prepend-icon="mdi-calendar" readonly
+                            v-bind="attrs" v-on="on"></v-text-field>
+                        </template>
+                        <v-date-picker v-model="date" no-title scrollable color="yellow ">
+                          <v-spacer></v-spacer>
+                          <v-btn text style="color: #ff4d4d" @click="menu = false">
+                            Cancel
+                          </v-btn>
+                          <v-btn outlined color="primary" @click="$refs.menu.save(date)">
+                            save
+                          </v-btn>
+                        </v-date-picker>
+                      </v-menu>
+                    </v-col>
+                    <!--Sto Date start-->
+                    <v-col cols="12" sm="1" md="1">
+                      <v-card-text style="color: #404040" class="px-0 mt-2">
+                        <h2>To</h2>
+                      </v-card-text>
+                    </v-col>
+                    <!--Sta Date stop------------------------------------------------------------------------------------------------->
+                    <v-col cols="12" sm="4" md="4">
+                      <v-menu ref="menus" v-model="menus" :close-on-content-click="false" :return-value.sync="dates"
+                        transition="scale-transition" offset-y min-width="auto">
+                        <template #activator="{ on, attrs }">
+                          <v-text-field v-model="dates" label="End Date" prepend-icon="mdi-calendar" readonly
+                            v-bind="attrs" v-on="on"></v-text-field>
+                        </template>
+                        <v-date-picker v-model="dates" no-title scrollable color="yellow ">
+                          <v-spacer></v-spacer>
+                          <v-btn text style="color: #ff4d4d" @click="menus = false">
+                            Cancel
+                          </v-btn>
+                          <v-btn outlined color="primary" @click="$refs.menus.save(dates)">
+                            save
+                          </v-btn>
+                        </v-date-picker>
+                      </v-menu>
+                    </v-col>
+                    <!--Sto Date stop-->
+                    <!-- Sta baton search date------------------------------------------------------------------------------------>
+                    <v-col cols="12" sm="4" md="3">
+                      <v-overlay class="text-center" :absolute="absolute" :value="overlay">
+                        <p>Date start should lower than Date stop.
+                          <span style="background-color: #ffff00; color: #000;">
+                            {{ date }}
+                          </span><span class="text-h5"> |</span><span style="background-color: #ffff00; color: #000;">
+                            {{ dates }}
+                          </span>
+                        </p>
+                        <v-btn style="background-color: #ffff00; color: #000; " @click="overlay = false">
+                          Ok, I see
                         </v-btn>
-                        <v-btn outlined color="primary" @click="$refs.menu.save(date)">
-                          save
+                      </v-overlay>
+                      <v-card-text class="text-right">
+                        <v-btn fab small color="#000" @mouseenter="datelang()" @click="getData()">
+                          <v-icon :color="iconColor"> mdi-magnify </v-icon>
                         </v-btn>
-                      </v-date-picker>
-                    </v-menu>
-                  </v-col>
-                  <!--Sto Date start-->
-                  <v-col cols="12" sm="1" md="1">
-                    <v-card-text style="color: #404040" class="px-0 mt-2">
-                      <h2>To</h2>
-                    </v-card-text>
-                  </v-col>
-                  <!--Sta Date stop------------------------------------------------------------------------------------------------->
-                  <v-col cols="12" sm="4" md="4">
-                    <v-menu ref="menus" v-model="menus" :close-on-content-click="false" :return-value.sync="dates"
-                      transition="scale-transition" offset-y min-width="auto">
-                      <template #activator="{ on, attrs }">
-                        <v-text-field v-model="dates" label="End Date" prepend-icon="mdi-calendar" readonly v-bind="attrs"
-                          v-on="on"></v-text-field>
-                      </template>
-                      <v-date-picker v-model="dates" no-title scrollable color="yellow ">
-                        <v-spacer></v-spacer>
-                        <v-btn text style="color: #ff4d4d" @click="menus = false">
-                          Cancel
-                        </v-btn>
-                        <v-btn outlined color="primary" @click="$refs.menus.save(dates)">
-                          save
-                        </v-btn>
-                      </v-date-picker>
-                    </v-menu>
-                  </v-col>
-                  <!--Sto Date stop-->
-                  <!-- Sta baton search date------------------------------------------------------------------------------------>
-                  <v-col cols="12" sm="4" md="3">
-                    <v-overlay class="text-center" :absolute="absolute" :value="overlay">
-                      <p>Date start should lower than Date stop.
-                        <span style="background-color: #ffff00; color: #000;">
-                          {{ date }}
-                        </span><span class="text-h5"> |</span><span style="background-color: #ffff00; color: #000;">
-                          {{ dates }}
-                        </span>
-                      </p>
-                      <v-btn style="background-color: #ffff00; color: #000; " @click="overlay = false">
-                        Ok, I see
-                      </v-btn>
-                    </v-overlay>
-                    <v-card-text class="text-right" @mouseenter="j = true">
-                      <v-btn fab small color="#000" @mouseenter="datelang()" @click="getData()">
-                        <v-icon :color="iconColor"> mdi-magnify </v-icon>
-                      </v-btn>
-                      Search
-                    </v-card-text>
-                  </v-col>
-                  <!--sto baton search date-->
-                </v-row>
-              </v-card>
+                        Search
+                      </v-card-text>
+                    </v-col>
+                    <!--sto baton search date-->
+                  </v-row>
+                </v-card>
+              </div>
             </v-col>
             <!--Sto date range-->
 
-            <v-col cols="12" sm="2" class="py-1"></v-col>
+            <v-col cols="12" sm="2" class="py-1">
+              <v-card-text v-if="(!expand && !overlay)" class="text-center mt-4" style="
+                 min-height: 1px;
+                  z-index: 100;
+                  bottom: 1px;
+                  right: 90px;">
+                <v-tooltip bottom class="px-4">
+                  <template #activator="{ on, attrs }">
+                    <v-btn text style="z-index: 100; background-color: transparent; color: transparent;" v-bind="attrs"
+                    v-on="on"
+                      @click="$router.push('/graph')" @mouseenter="colWidth = true" @mouseleave="colWidth = false">
+                      <v-icon size="45" :color="colWidth ? '#ffff00' : '#000'">mdi-chart-bar</v-icon>
+                    </v-btn>
+
+                  </template>
+                  <span class="tooltip" ref="tooltip">Display Graph</span>
+                </v-tooltip>
+              </v-card-text>
+            </v-col>
           </v-row>
         </v-card-text>
         <!--Sto title page-->
@@ -265,7 +285,7 @@
                 <v-progress-linear indeterminate color="#4d3d00"></v-progress-linear>
               </v-card-text>
               <v-data-table v-if="!overlay" dense :headers="visibleHeaders" :items="visibleItems" :items-per-page="10"
-                item-key="name" class="elevation-1 ma-1">
+                item-key="name" class="elevation-1 ma-1  px-4">
               </v-data-table>
               <v-card-text v-else class="pa-1">
                 <v-card flat min-height="474px" class="text-h5">
@@ -313,11 +333,10 @@ export default {
       absolute: true,
       overlay: false,
       loading: false,
-      colWidth: 'auto',
+      colWidth: false,
       buttonColor: '#ffff00',
       iconColor: '#fff',
       desserts: [],
-
       columns: [
         { key: 'TICKETID', title: 'TICKETID', active: true },
         { key: 'CLASSIFICATION', title: 'CLASSIFICATION', active: true },
@@ -360,8 +379,6 @@ export default {
         { key: 'PROVINCE', title: 'PROVINCE', active: true },
         { key: 'DISTRICT', title: 'DISTRICT', active: true },
         { key: 'VILLAGE', title: 'VILLAGE', active: true },
-        { key: 'TIME_CARE', title: 'TIME_CARE (n)', active: true },
-        { key: 'TIME_DO', title: 'TIME_DO', active: true },
         { key: 'COMPLAIN_BY', title: 'COMPLAIN_BY', active: true },
         { key: 'CLOSE_DATE', title: 'CLOSE_DATE', active: true },
         { key: 'CLOSE__BY', title: 'CLOSE_BY', active: true },
@@ -403,8 +420,6 @@ export default {
         { text: 'PROVINCE', value: 'PROVINCE' },
         { text: 'DISTRICT', value: 'DISTRICT' },
         { text: 'VILLAGE', value: 'VILLAGE' },
-        { text: 'TIME_CARE', value: 'TIME_CARE' },
-        { text: 'TIME_DO', value: 'TIME_DO' },
         { text: 'COMPLAIN_BY', value: 'COMPLAIN_BY' },
         { text: 'CLOSE_DATE', value: 'CLOSE_DATE' },
         { text: 'CLOSE__BY', value: 'CLOSE_BY' },
@@ -455,6 +470,7 @@ export default {
       })
     },
   },
+
   mounted() {
     this.getData()
     this.coloricon()
@@ -506,22 +522,6 @@ export default {
       }
     },
     // sta function alert file download success---------------------------------------------------------------->
-
-    // stopalert() {
-    //   clearInterval(this.autosavealert, this.autosavealert)
-    // },
-
-    // closealrt(alert) {
-    //   if (this.alert === 'alertsuccess') {
-    //     this.autosavealert = setInterval(() => {
-    //       this.alert = false
-    //     }, 3000)
-    //   } else {
-    //     this.autosavealert = setInterval(() => {
-    //       this.alert = false
-    //     }, 7500)
-    //   }
-    // },
     // sto function alert file download success---------------------------------------------------------------->
 
     formatDate(date) {
@@ -633,10 +633,30 @@ export default {
           const inownerItem =
             inownerItemIndex !== undefined ? res[inownerItemIndex] : null
 
-          const date1 = new Date(inprogressItem.QUEUED_DATE)
-          const date2 = new Date(firstItem.QUEUED_DATE)
-          const date3 = new Date(resolveItem.QUEUED_DATE)
-          const date4 = new Date(lastItem.QUEUED_DATE)
+          function convertToISOFormat(dateString) {
+            if (!dateString) {
+              return null // or handle the case where dateString is undefined
+            }
+
+            const dateParts = dateString.split(' ')
+
+            if (dateParts.length !== 2) {
+              return null // or handle the case where the expected format is not found
+            }
+
+            const [day, month, year] = dateParts[0].split('-')
+            const [hours, minutes, seconds] = dateParts[1].split(':')
+
+            return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`
+          }
+          const date1 = new Date(convertToISOFormat(inprogressItem.QUEUED_DATE))
+          const date2 = new Date(convertToISOFormat(firstItem.QUEUED_DATE))
+          const date3 = new Date(convertToISOFormat(resolveItem.QUEUED_DATE))
+          const date4 = new Date(convertToISOFormat(lastItem.QUEUED_DATE))
+          console.log('d1', date3)
+          console.log(resolveItem.QUEUED_DATE)
+          console.log('d2', date2)
+          console.log(firstItem.QUEUED_DATE)
 
           // const time  care  tplus = resolvedateValue.getDate() - qeuredateValue.getDate()
 
@@ -654,6 +674,7 @@ export default {
             (timedo % (1000 * 60 * 60)) / (1000 * 60)
           )
           const timedotplus = (timedo, hoursdo, minutesdo)
+          console.log('tic', timedotplus)
           // --------------------------------
 
           const timecenter = date4 - date3

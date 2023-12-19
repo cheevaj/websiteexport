@@ -1,3 +1,4 @@
+
 module.exports = {
   root: true,
   env: {
@@ -6,13 +7,12 @@ module.exports = {
   },
   parserOptions: {
     parser: '@babel/eslint-parser',
-    requireConfigFile: false,
+    requireConfigFile: true,
   },
+  plugins: ['nuxt'],
   globals: {
     Vue: true,
   },
   extends: ['@nuxtjs', 'plugin:nuxt/recommended', 'prettier'],
-  plugins: [],
-  // add your custom rules here
   rules: {},
-}
+};
