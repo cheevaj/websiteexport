@@ -235,9 +235,8 @@
                   right: 90px;">
                 <v-tooltip bottom class="px-4">
                   <template #activator="{ on, attrs }">
-                    <v-btn text style="z-index: 100; background-color: transparent; color: transparent;" v-bind="attrs"
-                    v-on="on"
-                      @click="$router.push('/graph')" @mouseenter="colWidth = true" @mouseleave="colWidth = false">
+                    <v-btn text style=" background-color: transparent; color: transparent;" v-bind="attrs"
+                      v-on="on" @click="navigateToGraph" @mouseenter="colWidth = true" @mouseleave="colWidth = false">
                       <v-icon size="45" :color="colWidth ? '#ffff00' : '#000'">mdi-chart-bar</v-icon>
                     </v-btn>
 
@@ -251,7 +250,7 @@
         <!--Sto title page-->
 
         <!--Sta table---------------------------------------------------------------------------------------------------------------------->
-        <v-card-actions class="expandable-row py-0">
+        <v-card-actions v-if="true" class="expandable-row py-0">
           <div ref="resizableCol2" class="my-4 " @mousedown="startResize">
             <v-card class="rounded-0 " width="100%" height="80%" :style="{ width: col1Width + 'px' }" color="#ffff00"
               outlined>
@@ -280,7 +279,7 @@
             </v-card>
           </div>
           <v-col class="py-0 pl-0">
-            <v-card outlined style="background-color: #ffff00" class="table-hiegth text-center">
+            <v-card outlined style="background-color: #ffff00" class="table-hiegth table-container text-center">
               <v-card-text v-if="loading" class="pa-0">
                 <v-progress-linear indeterminate color="#4d3d00"></v-progress-linear>
               </v-card-text>
@@ -314,6 +313,9 @@
             </v-card>
           </v-col>
         </v-card-actions>
+        <v-card v-if="true" class="my-4">
+          <chartgraph :desserts="desserts" />
+        </v-card>
       </v-col>
     </v-row>
 
@@ -322,11 +324,12 @@
 </template>
 <script>
 import * as XLSX from 'xlsx'
-// import VueResizeDirective from 'vue-resize-directive'
-// Vue.use(VueResizeDirective)
-// import html2pdf from 'html2pdf.js'
+import chartgraph from './chartgraph.vue'
 export default {
   Currency: 'DefaultLayout',
+  components: {
+    chartgraph,
+  },
   data() {
     return {
       alert: false,
@@ -569,7 +572,7 @@ export default {
             startDate
           )}&endDate=${encodeURIComponent(endDate)}`
         )
-
+            console.log(res)
         // --------- loop data in lastindex of Object in group ID
         const lastIndexes = {}
         const firstIndexes = {}
@@ -653,10 +656,10 @@ export default {
           const date2 = new Date(convertToISOFormat(firstItem.QUEUED_DATE))
           const date3 = new Date(convertToISOFormat(resolveItem.QUEUED_DATE))
           const date4 = new Date(convertToISOFormat(lastItem.QUEUED_DATE))
-          console.log('d1', date3)
-          console.log(resolveItem.QUEUED_DATE)
-          console.log('d2', date2)
-          console.log(firstItem.QUEUED_DATE)
+          // console.log('d1', date3)
+          // console.log(resolveItem.QUEUED_DATE)
+          // console.log('d2', date2)
+          // console.log(firstItem.QUEUED_DATE)
 
           // const time  care  tplus = resolvedateValue.getDate() - qeuredateValue.getDate()
 
@@ -674,7 +677,7 @@ export default {
             (timedo % (1000 * 60 * 60)) / (1000 * 60)
           )
           const timedotplus = (timedo, hoursdo, minutesdo)
-          console.log('tic', timedotplus)
+          // console.log('tic', timedotplus)
           // --------------------------------
 
           const timecenter = date4 - date3
@@ -719,17 +722,16 @@ export default {
         })
 
         // console.log(desserts)
-
         this.desserts = desserts
       } catch (error) {
         console.error('Error fetching data:', error)
         // Handle errors as needed, e.g., show an error message to the user
       }
       this.loading = false
-      // }
-      // else {
-      //   console.log("hi")
-      // }
+    },
+    // goto page graph and send desserts data to page graph
+    navigateToGraph() {
+      this.$router.push({ name: 'graph', params: { desserts: this.desserts, date: this.date, dates: this.dates } });
     },
 
     coloricon() {

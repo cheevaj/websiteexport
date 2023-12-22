@@ -176,7 +176,7 @@
                 <v-card-text>
                   <v-card-title class="pa-0">
                     We are ready to provide configuration instructions to
-                    support the <span style="color: #ffff00;">4.5G</span>  signal in the device again.
+                    support the <span style="color: #ffff00;">4.5G</span> signal in the device again.
                   </v-card-title>
                   <v-card-text class="px-0 pb-0">
                     The number is limited. Anyone who is interested, hurry up to

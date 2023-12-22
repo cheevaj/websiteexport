@@ -1,4 +1,4 @@
-<template>
+<!--<template>
     <v-card class="mx-auto text-center" color="#ffff00" dark>
         <v-card-text class="pa-1">
             <v-sheet color="#fff">
@@ -68,7 +68,6 @@
                     <v-row>
                         <v-col cols="12" md="6" class="pl-12">
                             <v-row class="fill-height" align="center">
-                                <!-- <v-switch v-model="fill" label="Filled"></v-switch> -->
                             </v-row>
                         </v-col>
                         <v-col cols="12" md="6" class="pb-0">
@@ -80,19 +79,18 @@
                                     <v-row>
                                         <v-item v-for="(item, i) in items" :key="i" v-slot="{ active, toggle }">
                                             <v-btn text style="background-color: transparent; color: transparent;"
-                                                @click="showgraph(item.graphform)">
+                                                @click="showgraph(item.name)">
                                                 <v-card flat :style="{
                                                     background: graphstyle[0],
                                                     border: '2px solid',
                                                     borderColor: active ? '#000' : 'white'
                                                 }" class="text-center pa-1" @click="toggle">
                                                     <v-icon size="35"
-                                                        :style="{ color: graphform === item.graphform ? '#000' : '#fff' }">
+                                                        :style="{ color: name === item.name ? '#000' : '#fff' }">
                                                         {{ item.icon }}
                                                     </v-icon>
-                                                    <small
-                                                        :style="{ color: graphform === item.graphform ? '#000' : '#fff' }">{{
-                                                            item.name }}</small>
+                                                    <small :style="{ color: graphdisplay === item.name ? '#000' : '#fff' }">{{
+                                                        item.name }}</small>
                                                 </v-card>
                                             </v-btn>
                                         </v-item>
@@ -184,13 +182,12 @@ export default {
             .toISOString()
             .substr(0, 10), // + 'T00:00:00.000Z',
         items: [
-            { icon: 'mdi-chart-bar', name: 'Bar', graphform: 'bar' },
-            { icon: 'mdi-chart-areaspline-variant', name: 'Variant', graphform: 'line' },
-            { icon: 'mdi-chart-pie', name: 'Pie', graphform: 'pie' },
+            { icon: 'mdi-chart-bar', name: 'bar' },
+            { icon: 'mdi-chart-areaspline-variant', name: 'line' },
+            { icon: 'mdi-chart-pie', name: 'pie' },
         ],
-        graphform: 'bar',
         graphstyle,
-        // graphform: 'bar',
+        graphdisplay: 'bar',
         radius: 2,
         value: [],
         names: [],
@@ -198,13 +195,11 @@ export default {
     }),
     mounted() {
         this.getData();
-        // this.showgraph(this.graphform);
     },
     methods: {
-        showgraph(graphform) {
-            this.graphform = graphform;
-            this.graphShow();
-            console.log(this.graphform)
+        showgraph(name) {
+            this.graphdisplay = name;
+            console.log(this.graphdisplay)
         },
         async getData() {
             this.loading = true;
@@ -218,7 +213,6 @@ export default {
                     )}&endDate=${encodeURIComponent(endDate)}`
                 );
 
-                // Calculate values based on SERVICE_GROUP
                 this.datavalue = this.calculateDataValue(res, 'DATA');
                 this.vasvalue = this.calculateDataValue(res, 'VAS');
                 this.voicevalue = this.calculateDataValue(res, 'VOICE');
@@ -240,16 +234,13 @@ export default {
                 }
             } catch (error) {
                 console.error('Error fetching data:', error);
-                // Handle errors as needed, e.g., show an error message to the user
             }
             this.graphShow();
         },
 
         calculateDataValue(data, serviceGroup) {
-            // Assuming "SERVICE_GROUP" is the key you want to filter on
             return data.reduce((sum, entry) => {
                 if (entry.SERVICE_GROUP === serviceGroup) {
-                    // Adjust the logic based on the field you want to sum
                     return sum + 1;
                 }
                 return sum;
@@ -259,12 +250,12 @@ export default {
             this.loading = false;
             const ctx = document.getElementById('myChart').getContext('2d');
             const myChart = new this.$Chart(ctx, {
-                type: this.graphform,
+                type: this.graphdisplay,
                 data: {
                     labels: this.names,
                     datasets: [
                         {
-                            label:' of Votes',
+                            label: ' of Votes',
                             data: this.value,
                             backgroundColor: [
                                 'rgba(255, 99, 132, 0.2)',

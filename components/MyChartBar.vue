@@ -7,17 +7,17 @@
   
 <script>
 export default {
-    props: {
-        datatel: {
-            type: Object,
-            required: true,
-        },
-        data() {
-            return {
-                //
-            }
-        }
-    },
+    // props: {
+    //     datatel: {
+    //         type: Object,
+    //         required: true,
+    //     },
+    //     data() {
+    //         return {
+    //             //
+    //         }
+    //     }
+    // },
     mounted() {
         const ctx = document.getElementById('myChart').getContext('2d');
         const myChart = new this.$Chart(ctx, {
@@ -57,7 +57,7 @@ export default {
             },
         });
         console.log(myChart)
-        console.log(this.datatel)
+        // console.log(this.datatel)
     },
 };
 </script>
