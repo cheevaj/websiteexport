@@ -235,13 +235,14 @@
                   right: 90px;">
                 <v-tooltip bottom class="px-4">
                   <template #activator="{ on, attrs }">
-                    <v-btn text style=" background-color: transparent; color: transparent;" v-bind="attrs"
-                      v-on="on" @click="navigateToGraph" @mouseenter="colWidth = true" @mouseleave="colWidth = false">
-                      <v-icon size="45" :color="colWidth ? '#ffff00' : '#000'">mdi-chart-bar</v-icon>
+                    <v-btn text style=" background-color: transparent; color: transparent;" v-bind="attrs" v-on="on"
+                      @click="showgraph = !showgraph" @mouseenter="colWidth = true" @mouseleave="colWidth = false">
+                      <v-icon v-if="!showgraph" size="45" :color="colWidth ? '#ffff00' : '#000'">mdi-chart-bar</v-icon>
+                      <v-icon v-else size="45" :color="colWidth ? '#ffff00' : '#000'">mdi-table-large</v-icon>
                     </v-btn>
-
                   </template>
-                  <span class="tooltip" ref="tooltip">Display Graph</span>
+                  <span v-if="!showgraph" class="tooltip" ref="tooltip">Display Graph</span>
+                  <span v-else class="tooltip" ref="tooltip">Display Table Data</span>
                 </v-tooltip>
               </v-card-text>
             </v-col>
@@ -250,7 +251,7 @@
         <!--Sto title page-->
 
         <!--Sta table---------------------------------------------------------------------------------------------------------------------->
-        <v-card-actions v-if="true" class="expandable-row py-0">
+        <v-card-actions v-if="!showgraph" class="expandable-row py-0">
           <div ref="resizableCol2" class="my-4 " @mousedown="startResize">
             <v-card class="rounded-0 " width="100%" height="80%" :style="{ width: col1Width + 'px' }" color="#ffff00"
               outlined>
@@ -283,8 +284,8 @@
               <v-card-text v-if="loading" class="pa-0">
                 <v-progress-linear indeterminate color="#4d3d00"></v-progress-linear>
               </v-card-text>
-              <v-data-table v-if="!overlay" dense :headers="visibleHeaders" :items="visibleItems" :items-per-page="10"
-                item-key="name" class="elevation-1 ma-1  px-4">
+              <v-data-table v-if="!overlay"  dense :headers="visibleHeaders" :items="visibleItems" :items-per-page="10"
+                item-key="name" class="elevation-1 my-1 pl-1 pr-8  px-4 ">
               </v-data-table>
               <v-card-text v-else class="pa-1">
                 <v-card flat min-height="474px" class="text-h5">
@@ -313,7 +314,8 @@
             </v-card>
           </v-col>
         </v-card-actions>
-        <v-card v-if="true" class="my-4">
+        <v-card v-if="showgraph" class="my-4">
+            <v-progress-linear v-if="loading" indeterminate color="#4d3d00"></v-progress-linear>
           <chartgraph :desserts="desserts" />
         </v-card>
       </v-col>
@@ -332,6 +334,7 @@ export default {
   },
   data() {
     return {
+      showgraph: false,
       alert: false,
       absolute: true,
       overlay: false,
@@ -346,7 +349,7 @@ export default {
         { key: 'MSISDN', title: 'MSISDN', active: true },
         { key: 'SERVICE_GROUP', title: 'SERVICE_GROUP', active: true },
         { key: 'COMMODITY', title: 'COMMODITY', active: true },
-        { key: 'CREATED__BY', title: 'CREATEDBY', active: true },
+        { key: 'CREATEDBY', title: 'CREATEDBY', active: true },
         { key: 'CREATIONDATE', title: 'CREATIONDATE', active: true },
         { key: 'QUEUED_DATE', title: 'QUEUED_DATE', active: true },
         { key: 'QUEUED_OWNERGROUP', title: 'QUEUED_OWNERGROUP', active: true },
@@ -384,7 +387,7 @@ export default {
         { key: 'VILLAGE', title: 'VILLAGE', active: true },
         { key: 'COMPLAIN_BY', title: 'COMPLAIN_BY', active: true },
         { key: 'CLOSE_DATE', title: 'CLOSE_DATE', active: true },
-        { key: 'CLOSE__BY', title: 'CLOSE_BY', active: true },
+        { key: 'CLOSE_BY', title: 'CLOSE_BY', active: true },
         { key: 'STATUS_TICKET', title: 'STATUS_TICKET', active: true },
         {
           key: 'TIME_CLOSE_BY_CENTER',
@@ -402,7 +405,7 @@ export default {
         { text: 'CLASSIFICATION', value: 'CLASSIFICATION' },
         { text: 'MSISDN', value: 'MSISDN' },
         { text: 'SERVICE_GROUP', value: 'SERVICE_GROUP' },
-        { text: 'CREATED__BY', value: 'CREATEDBY' },
+        { text: 'CREATEDBY', value: 'CREATEDBY' },
         { text: 'COMMODITY', value: 'COMMODITY' },
         { text: 'CREATIONDATE', value: 'CREATIONDATE' },
         { text: 'QUEUED_DATE', value: 'QUEUED_DATE' },
@@ -425,7 +428,7 @@ export default {
         { text: 'VILLAGE', value: 'VILLAGE' },
         { text: 'COMPLAIN_BY', value: 'COMPLAIN_BY' },
         { text: 'CLOSE_DATE', value: 'CLOSE_DATE' },
-        { text: 'CLOSE__BY', value: 'CLOSE_BY' },
+        { text: 'CLOSE_BY', value: 'CLOSE_BY' },
         { text: 'STATUS_TICKET', value: 'STATUS_TICKET' },
         { text: 'TIME_CLOSE_BY_CENTER', value: 'TIME_CLOSE_BY_CENTER' },
       ],
@@ -556,7 +559,7 @@ export default {
       }
     },
     async getData() {
-
+      this.showgraph= false;
       // const hours = Math.floor(datelang / (1000 * 60 * 60))
       // if (datelang >= 0) {
 
@@ -572,7 +575,7 @@ export default {
             startDate
           )}&endDate=${encodeURIComponent(endDate)}`
         )
-            console.log(res)
+        console.log(res)
         // --------- loop data in lastindex of Object in group ID
         const lastIndexes = {}
         const firstIndexes = {}
@@ -656,7 +659,7 @@ export default {
           const date2 = new Date(convertToISOFormat(firstItem.QUEUED_DATE))
           const date3 = new Date(convertToISOFormat(resolveItem.QUEUED_DATE))
           const date4 = new Date(convertToISOFormat(lastItem.QUEUED_DATE))
-          // console.log('d1', date3)
+          // console.log('d1', res)
           // console.log(resolveItem.QUEUED_DATE)
           // console.log('d2', date2)
           // console.log(firstItem.QUEUED_DATE)
@@ -725,14 +728,13 @@ export default {
         this.desserts = desserts
       } catch (error) {
         console.error('Error fetching data:', error)
-        // Handle errors as needed, e.g., show an error message to the user
       }
-      this.loading = false
+      this.loading = false;
     },
     // goto page graph and send desserts data to page graph
-    navigateToGraph() {
-      this.$router.push({ name: 'graph', params: { desserts: this.desserts, date: this.date, dates: this.dates } });
-    },
+    // navigateToGraph() {
+    //   this.$router.push({ name: 'graph', params: { desserts: this.desserts, date: this.date, dates: this.dates } });
+    // },
 
     coloricon() {
       // Change button and icon colors every second

@@ -7,7 +7,7 @@
                         <v-subheader>TABLE</v-subheader>
                         <v-list-item-group v-model="selectedItem" color="yellow">
                             <v-list-item v-for="(item, i) in itemsshowdata" :key="i">
-                                <v-list-item-content>
+                                <v-list-item-content @click="changeGraph">
                                     <v-list-item-title>{{ item.text }}</v-list-item-title>
                                 </v-list-item-content>
                             </v-list-item>
@@ -26,33 +26,18 @@
                                             indeterminate></v-progress-circular>
                                     </v-card>
                                 </v-col>
-                                <v-col cols="12" sm="7">
-                                    <div>
+                                <v-col cols="10" sm="9">
+                                    <v-container>
                                         <canvas id="myChart"></canvas>
-                                    </div>
+                                    </v-container>
                                 </v-col>
-                                <v-col v-if="!loading" cols="12" sm="5">
-                                    <v-card-text style="color: #000000;">
-                                        <v-simple-table dense flat class="table-container table-title-hiegth">
-                                            <template v-slot:default>
-                                                <thead>
-                                                    <tr>
-                                                        <th class="text-center" style="color: #ffff00;">
-                                                           Row Labels
-                                                        </th>
-                                                        <th class="text-center" style="color:#ffff00;">
-                                                            Count of SERVICE GROUP
-                                                        </th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr v-for="item in dataset" :key="item.name">
-                                                        <td>{{ item.name }}</td>
-                                                        <td>{{ item.value }}</td>
-                                                    </tr>
-                                                </tbody>
-                                            </template>
-                                        </v-simple-table>
+                                <v-col cols="2" sm="3" class="my-12">
+                                    <v-card-text>
+                                        <div v-for="(item, index) in dataset" :key="index">
+                                            <h4 v-if="item.value !== 0" class="my-4" :style="{ color: tablecolors[index] }">
+                                                {{ item.value }}
+                                            </h4>
+                                        </div>
                                     </v-card-text>
                                 </v-col>
                             </v-row>
@@ -89,31 +74,49 @@
                                         </v-item-group>
                                     </v-row>
                                 </v-col>
-                                <v-col cols="6" md="8" class="py-4">
-                                    <v-card-text style="color: #ffff00; background-color: #000;">
-                                        <v-row>
-                                            <v-col cols="4" style="background-color: #ffff00; color:#000;">
-                                                <v-card-actions>
-                                                    <span>GRANDTOTAL : </span>
-                                                    <h3> {{ grandtotal }}</h3>
-
-                                                </v-card-actions>
-                                            </v-col>
-                                            <v-col cols="4" style="background-color: #ffff00; color:#000;">
-                                                <v-card-actions> 
-                                                    <h3> VAS- </h3>
-                                                    <span>MAX : </span>
-                                                    <h3> {{ grandtotal }}</h3>
-                                                </v-card-actions>
-                                            </v-col>
-                                            <v-col cols="4" style="background-color: #ffff00; color:#000;">
-                                                <v-card-actions>
-                                                    <h3> SMS-</h3>
-                                                    <span>MIN :</span>
-                                                    <h3> {{ grandtotal }}</h3>
-                                                </v-card-actions>
-                                            </v-col>
-                                        </v-row>
+                                <v-col v-if="!loading" cols="6" sm="8">
+                                    <v-card-text style="color: #000000;">
+                                        <v-simple-table dense flat class="table-container table-title-hiegth">
+                                            <template v-slot:default>
+                                                <thead>
+                                                    <tr>
+                                                        <th class="text-center" style="color: #ffff00;">
+                                                            Row Labels
+                                                        </th>
+                                                        <th class="text-center" style="color:#ffff00;">
+                                                            Count of SERVICE GROUP
+                                                        </th>
+                                                        <th class="text-center" style="color:#ffff00;">
+                                                            percentages(%)
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr v-for="item in dataset" :key="item.name">
+                                                        <td>{{ item.name }}</td>
+                                                        <td>{{ item.value }}</td>
+                                                        <td>{{ item.percentage }}</td>
+                                                    </tr>
+                                                    <tr style="background-color: #ffff00;">
+                                                        <td style="color: #000;">
+                                                            <h4>
+                                                                {{ tablename }}
+                                                            </h4>
+                                                        </td>
+                                                        <td style="color: #000;">
+                                                            <h4>
+                                                                {{ tabledataall }}
+                                                            </h4>
+                                                        </td>
+                                                        <td style="color: #000;">
+                                                            <h4>
+                                                                100%
+                                                            </h4>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </template>
+                                        </v-simple-table>
                                     </v-card-text>
                                 </v-col>
                             </v-row>
@@ -132,43 +135,36 @@ export default {
     },
     data() {
         return {
-
             datacang: true,
             fill: false,
             loading: true,
+            datavalue: 0,
+            dataallvalue: 0,
             datad1value: 0,
             datad2value: 0,
-            datad3value: 0,
-
-            smss3value: 0,
-            smss5value: 0,
-            smssmsvalue: 0,
-            smsothervalue: 0,
-
-            vasva1value: 0,
-            vasva2value: 0,
-            vasva4value: 0,
-            vasva6value: 0,
-            vasva17value: 0,
-            vasvaothervalue: 0,
-            vasva29value:0,
-
-            voicev1value: 0,
-            voiceothervalue: 0,
-
-            datavalue: 0,
-            grandtotal: 0,
-            voicevalue: 0,
-            vasvalue: 0,
+            datad4value: 0,
+            datad5value: 0,
+            datad6value: 0,
+            dataothervalue: 0,
             smsvalue: 0,
             dataset: [],
+            tablename: '',
+            tabledataall: 0,
             item: [],
             itemsshowdata: [
-                { text: 'Real-Time' },
-                { text: 'Audience' },
-                { text: 'Conversions' },
-                { text: 'Conversions' },
-                { text: 'Conversions' },
+                { text: 'DATA TICKET' },
+                { text: 'DATA' },
+                { text: 'SMS' },
+                { text: 'VAS' },
+                { text: 'VOICE' },
+            ],
+            tablecolors: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)',
             ],
             selectedItem: 0,
             itemsbuton: [
@@ -182,6 +178,7 @@ export default {
             value: [],
             names: [],
             width: 1.5,
+            i: true,
         };
     },
     methods: {
@@ -192,44 +189,129 @@ export default {
         getData() {
             try {
                 // Calculate values based on SERVICE_GROUP
-                this.datavalue = this.calculateDataValue(this.desserts, 'DATA');
-                this.vasvalue = this.calculateDataValue(this.desserts, 'VAS');
-                this.voicevalue = this.calculateDataValue(this.desserts, 'VOICE');
-                this.smsvalue = this.calculateDataValue(this.desserts, 'SMS');
-
-                this.grandtotal = this.datavalue + this.vasvalue + this.voicevalue + this.smsvalue;
-
-
-                // Calculate values based on SERVICE_GROUP CLASSIFICATION
-                this.datad1value = this.calculateDataD1Value(this.desserts, 'DATA' , 'D1_CONNCET INTERNET ບໍ່ໄດ້');
-                this.datad2value = this.calculateDataD1Value(this.desserts, 'DATA' , 'D2_DATA ໝົດໄວ');
-                this.datad3value = this.calculateDataD1Value(this.desserts, 'DATA' , 'D3_INTERNET ຊ້າ');
-
-                // Calculate values based on SERVICE_GROUP CLASSIFICATION
-                this.smss3value = this.calculateDataD1Value(this.desserts, 'SMS' , 'S3_ຮັບ SMS ບໍ່ໄດ້');
-                this.smss5value = this.calculateDataD1Value(this.desserts, 'SMS' , 'S5_ສະຫມັກ APP ແລ້ວບໍ່ໄດ້ຮັບ CODE ຢືນຢັນ');
-                this.smssmsvalue = this.calculateDataD1Value(this.desserts, 'SMS' , 'SMS');
-                this.smsothervalue = this.smsvalue - (this.smss3value + this.smss5value + this.smssmsvalue) ;
-
-                // Calculate values based on SERVICE_GROUP CLASSIFICATION
-                this.vasva1value = this.calculateDataD1Value(this.desserts, 'VAS' , 'VA1_ເງີນຫາຍ (ບໍ່ຮູ້ສາເຫດ)'); 
-                this.vasva2value = this.calculateDataD1Value(this.desserts, 'VAS' , 'VA2_ຕື່ມເງິນ ບໍ່ໄດ້');
-                this.vasva4value = this.calculateDataD1Value(this.desserts, 'VAS' , 'VA4_ສະໝັກ PACKAGE ບໍ່ໄດ້');
-                this.vasva6value = this.calculateDataD1Value(this.desserts, 'VAS' , 'VA6_ສະໝັກ ແລະ ຍົກເລີກ ບໍລິການເສີມບໍ່​ໄດ້​');
-                this.vasva17value = this.calculateDataD1Value(this.desserts, 'VAS' , 'VA17_ກວດເງີນຜ່ານໜ້າຈໍບໍ່ໄດ້');
-                this.vasva29value = this.calculateDataD1Value(this.desserts, 'VAS' , 'VA29_ເບີໃໝ່ນຳໃຊ້ບໍ່ໄດ້');
-                this.vasvaothervalue = this.vasvalue - (this.vasva1value + this.vasva2value + this.vasva4value + this.vasva6value + this.vasva17value + this.vasva29value) ;
+                if (this.selectedItem === 0) {
+                    this.datavalue = this.calculateDataValue(this.desserts, 'DATA');
+                    this.datad1value = this.calculateDataValue(this.desserts, 'SMS');
+                    this.datad2value = this.calculateDataValue(this.desserts, 'VAS');
+                    this.datad3value = this.calculateDataValue(this.desserts, 'VOICE');
+                    this.dataothervalue = this.datavalue + this.datad1value + this.datad2value + this.datad3value;
+                    this.tablename = 'All';
+                    this.tabledataall = this.dataothervalue;
+                    this.names = ['DATA', 'SMS', 'VAS', 'VOICE'];
+                    this.value = [this.datavalue, this.datad1value, this.datad2value, this.datad3value];
+                    const percentages = this.value.map(value => {
+                        if (value === 0 || value === null) {
+                            return '0%';
+                        }
+                        return ((value / this.dataothervalue) * 100).toFixed(2) + '%';
+                    });
+                    this.dataset = this.names.map((item, index) => ({
+                        name: item,
+                        value: this.value[index],
+                        percentage: percentages[index]
+                    }));
+                }
 
                 // Calculate values based on SERVICE_GROUP CLASSIFICATION
-                this.voicev1value = this.calculateDataD1Value(this.desserts, 'VOICE' , 'V1_ມີ​ສັນຍານ​ໂທ​​ເຂົ້າ-​​ໂທອອກບໍ່​ໄດ້'); 
-                this.voiceothervalue = this.voicevalue - (this.voicev1value) ;
+                if (this.selectedItem === 1) {
+                    this.dataallvalue = this.calculateDataValue(this.desserts, 'DATA');
+                    //
+                    this.datad1value = this.calculateDataD1Value(this.desserts, 'DATA', 'D1_CONNCET INTERNET ບໍ່ໄດ້');
+                    this.datad2value = this.calculateDataD1Value(this.desserts, 'DATA', 'D2_DATA ໝົດໄວ');
+                    this.datad3value = this.calculateDataD1Value(this.desserts, 'DATA', 'D3_INTERNET ຊ້າ');
+                    this.dataothervalue = this.dataallvalue - this.datad1value - this.datad2value - this.datad3value;
+                    this.tablename = 'DATA All';
+                    this.tabledataall = this.dataallvalue;
+                    this.names = ['D1_CONNCET INTERNET ບໍ່ໄດ້', 'D2_DATA ໝົດໄວ', 'D3_INTERNET ຊ້າ', 'Other'];
+                    this.value = [this.datad1value, this.datad2value, this.datad3value, this.dataothervalue];
+                    const percentages = this.value.map(value => ((value / this.dataallvalue) * 100).toFixed(2));
+                    this.dataset = this.names.map((item, index) => ({
+                        name: item,
+                        value: this.value[index],
+                        percentage: `${percentages[index]}%`,
+                    }));
+                }
 
-                this.names = ['DATA', 'VAS', 'VOICE', 'SMS'];
-                this.value = [this.datavalue, this.vasvalue, this.voicevalue, this.smsvalue];
-                this.dataset = this.names.map((item, index) => ({
-                    name: item,
-                    value: this.value[index],
-                }));
+                // Calculate values based on SERVICE_GROUP CLASSIFICATION
+                if (this.selectedItem === 2) {
+                    this.dataallvalue = this.calculateDataValue(this.desserts, 'SMS');
+                    this.datad1value = this.calculateDataD1Value(this.desserts, 'SMS', 'S3_ຮັບ SMS ບໍ່ໄດ້');
+                    this.datad2value = this.calculateDataD1Value(this.desserts, 'SMS', 'S5_ສະຫມັກ APP ແລ້ວບໍ່ໄດ້ຮັບ CODE ຢືນຢັນ');
+                    this.datad3value = this.calculateDataD1Value(this.desserts, 'SMS', 'S6_ເຮັດທຸລະກຳຜ່ານ BANK ແລ້ວບໍ່ໄດ້ OTP CODE');
+                    this.datad4value = this.calculateDataD1Value(this.desserts, 'SMS', 'SMS');
+                    this.dataothervalue = this.dataallvalue - (this.datad1value + this.datad2value + this.datad3value + this.datad4value);
+                    this.tablename = 'SMS All';
+                    this.tabledataall = this.dataallvalue;
+                    this.names = ['S3_ຮັບ SMS ບໍ່ໄດ້', 'S5_ສະຫມັກ APP ແລ້ວບໍ່ໄດ້ຮັບ CODE ຢືນຢັນ', 'S6_ເຮັດທຸລະກຳຜ່ານ BANK ແລ້ວບໍ່ໄດ້ OTP CODE', 'sms', 'Other'];
+                    this.value = [this.datad1value, this.datad2value, this.datad3value, this.datad4value, this.dataothervalue];
+                    const percentages = this.value.map(value => {
+                        if (value === 0 || value === null) {
+                            return '0%';
+                        }
+                        return ((value / this.dataallvalue) * 100).toFixed(2) + '%';
+                    });
+                    this.dataset = this.names.map((item, index) => ({
+                        name: item,
+                        value: this.value[index],
+                        percentage: percentages[index]
+                    }));
+                }
+
+                // Calculate values based on SERVICE_GROUP CLASSIFICATION
+                if (this.selectedItem === 3) {
+                    this.dataallvalue = this.calculateDataValue(this.desserts, 'VAS');
+
+                    this.datad1value = this.calculateDataD1Value(this.desserts, 'VAS', 'VA1_ເງີນຫາຍ (ບໍ່ຮູ້ສາເຫດ)');
+                    this.datad2value = this.calculateDataD1Value(this.desserts, 'VAS', 'VA2_ຕື່ມເງິນ ບໍ່ໄດ້');
+                    this.datad3value = this.calculateDataD1Value(this.desserts, 'VAS', 'VA4_ສະໝັກ PACKAGE ບໍ່ໄດ້');
+                    this.datad4value = this.calculateDataD1Value(this.desserts, 'VAS', 'VA6_ສະໝັກ ແລະ ຍົກເລີກ ບໍລິການເສີມບໍ່​ໄດ້​');
+                    this.datad5value = this.calculateDataD1Value(this.desserts, 'VAS', 'VA17_ກວດເງີນຜ່ານໜ້າຈໍບໍ່ໄດ້');
+                    this.datad6value = this.calculateDataD1Value(this.desserts, 'VAS', 'VA29_ເບີໃໝ່ນຳໃຊ້ບໍ່ໄດ້');
+                    this.dataothervalue = this.dataallvalue - (this.datad1value + this.datad2value + this.datad3value + this.datad4value + this.datad5value + this.datad6value);
+                    this.tablename = 'VAS All';
+                    this.tabledataall = this.dataallvalue;
+                    this.names = ['VA1_ເງີນຫາຍ (ບໍ່ຮູ້ສາເຫດ)', 'VA2_ຕື່ມເງິນ ບໍ່ໄດ້', 'VA4_ສະໝັກ PACKAGE ບໍ່ໄດ້', 'VA6_ສະໝັກ ແລະ ຍົກເລີກ ບໍລິການເສີມບໍ່​ໄດ້', 'VA17_ກວດເງີນຜ່ານໜ້າຈໍບໍ່ໄດ້', 'VA29_ເບີໃໝ່ນຳໃຊ້ບໍ່ໄດ້', 'Other'];
+                    this.value = [this.datad1value, this.datad2value, this.datad3value, this.datad4value, this.datad5value, this.datad6value, this.dataothervalue];
+                    const percentages = this.value.map(value => {
+                        if (value === 0 || value === null) {
+                            return '0%';
+                        }
+                        return ((value / this.dataallvalue) * 100).toFixed(2) + '%';
+                    });
+                    this.dataset = this.names.map((item, index) => ({
+                        name: item,
+                        value: this.value[index],
+                        percentage: percentages[index]
+                    }));
+                }
+                if (this.selectedItem === 4) {
+                    this.dataallvalue = this.calculateDataValue(this.desserts, 'VOICE');
+
+                    this.datad1value = this.calculateDataD1Value(this.desserts, 'VOICE', 'V1_ມີ​ສັນຍານ​ໂທ​​ເຂົ້າ-​​ໂທອອກບໍ່​ໄດ້');
+                    this.datad2value = this.calculateDataD1Value(this.desserts, 'VOICE', 'V2_ມີ​ສັນຍານ​ໂທ​ອອກບໍ່​ໄດ້');
+                    this.datad3value = this.calculateDataD1Value(this.desserts, 'VOICE', 'V3_ມີ​ສັນຍານ​ໂທ​​ເຂົ້າບໍ່​ໄດ້');
+                    this.datad4value = this.calculateDataD1Value(this.desserts, 'VOICE', 'VA6_ສະໝັກ ແລະ ຍົກເລີກ ບໍລິການເສີມບໍ່​ໄດ້​');
+                    this.datad5value = this.calculateDataD1Value(this.desserts, 'VOICE', 'VA17_ກວດເງີນຜ່ານໜ້າຈໍບໍ່ໄດ້');
+                    this.datad6value = this.calculateDataD1Value(this.desserts, 'VOICE', 'VA29_ເບີໃໝ່ນຳໃຊ້ບໍ່ໄດ້');
+                    this.dataothervalue = this.dataallvalue - (this.datad1value + this.datad2value + this.datad3value + this.datad4value + this.datad5value + this.datad6value);
+                    this.dataothervalue = this.dataallvalue - (this.datad1value + this.datad2value + this.datad3value + this.datad4value + this.datad5value + this.datad6value);
+                    this.tablename = 'VOICE All';
+                    this.tabledataall = this.dataallvalue;
+                    this.names = ['VA1_ເງີນຫາຍ (ບໍ່ຮູ້ສາເຫດ)', 'VA2_ຕື່ມເງິນ ບໍ່ໄດ້', 'VA4_ສະໝັກ PACKAGE ບໍ່ໄດ້', 'VA6_ສະໝັກ ແລະ ຍົກເລີກ ບໍລິການເສີມບໍ່​ໄດ້', 'VA17_ກວດເງີນຜ່ານໜ້າຈໍບໍ່ໄດ້', 'VA29_ເບີໃໝ່ນຳໃຊ້ບໍ່ໄດ້', 'Other'];
+                    this.value = [this.datad1value, this.datad2value, this.datad3value, this.datad4value, this.datad5value, this.datad6value, this.dataothervalue];
+                    const percentages = this.value.map(value => {
+                        if (value === 0 || value === null) {
+                            return '0%';
+                        }
+                        return ((value / this.dataallvalue) * 100).toFixed(2) + '%';
+                    });
+                    this.dataset = this.names.map((item, index) => ({
+                        name: item,
+                        value: this.value[index],
+                        percentage: percentages[index]
+                    }));
+
+                }
                 // console.log('h', this.dataset)
                 if (this.desserts === undefined) {
                     console.error('Response is undefined');
@@ -261,7 +343,7 @@ export default {
                 return sum;
             }, 0);
         },
-        calculateDataD1Value(data, serviceGroup, serviceGroupD1) {
+        calculateDataD1Value(data, serviceGroup, serviceGroupD1, serviceGroupD2) {
             // Assuming "SERVICE_GROUP" is the key you want to filter on
             return data.reduce((sum, entry) => {
                 if ((entry.SERVICE_GROUP === serviceGroup) && (entry.CLASSIFICATION === serviceGroupD1)) {
@@ -318,21 +400,44 @@ export default {
                     },
                 },
             });
-
+            this.i = false;
         },
+        changeGraph() {
+            this.i = true;
+            this.graphType();
+        },
+
+        graphType() {
+            // Set up the initial interval
+            this.intervalId = setInterval(() => {
+                if (this.i) {
+                    this.getData();
+                    // Clear the current interval
+                    clearInterval(this.intervalId);
+                    // Set up a new interval for the next cycle
+                    this.setupInterval();
+                }
+            }, 1000);
+        },
+
+        setupInterval() {
+            // Set up a new interval when this.i is true
+            this.intervalId = setInterval(() => {
+                if (this.i) {
+                    this.getData();
+                    // Clear the current interval
+                    clearInterval(this.intervalId);
+                    // Set up a new interval for the next cycle
+                    this.setupInterval();
+                }
+            }, 1000);
+        }
 
     },
     mounted() {
-        this.intervalId = setInterval(() => {
-            // if (!this.dataFetched) {
-            this.getData();
-            // this.dataFetched = true; // Set the flag to indicate that data has been fetched
-            // }
-        }, 3200);
+        this.graphType();
     },
-    beforeDestroy() {
-        clearInterval(this.intervalId);
-    },
+
 }
 </script>
 <style scoped>
