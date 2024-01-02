@@ -17,22 +17,7 @@
         </v-btn>
       </div>
       <!--Sto book---------------------------------------------->
-      <!-- sta alert file download---------------------------------------------------------------->
-      <!-- <v-card v-if="alert !== false" flat outline class="rounded-0 pa-0"
-        style="position: absolute; z-index:100; top: 20%; right: 5px;">
-        <v-alert class="ma-0" style="width: 350px;" :value="alert === 'alertsuccess' ? true : false" text type="success"
-          icon="mdi-check-circle-outline" transition="scale-transition" @mouseenter="stopalert()"
-          @mouseleave="closealrt(alert='alertsuccess')">
-          Download the file successfully.
-        </v-alert>
-        <v-alert class="ma-0" style="width: 350px;" :value="(alert !== 'alertsuccess' && alert !== false) ? true : false"
-          text type="error" icon="mdi-close-circle-outline" transition="scale-transition" @mouseenter="stopalert()"
-          @mouseleave="closealrt()">
-          Download the file is error.
-          <v-divider style="background-color: rgb(183, 183, 183);"></v-divider>
-          <small>{{ alert }}</small>
-        </v-alert>
-      </v-card> -->
+
       <!---stop alert file download-------------------------------------------------------------------------------------->
 
       <!-- Sta slid baton Download------------------------------------------------------------------------------------------------------------------->
@@ -233,7 +218,16 @@
                   z-index: 100;
                   bottom: 1px;
                   right: 90px;">
-                <v-tooltip bottom class="px-4">
+                <v-tooltip v-if="loading" bottom class="px-4">
+                  <template #activator="{ on, attrs }">
+                    <v-btn text style=" background-color: transparent; color: transparent;" v-bind="attrs" v-on="on"
+                      @mouseenter="colWidth = true" @mouseleave="colWidth = false">
+                      <v-progress-circular :size="35" color="yellow" indeterminate></v-progress-circular>
+                    </v-btn>
+                  </template>
+                  <span class="tooltip" ref="tooltip">Loading Graph</span>
+                </v-tooltip>
+                <v-tooltip v-else bottom class="px-4">
                   <template #activator="{ on, attrs }">
                     <v-btn text style=" background-color: transparent; color: transparent;" v-bind="attrs" v-on="on"
                       @click="showgraph = !showgraph" @mouseenter="colWidth = true" @mouseleave="colWidth = false">
@@ -244,6 +238,7 @@
                   <span v-if="!showgraph" class="tooltip" ref="tooltip">Display Graph</span>
                   <span v-else class="tooltip" ref="tooltip">Display Table Data</span>
                 </v-tooltip>
+
               </v-card-text>
             </v-col>
           </v-row>
@@ -279,13 +274,13 @@
               </v-list>
             </v-card>
           </div>
-          <v-col class="py-0 pl-0">
-            <v-card outlined style="background-color: #ffff00" class="table-hiegth table-container text-center">
+          <v-col class="py-0 pl-1" :style="{ 'max-width': 'calc(100% - ' + col1Width + 'px)' }">
+            <v-card outlined style="background-color: #ffff00;" class="table-hiegth table-container text-center">
               <v-card-text v-if="loading" class="pa-0">
                 <v-progress-linear indeterminate color="#4d3d00"></v-progress-linear>
               </v-card-text>
-              <v-data-table v-if="!overlay"  dense :headers="visibleHeaders" :items="visibleItems" :items-per-page="10"
-                item-key="name" class="elevation-1 my-1 pl-1 pr-8  px-4 ">
+              <v-data-table v-if="!overlay" dense :headers="visibleHeaders" :items="visibleItems" :items-per-page="10"
+                item-key="name" class="elevation-1 pl-1 pr-8  px-4 ">
               </v-data-table>
               <v-card-text v-else class="pa-1">
                 <v-card flat min-height="474px" class="text-h5">
@@ -315,7 +310,7 @@
           </v-col>
         </v-card-actions>
         <v-card v-if="showgraph" class="my-4">
-            <v-progress-linear v-if="loading" indeterminate color="#4d3d00"></v-progress-linear>
+          <v-progress-linear v-if="loading" indeterminate color="#4d3d00"></v-progress-linear>
           <chartgraph :desserts="desserts" />
         </v-card>
       </v-col>
@@ -432,7 +427,7 @@ export default {
         { text: 'STATUS_TICKET', value: 'STATUS_TICKET' },
         { text: 'TIME_CLOSE_BY_CENTER', value: 'TIME_CLOSE_BY_CENTER' },
       ],
-      col1Width: 150,
+      col1Width: 80,
       minCol1Width: 60,
       maxCol1Width: 250,
       resizing: false,
@@ -443,7 +438,7 @@ export default {
       color: '#e5e5e5',
       date: new Date(
         Date.now() -
-        24 * 60 * 60 * 1000 -
+        (7*24) * 60 * 60 * 1000 -
         new Date().getTimezoneOffset() * 60000
       )
         .toISOString()
@@ -559,7 +554,7 @@ export default {
       }
     },
     async getData() {
-      this.showgraph= false;
+      this.showgraph = false;
       // const hours = Math.floor(datelang / (1000 * 60 * 60))
       // if (datelang >= 0) {
 
@@ -585,7 +580,6 @@ export default {
 
         for (let i = res.length - 1; i >= 0; i--) {
           const currentTicketID = res[i].TICKETID
-
           if (typeof inownerIndex[currentTicketID] === 'undefined') {
             inownerIndex[currentTicketID] = i - 3
           }
@@ -655,6 +649,25 @@ export default {
 
             return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`
           }
+          const inprogressItemQUEUEDOWNER =
+            inprogressItem && inprogressItem.QUEUED_OWNER
+              ? inprogressItem.QUEUED_OWNER
+              : '';
+
+          const inownerItemQUEUEDOWNER =
+            inownerItem && inownerItem.QUEUED_OWNER
+              ? inownerItem.QUEUED_OWNER
+              : '';
+          //
+          const inownerItemINPROGRESSCHANGEBY =
+            inownerItem && inownerItem.INPROGRESS_CHANGEBY
+              ? inownerItem.INPROGRESS_CHANGEBY
+              : '';
+
+          const inprogressItemINPROGRESSCHANGEBY =
+            inprogressItem && inprogressItem.INPROGRESS_CHANGEBY
+              ? inprogressItem.INPROGRESS_CHANGEBY
+              : '';
           const date1 = new Date(convertToISOFormat(inprogressItem.QUEUED_DATE))
           const date2 = new Date(convertToISOFormat(firstItem.QUEUED_DATE))
           const date3 = new Date(convertToISOFormat(resolveItem.QUEUED_DATE))
@@ -701,13 +714,13 @@ export default {
             QUEUED_DATE: firstItem.QUEUED_DATE,
             QUEUED_OWNERGROUP: firstItem.OWNERGROUP,
             INPROGRESS_DATE: inprogressItem.QUEUED_DATE,
-            INPROGRESS_OWNER: inownerItem.QUEUED_OWNER,
+            INPROGRESS_OWNER: inownerItemQUEUEDOWNER, //         QUEUED_OWNER === null
             INPROGRESS_OWNERGROUP: firstItem.OWNERGROUP,
-            INPROGRESS_CHANGBY: inownerItem.INPROGRESS_CHANGEBY,
+            INPROGRESS_CHANGBY: inownerItemINPROGRESSCHANGEBY, //
             RESOLVE_DATE: resolveItem.QUEUED_DATE,
-            RESOLVE_OWNER: inprogressItem.QUEUED_OWNER,
+            RESOLVE_OWNER: inprogressItemQUEUEDOWNER, //         QUEUED_OWNER === null
             RESOLVE_OWNERGROUP: inprogressItem.OWNERGROUP,
-            RESOLVE_CHANGBY: inprogressItem.INPROGRESS_CHANGEBY,
+            RESOLVE_CHANGBY: inprogressItemINPROGRESSCHANGEBY, // 
             TIME_CARE_TPLUS: timecaretplus, // inprogressdateValue - qeuredateValue
             TIME_DO_TPLUS: timedotplus, // resolvedateValue - qeuredateValue
             WORKLONG_DESCRIPTOIN: firstItem.FIRST_WORKLOG_DESCRIPTION,

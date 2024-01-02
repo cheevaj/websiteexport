@@ -1,4 +1,3 @@
-
 module.exports = {
   root: true,
   env: {
@@ -15,4 +14,4 @@ module.exports = {
   },
   extends: ['@nuxtjs', 'plugin:nuxt/recommended', 'prettier'],
   rules: {},
-};
+}
