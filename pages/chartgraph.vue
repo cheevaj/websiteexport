@@ -8,7 +8,8 @@
                         <template v-slot:activator="{ on, attrs }">
                             <v-btn style=" width: 99%; border-radius: 0%; background-color: #ffff00; color: #000;" dark
                                 v-bind="attrs" v-on="on">
-                                MENU TABLE
+                                MENU TABLES
+                                <v-icon>mdi-table-sync</v-icon>
                             </v-btn>
                         </template>
                         <v-list flat class="pt-0" style="background-color: #ffffe6;">
@@ -66,34 +67,37 @@
                         </v-list-item-group>
                     </v-list>
                 </v-card>
-                <v-card-text class="mt-2" style="color: #000;">
-                    <h4>STYLE GRAPH</h4>
-                </v-card-text>
-                <v-divider style="background-color: #000;" />
-                <v-col cols="12" sm="12" md="12" class="mt-4 by-4 px-2 ">
-                    <v-row class="fill-height pl-2" align="center">
-                        <v-item-group mandatory>
-                            <v-col v-for="(item, i) in itemsbuton" :key="i">
-                                <v-item v-slot="{ active, toggle }">
-                                    <v-btn text class="pa-2" style="background-color: transparent; color: transparent;"
-                                        @click="showgraph(item.name)">
-                                        <v-card flat :style="{
-                                            background: graphstyle[0],
-                                            border: '2px solid',
-                                            borderColor: active ? '#000' : 'white'
-                                        }" class="text-center pa-1" @click="toggle">
-                                            <v-icon size="35"
-                                                :style="{ color: graphform === item.name ? '#000' : '#fff' }">{{ item.icon
-                                                }}</v-icon>
-                                            <small :style="{ color: graphform === item.name ? '#000' : '#fff' }">{{
-                                                item.name }}</small>
-                                        </v-card>
-                                    </v-btn>
-                                </v-item>
-                            </v-col>
-                        </v-item-group>
-                    </v-row>
-                </v-col>
+                <div>
+                    <v-card-text class="mt-2" style="color: #000;">
+                        <h4>STYLE GRAPH</h4>
+                    </v-card-text>
+                    <v-divider style="background-color: #000;" />
+                    <v-col cols="12" sm="12" md="12" class="mt-4 by-4 px-2">
+                        <v-row class="fill-height pl-2" align="center">
+                            <v-item-group mandatory>
+                                <v-col v-for="(item, i) in itemsbuton" :key="i">
+                                    <v-item v-slot="{ active, toggle }">
+                                        <v-btn text class="pa-2" style="background-color: transparent; color: transparent;"
+                                            @click="showgraph(item.name)">
+                                            <v-card flat :style="{
+                                                background: graphstyle[0],
+                                                border: '2px solid',
+                                                borderColor: active ? '#000' : 'white'
+                                            }" class="text-center pa-1" @click="toggle">
+                                                <v-icon size="35"
+                                                    :style="{ color: graphform === item.name ? '#000' : '#fff' }">{{
+                                                        item.icon
+                                                    }}</v-icon>
+                                                <small :style="{ color: graphform === item.name ? '#000' : '#fff' }">{{
+                                                    item.name }}</small>
+                                            </v-card>
+                                        </v-btn>
+                                    </v-item>
+                                </v-col>
+                            </v-item-group>
+                        </v-row>
+                    </v-col>
+                </div>
             </v-col>
             <v-col cols="10" class="pa-0">
                 <v-card-text class="pa-1">
@@ -106,21 +110,10 @@
                                             indeterminate></v-progress-circular>
                                     </v-card>
                                 </v-col>
-                                <v-col :cols="showvalue ? 10 : 12" :sm="showvalue ? 9 : 12">
+                                <v-col cols="12"> <!-- cols="12" :sm="showstrygraph ? 9 : 12" -->
                                     <v-container>
                                         <canvas id="myChart"></canvas>
                                     </v-container>
-                                </v-col>
-                                <v-col v-if="showvalue" cols="2" sm="6" md="3" class="my-12">
-                                    <v-card-text>
-                                        <div v-for="(item, index) in dataset" :key="index">
-                                            <h4 v-if="item.value !== 0" class="my-4"
-                                                :style="{ color: index <= 9 ? tablecolors[index] : '#4d4d00' }">
-                                                {{ item.value }} <span style="color: #000;">|</span> {{ item.percentage }}
-                                            </h4>
-                                            <v-divider style="background-color: #ffff00;"></v-divider>
-                                        </div>
-                                    </v-card-text>
                                 </v-col>
                             </v-row>
                         </v-card-text>
@@ -129,7 +122,7 @@
                         </div>
                         <v-card-text style="background-color: rgba(255, 206, 86,0.1);">
                             <v-row>
-                                <v-col v-if="(!loading && tabledisplay === 'Customer complaint')" cols="6" sm="7" md="7"
+                                <v-col v-if="(!loading && tabledisplay === 'Customer complaint')" cols="12" sm="7" md="7"
                                     class="px-0 py-0">
                                     <v-card-text class="px-1 pt-0 pb-1" style="color: #000000;">
                                         <h4 style="color: #b3b300;">DATA TABLE</h4>
@@ -235,9 +228,10 @@
                                                             Ticket/KPI
                                                         </th>
                                                         <th class="text-center" style="color:#ffff00;">
-                                                            Time ≤ 20m </th>
+                                                            ≤ 20m
+                                                        </th>
                                                         <th class="text-center" style="color:#ffff00;">
-                                                            Time > 20m
+                                                            &gt; 20m
                                                         </th>
                                                         <th class="text-center" style="color:#ffff00;">
                                                             Total
@@ -247,24 +241,25 @@
                                                 <tbody>
                                                     <tr v-for="item in datasetdatatime" :key="item.name">
                                                         <td>{{ item.name }}</td>
-                                                        <td>{{ item.valuemax }}</td>
                                                         <td>{{ item.valuemin }}</td>
+                                                        <td>{{ item.valuemax }}</td>
                                                         <td>{{ item.dataall }}</td>
                                                     </tr>
                                                     <tr style="background-color: #ffff00;">
                                                         <td style="color: #000;">
                                                             <h4>
-                                                                percentages(%)
+                                                                percent(%)
                                                             </h4>
                                                         </td>
                                                         <td style="color: #000;">
                                                             <h4>
-                                                                {{ percenmax }}
+
+                                                                L(20m):{{ percenmin }}
                                                             </h4>
                                                         </td>
                                                         <td style="color: #000;">
                                                             <h4>
-                                                                {{ percenmin }}
+                                                                H(20m):{{ percenmax }}
                                                             </h4>
                                                         </td>
                                                         <td style="color: #000;">
@@ -297,7 +292,7 @@ export default {
             expand: 'btn-1',
             tabledisplay: 'Customer complaint',
             datacang: true,
-            showvalue: true,
+            showstrygraph: true,
             loading: true,
             percenmin: 0,
             percenmax: 0,
@@ -312,17 +307,6 @@ export default {
                 { text: 'SMS' },
                 { text: 'VAS' },
                 { text: 'VOICE' },
-            ],
-            tablecolors: [
-                'rgba(255, 99, 132, 1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(153, 102, 255, 1)',
-                'rgba(25, 159, 64, 1)',
-                'rgba(254, 19, 64, 1)',
-                'rgba(255, 159, 164, 1)',
-                'rgba(125, 139, 144, 1)',
             ],
             selectedItem: 0,
             itemsbuton: [
@@ -347,7 +331,6 @@ export default {
         getData() {
             try {
                 // Calculate values based on SERVICE_GROUP
-                // if (this.tabledisplay === 'Customer complaint') {
                 const datamin = this.calculateDatamin(this.desserts, 'DATA', 20);
                 const datavalue = this.calculateDataValue(this.desserts, 'DATA');
                 const datamax = datavalue - datamin;
@@ -392,69 +375,70 @@ export default {
                     const dataothervalue = datavalue + datad1value + datad2value + datad3value;
                     this.tablename = 'All';
                     this.tabledataall = dataothervalue;
-                    this.names = ['DATA', 'SMS', 'VAS', 'VOICE'];
-                    this.value = [datavalue, datad1value, datad2value, datad3value];
-                    const percentages = this.value.map(value => {
-                        if (value === 0 || value === null) {
-                            return '0%';
-                        }
-                        return ((value / dataothervalue) * 100).toFixed(2) + '%';
-                    });
+                    const dataObjects = [
+                        { name: 'DATA', value: datavalue },
+                        { name: 'SMS', value: datad1value },
+                        { name: 'VAS', value: datad2value },
+                        { name: 'VOICE', value: datad3value },
+                    ];
+                    dataObjects.sort((a, b) => b.value - a.value);
+                    this.names = dataObjects.filter(item => item.value > 0).map(item => item.name);
+                    this.value = dataObjects.filter(item => item.value > 0).map(item => item.value);
+                    const percentages = this.value.map(value => ((value / dataothervalue) * 100).toFixed(2));
                     this.dataset = this.names.map((item, index) => ({
                         name: item,
                         value: this.value[index],
-                        percentage: percentages[index]
+                        percentage: `${percentages[index]}%`,
                     }));
+                    this.dataset = this.dataset.filter(item => item.value > 0);
                 }
-
                 // Calculate values based on SERVICE_GROUP CLASSIFICATION DATA
                 if (this.selectedItem === 1) {
                     const dataallvalue = this.calculateDataValue(this.desserts, 'DATA');
                     if (this.tabledisplay === 'Root Cause') {
-                        const datad1value = this.calculateDataD2Value(this.desserts, 'DATA', 'TP036_ລູກຄ້າຈັບສັນຍານ 2G ແນະນໍາລູກຄ້າລີເລັດມືຖືແລ້ວລອງໄໝ່')
-                        const datad2value = this.calculateDataD1Value(this.desserts, 'DATA', 'High PRB')
-                        const datad3value = this.calculateDataD1Value(this.desserts, 'DATA', 'TP002_ເບີນີ້ໃຊ້ງານໄດ້ປົກກະຕິ ແນະນໍາລູກຄ້າລີເຊັດມືຖືແລ້ວລອງໃໝ່ອີກຄັ້ງ')
-                        const datad4value = this.calculateDataD1Value(this.desserts, 'DATA', 'Sites were down in that area')
-                        const datad5value = this.calculateDataD1Value(this.desserts, 'DATA', 'Usage Old Beeline SIM')
-                        const datad6value = this.calculateDataD1Value(this.desserts, 'DATA', 'Usage Up Package Already')
+                        const datad1value = this.calculateDataD2Value(this.desserts, 'DATA', 'TP036_')
+                        const datad2value = this.calculateDataD2Value(this.desserts, 'DATA', 'TP005_')
+                        const datad3value = this.calculateDataD2Value(this.desserts, 'DATA', 'TP002_')
+                        const datad4value = this.calculateDataD2Value(this.desserts, 'DATA', 'TP027_')
+                        const datad5value = this.calculateDataD2Value(this.desserts, 'DATA', 'TP016_')
+                        const datad6value = this.calculateDataD2Value(this.desserts, 'DATA', 'TP004_')
                         const dataothervalue = dataallvalue - datad1value - datad2value - datad3value - datad4value - datad5value - datad6value;
                         this.tablename = 'DATA All';
                         this.tabledataall = dataallvalue;
                         const dataObjects = [
+                            { name: 'Number Was Operational', value: datad3value },
                             { name: 'Customer Capture 2G signal', value: datad1value },
                             { name: 'High PRB', value: datad2value },
-                            { name: 'Number Was Operational', value: datad3value },
                             { name: 'Sites were down in that area', value: datad4value },
                             { name: 'Usage Old Beeline SIM', value: datad5value },
                             { name: 'Usage Up Package Already', value: datad6value },
                             { name: 'Other', value: dataothervalue }
                         ];
                         // Sort the dataObjects array based on the value property in descending order
-                        // dataObjects.sort((a, b) => b.value - a.value);
-                        this.names = dataObjects.map(item => item.name);
-                        this.value = dataObjects.map(item => item.value);
+                        dataObjects.sort((a, b) => b.value - a.value);
+                        this.names = dataObjects.filter(item => item.value > 0).map(item => item.name);
+                        this.value = dataObjects.filter(item => item.value > 0).map(item => item.value);
                         const percentages = this.value.map(value => ((value / dataallvalue) * 100).toFixed(2));
                         this.dataset = this.names.map((item, index) => ({
                             name: item,
                             value: this.value[index],
                             percentage: `${percentages[index]}%`,
                         }));
+                        this.dataset = this.dataset.filter(item => item.value > 0);
                     }
                     else {
-                        const datad1value = this.calculateDataD1Value(this.desserts, 'DATA', 'D1_CONNCET INTERNET ບໍ່ໄດ້');
-                        const datad2value = this.calculateDataD1Value(this.desserts, 'DATA', 'D2_DATA ໝົດໄວ');
-                        const datad3value = this.calculateDataD1Value(this.desserts, 'DATA', 'D3_INTERNET ຊ້າ');
-                        const dataothervalue = dataallvalue - datad1value - datad2value - datad3value;
                         this.tablename = 'DATA All';
                         this.tabledataall = dataallvalue;
-                        const dataObjects = [
-                            { name: 'D1_CONNCET INTERNET ບໍ່ໄດ້', value: datad1value },
-                            { name: 'D2_DATA ໝົດໄວ', value: datad2value },
-                            { name: 'D3_INTERNET ຊ້າ', value: datad3value },
-                            { name: 'Other', value: dataothervalue }
-                        ];
+                        // Collect unique names using loopname function
+                        const uniqueNames = this.loopname(this.desserts, 'DATA', 'DATA');
+
+                        const dataObjects = uniqueNames.map(name => ({
+                            name,
+                            value: this.calculateDataD1Value(this.desserts, 'DATA', name)
+                        }));
+                        // console.log('oo', dataObjects)
                         // Sort the dataObjects array based on the value property in descending order
-                        // dataObjects.sort((a, b) => b.value - a.value);
+                        dataObjects.sort((a, b) => b.value - a.value);
                         this.names = dataObjects.map(item => item.name);
                         this.value = dataObjects.map(item => item.value);
                         const percentages = this.value.map(value => ((value / dataallvalue) * 100).toFixed(2));
@@ -463,71 +447,153 @@ export default {
                             value: this.value[index],
                             percentage: `${percentages[index]}%`,
                         }));
+                        // console.log(uniqueNames)
+                        // console.log('data', dataObjects)
                     }
                 }
-
                 // Calculate values based on SERVICE_GROUP CLASSIFICATION SMS
                 if (this.selectedItem === 2) {
                     const dataallvalue = this.calculateDataValue(this.desserts, 'SMS');
-                    // Root cause
+                    // if (this.tabledisplay === 'Root Cause') {
+                    //     this.tablename = 'SMS All';
+                    //     this.tabledataall = dataallvalue;
+                    //     // this.tabledataall = this.value.reduce((sum, value) => sum + value, 0);
+
+                    //     const uniqueNames = this.loopname(this.desserts, 'SMS', 'Root');
+                    //     console.log('l', uniqueNames)
+                    //     const dataObjects = uniqueNames.reduce((accumulator, name) => {
+                    //         let adjustedName = [];
+
+                    //         // Iterate through each character in the name
+                    //         for (let i = 0; i < name.length; i++) {
+                    //             const a = name.substring(i, i + 1);
+
+                    //             // If an underscore is found, adjust the name
+                    //             if (a === '_') {
+                    //                 const id = name.substring(0, i + 1);
+                    //                 if (id.substring(0, 2) === 'TP') {
+                    //                     adjustedName = id.substring(2, 3) === '0' ? id.substring(0, 2) + id.substring(3) : id.substring(0);
+                    //                 }
+                    //                 break; // Exit the loop after adjustment
+                    //             }
+                    //         }
+                    //         const existingObject = accumulator.find((obj) => obj.name === adjustedName);
+                    //         if (existingObject) {
+                    //             existingObject.value += this.calculateDataD2Value(
+                    //                 this.desserts,
+                    //                 'SMS',
+                    //                 name
+                    //             );
+                    //         } else {
+                    //             accumulator.push({
+                    //                 name: adjustedName,
+                    //                 value: this.calculateDataD2Value(this.desserts, 'SMS', name),
+                    //             });
+                    //         }
+
+                    //         return accumulator;
+                    //     }, []);
+
+                    //     console.log('p', this.tabledataall);
+                    //     console.log('name', dataObjects);
+
+                    //     // Sort the dataObjects array based on the value property in descending order
+                    //     dataObjects.sort((a, b) => b.value - a.value);
+                    //     this.names = dataObjects.map((item) => item.name);
+                    //     this.value = dataObjects.map((item) => item.value);
+                    //     const percentages = this.value.map((value) =>
+                    //         ((value / dataallvalue) * 100).toFixed(2)
+                    //     );
+
+                    //     this.dataset = this.names.map((item, index) => ({
+                    //         name: item,
+                    //         value: this.value[index],
+                    //         percentage: `${percentages[index]}%`,
+                    //     }));
+                    // }
+                    // else {
+                    //     this.tablename = 'SMS All';
+                    //     this.tabledataall = dataallvalue;
+                    //     const uniqueNames = this.loopname(this.desserts, 'SMS', 'DATA');
+                    //     const dataObjects = uniqueNames.map(name => ({
+                    //         name,
+                    //         value: this.calculateDataD1Value(this.desserts, 'SMS', name)
+                    //     }));
+                    //     // Sort the dataObjects array based on the value property in descending order
+                    //     dataObjects.sort((a, b) => b.value - a.value);
+                    //     this.names = dataObjects.map(item => item.name);
+                    //     this.value = dataObjects.map(item => item.value);
+                    //     const percentages = this.value.map(value => ((value / dataallvalue) * 100).toFixed(2));
+                    //     this.dataset = this.names.map((item, index) => ({
+                    //         name: item,
+                    //         value: this.value[index],
+                    //         percentage: `${percentages[index]}%`,
+                    //     }));
+                    // }
                     if (this.tabledisplay === 'Root Cause') {
-                        const datad1value = this.calculateDataD1Value(this.desserts, 'SMS', 'No SMSMT in HSS');
-                        const datad2value = this.calculateDataD1Value(this.desserts, 'SMS', 'Number Was Operational(Sugestion to Setting SMS Center)');
-                        const datad3value = this.calculateDataD1Value(this.desserts, 'SMS', 'Received SMS(They did not check SMS)');
-                        const dataothervalue = dataallvalue - (datad1value + datad2value + datad3value);
                         this.tablename = 'SMS All';
                         this.tabledataall = dataallvalue;
-                        const dataObjects = [
-                            { name: 'No SMSMT in HSS', value: datad1value },
-                            { name: 'Number Was Operational(Sugestion to Setting SMS Center)', value: datad2value },
-                            { name: 'Received SMS(They did not check SMS)', value: datad3value },
-                            { name: 'Other', value: dataothervalue }
-                        ];
-                        // Sort the dataObjects array based on the value property in descending order
-                        // dataObjects.sort((a, b) => b.value - a.value);
-                        this.names = dataObjects.map(item => item.name);
-                        this.value = dataObjects.map(item => item.value);
-                        const percentages = this.value.map(value => ((value / dataallvalue) * 100).toFixed(2));
+                        const uniqueNames = this.loopname(this.desserts, 'SMS', 'Root');
+                        const dataObjects = uniqueNames.reduce((accumulator, name) => {
+                            const adjustedName = this.adjustName(name);
+                            const existingObject = accumulator.find((obj) => obj.name === adjustedName);
+                            // console.log('lll', existingObject)
+                            if (existingObject) {
+                                existingObject.value += this.calculateDataD2Value(this.desserts, 'SMS', name);
+                            } else {
+                                accumulator.push({
+                                    name: adjustedName,
+                                    value: this.calculateDataD2Value(this.desserts, 'SMS', name),
+                                });
+                            }
+
+                            return accumulator;
+                        }, []);
+
+                        // console.log('p', this.tabledataall);
+                        // console.log('name', dataObjects);
+
+                        dataObjects.sort((a, b) => b.value - a.value);
+                        this.names = dataObjects.map((item) => item.name);
+                        this.value = dataObjects.map((item) => item.value);
+                        const percentages = this.value.map((value) => ((value / this.tabledataall) * 100).toFixed(2));
+
+                        this.dataset = this.names.map((item, index) => ({
+                            name: item,
+                            value: this.value[index],
+                            percentage: `${percentages[index]}%`,
+                        }));
+                    } else {
+                        this.tablename = 'SMS All';
+                        this.tabledataall = dataallvalue;
+                        const uniqueNames = this.loopname(this.desserts, 'SMS', 'DATA');
+                        const dataObjects = uniqueNames.map((name) => ({
+                            name,
+                            value: this.calculateDataD1Value(this.desserts, 'SMS', name),
+                        }));
+                        dataObjects.sort((a, b) => b.value - a.value);
+                        this.names = dataObjects.map((item) => item.name);
+                        this.value = dataObjects.map((item) => item.value);
+                        const percentages = this.value.map((value) => ((value / this.tabledataall) * 100).toFixed(2));
+
                         this.dataset = this.names.map((item, index) => ({
                             name: item,
                             value: this.value[index],
                             percentage: `${percentages[index]}%`,
                         }));
                     }
-                    else {
-                        const datad1value = this.calculateDataD1Value(this.desserts, 'SMS', 'S3_ຮັບ SMS ບໍ່ໄດ້');
-                        const datad2value = this.calculateDataD1Value(this.desserts, 'SMS', 'S5_ສະຫມັກ APP ແລ້ວບໍ່ໄດ້ຮັບ CODE ຢືນຢັນ');
-                        const datad3value = this.calculateDataD1Value(this.desserts, 'SMS', 'S6_ເຮັດທຸລະກຳຜ່ານ BANK ແລ້ວບໍ່ໄດ້ OTP CODE');
-                        const datad4value = this.calculateDataD1Value(this.desserts, 'SMS', 'SMS');
-                        const dataothervalue = dataallvalue - (datad1value + datad2value + datad3value + datad4value);
-                        this.tablename = 'SMS All';
-                        this.tabledataall = dataallvalue;
-                        this.names = ['S3_ຮັບ SMS ບໍ່ໄດ້', 'S5_ສະຫມັກ APP ແລ້ວບໍ່ໄດ້ຮັບ CODE ຢືນຢັນ', 'S6_ເຮັດທຸລະກຳຜ່ານ BANK ແລ້ວບໍ່ໄດ້ OTP CODE', 'sms', 'Other'];
-                        this.value = [datad1value, datad2value, datad3value, datad4value, dataothervalue];
-                        const percentages = this.value.map(value => {
-                            if (value === 0 || value === null) {
-                                return '0%';
-                            }
-                            return ((value / dataallvalue) * 100).toFixed(2) + '%';
-                        });
-                        this.dataset = this.names.map((item, index) => ({
-                            name: item,
-                            value: this.value[index],
-                            percentage: percentages[index]
-                        }));
-                    }
-
                 }
-
                 // Calculate values based on SERVICE_GROUP CLASSIFICATION
                 if (this.selectedItem === 3) {
                     const dataallvalue = this.calculateDataValue(this.desserts, 'VAS');
                     if (this.tabledisplay === 'Root Cause') {
-                        const datad1value = this.calculateDataD1Value(this.desserts, 'VAS', 'Money Was Deducted by Games');
-                        const datad2value = this.calculateDataD1Value(this.desserts, 'VAS', 'Money Was Deducted by Loan Money');
-                        const datad3value = this.calculateDataD1Value(this.desserts, 'VAS', 'Money Was Deducted by Package Service');
-                        const datad4value = this.calculateDataD1Value(this.desserts, 'VAS', 'Money Was Deducted by SMS');
-                        const dataothervalue = dataallvalue - (datad1value + datad2value + datad3value + datad4value);
+                        const datad1value = this.calculateDataD2Value(this.desserts, 'VAS', 'TP012_');
+                        const datad2value = this.calculateDataD2Value(this.desserts, 'VAS', 'TP013_');
+                        const datad3value = this.calculateDataD2Value(this.desserts, 'VAS', 'TP043_');
+                        const datad4value = this.calculateDataD2Value(this.desserts, 'VAS', 'TP011_');
+                        const datad5value = this.calculateDataD2Value(this.desserts, 'VAS', 'TP010_');
+                        const datad6value = this.calculateDataD2Value(this.desserts, 'VAS', 'TP009_');
+                        const dataothervalue = (dataallvalue - (datad1value + datad2value + datad3value + datad4value + datad5value + datad6value));
                         this.tablename = 'VAS All';
                         this.tabledataall = dataallvalue;
                         const dataObjects = [
@@ -535,10 +601,33 @@ export default {
                             { name: 'Money Was Deducted by Loan Money', value: datad2value },
                             { name: 'Money Was Deducted by Package Service', value: datad3value },
                             { name: 'Money Was Deducted by SMS', value: datad4value },
+                            { name: 'Money Was Deducted by Voice', value: datad5value },
+                            { name: 'Money Was Deducted by Voice', value: datad6value },
                             { name: 'Other', value: dataothervalue }
                         ];
                         // Sort the dataObjects array based on the value property in descending order
-                        // dataObjects.sort((a, b) => b.value - a.value);
+                        dataObjects.sort((a, b) => b.value - a.value);
+                        this.names = dataObjects.filter(item => item.value > 0).map(item => item.name);
+                        this.value = dataObjects.filter(item => item.value > 0).map(item => item.value);
+                        const percentages = this.value.map(value => ((value / dataallvalue) * 100).toFixed(2));
+                        this.dataset = this.names.map((item, index) => ({
+                            name: item,
+                            value: this.value[index],
+                            percentage: `${percentages[index]}%`,
+                        }));
+                        this.dataset = this.dataset.filter(item => item.value > 0);
+                    }
+                    else {
+
+                        this.tablename = 'VAS All';
+                        this.tabledataall = dataallvalue;
+                        const uniqueNames = this.loopname(this.desserts, 'VAS', 'DATA');
+                        const dataObjects = uniqueNames.map(name => ({
+                            name,
+                            value: this.calculateDataD1Value(this.desserts, 'VAS', name)
+                        }));
+                        // Sort the dataObjects array based on the value property in descending order
+                        dataObjects.sort((a, b) => b.value - a.value);
                         this.names = dataObjects.map(item => item.name);
                         this.value = dataObjects.map(item => item.value);
                         const percentages = this.value.map(value => ((value / dataallvalue) * 100).toFixed(2));
@@ -546,30 +635,6 @@ export default {
                             name: item,
                             value: this.value[index],
                             percentage: `${percentages[index]}%`,
-                        }));
-                    }
-                    else {
-                        const datad1value = this.calculateDataD1Value(this.desserts, 'VAS', 'VA1_ເງີນຫາຍ (ບໍ່ຮູ້ສາເຫດ)');
-                        const datad2value = this.calculateDataD1Value(this.desserts, 'VAS', 'VA2_ຕື່ມເງິນ ບໍ່ໄດ້');
-                        const datad3value = this.calculateDataD1Value(this.desserts, 'VAS', 'VA4_ສະໝັກ PACKAGE ບໍ່ໄດ້');
-                        const datad4value = this.calculateDataD1Value(this.desserts, 'VAS', 'VA6_ສະໝັກ ແລະ ຍົກເລີກ ບໍລິການເສີມບໍ່​ໄດ້​');
-                        const datad5value = this.calculateDataD1Value(this.desserts, 'VAS', 'VA17_ກວດເງີນຜ່ານໜ້າຈໍບໍ່ໄດ້');
-                        const datad6value = this.calculateDataD1Value(this.desserts, 'VAS', 'VA29_ເບີໃໝ່ນຳໃຊ້ບໍ່ໄດ້');
-                        const dataothervalue = dataallvalue - (datad1value + datad2value + datad3value + datad4value + datad5value + datad6value);
-                        this.tablename = 'VAS All';
-                        this.tabledataall = dataallvalue;
-                        this.names = ['VA1_ເງີນຫາຍ (ບໍ່ຮູ້ສາເຫດ)', 'VA2_ຕື່ມເງິນ ບໍ່ໄດ້', 'VA4_ສະໝັກ PACKAGE ບໍ່ໄດ້', 'VA6_ສະໝັກ ແລະ ຍົກເລີກ ບໍລິການເສີມບໍ່​ໄດ້', 'VA17_ກວດເງີນຜ່ານໜ້າຈໍບໍ່ໄດ້', 'VA29_ເບີໃໝ່ນຳໃຊ້ບໍ່ໄດ້', 'Other'];
-                        this.value = [datad1value, datad2value, datad3value, datad4value, datad5value, datad6value, dataothervalue];
-                        const percentages = this.value.map(value => {
-                            if (value === 0 || value === null) {
-                                return '0%';
-                            }
-                            return ((value / dataallvalue) * 100).toFixed(2) + '%';
-                        });
-                        this.dataset = this.names.map((item, index) => ({
-                            name: item,
-                            value: this.value[index],
-                            percentage: percentages[index]
                         }));
                     }
 
@@ -577,36 +642,59 @@ export default {
                 if (this.selectedItem === 4) {
                     const dataallvalue = this.calculateDataValue(this.desserts, 'VOICE');
                     if (this.tabledisplay === 'Root Cause') {
-                        const datad1value = this.calculateDataD1Value(this.desserts, 'VOICE', 'Blocking on their Mobile');
-                        const datad2value = this.calculateDataD1Value(this.desserts, 'VOICE', 'Call to Invalid Number');
-                        const datad3value = this.calculateDataD1Value(this.desserts, 'VOICE', 'Customer Capture 2G signal');
-                        const datad4value = this.calculateDataD1Value(this.desserts, 'VOICE', 'Customer turn off Mobile');
-                        const datad5value = this.calculateDataD1Value(this.desserts, 'VOICE', 'In Corrected UCSI Template');
-                        const datad6value = this.calculateDataD1Value(this.desserts, 'VOICE', 'Number Was Barring in HSS');
-                        const datad7value = this.calculateDataD1Value(this.desserts, 'VOICE', 'Number Was IDLE Status in OCS');
-                        const datad8value = this.calculateDataD1Value(this.desserts, 'VOICE', 'Number Was Operational');
-                        const datad9value = this.calculateDataD1Value(this.desserts, 'VOICE', 'Number was suspended in OCS');
-                        const datad0value = this.calculateDataD1Value(this.desserts, 'VOICE', 'SIM WASLOCKED PROVIDED PIN&PUK');
-                        const datad11value = this.calculateDataD1Value(this.desserts, 'VOICE', 'Life Cycle Was Expired');
+                        const datad1value = this.calculateDataD2Value(this.desserts, 'VOICE', 'TP053_');
+                        const datad2value = this.calculateDataD2Value(this.desserts, 'VOICE', 'TP040_');
+                        const datad3value = this.calculateDataD2Value(this.desserts, 'VOICE', 'TP036_');
+                        const datad4value = this.calculateDataD2Value(this.desserts, 'VOICE', 'TP056_');
+                        const datad5value = this.calculateDataD2Value(this.desserts, 'VOICE', 'TP050_');
+                        const datad6value = this.calculateDataD2Value(this.desserts, 'VOICE', 'TP001_');
+                        const datad7value = this.calculateDataD2Value(this.desserts, 'VOICE', 'TP063_');
+                        const datad8value = this.calculateDataD2Value(this.desserts, 'VOICE', 'TP002_');
+                        const datad9value = this.calculateDataD2Value(this.desserts, 'VOICE', 'TP009_');
+                        const datad0value = this.calculateDataD2Value(this.desserts, 'VOICE', 'TP017_');
+                        const datad11value = this.calculateDataD2Value(this.desserts, 'VOICE', 'TP045_'); ///
+                        const datad12value = this.calculateDataD2Value(this.desserts, 'VOICE', 'TP041_');
                         const dataothervalue = dataallvalue - (datad1value + datad2value + datad3value + datad4value + datad5value + datad6value + datad7value + datad8value + datad9value + datad0value + datad11value);
                         this.tablename = 'VOICE All';
                         this.tabledataall = dataallvalue;
                         const dataObjects = [
-                            { name: 'Blocking on their Mobile', value: datad1value },
-                            { name: 'Call to Invalid Number', value: datad2value },
+                            { name: 'Blocking on their Mobile', value: datad1value }, //
+                            { name: 'Call to Invalid Number', value: datad2value }, //
                             { name: 'Customer Capture 2G signal', value: datad3value },
                             { name: 'Customer turn off Mobile', value: datad4value },
                             { name: 'In Corrected UCSI Template', value: datad5value },
+                            { name: 'No Offerring In CBS', value: datad12value },
                             { name: 'Number Was Barring in HSS', value: datad6value },
                             { name: 'Number Was IDLE Status in OCS', value: datad7value },
                             { name: 'Number Was Operational', value: datad8value },
                             { name: 'Number was suspended in OCS', value: datad9value },
                             { name: 'SIM WASLOCKED PROVIDED PIN&PUK', value: datad0value },
-                            { name: 'Life Cycle Was Expired', value: datad11value },
+                            { name: 'Life Cycle Was Expired', value: datad11value },  ///
                             { name: 'Other', value: dataothervalue }
                         ];
                         // Sort the dataObjects array based on the value property in descending order
-                        // dataObjects.sort((a, b) => b.value - a.value);
+                        dataObjects.sort((a, b) => b.value - a.value);
+                        this.names = dataObjects.filter(item => item.value > 0).map(item => item.name);
+                        this.value = dataObjects.filter(item => item.value > 0).map(item => item.value);
+                        const percentages = this.value.map(value => ((value / dataallvalue) * 100).toFixed(2));
+                        this.dataset = this.names.map((item, index) => ({
+                            name: item,
+                            value: this.value[index],
+                            percentage: `${percentages[index]}%`,
+                        }));
+                        this.dataset = this.dataset.filter(item => item.value > 0);
+                    }
+                    else {
+
+                        this.tablename = 'VOICE All';
+                        this.tabledataall = dataallvalue;
+                        const uniqueNames = this.loopname(this.desserts, 'VOICE', 'DATA');
+                        const dataObjects = uniqueNames.map(name => ({
+                            name,
+                            value: this.calculateDataD1Value(this.desserts, 'VOICE', name)
+                        }));
+                        // Sort the dataObjects array based on the value property in descending order
+                        dataObjects.sort((a, b) => b.value - a.value);
                         this.names = dataObjects.map(item => item.name);
                         this.value = dataObjects.map(item => item.value);
                         const percentages = this.value.map(value => ((value / dataallvalue) * 100).toFixed(2));
@@ -616,87 +704,110 @@ export default {
                             percentage: `${percentages[index]}%`,
                         }));
                     }
-                    else {
-
-                        const datad1value = this.calculateDataD1Value(this.desserts, 'VOICE', 'V1_ມີ​ສັນຍານ​ໂທ​​ເຂົ້າ-​​ໂທອອກບໍ່​ໄດ້');
-                        const datad2value = this.calculateDataD1Value(this.desserts, 'VOICE', 'V2_ມີ​ສັນຍານ​ໂທ​ອອກບໍ່​ໄດ້');
-                        const datad3value = this.calculateDataD1Value(this.desserts, 'VOICE', 'V3_ມີ​ສັນຍານ​ໂທ​​ເຂົ້າບໍ່​ໄດ້');
-                        const datad4value = this.calculateDataD1Value(this.desserts, 'VOICE', 'VA6_ສະໝັກ ແລະ ຍົກເລີກ ບໍລິການເສີມບໍ່​ໄດ້​');
-                        const datad5value = this.calculateDataD1Value(this.desserts, 'VOICE', 'VA17_ກວດເງີນຜ່ານໜ້າຈໍບໍ່ໄດ້');
-                        const datad6value = this.calculateDataD1Value(this.desserts, 'VOICE', 'VA29_ເບີໃໝ່ນຳໃຊ້ບໍ່ໄດ້');
-                        const dataothervalue = dataallvalue - (datad1value + datad2value + datad3value + datad4value + datad5value + datad6value);
-                        this.tablename = 'VOICE All';
-                        this.tabledataall = dataallvalue;
-                        this.names = ['VA1_ເງີນຫາຍ (ບໍ່ຮູ້ສາເຫດ)', 'VA2_ຕື່ມເງິນ ບໍ່ໄດ້', 'VA4_ສະໝັກ PACKAGE ບໍ່ໄດ້', 'VA6_ສະໝັກ ແລະ ຍົກເລີກ ບໍລິການເສີມບໍ່​ໄດ້', 'VA17_ກວດເງີນຜ່ານໜ້າຈໍບໍ່ໄດ້', 'VA29_ເບີໃໝ່ນຳໃຊ້ບໍ່ໄດ້', 'Other'];
-                        this.value = [datad1value, datad2value, datad3value, datad4value, datad5value, datad6value, dataothervalue];
-                        const percentages = this.value.map(value => {
-                            if (value === 0 || value === null) {
-                                return '0%';
-                            }
-                            return ((value / dataallvalue) * 100).toFixed(2) + '%';
-                        });
-                        this.dataset = this.names.map((item, index) => ({
-                            name: item,
-                            value: this.value[index],
-                            percentage: percentages[index]
-                        }));
-                    }
-
                 };
-
-                // }
-                // else if(this.tabledisplay==='Root Cause'){
-
-                // }
-                // else {
-                //     console.log('Error data not faut ')
-                // }
-                // console.log('h', this.dataset)
                 if (this.desserts === undefined) {
                     console.error('Response is undefined');
                     throw new Error('Response is undefined');
                 }
             } catch (error) {
                 console.error('Error fetching data:', error);
-                // Handle errors as needed, e.g., show an error message to the user
                 throw error;
             }
             this.graphShow();
             this.loading = false;
-            // console.log('titt', this.desserts)
-            // console.log('other', this.vasvaothervalue)
-            // console.log('d1', this.vasva1value)
-            // console.log('d2', this.vasva2value)
-            // console.log('d3', this.vasva4value)
-            // console.log('d3', this.vasva17value)
-            // console.log('all', this.vasva1value + this.vasva2value + this.vasva4value + this.smsothervalue)
         },
 
         calculateDataValue(data, serviceGroup) {
             // Assuming "SERVICE_GROUP" is the key you want to filter on
             return data.reduce((sum, entry) => {
                 if (entry.SERVICE_GROUP === serviceGroup) {
-                    // Adjust the logic based on the field you want to sum
                     return sum + 1;
                 }
                 return sum;
             }, 0);
         },
-        calculateDataD1Value(data, serviceGroup, serviceGroupD1) {
+        calculateData(data, serviceGroup, serviceGroupD1) {
             // Assuming "SERVICE_GROUP" is the key you want to filter on
             return data.reduce((sum, entry) => {
                 if ((entry.SERVICE_GROUP === serviceGroup) && (entry.CLASSIFICATION === serviceGroupD1)) {
-                    // Adjust the logic based on the field you want to sum
                     return sum + 1;
                 }
                 return sum;
             }, 0);
         },
-        calculateDataD2Value(data, serviceGroup, serviceGroupD1) {
-            // Assuming "SERVICE_GROUP" is the key you want to filter on
+
+        loopname(data, serviceGroup, status) {
+            if (status === 'DATA') {
+                const uniqueNames = new Set();
+                data.forEach((entry) => {
+                    if (entry.SERVICE_GROUP === serviceGroup && typeof entry.CLASSIFICATION === 'string') {
+                        uniqueNames.add(entry.CLASSIFICATION);
+                    }
+                });
+                return Array.from(uniqueNames);
+            } else if (status === 'Root') {
+                const uniqueNames = new Set();
+                data.forEach((entry) => {
+                    if (entry.SERVICE_GROUP === serviceGroup && typeof entry.WORKLONG_DESCRIPTOIN === 'string') {
+                        uniqueNames.add(entry.WORKLONG_DESCRIPTOIN);
+                    }
+                });
+                return Array.from(uniqueNames);
+            }
+        },
+        adjustName(name) {
+            for (let i = 0; i < name.length; i++) {
+                const a = name.substring(i, i + 1);
+
+                if (a === '_') {
+                    const id = name.substring(0, i + 1);
+                    return id.substring(0, 2) === 'TP' ? (id.substring(2, 3) === '0' ? id.substring(0, 2) + id.substring(3) : id.substring(0)) : name.substring(0, i + 1);
+                }
+            }
+            return name;
+        },
+        calculateDataD1Value(data, serviceGroup, serviceGroupD1) {
+            const nameservice = this.changservice(serviceGroupD1);
             return data.reduce((sum, entry) => {
-                if ((entry.SERVICE_GROUP === serviceGroup) && (entry.FIRST_WORKLOG_DESCRIPTION === serviceGroupD1)) {
-                    // Adjust the logic based on the field you want to sum
+                const textname = entry.CLASSIFICATION || '';
+                const description = this.changservice(this.adjustName(textname));
+                if (entry.SERVICE_GROUP === serviceGroup) {
+                    const namedescription = description.substring(0, 5);
+                    if (namedescription.includes(serviceGroupD1) || namedescription.includes(nameservice)) {
+                        return sum + 1;
+                    }
+                    else if (textname === nameservice) {
+                        return sum + 1;
+                    } else {
+                        return sum;
+                    }
+                }
+                return sum;
+            }, 0);
+        },
+
+        changservice(nameservice) {
+            const SERVICE = nameservice.substring(0, 6);
+            const indexOfA = SERVICE.indexOf('_');
+            if (SERVICE !== undefined) {
+                if (SERVICE.substring(0, 2) === 'TP') {
+                    return indexOfA === 3 ? SERVICE.substring(0, 2) + '0' + SERVICE.substring(2) : SERVICE.substring(0);
+                } else if ((indexOfA !== 0) && (SERVICE.substring(0, 2) !== 'TP') && (indexOfA !== -1)) {
+                    return SERVICE.substring(0, indexOfA + 1);
+                }
+                else if (indexOfA === - 1) {
+                    const SERVICE = nameservice.substring(0);
+                    return SERVICE;
+                }
+            } else {
+                console.log('undefineddata');
+            }
+        },
+        calculateDataD2Value(data, serviceGroup, serviceGroupD1) {
+            return data.reduce((sum, entry) => {
+                const description = entry.WORKLONG_DESCRIPTOIN || '';
+                // Check if description contains either serviceGroupD1 or serviceGroupD2
+                if ((entry.SERVICE_GROUP === serviceGroup) && description.includes(serviceGroupD1)) {
                     return sum + 1;
                 }
                 return sum;
@@ -706,13 +817,11 @@ export default {
             // Assuming "SERVICE_GROUP" is the key you want to filter on
             return data.reduce((sum, entry) => {
                 if (entry.SERVICE_GROUP === serviceGroup && entry.TIME_DO_TPLUS <= threshold) {
-                    // Adjust the logic based on the field you want to sum
                     return sum + 1;
                 }
                 return sum;
             }, 0);
         },
-
         graphShow() {
             const ctx = document.getElementById('myChart').getContext('2d');
             // Clear existing chart
@@ -735,6 +844,13 @@ export default {
                                 'rgba(153, 102, 255, 0.5)',
                                 'rgba(25, 159, 64, 0.5)',
                                 'rgba(254, 19, 64, 0.5)',
+                                'rgba(54, 162, 235, 0.5)',
+                                'rgba(255, 159, 164, 0.5)',
+                                'rgba(255, 206, 86, 0.5)',
+                                'rgba(254, 19, 64, 0.5)',
+                                'rgba(153, 102, 255, 0.5)',
+                                'rgba(75, 192, 192, 0.5)',
+                                'rgba(25, 159, 64, 0.5)',
                                 'rgba(255, 159, 164, 0.5)',
                                 'rgba(125, 139, 144, 0.5)',
                             ],
@@ -746,6 +862,13 @@ export default {
                                 'rgba(153, 102, 255, 1)',
                                 'rgba(25, 159, 64, 1)',
                                 'rgba(254, 19, 64, 1)',
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 159, 164, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(254, 19, 64, 1)',
+                                'rgba(153, 102, 255, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(25, 159, 64, 1)',
                                 'rgba(255, 159, 164, 1)',
                                 'rgba(125, 139, 144, 1)',
                             ],
@@ -765,7 +888,7 @@ export default {
                     },
                 },
             });
-            console.log(this.tabledisplay)
+            // console.log(this.tabledisplay)
             this.i = false;
         },
         changeGraph(itemvalue) {
@@ -800,7 +923,7 @@ export default {
         },
         updateShowProperty() {
             // Update 'show' property based on window width
-            this.showvalue = window.innerWidth > 980;
+            this.showstrygraph = window.innerWidth > 980;
         }
 
     },
@@ -872,13 +995,13 @@ export default {
 
     /* Update the 'show' property to false for screen width less than or equal to 1600px */
     :root {
-        --showvalue-value: false;
+        --showstrygraph-value: false;
     }
 }
 
 /* Use the custom property to set the 'show' property */
 .grid {
-    display: var(--showvalue-value, grid);
+    display: var(--showstrygraph-value, grid);
 }
 </style>
   

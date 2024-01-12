@@ -1,244 +1,650 @@
-<!--<template>
-    <v-card class="mx-auto text-center" color="#ffff00" dark>
-        <v-card-text class="pa-1">
-            <v-sheet color="#fff">
-                <v-card-text class="pa-0">
-                    <div class="text-left" style="background-color: #ffffff;">
-                        <v-card-actions class="py-1">
-                            <v-btn fab x-small text style="background-color: #000000" @click="$router.go(-1)">
-                                <v-icon color="#ffff00" size="25">mdi-arrow-left</v-icon>
+<template>
+    <v-card class="mx-auto text-center mx-2" color="#ffff00" dark>
+        <v-row>
+            <v-col cols="2" class="py-0 pl-2 pr-0">
+                <v-card class="mx-auto pb-4" max-width="300" tile>
+                    <v-subheader style="color: #ffff00;">TABLE | GRAPH</v-subheader>
+                    <v-menu flat transition="slide-x-transition" bottom right>
+                        <template v-slot:activator="{ on, attrs }">
+                            <v-btn style=" width: 99%; border-radius: 0%; background-color: #ffff00; color: #000;" dark
+                                v-bind="attrs" v-on="on">
+                                MENU TABLES
+                                <v-icon>mdi-table-sync</v-icon>
                             </v-btn>
-                            <v-card-text class="text-center pa-0">
-                                <v-list-item-action class="pa-0">
-                                    <v-card-actions class="py-1">
-                                        <h3 style="color: black;">24-06-2023</h3>
-                                        <h2 class="mx-4" style="color: #000000;"><span style="color: #7d7d15;">To</span>
-                                        </h2>
-                                        <h3 style="color: black;">24-06-2023</h3>
-                                    </v-card-actions>
-                                </v-list-item-action>
+                        </template>
+                        <v-list flat class="pt-0" style="background-color: #ffffe6;">
+                            <v-card-text class="text-center" style="background-color:#000; color: #ffff00;">
+                                <h3>TABLE</h3>
                             </v-card-text>
-                        </v-card-actions>
-                    </div>
-                    <v-divider style="background-color: #ffff00;"></v-divider>
-                </v-card-text>
-                <v-card-text class="pb-0">
-                    <v-row>
-                        <v-col v-if="loading" cols="12">
-                            <v-card flat style="background-color: #ffffff; height: 350px;">
-                                <v-progress-circular style="top:36%" :width="7" :size="65"
-                                    indeterminate></v-progress-circular>
-                            </v-card>
-                        </v-col>
-                        <v-col cols="12" sm="7">
-                            <div>
-                                <canvas id="myChart"></canvas>
-                            </div>
-                        </v-col>
-                        <v-col cols="12" sm="5">
-                            <v-card-text style="color: #000000;">
-                                <v-simple-table dense flat>
-                                    <template v-slot:default>
-                                        <thead>
-                                            <tr>
-                                                <th class="text-center" style="color: #ffff00;">
-                                                    Name
-                                                </th>
-                                                <th class="text-center" style="color:#ffff00;">
-                                                    Calories
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr v-for="item in desserts" :key="item.name">
-                                                <td>{{ item.name }}</td>
-                                                <td>{{ item.calories }}</td>
-                                            </tr>
-                                        </tbody>
-                                    </template>
-                                </v-simple-table>
-                            </v-card-text>
-                        </v-col>
-                    </v-row>
-                </v-card-text>
-                <div class="px-1">
-                    <v-divider style="background-color: #ffff00;"></v-divider>
+                            <v-divider style="background-color: #000;" />
+                            <v-list-item class="ma-0 py-0 pl-0 pr-2" style="width: 100%;"
+                                @click="changeGraph('Customer complaint')" @mouseenter="expand = 'btn-1'"
+                                @mouseleave="expand = ''">
+                                <v-btn class="pl-2 pr-3 " text
+                                    style="width: 100%; color:#000; border-top-right-radius: 50px; border-bottom-right-radius: 50px;"
+                                    :style="{ backgroundColor: expand === 'btn-1' ? 'rgb(255, 255, 0)' : '#ffffe6' }">
+                                    Customer complaint
+                                </v-btn>
+                            </v-list-item>
+                            <v-list-item class="ma-0 py-0 pl-0 pr-2" style="width: 100%;">
+                                <v-btn class="px-2 " text
+                                    style="width: 100%; color:#000; border-top-right-radius: 50px; border-bottom-right-radius: 50px;"
+                                    :style="{ backgroundColor: expand === 'btn-2' ? 'rgb(255, 255, 0)' : '#ffffe6' }"
+                                    @click="changeGraph('Root Cause')" @mouseenter="expand = 'btn-2'"
+                                    @mouseleave="expand = ''">
+                                    Root Cause
+                                </v-btn>
+                            </v-list-item>
+                        </v-list>
+                    </v-menu>
+                </v-card>
+                <v-divider style="background-color: #ffff00;"></v-divider>
+                <v-card v-if="tabledisplay === 'Customer complaint'" class="mx-auto" max-width="300" tile>
+                    <v-list shaped>
+                        <v-subheader style="color: #ffff00;">{{ tabledisplay }}</v-subheader>
+                        <v-list-item-group v-model="selectedItem" color="yellow">
+                            <v-list-item v-for="(item, i) in itemdatacustomer" :key="i">
+                                <v-list-item-content @click="changeGraph('Customer complaint')">
+                                    <v-list-item-title>
+                                        {{ item.text }}
+                                    </v-list-item-title>
+                                </v-list-item-content>
+                            </v-list-item>
+                        </v-list-item-group>
+                    </v-list>
+                </v-card>
+                <v-card v-if="tabledisplay === 'Root Cause'" class="mx-auto" max-width="300" tile>
+                    <v-list shaped>
+                        <v-subheader style="color: #ffff00;">{{ tabledisplay }}</v-subheader>
+                        <v-list-item-group v-model="selectedItem" color="yellow">
+                            <v-list-item v-for="(item, i) in itemdatacustomer" :key="i">
+                                <v-list-item-content @click="changeGraph('Root Cause')">
+                                    <v-list-item-title>
+                                        {{ item.text }}
+                                    </v-list-item-title>
+                                </v-list-item-content>
+                            </v-list-item>
+                        </v-list-item-group>
+                    </v-list>
+                </v-card>
+                <div>
+                    <v-card-text class="mt-2" style="color: #000;">
+                        <h4>STYLE GRAPH</h4>
+                    </v-card-text>
+                    <v-divider style="background-color: #000;" />
+                    <v-col cols="12" sm="12" md="12" class="mt-4 by-4 px-2">
+                        <v-row class="fill-height pl-2" align="center">
+                            <v-item-group mandatory>
+                                <v-col v-for="(item, i) in itemsbuton" :key="i">
+                                    <v-item v-slot="{ active, toggle }">
+                                        <v-btn text class="pa-2" style="background-color: transparent; color: transparent;"
+                                            @click="showgraph(item.name)">
+                                            <v-card flat :style="{
+                                                background: graphstyle[0],
+                                                border: '2px solid',
+                                                borderColor: active ? '#000' : 'white'
+                                            }" class="text-center pa-1" @click="toggle">
+                                                <v-icon size="35"
+                                                    :style="{ color: graphform === item.name ? '#000' : '#fff' }">{{
+                                                        item.icon
+                                                    }}</v-icon>
+                                                <small :style="{ color: graphform === item.name ? '#000' : '#fff' }">{{
+                                                    item.name }}</small>
+                                            </v-card>
+                                        </v-btn>
+                                    </v-item>
+                                </v-col>
+                            </v-item-group>
+                        </v-row>
+                    </v-col>
                 </div>
-                <v-card-text>
-                    <v-row>
-                        <v-col cols="12" md="6" class="pl-12">
-                            <v-row class="fill-height" align="center">
+            </v-col>
+            <v-col cols="10" class="pa-0">
+                <v-card-text class="pa-1">
+                    <v-sheet color="#fff">
+                        <v-card-text class="pb-0">
+                            <v-row>
+                                <v-col v-if="loading" cols="12">
+                                    <v-card flat style="background-color: #ffffff; height: 350px;">
+                                        <v-progress-circular style="top:36%" :width="7" :size="65"
+                                            indeterminate></v-progress-circular>
+                                    </v-card>
+                                </v-col>
+                                <v-col cols="12"> <!-- cols="12" :sm="showstrygraph ? 9 : 12" -->
+                                    <v-container>
+                                        <canvas id="myChart"></canvas>
+                                    </v-container>
+                                </v-col>
                             </v-row>
-                        </v-col>
-                        <v-col cols="12" md="6" class="pb-0">
-                            <v-slider v-model="width" label="Width" min="1" max="4.5" step="0.1" thumb-label></v-slider>
-                        </v-col>
-                        <v-col cols="6" class="pl-12">
-                            <v-row class="fill-height" align="center">
-                                <v-item-group mandatory>
-                                    <v-row>
-                                        <v-item v-for="(item, i) in items" :key="i" v-slot="{ active, toggle }">
-                                            <v-btn text style="background-color: transparent; color: transparent;"
-                                                @click="showgraph(item.name)">
-                                                <v-card flat :style="{
-                                                    background: graphstyle[0],
-                                                    border: '2px solid',
-                                                    borderColor: active ? '#000' : 'white'
-                                                }" class="text-center pa-1" @click="toggle">
-                                                    <v-icon size="35"
-                                                        :style="{ color: name === item.name ? '#000' : '#fff' }">
-                                                        {{ item.icon }}
-                                                    </v-icon>
-                                                    <small :style="{ color: graphdisplay === item.name ? '#000' : '#fff' }">{{
-                                                        item.name }}</small>
-                                                </v-card>
-                                            </v-btn>
-                                        </v-item>
-                                    </v-row>
-                                </v-item-group>
-                            </v-row>
-                        </v-col>
-                        <v-col cols="12" md="6" class="py-0">
-                            <v-slider v-model="radius" label="Radius" min="0" max="10" thumb-label style="b"></v-slider>
-                        </v-col>
-                    </v-row>
-                </v-card-text>
-            </v-sheet>
-        </v-card-text>
-        <v-card-text>
-            <div class=" font-thin" style="color: #fff;">
-                Sales Last 24h
-            </div>
-            <div class="text-h5 font-thin" style="color: black;">
-                Sales Last 24h
-            </div>
-        </v-card-text>
+                        </v-card-text>
+                        <div class="px-1">
+                            <v-divider style="background-color: #ffff00;"></v-divider>
+                        </div>
+                        <v-card-text style="background-color: rgba(255, 206, 86,0.1);">
+                            <v-row>
+                                <v-col v-if="(!loading && tabledisplay === 'Customer complaint')" cols="12" sm="7" md="7"
+                                    class="px-0 py-0">
+                                    <v-card-text class="px-1 pt-0 pb-1" style="color: #000000;">
+                                        <h4 style="color: #b3b300;">DATA TABLE</h4>
+                                        <v-simple-table dense flat class="table-container table-title-hiegth">
+                                            <template v-slot:default>
+                                                <thead>
+                                                    <tr>
+                                                        <th class="text-center" style="color: #ffff00;">
+                                                            Row Labels
+                                                        </th>
+                                                        <th class="text-center" style="color:#ffff00;">
+                                                            Count of SERVICE GROUP
+                                                        </th>
+                                                        <th class="text-center" style="color:#ffff00;">
+                                                            percentages(%)
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr v-for="item in dataset" :key="item.name"
+                                                        :style="{ color: item.name === 'Other' ? '#ffff00' : '#ffff' }">
+                                                        <td>{{ item.name }}</td>
+                                                        <td>{{ item.value }}</td>
+                                                        <td>{{ item.percentage }}</td>
+                                                    </tr>
+                                                    <tr style="background-color: #ffff00;">
+                                                        <td style="color: #000;">
+                                                            <h4>
+                                                                {{ tablename }}
+                                                            </h4>
+                                                        </td>
+                                                        <td style="color: #000;">
+                                                            <h4>
+                                                                {{ tabledataall }}
+                                                            </h4>
+                                                        </td>
+                                                        <td style="color: #000;">
+                                                            <h4>
+                                                                100%
+                                                            </h4>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </template>
+                                        </v-simple-table>
+                                    </v-card-text>
+                                </v-col>
+                                <v-col v-if="(!loading && tabledisplay === 'Root Cause')" cols="12" sm="7" md="7"
+                                    class="px-0 py-0">
+                                    <v-card-text class="px-1 pt-0 pb-1" style="color: #000000;">
+                                        <h4 style="color: #b3b300;">DATA TABLE</h4>
+                                        <v-simple-table dense flat class="table-container table-title-hiegth">
+                                            <template v-slot:default>
+                                                <thead>
+                                                    <tr>
+                                                        <th class="text-center" style="color: #ffff00;">
+                                                            Row Labels
+                                                        </th>
+                                                        <th class="text-center" style="color:#ffff00;">
+                                                            Count of SERVICE GROUP
+                                                        </th>
+                                                        <th class="text-center" style="color:#ffff00;">
+                                                            percentages(%)
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr v-for="item in dataset" :key="item.name">
+                                                        <td>{{ item.name }}</td>
+                                                        <td>{{ item.value }}</td>
+                                                        <td>{{ item.percentage }}</td>
+                                                    </tr>
+                                                    <tr style="background-color: #ffff00;">
+                                                        <td style="color: #000;">
+                                                            <h4>
+                                                                {{ tablename }}
+                                                            </h4>
+                                                        </td>
+                                                        <td style="color: #000;">
+                                                            <h4>
+                                                                {{ tabledataall }}
+                                                            </h4>
+                                                        </td>
+                                                        <td style="color: #000;">
+                                                            <h4>
+                                                                100%
+                                                            </h4>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </template>
+                                        </v-simple-table>
+                                    </v-card-text>
+                                </v-col>
+                                <v-col cols="12" sm="5" md="5" class="px-0 py-0">
+                                    <v-card-text class="px-1 pt-0 pb-1" style="color: #000000;">
+                                        <h4 style="color: #b3b300;">TABLE TIME</h4>
+                                        <v-simple-table dense flat class="table-container table-title-hiegth">
+                                            <template v-slot:default>
+                                                <thead>
+                                                    <tr>
+                                                        <th class="text-center" style="color: #ffff00;">
+                                                            Ticket/KPI
+                                                        </th>
+                                                        <th class="text-center" style="color:#ffff00;">
+                                                            ≤ 20m
+                                                        </th>
+                                                        <th class="text-center" style="color:#ffff00;">
+                                                            &gt; 20m
+                                                        </th>
+                                                        <th class="text-center" style="color:#ffff00;">
+                                                            Total
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr v-for="item in datasetdatatime" :key="item.name">
+                                                        <td>{{ item.name }}</td>
+                                                        <td>{{ item.valuemin }}</td>
+                                                        <td>{{ item.valuemax }}</td>
+                                                        <td>{{ item.dataall }}</td>
+                                                    </tr>
+                                                    <tr style="background-color: #ffff00;">
+                                                        <td style="color: #000;">
+                                                            <h4>
+                                                                percent(%)
+                                                            </h4>
+                                                        </td>
+                                                        <td style="color: #000;">
+                                                            <h4>
 
-        <v-card-text class="py-0">
-            <v-divider style="background-color: black;"></v-divider>
-        </v-card-text>
+                                                                L(20m):{{ percenmin }}
+                                                            </h4>
+                                                        </td>
+                                                        <td style="color: #000;">
+                                                            <h4>
+                                                                H(20m):{{ percenmax }}
+                                                            </h4>
+                                                        </td>
+                                                        <td style="color: #000;">
+                                                            <h4>
+                                                                100%
+                                                            </h4>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </template>
+                                        </v-simple-table>
+                                    </v-card-text>
+                                </v-col>
+                            </v-row>
+                        </v-card-text>
+                    </v-sheet>
+                </v-card-text>
+            </v-col>
+        </v-row>
     </v-card>
 </template>
 <script>
 const graphstyle = [['#00c6ff', '#F0F', '#FF0']]
 export default {
-    data: () => ({
-        fill: false,
-        loading: true,
-        datavalue: 0,
-        grandtotal: 0,
-        voicevalue: 0,
-        vasvalue: 0,
-        smsvalue: 0,
-        desserts: [
-            {
-                name: 'Frozen Yogurt',
-                calories: 159,
-            },
-            {
-                name: 'Ice cream sandwich',
-                calories: 237,
-            },
-            {
-                name: 'Eclair',
-                calories: 262,
-            },
-            {
-                name: 'Cupcake',
-                calories: 305,
-            },
-            {
-                name: 'Gingerbread',
-                calories: 356,
-            },
-            {
-                name: 'Jelly bean',
-                calories: 375,
-            },
-            {
-                name: 'Lollipop',
-                calories: 392,
-            },
-            {
-                name: 'Honeycomb',
-                calories: 408,
-            },
-            {
-                name: 'Donut',
-                calories: 452,
-            },
-            {
-                name: 'KitKat',
-                calories: 518,
-            },
-        ],
-        item: [],
-        date: new Date(
-            Date.now() - 24 * 60 * 60 * 1000 - new Date().getTimezoneOffset() * 60000
-        )
-            .toISOString()
-            .substr(0, 10), // + 'T00:00:00.000Z',
-        dates: new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
-            .toISOString()
-            .substr(0, 10), // + 'T00:00:00.000Z',
-        items: [
-            { icon: 'mdi-chart-bar', name: 'bar' },
-            { icon: 'mdi-chart-areaspline-variant', name: 'line' },
-            { icon: 'mdi-chart-pie', name: 'pie' },
-        ],
-        graphstyle,
-        graphdisplay: 'bar',
-        radius: 2,
-        value: [],
-        names: [],
-        width: 1.5,
-    }),
-    mounted() {
-        this.getData();
+    props: {
+        desserts: Array,
+    },
+    data() {
+        return {
+            expand: 'btn-1',
+            tabledisplay: 'Customer complaint',
+            datacang: true,
+            showstrygraph: true,
+            loading: true,
+            percenmin: 0,
+            percenmax: 0,
+            dataset: [],
+            datasetdatatime: [],
+            tablename: '',
+            tabledataall: 0,
+            item: [],
+            itemdatacustomer: [
+                { text: 'DATA TICKET' },
+                { text: 'DATA' },
+                { text: 'SMS' },
+                { text: 'VAS' },
+                { text: 'VOICE' },
+            ],
+            selectedItem: 0,
+            itemsbuton: [
+                { icon: 'mdi-chart-bar', name: 'bar' },
+                { icon: 'mdi-chart-areaspline-variant', name: 'line' },
+                { icon: 'mdi-chart-pie', name: 'pie' },
+            ],
+            graphform: 'bar',
+            graphstyle,
+            radius: 2,
+            value: [],
+            names: [],
+            width: 1.5,
+            i: true,
+        };
     },
     methods: {
         showgraph(name) {
-            this.graphdisplay = name;
-            console.log(this.graphdisplay)
+            this.graphform = name;
+            this.graphShow();
         },
-        async getData() {
-            this.loading = true;
-
+        getData() {
             try {
-                const startDate = this.date;
-                const endDate = this.dates;
-                const res = await this.$axios.$get(
-                    `http://172.28.26.23:3000/ticket?startDate=${encodeURIComponent(
-                        startDate
-                    )}&endDate=${encodeURIComponent(endDate)}`
-                );
+                // Calculate values based on SERVICE_GROUP
+                const datamin = this.calculateDatamin(this.desserts, 'DATA', 20);
+                const datavalue = this.calculateDataValue(this.desserts, 'DATA');
+                const datamax = datavalue - datamin;
+                const dataminsms = this.calculateDatamin(this.desserts, 'SMS', 20);
+                const datavaluesms = this.calculateDataValue(this.desserts, 'SMS');
+                const datamaxsms = datavaluesms - dataminsms;
+                const dataminvas = this.calculateDatamin(this.desserts, 'VAS', 20);
+                const datavaluevas = this.calculateDataValue(this.desserts, 'VAS');
+                const datamaxvas = datavaluevas - dataminvas;
+                const dataminvoi = this.calculateDatamin(this.desserts, 'VOICE', 20);
+                const datavaluevoi = this.calculateDataValue(this.desserts, 'VOICE');
+                const datamaxvoi = datavaluevoi - dataminvoi;
+                const allDT = datavalue + datavaluevoi + datavaluesms + datavaluevas;
+                const minDT = dataminsms + datamin + dataminvoi + dataminvas;
+                const percentmin = (((minDT / allDT) * 100).toFixed(2) + '%');
+                this.percenmin = percentmin;
+                const maxDT = datamaxsms + datamax + datamaxvoi + datamaxvas;
+                const percentmax = (((maxDT / allDT) * 100).toFixed(2) + '%');
+                this.percenmax = percentmax;
+                // const dataothervalue = datad1value + datad2value + datad3value + datad4value;
+                const dataObjects = [
+                    { name: 'DATA', valuemax: datamax, valuemin: datamin, dataall: datavalue },
+                    { name: 'SMS', valuemax: datamaxsms, valuemin: dataminsms, dataall: datavaluesms },
+                    { name: 'VAS', valuemax: datamaxvas, valuemin: dataminvas, dataall: datavaluevas },
+                    { name: 'VOICE', valuemax: datamaxvoi, valuemin: dataminvoi, dataall: datavaluevoi },
+                ];
+                const names = dataObjects.map(item => item.name);
+                const valuemax = dataObjects.map(item => item.valuemax);
+                const valuemin = dataObjects.map(item => item.valuemin);
+                const dataall = dataObjects.map(item => item.dataall);
+                this.datasetdatatime = names.map((item, index) => ({
+                    name: item,
+                    valuemin: valuemin[index],
+                    valuemax: valuemax[index],
+                    dataall: dataall[index],
+                }));
 
-                this.datavalue = this.calculateDataValue(res, 'DATA');
-                this.vasvalue = this.calculateDataValue(res, 'VAS');
-                this.voicevalue = this.calculateDataValue(res, 'VOICE');
-                this.smsvalue = this.calculateDataValue(res, 'SMS');
-                this.grandtotal = this.datavalue + this.vasvalue + this.voicevalue + this.smsvalue;
+                
 
-                this.names = ['DATA', 'VAS', 'VOICE', 'SMS'];
-                this.value = [this.datavalue, this.vasvalue, this.voicevalue, this.smsvalue];
+                if (this.selectedItem === 0) {
+                    const datavalue = this.calculateDataValue(this.desserts, 'DATA');
+                    const datad1value = this.calculateDataValue(this.desserts, 'SMS');
+                    const datad2value = this.calculateDataValue(this.desserts, 'VAS');
+                    const datad3value = this.calculateDataValue(this.desserts, 'VOICE');
+                    const dataothervalue = datavalue + datad1value + datad2value + datad3value;
+                    this.tablename = 'All';
+                    this.tabledataall = dataothervalue;
+                    const dataObjects = [
+                        { name: 'DATA', value: datavalue },
+                        { name: 'SMS', value: datad1value },
+                        { name: 'VAS', value: datad2value },
+                        { name: 'VOICE', value: datad3value },
+                    ];
+                    dataObjects.sort((a, b) => b.value - a.value);
+                    this.names = dataObjects.filter(item => item.value > 0).map(item => item.name);
+                    this.value = dataObjects.filter(item => item.value > 0).map(item => item.value);
+                    const percentages = this.value.map(value => ((value / dataothervalue) * 100).toFixed(2));
+                    this.dataset = this.names.map((item, index) => ({
+                        name: item,
+                        value: this.value[index],
+                        percentage: `${percentages[index]}%`,
+                    }));
+                    this.dataset = this.dataset.filter(item => item.value > 0);
+                }
+                // Calculate values based on SERVICE_GROUP CLASSIFICATION DATA
+                if (this.selectedItem === 1) {
+                    const dataallvalue = this.calculateDataValue(this.desserts, 'DATA');
+                    if (this.tabledisplay === 'Root Cause') {
+                        const datad1value = this.calculateDataD2Value(this.desserts, 'DATA', 'TP036_') // 'TP036_ລູກຄ້າຈັບສັນຍານ 2G ແນະນໍາລູກຄ້າລີເລັດມືຖືແລ້ວລອງໄໝ່'
+                        const datad2value = this.calculateDataD2Value(this.desserts, 'DATA', 'TP005_')
+                        const datad3value = this.calculateDataD2Value(this.desserts, 'DATA', 'TP002_')
+                        const datad4value = this.calculateDataD2Value(this.desserts, 'DATA', 'TP027_')
+                        const datad5value = this.calculateDataD2Value(this.desserts, 'DATA', 'TP016_')
+                        const datad6value = this.calculateDataD2Value(this.desserts, 'DATA', 'TP004_')
+                        const dataothervalue = dataallvalue - datad1value - datad2value - datad3value - datad4value - datad5value - datad6value;
+                        this.tablename = 'DATA All';
+                        this.tabledataall = dataallvalue;
+                        const dataObjects = [
+                            { name: 'Number Was Operational', value: datad3value },
+                            { name: 'Customer Capture 2G signal', value: datad1value },
+                            { name: 'High PRB', value: datad2value },
+                            { name: 'Sites were down in that area', value: datad4value },
+                            { name: 'Usage Old Beeline SIM', value: datad5value },
+                            { name: 'Usage Up Package Already', value: datad6value },
+                            { name: 'Other', value: dataothervalue }
+                        ];
+                        // Sort the dataObjects array based on the value property in descending order
+                        dataObjects.sort((a, b) => b.value - a.value);
+                        this.names = dataObjects.filter(item => item.value > 0).map(item => item.name);
+                        this.value = dataObjects.filter(item => item.value > 0).map(item => item.value);
+                        const percentages = this.value.map(value => ((value / dataallvalue) * 100).toFixed(2));
+                        this.dataset = this.names.map((item, index) => ({
+                            name: item,
+                            value: this.value[index],
+                            percentage: `${percentages[index]}%`,
+                        }));
+                        this.dataset = this.dataset.filter(item => item.value > 0);
+                    }
+                    else {
+                        this.tablename = 'DATA All';
+                        this.tabledataall = dataallvalue;
+                        // Collect unique names using loopname function
+                        const uniqueNames = this.loopname(this.desserts, 'DATA', 'DATA');
+                        const dataObjects = uniqueNames.map(name => ({
+                            name,
+                            value: this.calculateDataD1Value(this.desserts, 'DATA', name)
+                        }));
+                        // Sort the dataObjects array based on the value property in descending order
+                        dataObjects.sort((a, b) => b.value - a.value);
+                        this.names = dataObjects.map(item => item.name);
+                        this.value = dataObjects.map(item => item.value);
+                        const percentages = this.value.map(value => ((value / dataallvalue) * 100).toFixed(2));
+                        this.dataset = this.names.map((item, index) => ({
+                            name: item,
+                            value: this.value[index],
+                            percentage: `${percentages[index]}%`,
+                        }));
+                    }
+                }
+                // Calculate values based on SERVICE_GROUP CLASSIFICATION SMS
+                if (this.selectedItem === 2) {
+                    const dataallvalue = this.calculateDataValue(this.desserts, 'SMS');
+                    // Root cause
+                    if (this.tabledisplay === 'Root Cause') {
+                        this.tablename = 'SMS All';
+                        this.tabledataall = dataallvalue;
 
-                console.log('datavalue', this.datavalue);
-                console.log('vasvalue', this.vasvalue);
-                console.log('voicevalue', this.voicevalue);
-                console.log('smsvalue', this.smsvalue);
-                console.log('all', this.grandtotal);
-                console.log('Response:', res);
-                if (res === undefined) {
+                        const uniqueNames = this.loopname(this.desserts, 'SMS', 'Root');
+
+                        const dataObjects = uniqueNames.reduce((accumulator, name) => {
+                            const existingObject = accumulator.find(obj => obj.name.startsWith(name.substring(0, 5)));
+
+                            if (existingObject) {
+                                existingObject.value += this.calculateDataD2Value(this.desserts, 'SMS', name);
+                            } else {
+                                accumulator.push({
+                                    name,
+                                    value: this.calculateDataD2Value(this.desserts, 'SMS', name)
+                                });
+                            }
+
+                            return accumulator;
+                        }, []);
+                        // Sort the dataObjects array based on the value property in descending order
+                        dataObjects.sort((a, b) => b.value - a.value);
+
+                        this.names = dataObjects.map(item => item.name);
+                        this.value = dataObjects.map(item => item.value);
+                        const percentages = this.value.map(value => ((value / dataallvalue) * 100).toFixed(2));
+
+                        this.dataset = this.names.map((item, index) => ({
+                            name: item,
+                            value: this.value[index],
+                            percentage: `${percentages[index]}%`,
+                        }));
+                    }
+                    else {
+                        this.tablename = 'SMS All';
+                        this.tabledataall = dataallvalue;
+                        const uniqueNames = this.loopname(this.desserts, 'SMS', 'DATA');
+                        const dataObjects = uniqueNames.map(name => ({
+                            name,
+                            value: this.calculateDataD1Value(this.desserts, 'SMS', name)
+                        }));
+                        // Sort the dataObjects array based on the value property in descending order
+                        dataObjects.sort((a, b) => b.value - a.value);
+                        this.names = dataObjects.map(item => item.name);
+                        this.value = dataObjects.map(item => item.value);
+                        const percentages = this.value.map(value => ((value / dataallvalue) * 100).toFixed(2));
+                        this.dataset = this.names.map((item, index) => ({
+                            name: item,
+                            value: this.value[index],
+                            percentage: `${percentages[index]}%`,
+                        }));
+                    }
+
+                }
+
+                // Calculate values based on SERVICE_GROUP CLASSIFICATION
+                if (this.selectedItem === 3) {
+                    const dataallvalue = this.calculateDataValue(this.desserts, 'VAS');
+                    if (this.tabledisplay === 'Root Cause') {
+                        const datad1value = this.calculateDataD2Value(this.desserts, 'VAS', 'TP012_');
+                        const datad2value = this.calculateDataD2Value(this.desserts, 'VAS', 'TP013_');
+                        const datad3value = this.calculateDataD2Value(this.desserts, 'VAS', 'TP043_');
+                        const datad4value = this.calculateDataD2Value(this.desserts, 'VAS', 'TP011_');
+                        const datad5value = this.calculateDataD2Value(this.desserts, 'VAS', 'TP010_');
+                        const datad6value = this.calculateDataD2Value(this.desserts, 'VAS', 'TP009_');
+                        const dataothervalue = (dataallvalue - (datad1value + datad2value + datad3value + datad4value + datad5value + datad6value));
+                        this.tablename = 'VAS All';
+                        this.tabledataall = dataallvalue;
+                        const dataObjects = [
+                            { name: 'Money Was Deducted by Games', value: datad1value },
+                            { name: 'Money Was Deducted by Loan Money', value: datad2value },
+                            { name: 'Money Was Deducted by Package Service', value: datad3value },
+                            { name: 'Money Was Deducted by SMS', value: datad4value },
+                            { name: 'Money Was Deducted by Voice', value: datad5value },
+                            { name: 'Money Was Deducted by Voice', value: datad6value },
+                            { name: 'Other', value: dataothervalue }
+                        ];
+                        // Sort the dataObjects array based on the value property in descending order
+                        dataObjects.sort((a, b) => b.value - a.value);
+                        this.names = dataObjects.filter(item => item.value > 0).map(item => item.name);
+                        this.value = dataObjects.filter(item => item.value > 0).map(item => item.value);
+                        const percentages = this.value.map(value => ((value / dataallvalue) * 100).toFixed(2));
+                        this.dataset = this.names.map((item, index) => ({
+                            name: item,
+                            value: this.value[index],
+                            percentage: `${percentages[index]}%`,
+                        }));
+                        this.dataset = this.dataset.filter(item => item.value > 0);
+                    }
+                    else {
+
+                        this.tablename = 'VAS All';
+                        this.tabledataall = dataallvalue;
+                        const uniqueNames = this.loopname(this.desserts, 'VAS', 'DATA');
+                        const dataObjects = uniqueNames.map(name => ({
+                            name,
+                            value: this.calculateDataD1Value(this.desserts, 'VAS', name)
+                        }));
+                        // Sort the dataObjects array based on the value property in descending order
+                        dataObjects.sort((a, b) => b.value - a.value);
+                        this.names = dataObjects.map(item => item.name);
+                        this.value = dataObjects.map(item => item.value);
+                        const percentages = this.value.map(value => ((value / dataallvalue) * 100).toFixed(2));
+                        this.dataset = this.names.map((item, index) => ({
+                            name: item,
+                            value: this.value[index],
+                            percentage: `${percentages[index]}%`,
+                        }));
+                    }
+
+                }
+                if (this.selectedItem === 4) {
+                    const dataallvalue = this.calculateDataValue(this.desserts, 'VOICE');
+                    if (this.tabledisplay === 'Root Cause') {
+                        const datad1value = this.calculateDataD2Value(this.desserts, 'VOICE', 'TP053_');
+                        const datad2value = this.calculateDataD2Value(this.desserts, 'VOICE', 'TP040_');
+                        const datad3value = this.calculateDataD2Value(this.desserts, 'VOICE', 'TP036_');
+                        const datad4value = this.calculateDataD2Value(this.desserts, 'VOICE', 'TP056_');
+                        const datad5value = this.calculateDataD2Value(this.desserts, 'VOICE', 'TP050_');
+                        const datad6value = this.calculateDataD2Value(this.desserts, 'VOICE', 'TP001_');
+                        const datad7value = this.calculateDataD2Value(this.desserts, 'VOICE', 'TP063_');
+                        const datad8value = this.calculateDataD2Value(this.desserts, 'VOICE', 'TP002_');
+                        const datad9value = this.calculateDataD2Value(this.desserts, 'VOICE', 'TP009_');
+                        const datad0value = this.calculateDataD2Value(this.desserts, 'VOICE', 'TP017_');
+                        const datad11value = this.calculateDataD2Value(this.desserts, 'VOICE', 'TP045_'); ///
+                        const datad12value = this.calculateDataD2Value(this.desserts, 'VOICE', 'TP041_');
+                        const dataothervalue = dataallvalue - (datad1value + datad2value + datad3value + datad4value + datad5value + datad6value + datad7value + datad8value + datad9value + datad0value + datad11value);
+                        this.tablename = 'VOICE All';
+                        this.tabledataall = dataallvalue;
+                        const dataObjects = [
+                            { name: 'Blocking on their Mobile', value: datad1value }, //
+                            { name: 'Call to Invalid Number', value: datad2value }, //
+                            { name: 'Customer Capture 2G signal', value: datad3value },
+                            { name: 'Customer turn off Mobile', value: datad4value },
+                            { name: 'In Corrected UCSI Template', value: datad5value },
+                            { name: 'No Offerring In CBS', value: datad12value },
+                            { name: 'Number Was Barring in HSS', value: datad6value },
+                            { name: 'Number Was IDLE Status in OCS', value: datad7value },
+                            { name: 'Number Was Operational', value: datad8value },
+                            { name: 'Number was suspended in OCS', value: datad9value },
+                            { name: 'SIM WASLOCKED PROVIDED PIN&PUK', value: datad0value },
+                            { name: 'Life Cycle Was Expired', value: datad11value },  ///
+                            { name: 'Other', value: dataothervalue }
+                        ];
+                        // Sort the dataObjects array based on the value property in descending order
+                        dataObjects.sort((a, b) => b.value - a.value);
+                        this.names = dataObjects.filter(item => item.value > 0).map(item => item.name);
+                        this.value = dataObjects.filter(item => item.value > 0).map(item => item.value);
+                        const percentages = this.value.map(value => ((value / dataallvalue) * 100).toFixed(2));
+                        this.dataset = this.names.map((item, index) => ({
+                            name: item,
+                            value: this.value[index],
+                            percentage: `${percentages[index]}%`,
+                        }));
+                        this.dataset = this.dataset.filter(item => item.value > 0);
+                    }
+                    else {
+
+                        this.tablename = 'VOICE All';
+                        this.tabledataall = dataallvalue;
+                        const uniqueNames = this.loopname(this.desserts, 'VOICE', 'DATA');
+                        const dataObjects = uniqueNames.map(name => ({
+                            name,
+                            value: this.calculateDataD1Value(this.desserts, 'VOICE', name)
+                        }));
+                        // Sort the dataObjects array based on the value property in descending order
+                        dataObjects.sort((a, b) => b.value - a.value);
+                        this.names = dataObjects.map(item => item.name);
+                        this.value = dataObjects.map(item => item.value);
+                        const percentages = this.value.map(value => ((value / dataallvalue) * 100).toFixed(2));
+                        this.dataset = this.names.map((item, index) => ({
+                            name: item,
+                            value: this.value[index],
+                            percentage: `${percentages[index]}%`,
+                        }));
+                    }
+                };
+                if (this.desserts === undefined) {
                     console.error('Response is undefined');
-                    return 'Response is undefined';
+                    throw new Error('Response is undefined');
                 }
             } catch (error) {
                 console.error('Error fetching data:', error);
+                throw error;
             }
             this.graphShow();
+            this.loading = false;
         },
 
         calculateDataValue(data, serviceGroup) {
+            // Assuming "SERVICE_GROUP" is the key you want to filter on
             return data.reduce((sum, entry) => {
                 if (entry.SERVICE_GROUP === serviceGroup) {
                     return sum + 1;
@@ -246,11 +652,80 @@ export default {
                 return sum;
             }, 0);
         },
+        calculateData(data, serviceGroup, serviceGroupD1) {
+            // Assuming "SERVICE_GROUP" is the key you want to filter on
+            return data.reduce((sum, entry) => {
+                if ((entry.SERVICE_GROUP === serviceGroup) && (entry.CLASSIFICATION === serviceGroupD1)) {
+                    return sum + 1;
+                }
+                return sum;
+            }, 0);
+        },
+        loopname(data, serviceGroup, status) {
+            if (status === 'DATA') {
+                const uniqueNames = new Set();
+                data.forEach((entry) => {
+                    if (entry.SERVICE_GROUP === serviceGroup && typeof entry.CLASSIFICATION === 'string') {
+                        // console.log('hu', entry.CLASSIFICATION);
+                        uniqueNames.add(entry.CLASSIFICATION);
+                    }
+                });
+                return Array.from(uniqueNames);
+            }
+            else if (status === 'Root') {
+                const uniqueNames = new Set();
+                data.forEach((entry) => {
+                    if (entry.SERVICE_GROUP === serviceGroup && typeof entry.WORKLONG_DESCRIPTOIN === 'string') {
+                        // console.log('hu', entry.WORKLONG_DESCRIPTOIN);
+                        uniqueNames.add(entry.WORKLONG_DESCRIPTOIN);
+                    }
+                });
+                return Array.from(uniqueNames);
+            }
+        },
+        calculateDataD1Value(data, serviceGroup, serviceGroupD1) {
+            // Assuming "SERVICE_GROUP" is the key you want to filter on
+            return data.reduce((sum, entry, index) => {
+                const description = entry.CLASSIFICATION || '';
+                if ((entry.SERVICE_GROUP === serviceGroup) && description.includes(serviceGroupD1)) {
+                    return sum + 1;
+                }
+                else {
+                    if ((entry.SERVICE_GROUP === serviceGroup) && (!description.includes('D1_') && !description.includes('D2_') && !description.includes('D3_') && !description.includes('V1_') && !description.includes('DATA') && !description.includes('D4_'))) {
+                        // console.log('Name:', entry.CLASSIFICATION, entry.SERVICE_GROUP, index + 1); // Log the data when conditions are met
+                    };
+                }
+                return sum;
+            }, 0);
+        },
+        calculateDataD2Value(data, serviceGroup, serviceGroupD1) {
+            return data.reduce((sum, entry) => {
+                const description = entry.WORKLONG_DESCRIPTOIN || '';
+                // Check if description contains either serviceGroupD1 or serviceGroupD2
+                if ((entry.SERVICE_GROUP === serviceGroup) && description.includes(serviceGroupD1)) {
+                    return sum + 1;
+                }
+                return sum;
+            }, 0);
+        },
+        calculateDatamin(data, serviceGroup, threshold) {
+            // Assuming "SERVICE_GROUP" is the key you want to filter on
+            return data.reduce((sum, entry) => {
+                if (entry.SERVICE_GROUP === serviceGroup && entry.TIME_DO_TPLUS <= threshold) {
+                    return sum + 1;
+                }
+                return sum;
+            }, 0);
+        },
+
         graphShow() {
-            this.loading = false;
             const ctx = document.getElementById('myChart').getContext('2d');
-            const myChart = new this.$Chart(ctx, {
-                type: this.graphdisplay,
+            // Clear existing chart
+            if (this.myChart) {
+                this.myChart.destroy();
+            }
+            this.myChart = new this.$Chart(ctx, {
+                type: this.graphform,
                 data: {
                     labels: this.names,
                     datasets: [
@@ -258,12 +733,22 @@ export default {
                             label: ' of Votes',
                             data: this.value,
                             backgroundColor: [
-                                'rgba(255, 99, 132, 0.2)',
-                                'rgba(54, 162, 235, 0.2)',
-                                'rgba(255, 206, 86, 0.2)',
-                                'rgba(75, 192, 192, 0.2)',
-                                'rgba(153, 102, 255, 0.2)',
-                                'rgba(255, 159, 64, 0.2)',
+                                'rgba(255, 99, 132, 0.5)',
+                                'rgba(54, 162, 235, 0.5)',
+                                'rgba(255, 206, 86, 0.5)',
+                                'rgba(75, 192, 192, 0.5)',
+                                'rgba(153, 102, 255, 0.5)',
+                                'rgba(25, 159, 64, 0.5)',
+                                'rgba(254, 19, 64, 0.5)',
+                                'rgba(54, 162, 235, 0.5)',
+                                'rgba(255, 159, 164, 0.5)',
+                                'rgba(255, 206, 86, 0.5)',
+                                'rgba(254, 19, 64, 0.5)',
+                                'rgba(153, 102, 255, 0.5)',
+                                'rgba(75, 192, 192, 0.5)',
+                                'rgba(25, 159, 64, 0.5)',
+                                'rgba(255, 159, 164, 0.5)',
+                                'rgba(125, 139, 144, 0.5)',
                             ],
                             borderColor: [
                                 'rgba(255, 99, 132, 1)',
@@ -271,7 +756,17 @@ export default {
                                 'rgba(255, 206, 86, 1)',
                                 'rgba(75, 192, 192, 1)',
                                 'rgba(153, 102, 255, 1)',
-                                'rgba(255, 159, 64, 1)',
+                                'rgba(25, 159, 64, 1)',
+                                'rgba(254, 19, 64, 1)',
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 159, 164, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(254, 19, 64, 1)',
+                                'rgba(153, 102, 255, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(25, 159, 64, 1)',
+                                'rgba(255, 159, 164, 1)',
+                                'rgba(125, 139, 144, 1)',
                             ],
                             borderWidth: 1,
                         },
@@ -289,15 +784,120 @@ export default {
                     },
                 },
             });
-            console.log(myChart);
+            // console.log(this.tabledisplay)
+            this.i = false;
         },
-    }
+        changeGraph(itemvalue) {
+            this.i = true;
+            this.graphType();
+            this.tabledisplay = itemvalue;
+        },
+        graphType() {
+            // Set up the initial interval
+            this.intervalId = setInterval(() => {
+                if (this.i) {
+                    this.getData();
+                    // Clear the current interval
+                    clearInterval(this.intervalId);
+                    // Set up a new interval for the next cycle
+                    this.setupInterval();
+                }
+            }, 500);
+        },
+
+        setupInterval() {
+            // Set up a new interval when this.i is true
+            this.intervalId = setInterval(() => {
+                if (this.i) {
+                    this.getData();
+                    // Clear the current interval
+                    clearInterval(this.intervalId);
+                    // Set up a new interval for the next cycle
+                    this.setupInterval();
+                }
+            }, 500);
+        },
+        updateShowProperty() {
+            // Update 'show' property based on window width
+            this.showstrygraph = window.innerWidth > 980;
+        }
+
+    },
+    mounted() {
+        this.graphType();
+        this.updateShowProperty();
+
+        // Listen for window resize events and update 'show' property accordingly
+        window.addEventListener('resize', this.updateShowProperty);
+    },
+    beforeDestroy() {
+        // Remove the window resize event listener to prevent memory leaks
+        window.removeEventListener('resize', this.updateShowProperty);
+    },
 }
 </script>
 <style scoped>
 .v-progress-circular {
     margin: 1rem;
     color: #ffff00;
+}
+
+.v-card--reveal {
+    align-items: center;
+    bottom: 0;
+    justify-content: center;
+    opacity: 0.5;
+    position: absolute;
+    width: 100%;
+}
+
+.table-container {
+    max-height: 350px;
+    overflow-y: auto;
+}
+
+.table-container ::-webkit-scrollbar {
+    width: 2px;
+}
+
+.table-container ::-webkit-scrollbar-thumb {
+    background-color: #ffff00;
+    border-radius: 4px;
+}
+
+.table-container ::-webkit-scrollbar-corner {
+    background-color: #ffff00;
+    border-radius: 4px;
+}
+
+.resizable {
+    cursor: ew-resize;
+}
+
+.table-hiegth {
+    max-height: 350px;
+    overflow-y: auto;
+}
+
+.table-title-hiegth {
+    max-height: 350px;
+    overflow-y: auto;
+}
+
+@media only screen and (max-width: 980px) {
+    .grid {
+        display: none;
+    }
+
+    /* Update the 'show' property to false for screen width less than or equal to 1600px */
+    :root {
+        --showstrygraph-value: false;
+    }
+}
+
+/* Use the custom property to set the 'show' property */
+.grid {
+    display: var(--showstrygraph-value, grid);
 }
 </style>
   

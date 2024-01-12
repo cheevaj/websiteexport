@@ -21,10 +21,10 @@ export default {
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
-  css: [],
+  css: ['iview/dist/styles/iview.css'],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: ['~/plugins/chartjs.js'],
+  plugins: ['~/plugins/chartjs.js','@/plugins/iview'],
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
 

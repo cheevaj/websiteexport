@@ -1,0 +1,99 @@
+const dataallvalue = this.calculateDataValue(this.desserts, 'SMS')
+if (this.tabledisplay === 'Root Cause') {
+  this.tablename = 'SMS All'
+  this.tabledataall = dataallvalue
+  const uniqueNames = this.loopname(this.desserts, 'SMS', 'Root')
+  const dataObjects = uniqueNames.reduce((accumulator, name) => {
+    let adjustedName = idname;
+    // Iterate through each character in the name
+    for (let i = 0; i < name.length; i++) {
+      const a = name.substring(i, i + 1)
+      // If an underscore is found, adjust the name
+      if (a === '_') {
+        const id = name.substring(0, i + 1)
+        if (id.substring(0,2)==='TP'){
+            const idname = id.substring(0,2) + id.substring(3);
+            return idname;
+        } 
+        return idname;
+      }
+    }
+
+    const existingObject = accumulator.find((obj) => obj.name === adjustedName)
+
+    if (existingObject) {
+      existingObject.value += this.calculateDataD2Value(
+        this.desserts,
+        'SMS',
+        name
+      )
+    } else {
+      accumulator.push({
+        name: adjustedName,
+        value: this.calculateDataD2Value(this.desserts, 'SMS', name),
+      })
+    }
+
+    return accumulator
+  }, [])
+
+  console.log('name', dataObjects)
+
+  // Sort the dataObjects array based on the value property in descending order
+  dataObjects.sort((a, b) => b.value - a.value)
+
+  this.names = dataObjects.map((item) => item.name)
+  this.value = dataObjects.map((item) => item.value)
+  const percentages = this.value.map((value) =>
+    ((value / dataallvalue) * 100).toFixed(2)
+  )
+
+  this.dataset = this.names.map((item, index) => ({
+    name: item,
+    value: this.value[index],
+    percentage: `${percentages[index]}%`,
+  }))
+}
+
+if (this.tabledisplay === 'Root Cause') {
+  this.tablename = 'SMS All'
+  this.tabledataall = dataallvalue
+  const uniqueNames = this.loopname(this.desserts, 'SMS', 'Root')
+  const dataObjects = uniqueNames.reduce((accumulator, name) => {
+    // Extract the part of the name before the underscore
+    const prefix = name.split('_')[0]
+    const existingObject = accumulator.find((obj) =>
+      obj.name.startsWith(prefix)
+    )
+    if (existingObject) {
+      existingObject.value += this.calculateDataD2Value(
+        this.desserts,
+        'SMS',
+        name
+      )
+    } else {
+      accumulator.push({
+        name: prefix,
+        value: this.calculateDataD2Value(this.desserts, 'SMS', name),
+      })
+    }
+    return accumulator
+  }, [])
+
+  console.log('name', dataObjects)
+
+  // Sort the dataObjects array based on the value property in descending order
+  dataObjects.sort((a, b) => b.value - a.value)
+
+  this.names = dataObjects.map((item) => item.name + '_')
+  this.value = dataObjects.map((item) => item.value)
+  const percentages = this.value.map((value) =>
+    ((value / dataallvalue) * 100).toFixed(2)
+  )
+
+  this.dataset = this.names.map((item, index) => ({
+    name: item,
+    value: this.value[index],
+    percentage: `${percentages[index]}%`,
+  }))
+}

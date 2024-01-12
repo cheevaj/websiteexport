@@ -438,7 +438,7 @@ export default {
       color: '#e5e5e5',
       date: new Date(
         Date.now() -
-        (7*24) * 60 * 60 * 1000 -
+        (29*24) * 60 * 60 * 1000 -
         new Date().getTimezoneOffset() * 60000
       )
         .toISOString()
@@ -570,7 +570,7 @@ export default {
             startDate
           )}&endDate=${encodeURIComponent(endDate)}`
         )
-        console.log(res)
+        // console.log(res)
         // --------- loop data in lastindex of Object in group ID
         const lastIndexes = {}
         const firstIndexes = {}
@@ -737,7 +737,6 @@ export default {
           }
         })
 
-        // console.log(desserts)
         this.desserts = desserts
       } catch (error) {
         console.error('Error fetching data:', error)
