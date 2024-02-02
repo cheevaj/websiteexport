@@ -3,7 +3,8 @@
     <v-app-bar style="z-index: 100" flat clipped-left fixed app>
       <v-col cols="12" class="px-0">
         <v-row>
-          <v-col :cols="show ? 2 : 4" align="center" justify="center" @mouseleave="colortext = false" @click="$router.push('/')">
+          <v-col :cols="show ? 2 : 4" align="center" justify="center" @mouseleave="colortext = false"
+            @click="$router.push('/')">
             <!-- <v-col class="px-0"> -->
             <v-list-item class="px-0">
               <v-btn class="pa-0" text style="background-color: transparent; color: transparent">
@@ -59,7 +60,6 @@
               </v-card>
             </v-btn>
           </v-col>
-
           <v-col cols="8" v-if="show" class="text-right" @mouseleave="colortext = false">
             <v-card-text class="pa-0 text-right pr-12">
               <v-tooltip bottom class="px-4">
@@ -85,6 +85,14 @@
                     color: colortext === 'about' ? '#ffff00' : '#000',
                   }">
                     about us
+                  </v-card-text>
+                </v-card-actions>
+              </v-btn>
+              <v-btn height="100%" class="pa-0" text style="background-color: transparent; color: transparent"
+                @mouseenter="colortext = 'message'" @click="$router.push('/chart/pagewhatsapp')">
+                <v-card-actions class="pa-0">
+                  <v-card-text :style="{color: colortext === 'message' ? '#ffff00' : '#000'}">
+                    messages
                   </v-card-text>
                 </v-card-actions>
               </v-btn>
@@ -130,7 +138,7 @@
                   <v-list-item v-for="(item, index) in menu" :key="index">
                     <v-btn height="100%" class="pa-0" text style="background-color: transparent; color: transparent"
                       @mouseenter="colortext = 'menu' + index" @mouseleave="colortext = false"
-                      @click=" index === 0 ? $router.push('/pagetable') : openLinkInNewTab(link[index])">
+                      @click=" (index === 0 || index === 2) ? index === 0 ? $router.push('/pagetable') : $router.push('/chart/pagewhatsapp') : openLinkInNewTab(link[index])">
                       <v-list-item-title style="color: #000;" :style="{
                         color: colortext === 'menu' + index ? '#ffff00' : '#000',
                       }">{{ item.title }}
@@ -183,7 +191,8 @@ export default {
       show: true,
       menu: [
         { title: 'Ticket' },
-        { title: 'About us' },
+        { title: 'Contact us' },
+        { title: 'Message ' },
         { title: 'Products' },
         { title: 'Contact us' },
       ],
@@ -213,6 +222,7 @@ export default {
       link: [
         'https://tplus.la/tplus/about-us',
         'https://tplus.la/new-number/sim/',
+        '',
         'https://tplus.la/help',
       ],
       icons: [

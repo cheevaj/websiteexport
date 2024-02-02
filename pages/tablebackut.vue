@@ -1,4 +1,4 @@
-<template>
+ <template>
     <!-- Main card containing the entire component -->
     <v-card class="mx-auto text-center mx-2" color="#ffff00" dark>
         <!-- Sidebar column with menu and buttons -->
@@ -63,8 +63,8 @@
                     <v-list shaped>
                         <v-subheader style="color: #ffff00;">{{ tabledisplay }}</v-subheader>
                         <v-list-item-group v-model="selectedItem" color="yellow">
-                            <v-list-item v-for="(item, i) in itemdatacustomer" :key="i" @click="changeGraph('Customer complaint')">
-                                <v-list-item-content >
+                            <v-list-item v-for="(item, i) in itemdatacustomer" :key="i">
+                                <v-list-item-content @click="changeGraph('Customer complaint')">
                                     <v-list-item-title>
                                         {{ item.text }}
                                     </v-list-item-title>
@@ -79,8 +79,8 @@
                         <v-subheader style="color: #ffff00;">{{ tabledisplay }}</v-subheader>
                         <v-list-item-group v-model="selectedItem" color="yellow">
                             <!-- Use v-if on the v-list-item to conditionally render it -->
-                            <v-list-item v-for="(item, i) in itemdatacust" :key="i" @click="changeGraph('Root Cause')">
-                                <v-list-item-content >
+                            <v-list-item v-for="(item, i) in itemdatacust" :key="i">
+                                <v-list-item-content @click="changeGraph('Root Cause')">
                                     <v-list-item-title>
                                         {{ item.text }}
                                     </v-list-item-title>
@@ -94,8 +94,8 @@
                     <v-list shaped>
                         <v-subheader style="color: #ffff00;">{{ tabledisplay }}</v-subheader>
                         <v-list-item-group v-model="selectedItem" color="yellow">
-                            <v-list-item v-for="(item, i) in itemdatarootall" :key="i" @click="changeGraph('Root Cause Report')">
-                                <v-list-item-content >
+                            <v-list-item v-for="(item, i) in itemdatarootall" :key="i">
+                                <v-list-item-content @click="changeGraph('Root Cause Report')">
                                     <v-list-item-title>
                                         {{ item.text }}
                                     </v-list-item-title>
@@ -151,15 +151,7 @@
                                 </v-col>
                                 <v-col cols="12" class="py-1">
                                     <v-container>
-                                        <v-card-text class="pt-0">
-                                            <div v-for="(item, index) in (tabledisplay === 'Customer complaint' ? itemdatacustomer : (tabledisplay === 'Root Cause' ? itemdatacust : itemdatarootall))"
-                                                :key="index">
-                                                <h2 style="color:rgb(77, 77, 0);">
-                                                    <span v-if="index === selectedItem">
-                                                        {{ item.text }}
-                                                    </span>
-                                                </h2>
-                                            </div>
+                                        <v-card-text>
                                             <canvas height="96px" id="myChart"></canvas>
                                         </v-card-text>
                                     </v-container>
@@ -176,7 +168,7 @@
                                     cols="12" sm="7" md="7" class="px-0 py-0">
                                     <v-card-text class="px-1 pt-0 pb-1" style="color: #000000;">
                                         <h4 style="color: #b3b300;">DATA TABLE</h4>
-                                        <v-simple-table dense flat height="192px" fixed-header class="table-container">
+                                        <v-simple-table dense flat fixed-header class="table-container table-title-hiegth">
                                             <template v-slot:default>
                                                 <thead>
                                                     <tr>
@@ -224,7 +216,7 @@
                                     class="px-0 py-0">
                                     <v-card-text class="px-1 pt-0 pb-1" style="color: #000000;">
                                         <h4 style="color: #b3b300;">DATA TABLE</h4>
-                                        <v-simple-table dense flat height="192px" fixed-header class="table-container">
+                                        <v-simple-table dense flat class="table-container table-title-hiegth">
                                             <template v-slot:default>
                                                 <thead>
                                                     <tr>
@@ -270,7 +262,7 @@
                                 <v-col cols="12" sm="5" md="5" class="px-0 py-0">
                                     <v-card-text class="px-1 pt-0 pb-1" style="color: #000000;">
                                         <h4 style="color: #b3b300;">TABLE TIME</h4>
-                                        <v-simple-table dense flat height="192px" fixed-header class="table-container">
+                                        <v-simple-table dense flat class="table-container table-title-hiegth">
                                             <template v-slot:default>
                                                 <thead>
                                                     <tr>
@@ -341,6 +333,7 @@ export default {
     data() {
         return {
             expand: 'btn-1',
+            tabledisplay: 'Customer complaint',
             datacang: true,
             showstrygraph: true,
             loading: true,
@@ -352,7 +345,6 @@ export default {
             item: [],
             tablename: '',
             tabledataall: 0,
-            tabledisplay: 'Customer complaint',
             itemdatacustomer: [
                 { text: 'SERVICE GROUP' },
                 { text: 'DATA' },
@@ -386,8 +378,6 @@ export default {
             radius: 2,
             value: [],
             names: [],
-            namemins: [],
-            valuemins: [],
             width: 1.5,
             i: true,
         };
@@ -433,9 +423,6 @@ export default {
                 const valuemax = dataObjects.map(item => item.valuemax);
                 const valuemin = dataObjects.map(item => item.valuemin);
                 const dataall = dataObjects.map(item => item.dataall);
-                this.namemins = names; // get data to use graph (graph names)
-                this.valuemins = valuemax;
-                console.log(this.valuemins,this.namemins)
                 // Create a datasetdatatime array with formatted data for display
                 this.datasetdatatime = names.map((item, index) => ({
                     name: item,
@@ -444,333 +431,6 @@ export default {
                     dataall: dataall[index],
                 }));
                 // Process data for table display based on selectedItem and tabledisplay
-                if (this.selectedItem === 0) {
-                    // Handle different cases based on tabledisplay option
-                    if (this.tabledisplay === 'Root Cause') {
-                        const dataallvalue = this.calculateDataValue(this.desserts, 'DATA', 'DA'); // Calculate data values for 'All' and unique names
-                        this.tablename = 'All';
-                        this.tabledataall = dataallvalue;
-                        const uniqueNames = this.loopname(this.desserts, 'DATA', 'Root');
-                        // console.log('test', uniqueNames)
-                        const dataObjects = uniqueNames.map(name => ({
-                            name,
-                            value: this.calculateDataValue(this.desserts, name, 'Root', 'DATA'),
-                        }));
-                        // arrow function find value max to min  
-                        dataObjects.sort((a, b) => b.value - a.value); // Sort dataObjects based on value in descending order
-                        // get data to use graph 
-                        this.names = dataObjects.map((item) => item.name); // get data to use graph (graph names)
-                        this.value = dataObjects.map((item) => item.value); // get data to use graph (graph values)
-                        const percentages = this.value.map((value) => ((value / this.tabledataall) * 100).toFixed(2));
-                        // get data to use table desplay datas
-                        // Format data for both graph and table display
-                        this.dataset = this.names.map((item, index) => ({
-                            name: item,
-                            value: this.value[index],
-                            percentage: `${percentages[index]}%`,
-                        }));
-                    }
-                    else if (this.tabledisplay === 'Root Cause Report') {
-                        const uniqueNames = this.loopname(this.desserts, 'DATA', 'OWNER');
-                        const dataObjects = uniqueNames.map(name => ({
-                            name,
-                            value: this.calculateDataValue(this.desserts, name, 'OWNER'),
-                        }));
-                        this.tablename = 'All';
-                        const dataallvalue = dataObjects.reduce((sum, item) => sum + item.value, 0);
-                        this.tabledataall = dataallvalue;
-                        dataObjects.sort((a, b) => b.value - a.value);
-                        this.names = dataObjects.map(item => item.name);
-                        this.value = dataObjects.map(item => item.value);
-                        const percentages = this.value.map(value => ((value / dataallvalue) * 100).toFixed(2));
-                        this.dataset = this.names.map((item, index) => ({
-                            name: item,
-                            value: this.value[index],
-                            percentage: `${percentages[index]}%`,
-                        }));
-                    }
-                    else {
-                        const datavalue = this.calculateDataValue(this.desserts, 'DATA', 'DA');
-                        const datad1value = this.calculateDataValue(this.desserts, 'SMS', 'DA');
-                        const datad2value = this.calculateDataValue(this.desserts, 'VAS', 'DA');
-                        const datad3value = this.calculateDataValue(this.desserts, 'VOICE', 'DA');
-                        const dataothervalue = datavalue + datad1value + datad2value + datad3value;
-                        const dataA = datavalue + datad1value;
-                        this.tablename = 'All';
-                        this.tabledataall = this.tabledisplay === 'Root Cause Report' ? dataA : dataothervalue;
-                        // Get data style Objects from table service grops
-                        const dataDATA = [
-                            { name: 'DATA', value: datavalue },
-                            { name: 'SMS', value: datad1value },
-                            { name: 'VAS', value: datad2value },
-                            { name: 'VOICE', value: datad3value },
-                        ];
-                        const dataOwner = [{ name: 'USER', value: datavalue }, { name: 'SYSTEM', value: datad1value }]
-                        const dataObjects = this.tabledisplay === 'Root Cause Report' ? dataOwner : dataDATA;                  // arrow function find value max to min  
-                        dataObjects.sort((a, b) => b.value - a.value);
-                        // get data to use graph 
-                        this.names = dataObjects.filter(item => item.value > 0).map(item => item.name); // get data to use graph (graph names)
-                        this.value = dataObjects.filter(item => item.value > 0).map(item => item.value); // get data to use graph (graph values)
-                        const percentages = this.value.map(value => ((value / dataothervalue) * 100).toFixed(2));
-                        // get data to use table desplay datas
-                        this.dataset = this.names.map((item, index) => ({
-                            name: item,
-                            value: this.value[index],
-                            percentage: `${percentages[index]}%`,
-                        }));
-                    }
-                    this.dataset = this.dataset.filter(item => item.value > 0); // Filter out items with zero values
-                }
-                // Calculate values based on SERVICE_GROUP CLASSIFICATION DATA and SERVICE_GROUP WORKLONG_DESCRIPTOIN DATA
-                //  DATA
-                if (this.selectedItem === 1) {
-                    // DATA of Root cause
-                    if ((this.tabledisplay === 'Root Cause')) {
-                        const dataallvalue = this.calculateDataValue(this.desserts, 'SMS', 'DA');
-                        this.tablename = 'SMS All';
-                        this.tabledataall = dataallvalue;
-                        const uniqueNames = this.loopname(this.desserts, 'SMS', 'Root');
-                        const dataObjects = uniqueNames.map(name => ({
-                            name,
-                            value: this.calculateDataValue(this.desserts, name, 'Root', 'SMS'),
-                        }));
-                        dataObjects.sort((a, b) => b.value - a.value);
-                        this.names = dataObjects.map((item) => item.name);
-                        this.value = dataObjects.map((item) => item.value);
-                        const percentages = this.value.map((value) => ((value / this.tabledataall) * 100).toFixed(2));
-                        this.dataset = this.names.map((item, index) => ({
-                            name: item,
-                            value: this.value[index],
-                            percentage: `${percentages[index]}%`,
-                        }));
-                    }
-                    else if (this.tabledisplay === 'Root Cause Report') {
-                        const uniqueNames = this.loopname(this.desserts, 'DATA', 'TI');
-                        const dataObjects = uniqueNames.map(name => ({
-                            name,
-                            value: this.calculateDataValue(this.desserts, name, 'TI'),
-                        }));
-                        this.tablename = 'All';
-                        const dataallvalue = dataObjects.reduce((sum, item) => sum + item.value, 0);
-                        this.tabledataall = dataallvalue;
-                        dataObjects.sort((a, b) => b.value - a.value);
-                        this.names = dataObjects.map(item => item.name);
-                        this.value = dataObjects.map(item => item.value);
-                        const percentages = this.value.map(value => ((value / dataallvalue) * 100).toFixed(2));
-                        this.dataset = this.names.map((item, index) => ({
-                            name: item,
-                            value: this.value[index],
-                            percentage: `${percentages[index]}%`,
-                        }));
-                    }
-                    // DATA of customer compaint
-                    else {
-                        const dataallvalue = this.calculateDataValue(this.desserts, 'DATA', 'DA');
-                        this.tablename = 'DATA All';
-                        this.tabledataall = dataallvalue;
-                        const uniqueNames = this.loopname(this.desserts, 'DATA', 'DATA');
-                        const dataObjects = uniqueNames.map(name => ({
-                            name,
-                            value: this.calculateDataD1Value(this.desserts, 'DATA', name),
-                        }));
-                        dataObjects.sort((a, b) => b.value - a.value);
-                        this.names = dataObjects.map(item => item.name);
-                        this.value = dataObjects.map(item => item.value);
-                        const percentages = this.value.map(value => ((value / dataallvalue) * 100).toFixed(2));
-                        this.dataset = this.names.map((item, index) => ({
-                            name: item,
-                            value: this.value[index],
-                            percentage: `${percentages[index]}%`,
-                        }));
-                    }
-                }
-                // Calculate values based on SERVICE_GROUP CLASSIFICATION DATA and SERVICE_GROUP WORKLONG_DESCRIPTOIN DATA
-                //  SMS
-                if (this.selectedItem === 2) {
-                    // SMS of Root cause
-                    if (this.tabledisplay === 'Root Cause') {
-                        const dataallvalue = this.calculateDataValue(this.desserts, 'VAS', 'DA');
-                        this.tablename = 'VAS All';
-                        this.tabledataall = dataallvalue;
-                        const uniqueNames = this.loopname(this.desserts, 'VAS', 'Root');
-                        const dataObjects = uniqueNames.map(name => ({
-                            name,
-                            value: this.calculateDataValue(this.desserts, name, 'Root', 'VAS'),
-                        }));
-                        dataObjects.sort((a, b) => b.value - a.value);
-                        this.names = dataObjects.map((item) => item.name);
-                        this.value = dataObjects.map((item) => item.value);
-                        const percentages = this.value.map((value) => ((value / this.tabledataall) * 100).toFixed(2));
-                        this.dataset = this.names.map((item, index) => ({
-                            name: item,
-                            value: this.value[index],
-                            percentage: `${percentages[index]}%`,
-                        }));
-                    }
-                    else if (this.tabledisplay === 'Root Cause Report') {
-                        const uniqueNames = this.loopname(this.desserts, 'DATA', 'DP');
-                        const dataObjects = uniqueNames.map(name => ({
-                            name,
-                            value: this.calculateDataValue(this.desserts, name, 'DP'),
-                        }));
-                        this.tablename = 'All';
-                        const dataallvalue = dataObjects.reduce((sum, item) => sum + item.value, 0);
-                        this.tabledataall = dataallvalue;
-                        dataObjects.sort((a, b) => b.value - a.value);
-                        this.names = dataObjects.map(item => item.name);
-                        this.value = dataObjects.map(item => item.value);
-                        const percentages = this.value.map(value => ((value / dataallvalue) * 100).toFixed(2));
-                        this.dataset = this.names.map((item, index) => ({
-                            name: item,
-                            value: this.value[index],
-                            percentage: `${percentages[index]}%`,
-                        }));
-                    }
-                    // SMS of customer compaint
-                    else {
-                        const dataallvalue = this.calculateDataValue(this.desserts, 'SMS', 'DA');
-                        this.tablename = 'SMS All';
-                        this.tabledataall = dataallvalue;
-                        const uniqueNames = this.loopname(this.desserts, 'SMS', 'DATA');
-                        const dataObjects = uniqueNames.map((name) => ({
-                            name,
-                            value: this.calculateDataD1Value(this.desserts, 'SMS', name),
-                        }));
-                        dataObjects.sort((a, b) => b.value - a.value);
-                        this.names = dataObjects.map((item) => item.name);
-                        this.value = dataObjects.map((item) => item.value);
-                        const percentages = this.value.map((value) => ((value / this.tabledataall) * 100).toFixed(2));
-                        this.dataset = this.names.map((item, index) => ({
-                            name: item,
-                            value: this.value[index],
-                            percentage: `${percentages[index]}%`,
-                        }));
-                    }
-                }
-                // Calculate values based on SERVICE_GROUP CLASSIFICATION DATA and SERVICE_GROUP WORKLONG_DESCRIPTOIN DATA
-                //  VAS
-                if (this.selectedItem === 3) {
-                    if (this.tabledisplay === 'Root Cause') {
-                        const dataallvalue = this.calculateDataValue(this.desserts, 'VOICE', 'DA');
-                        this.tablename = 'VOICE All';
-                        this.tabledataall = dataallvalue;
-                        const uniqueNames = this.loopname(this.desserts, 'VOICE', 'Root');
-                        const dataObjects = uniqueNames.map(name => ({
-                            name,
-                            value: this.calculateDataValue(this.desserts, name, 'Root', 'VOICE'),
-                        }));
-                        dataObjects.sort((a, b) => b.value - a.value);
-                        this.names = dataObjects.map((item) => item.name);
-                        this.value = dataObjects.map((item) => item.value);
-                        const percentages = this.value.map((value) => ((value / this.tabledataall) * 100).toFixed(2));
-                        this.dataset = this.names.map((item, index) => ({
-                            name: item,
-                            value: this.value[index],
-                            percentage: `${percentages[index]}%`,
-                        }));
-                    }
-                    else if (this.tabledisplay === 'Root Cause Report') {
-                        const uniqueNames = this.loopname(this.desserts, 'DATA', 'RSOWNER');
-                        const dataObjects = uniqueNames.map(name => ({
-                            name,
-                            value: this.calculateDataValue(this.desserts, name, 'RSOWNER'),
-                        }));
-                        this.tablename = 'All';
-                        const dataallvalue = dataObjects.reduce((sum, item) => sum + item.value, 0);
-                        this.tabledataall = dataallvalue;
-                        dataObjects.sort((a, b) => b.value - a.value);
-                        this.names = dataObjects.map(item => item.name);
-                        this.value = dataObjects.map(item => item.value);
-                        const percentages = this.value.map(value => ((value / dataallvalue) * 100).toFixed(2));
-                        this.dataset = this.names.map((item, index) => ({
-                            name: item,
-                            value: this.value[index],
-                            percentage: `${percentages[index]}%`,
-                        }));
-                    }
-                    else {
-                        const dataallvalue = this.calculateDataValue(this.desserts, 'VAS', 'DA');
-                        this.tablename = 'VAS All';
-                        this.tabledataall = dataallvalue;
-                        const uniqueNames = this.loopname(this.desserts, 'VAS', 'DATA');
-                        const dataObjects = uniqueNames.map(name => ({
-                            name,
-                            value: this.calculateDataD1Value(this.desserts, 'VAS', name)
-                        }));
-                        // Sort the dataObjects array based on the value property in descending order
-                        dataObjects.sort((a, b) => b.value - a.value);
-                        this.names = dataObjects.map(item => item.name);
-                        this.value = dataObjects.map(item => item.value);
-                        const percentages = this.value.map(value => ((value / dataallvalue) * 100).toFixed(2));
-                        this.dataset = this.names.map((item, index) => ({
-                            name: item,
-                            value: this.value[index],
-                            percentage: `${percentages[index]}%`,
-                        }));
-                    }
-                }
-                // Calculate values based on SERVICE_GROUP CLASSIFICATION DATA and SERVICE_GROUP WORKLONG_DESCRIPTOIN DATA
-                //  VOICE
-                if (this.selectedItem === 4) {
-                    const dataallvalue = this.calculateDataValue(this.desserts, 'VOICE', 'DA');
-                    if (this.tabledisplay === 'Root Cause Report') {
-                        const uniqueNames = this.loopname(this.desserts, 'DATA', 'PV');
-                        const dataObjects = uniqueNames.map(name => ({
-                            name,
-                            value: this.calculateDataValue(this.desserts, name, 'PV'),
-                        }));
-                        this.tablename = 'All';
-                        const dataallvalue = dataObjects.reduce((sum, item) => sum + item.value, 0);
-                        this.tabledataall = dataallvalue;
-                        dataObjects.sort((a, b) => b.value - a.value);
-                        this.names = dataObjects.map(item => item.name);
-                        this.value = dataObjects.map(item => item.value);
-                        const percentages = this.value.map(value => ((value / dataallvalue) * 100).toFixed(2));
-                        this.dataset = this.names.map((item, index) => ({
-                            name: item,
-                            value: this.value[index],
-                            percentage: `${percentages[index]}%`,
-                        }));
-                    }
-                    else {
-                        this.tablename = 'VOICE All';
-                        this.tabledataall = dataallvalue;
-                        const uniqueNames = this.loopname(this.desserts, 'VOICE', 'DATA');
-                        const dataObjects = uniqueNames.map(name => ({
-                            name,
-                            value: this.calculateDataD1Value(this.desserts, 'VOICE', name)
-                        }));
-                        // Sort the dataObjects array based on the value property in descending order
-                        dataObjects.sort((a, b) => b.value - a.value);
-                        this.names = dataObjects.map(item => item.name);
-                        this.value = dataObjects.map(item => item.value);
-                        const percentages = this.value.map(value => ((value / dataallvalue) * 100).toFixed(2));
-                        this.dataset = this.names.map((item, index) => ({
-                            name: item,
-                            value: this.value[index],
-                            percentage: `${percentages[index]}%`,
-                        }));
-                    }
-                };
-                if (this.selectedItem === 5) {
-                    const uniqueNames = this.loopname(this.desserts, 'DATA', 'CHAN');
-                    const dataObjects = uniqueNames.map(name => ({
-                        name,
-                        value: this.calculateDataValue(this.desserts, name, 'CHAN'),
-                    }));
-                    this.tablename = 'All';
-                    const dataallvalue = dataObjects.reduce((sum, item) => sum + item.value, 0);
-                    this.tabledataall = dataallvalue;
-                    dataObjects.sort((a, b) => b.value - a.value);
-                    this.names = dataObjects.map(item => item.name);
-                    this.value = dataObjects.map(item => item.value);
-                    const percentages = this.value.map(value => ((value / dataallvalue) * 100).toFixed(2));
-                    this.dataset = this.names.map((item, index) => ({
-                        name: item,
-                        value: this.value[index],
-                        percentage: `${percentages[index]}%`,
-                    }));
-                };
                 if (this.desserts === undefined) {
                     console.error('Response is undefined');
                     throw new Error('Response is undefined');
@@ -779,13 +439,318 @@ export default {
                 console.error('Error fetching data:', error);
                 throw error;
             }
+
             // --- go to function graphShow;
             this.graphShow();
             this.loading = false;
         },
+        dataCustomer() {
+            const dataDATA = this.calculateDataValue(this.desserts, 'DATA', 'DA');
+            const dataSMS = this.calculateDataValue(this.desserts, 'SMS', 'DA');
+            const dataVAS = this.calculateDataValue(this.desserts, 'VAS', 'DA');
+            const dataVOICE = this.calculateDataValue(this.desserts, 'VOICE', 'DA');
+            if (this.selectedItem === 0) {
+                const dataothervalue = dataDATA + dataSMS + dataVAS + dataVOICE;
+                this.tablename = 'All';
+                this.tabledataall = dataothervalue;
+                // Get data style Objects from table service grops
+                const dataObjects = [
+                    { name: 'DATA', value: dataDATA },
+                    { name: 'SMS', value: dataSMS },
+                    { name: 'VAS', value: dataVAS },
+                    { name: 'VOICE', value: dataVOICE },
+                ];
+                dataObjects.sort((a, b) => b.value - a.value);
+                // get data to use graph 
+                this.names = dataObjects.filter(item => item.value > 0).map(item => item.name); // get data to use graph (graph names)
+                this.value = dataObjects.filter(item => item.value > 0).map(item => item.value); // get data to use graph (graph values)
+                const percentages = this.value.map(value => ((value / dataothervalue) * 100).toFixed(2));
+                // get data to use table desplay datas
+                this.dataset = this.names.map((item, index) => ({
+                    name: item,
+                    value: this.value[index],
+                    percentage: `${percentages[index]}%`,
+                }));
+            }
+            if (this.selectedItem === 1) {
+                this.tablename = 'DATA All';
+                this.tabledataall = dataDATA;
+                const uniqueNames = this.loopname(this.desserts, 'DATA', 'DATA');
+                const dataObjects = uniqueNames.map(name => ({
+                    name,
+                    value: this.calculateDataD1Value(this.desserts, 'DATA', name),
+                }));
+                dataObjects.sort((a, b) => b.value - a.value);
+                this.names = dataObjects.map(item => item.name);
+                this.value = dataObjects.map(item => item.value);
+                const percentages = this.value.map(value => ((value / dataDATA) * 100).toFixed(2));
+                this.dataset = this.names.map((item, index) => ({
+                    name: item,
+                    value: this.value[index],
+                    percentage: `${percentages[index]}%`,
+                }));
+            }
+            if (this.selectedItem === 2) {
+                this.tablename = 'SMS All';
+                this.tabledataall = dataSMS;
+                const uniqueNames = this.loopname(this.desserts, 'SMS', 'DATA');
+                const dataObjects = uniqueNames.map((name) => ({
+                    name,
+                    value: this.calculateDataD1Value(this.desserts, 'SMS', name),
+                }));
+                dataObjects.sort((a, b) => b.value - a.value);
+                this.names = dataObjects.map((item) => item.name);
+                this.value = dataObjects.map((item) => item.value);
+                const percentages = this.value.map((value) => ((value / dataSMS) * 100).toFixed(2));
+                this.dataset = this.names.map((item, index) => ({
+                    name: item,
+                    value: this.value[index],
+                    percentage: `${percentages[index]}%`,
+                }));
+            }
+            if (this.selectedItem === 3) {
+                this.tablename = 'VAS All';
+                this.tabledataall = dataVAS;
+                const uniqueNames = this.loopname(this.desserts, 'VAS', 'DATA');
+                const dataObjects = uniqueNames.map(name => ({
+                    name,
+                    value: this.calculateDataD1Value(this.desserts, 'VAS', name)
+                }));
+                // Sort the dataObjects array based on the value property in descending order
+                dataObjects.sort((a, b) => b.value - a.value);
+                this.names = dataObjects.map(item => item.name);
+                this.value = dataObjects.map(item => item.value);
+                const percentages = this.value.map(value => ((value / dataVAS) * 100).toFixed(2));
+                this.dataset = this.names.map((item, index) => ({
+                    name: item,
+                    value: this.value[index],
+                    percentage: `${percentages[index]}%`,
+                }));
+            }
+            if (this.selectedItem === 4) {
+                this.tablename = 'VOICE All';
+                this.tabledataall = dataVOICE;
+                const uniqueNames = this.loopname(this.desserts, 'VOICE', 'DATA');
+                const dataObjects = uniqueNames.map(name => ({
+                    name,
+                    value: this.calculateDataD1Value(this.desserts, 'VOICE', name)
+                }));
+                // Sort the dataObjects array based on the value property in descending order
+                dataObjects.sort((a, b) => b.value - a.value);
+                this.names = dataObjects.map(item => item.name);
+                this.value = dataObjects.map(item => item.value);
+                const percentages = this.value.map(value => ((value / dataVOICE) * 100).toFixed(2));
+                this.dataset = this.names.map((item, index) => ({
+                    name: item,
+                    value: this.value[index],
+                    percentage: `${percentages[index]}%`,
+                }));
+            }
+            this.dataset = this.dataset.filter(item => item.value > 0); // Filter out items with zero values
+        },
+        dataRoot() {
+            const dataDATA = this.calculateDataValue(this.desserts, 'DATA', 'DA');
+            const dataSMS = this.calculateDataValue(this.desserts, 'SMS', 'DA');
+            const dataVAS = this.calculateDataValue(this.desserts, 'VAS', 'DA');
+            const dataVOICE = this.calculateDataValue(this.desserts, 'VOICE', 'DA');
+            if (this.selectedItem === 0) {
+                this.tablename = 'All';
+                this.tabledataall = dataDATA;
+                const uniqueNames = this.loopname(this.desserts, 'DATA', 'Root');
+                // console.log('test', uniqueNames)
+                const dataObjects = uniqueNames.map((name) => ({
+                    name: this.changeNameroot(name),
+                    value: this.calculateDataD2Value(this.desserts, 'DATA', name),
+                }));
+                // arrow function find value max to min  
+                dataObjects.sort((a, b) => b.value - a.value); // Sort dataObjects based on value in descending order
+                // get data to use graph 
+                this.names = dataObjects.map((item) => item.name); // get data to use graph (graph names)
+                this.value = dataObjects.map((item) => item.value); // get data to use graph (graph values)
+                const percentages = this.value.map((value) => ((value / this.tabledataall) * 100).toFixed(2));
+                // get data to use table desplay datas
+                // Format data for both graph and table display
+                this.dataset = this.names.map((item, index) => ({
+                    name: item,
+                    value: this.value[index],
+                    percentage: `${percentages[index]}%`,
+                }));
+            }
+            if (this.selectedItem === 1) {
+                this.tablename = 'SMS All';
+                this.tabledataall = dataSMS;
+                const uniqueNames = this.loopname(this.desserts, 'SMS', 'Root');
+                const dataObjects = uniqueNames.map((name) => ({
+                    name: this.changeNameroot(name),
+                    value: this.calculateDataD2Value(this.desserts, 'SMS', name),
+                }));
+                dataObjects.sort((a, b) => b.value - a.value);
+                this.names = dataObjects.map((item) => item.name);
+                this.value = dataObjects.map((item) => item.value);
+                const percentages = this.value.map((value) => ((value / this.tabledataall) * 100).toFixed(2));
+                this.dataset = this.names.map((item, index) => ({
+                    name: item,
+                    value: this.value[index],
+                    percentage: `${percentages[index]}%`,
+                }));
+            } if (this.selectedItem === 2) {
+                this.tablename = 'VAS All';
+                this.tabledataall = dataVAS;
+                const uniqueNames = this.loopname(this.desserts, 'VAS', 'Root');
+                const dataObjects = uniqueNames.map((name) => ({
+                    name: this.changeNameroot(name),
+                    value: this.calculateDataD2Value(this.desserts, 'VAS', name),
+                }));
+                dataObjects.sort((a, b) => b.value - a.value);
+                this.names = dataObjects.map((item) => item.name);
+                this.value = dataObjects.map((item) => item.value);
+                const percentages = this.value.map((value) => ((value / this.tabledataall) * 100).toFixed(2));
+                this.dataset = this.names.map((item, index) => ({
+                    name: item,
+                    value: this.value[index],
+                    percentage: `${percentages[index]}%`,
+                }));
+            }
+            if (this.selectedItem === 3) {
+                this.tablename = 'VOICE All';
+                this.tabledataall = dataVOICE;
+                const uniqueNames = this.loopname(this.desserts, 'VOICE', 'Root');
+                const dataObjects = uniqueNames.map((name) => ({
+                    name: this.changeNameroot(name),
+                    value: this.calculateDataD2Value(this.desserts, 'VOICE', name),
+                }));
+                dataObjects.sort((a, b) => b.value - a.value);
+                this.names = dataObjects.map((item) => item.name);
+                this.value = dataObjects.map((item) => item.value);
+                const percentages = this.value.map((value) => ((value / this.tabledataall) * 100).toFixed(2));
+                this.dataset = this.names.map((item, index) => ({
+                    name: item,
+                    value: this.value[index],
+                    percentage: `${percentages[index]}%`,
+                }));
+            }
+            this.dataset = this.dataset.filter(item => item.value > 0); // Filter out items with zero values
+        },
+        dataReport() {
+            if (this.selectedItem === 0) {
+                const uniqueNames = this.loopname(this.desserts, 'DATA', 'OWNER');
+                const dataObjects = uniqueNames.map(name => ({
+                    name,
+                    value: this.calculateDataValue(this.desserts, name, 'OWNER'),
+                }));
+                this.tablename = 'All';
+                const dataallvalue = dataObjects.reduce((sum, item) => sum + item.value, 0);
+                this.tabledataall = dataallvalue;
+                dataObjects.sort((a, b) => b.value - a.value);
+                this.names = dataObjects.map(item => item.name);
+                this.value = dataObjects.map(item => item.value);
+                const percentages = this.value.map(value => ((value / dataallvalue) * 100).toFixed(2));
+                this.dataset = this.names.map((item, index) => ({
+                    name: item,
+                    value: this.value[index],
+                    percentage: `${percentages[index]}%`,
+                }));
+            }
+            if (this.selectedItem === 1) {
+                const uniqueNames = this.loopname(this.desserts, 'DATA', 'TI');
+                const dataObjects = uniqueNames.map(name => ({
+                    name,
+                    value: this.calculateDataValue(this.desserts, name, 'TI'),
+                }));
+                this.tablename = 'All';
+                const dataallvalue = dataObjects.reduce((sum, item) => sum + item.value, 0);
+                this.tabledataall = dataallvalue;
+                dataObjects.sort((a, b) => b.value - a.value);
+                this.names = dataObjects.map(item => item.name);
+                this.value = dataObjects.map(item => item.value);
+                const percentages = this.value.map(value => ((value / dataallvalue) * 100).toFixed(2));
+                this.dataset = this.names.map((item, index) => ({
+                    name: item,
+                    value: this.value[index],
+                    percentage: `${percentages[index]}%`,
+                }));
+            }
+            if (this.selectedItem === 2) {
+                const uniqueNames = this.loopname(this.desserts, 'DATA', 'DP');
+                const dataObjects = uniqueNames.map(name => ({
+                    name,
+                    value: this.calculateDataValue(this.desserts, name, 'DP'),
+                }));
+                this.tablename = 'All';
+                const dataallvalue = dataObjects.reduce((sum, item) => sum + item.value, 0);
+                this.tabledataall = dataallvalue;
+                dataObjects.sort((a, b) => b.value - a.value);
+                this.names = dataObjects.map(item => item.name);
+                this.value = dataObjects.map(item => item.value);
+                const percentages = this.value.map(value => ((value / dataallvalue) * 100).toFixed(2));
+                this.dataset = this.names.map((item, index) => ({
+                    name: item,
+                    value: this.value[index],
+                    percentage: `${percentages[index]}%`,
+                }));
+            }
+            if (this.selectedItem === 3) {
+                const uniqueNames = this.loopname(this.desserts, 'DATA', 'RSOWNER');
+                const dataObjects = uniqueNames.map(name => ({
+                    name,
+                    value: this.calculateDataValue(this.desserts, name, 'RSOWNER'),
+                }));
+                this.tablename = 'All';
+                const dataallvalue = dataObjects.reduce((sum, item) => sum + item.value, 0);
+                this.tabledataall = dataallvalue;
+                dataObjects.sort((a, b) => b.value - a.value);
+                this.names = dataObjects.map(item => item.name);
+                this.value = dataObjects.map(item => item.value);
+                const percentages = this.value.map(value => ((value / dataallvalue) * 100).toFixed(2));
+                this.dataset = this.names.map((item, index) => ({
+                    name: item,
+                    value: this.value[index],
+                    percentage: `${percentages[index]}%`,
+                }));
+            }
+            if (this.selectedItem === 4) {
+                const uniqueNames = this.loopname(this.desserts, 'DATA', 'PV');
+                const dataObjects = uniqueNames.map(name => ({
+                    name,
+                    value: this.calculateDataValue(this.desserts, name, 'PV'),
+                }));
+                this.tablename = 'All';
+                const dataallvalue = dataObjects.reduce((sum, item) => sum + item.value, 0);
+                this.tabledataall = dataallvalue;
+                dataObjects.sort((a, b) => b.value - a.value);
+                this.names = dataObjects.map(item => item.name);
+                this.value = dataObjects.map(item => item.value);
+                const percentages = this.value.map(value => ((value / dataallvalue) * 100).toFixed(2));
+                this.dataset = this.names.map((item, index) => ({
+                    name: item,
+                    value: this.value[index],
+                    percentage: `${percentages[index]}%`,
+                }));
+            }
+            if (this.selectedItem === 5) {
+                const uniqueNames = this.loopname(this.desserts, 'DATA', 'CHAN');
+                const dataObjects = uniqueNames.map(name => ({
+                    name,
+                    value: this.calculateDataValue(this.desserts, name, 'CHAN'),
+                }));
+                this.tablename = 'All';
+                const dataallvalue = dataObjects.reduce((sum, item) => sum + item.value, 0);
+                this.tabledataall = dataallvalue;
+                dataObjects.sort((a, b) => b.value - a.value);
+                this.names = dataObjects.map(item => item.name);
+                this.value = dataObjects.map(item => item.value);
+                const percentages = this.value.map(value => ((value / dataallvalue) * 100).toFixed(2));
+                this.dataset = this.names.map((item, index) => ({
+                    name: item,
+                    value: this.value[index],
+                    percentage: `${percentages[index]}%`,
+                }));
+            }
+            this.dataset = this.dataset.filter(item => item.value > 0); // Filter out items with zero values
+        },
         // -------- Function loop Data of table SERVICE GROUP
         // Define a function named calculateDataValue that takes three parameters: data, serviceGroup, and status
-        calculateDataValue(data, serviceGroup, status, tyle) {
+        calculateDataValue(data, serviceGroup, status) {
             // Use the reduce function to iterate over the data array and accumulate a sum based on the specified conditions
             return data.reduce((sum, entry) => {
                 // Use a switch statement to handle different cases based on the provided 'status'
@@ -818,9 +783,6 @@ export default {
                     case 'CHAN':
                         if (entry.CREATEDBY.startsWith(serviceGroup)) sum++;
                         break;
-                    case 'Root':
-                        if ((entry.SERVICE_GROUP === tyle) && entry.ROOT_CAUSE_DESCRIPTIONS.startsWith(serviceGroup)) sum++;
-                        break;
                 }
                 // Return the accumulated sum
                 return sum;
@@ -828,94 +790,103 @@ export default {
         },
         // -------- Function loop Data similar 
         loopname(data, serviceGroup, status) {
-            // Initialize a Set to store unique names
-            const uniqueNames = new Set();
-
-            let namesArray;
-            // Helper function to add adjusted names to the uniqueNames set
-            const addAdjustedName = (entry, key, length) => {
-                if (typeof entry[key] === 'string') {
-                    const n = length ? entry[key].substring(0, length) : entry[key];
-                    const adjustedName = this.adjustName(n);
-                    uniqueNames.add(adjustedName);
-                }
-            };
-            // Iterate over the data based on the provided status
-            switch (status) {
-                case 'DATA':
-                    // Filter data based on SERVICE_GROUP and CLASSIFICATION
-                    data.forEach((entry) => {
-                        if (entry.SERVICE_GROUP === serviceGroup && typeof entry.CLASSIFICATION === 'string') {
-                            uniqueNames.add(entry.CLASSIFICATION);
-                        }
-                    });
-                    break;
-
-                case 'OWNER':
-                    // Filter data based on ROOT_CAUSE_BY_STATUS
-                    data.forEach((entry) => {
-                        addAdjustedName(entry, 'ROOT_CAUSE_BY_STATUS');
-                    });
-                    break;
-
-                case 'DP':
-                    // Filter data based on ROOT_CAUSE_BY_DEPARTMENT
-                    data.forEach((entry) => {
-                        addAdjustedName(entry, 'ROOT_CAUSE_BY_DEPARTMENT');
-                    });
-                    break;
-
-                case 'TI':
-                    // Filter data based on ROOT_CAUSE_BY_TIER
-                    data.forEach((entry) => {
-                        addAdjustedName(entry, 'ROOT_CAUSE_BY_TIER');
-                    });
-                    break;
-
-                case 'RSOWNER':
-                    // Filter data based on RESOLVE_CHANGBY
-                    data.forEach((entry) => {
-                        addAdjustedName(entry, 'RESOLVE_CHANGBY');
-                    });
-                    break;
-
-                case 'CHAN':
-                    // Filter data based on CREATEDBY with substring and adjust
-                    data.forEach((entry) => {
-                        addAdjustedName(entry, 'CREATEDBY', 8);
-                    });
-                    // Assign the value to namesArray
-                    namesArray = Array.from(uniqueNames);
-                    // Output the namesArray to the console
-                    console.log('oo', namesArray);
-                    // Return namesArray outside the switch statement
-                    return namesArray;
-                case 'PV':
-                    // Filter data based on PROVINCE
-                    data.forEach((entry) => {
-                        addAdjustedName(entry, 'PROVINCE');
-                    });
-                    break;
-
-                case 'Root':
-                    // Filter data based on SERVICE_GROUP and WORKLONG_DESCRIPTOIN
-                    data.forEach((entry) => {
-                        if (entry.SERVICE_GROUP === serviceGroup && typeof entry.ROOT_CAUSE_DESCRIPTIONS === 'string') {
-                            addAdjustedName(entry, 'ROOT_CAUSE_DESCRIPTIONS');
-                        }
-                    });
-                    break;
-
-                // Add more cases as needed
-
-                default:
-                    // Handle unknown status
-                    console.error('Unknown status:', status);
-                    break;
+            if (status === 'DATA') {
+                const uniqueNames = new Set();
+                data.forEach((entry) => {
+                    if (entry.SERVICE_GROUP === serviceGroup && typeof entry.CLASSIFICATION === 'string') {
+                        uniqueNames.add(entry.CLASSIFICATION);
+                    }
+                });
+                return Array.from(uniqueNames);
             }
-
-            // Convert the uniqueNames set to an array and return
-            return Array.from(uniqueNames);
+            else if (status === 'OWNER') {
+                const uniqueNames = new Set();
+                data.forEach((entry) => {
+                    if (typeof entry.ROOT_CAUSE_BY_STATUS === 'string') {
+                        const n = entry.ROOT_CAUSE_BY_STATUS;
+                        const adjustedName = this.adjustName(n);
+                        uniqueNames.add(adjustedName);
+                    }
+                });
+                const namesArray = Array.from(uniqueNames);
+                return namesArray;
+            }
+            else if (status === 'DP') {
+                const uniqueNames = new Set();
+                data.forEach((entry) => {
+                    if (typeof entry.ROOT_CAUSE_BY_DEPARTMENT === 'string') {
+                        const n = entry.ROOT_CAUSE_BY_DEPARTMENT;
+                        const adjustedName = this.adjustName(n);
+                        uniqueNames.add(adjustedName);
+                    }
+                });
+                const namesArray = Array.from(uniqueNames);
+                return namesArray;
+            }
+            else if (status === 'TI') {
+                const uniqueNames = new Set();
+                data.forEach((entry) => {
+                    if (typeof entry.ROOT_CAUSE_BY_TIER === 'string') {
+                        const n = entry.ROOT_CAUSE_BY_TIER;
+                        const adjustedName = this.adjustName(n);
+                        uniqueNames.add(adjustedName);
+                    }
+                });
+                const namesArray = Array.from(uniqueNames);
+                return namesArray;
+            }
+            else if (status === 'RSOWNER') {
+                const uniqueNames = new Set();
+                data.forEach((entry) => {
+                    if (typeof entry.RESOLVE_CHANGBY === 'string') {
+                        const n = entry.RESOLVE_CHANGBY;
+                        const adjustedName = this.adjustName(n);
+                        uniqueNames.add(adjustedName);
+                    }
+                });
+                const namesArray = Array.from(uniqueNames);
+                return namesArray;
+            }
+            else if (status === 'CHAN') {
+                const uniqueNames = new Set();
+                data.forEach((entry) => {
+                    if (typeof entry.CREATEDBY === 'string') {
+                        const n = entry.CREATEDBY;
+                        const changeCre = n.substring(0, 8);
+                        // Check if changeCre is a string and has at least 8 characters
+                        if (typeof changeCre === 'string' && changeCre.length >= 8) {
+                            const adjustedName = this.adjustName(changeCre.substring(0, 8));
+                            uniqueNames.add(adjustedName);
+                        }
+                    }
+                });
+                const namesArray = Array.from(uniqueNames);
+                return namesArray;
+            }
+            else if (status === 'PV') {
+                const uniqueNames = new Set();
+                data.forEach((entry) => {
+                    if (typeof entry.PROVINCE === 'string') {
+                        const n = entry.PROVINCE;
+                        const adjustedName = this.adjustName(n);
+                        uniqueNames.add(adjustedName);
+                    }
+                });
+                const namesArray = Array.from(uniqueNames);
+                return namesArray;
+            }
+            else if (status === 'Root') {
+                const uniqueNames = new Set();
+                data.forEach((entry) => {
+                    if (entry.SERVICE_GROUP === serviceGroup && typeof entry.WORKLONG_DESCRIPTOIN === 'string') {
+                        const n = entry.WORKLONG_DESCRIPTOIN;
+                        const adjustedName = this.adjustName(n);
+                        uniqueNames.add(adjustedName);
+                    }
+                });
+                const namesArray = Array.from(uniqueNames);
+                return namesArray;
+            }
         },
         adjustName(name) {
             if (typeof name === 'string') {
@@ -949,6 +920,24 @@ export default {
                 return sum;
             }, 0);
         },
+        // -------- Function Look Data of Root Cause tables
+        calculateDataD2Value(data, serviceGroup, serviceGroupD1) {
+            const nameservice = this.changservice(serviceGroupD1);
+            return data.reduce((sum, entry) => {
+                const textname = entry.WORKLONG_DESCRIPTOIN || '';
+                const description = this.changservice(this.adjustName(textname));
+                // const namechange = this.changservice(description)
+                if (entry.SERVICE_GROUP === serviceGroup) {
+                    const namedescription = description.substring(0, 5);
+                    if (namedescription.includes(serviceGroupD1) || namedescription.includes(nameservice) || (textname === nameservice)) {
+                        return sum + 1;
+                    } else {
+                        return sum;
+                    }
+                }
+                return sum;
+            }, 0);
+        },
         // -------- Function Change vervice ID 
         changservice(nameservice) {
             const SERVICE = nameservice.substring(0, 7);
@@ -965,6 +954,72 @@ export default {
                 }
             } else {
                 console.log('undefineddata');
+            }
+        },
+        changeNameroot(ID) {
+            if (ID !== undefined && ID.indexOf('_') > 0 && ID.startsWith('TP')) {
+                const idToNameMap = {
+                    // 1-10
+                    'TP01_': 'Number Was Barring in HSS',
+                    'TP02_': 'Number Was Operational',
+                    'TP03_': 'Number was Blacklist in OCS',
+                    'TP04_': 'Usage Up Package Already',
+                    'TP05_': 'High PRB',
+                    'TP06_': 'No Have 3G/4G Profile',
+                    'TP07_': 'Wrong Profile in SPNV',
+                    'TP08_': 'No Package',
+                    'TP09_': 'Number was suspended in OCS',
+                    'TP10_': 'Money Was Deducted by Voice',
+                    // 11 -20
+                    'TP11_': 'Money Was Deducted by SMS',
+                    'TP12_': 'Money Was Deducted by Games',
+                    'TP13_': 'Money Was Deducted by Loan Money',
+                    'TP14_': 'Money Was Deducted by Transfer to Others',
+                    'TP15_': 'No Balance',
+                    'TP16_': 'Usage Old Beeline SIM',
+                    'TP17_': 'SIM WASLOCKED PROVIDED PIN&PUK',
+                    'TP18_': 'Received Package Normal(They did not check SMS)',
+                    'TP19_': 'Received Balance Normal(They did not check SMS)',
+                    'TP20_': 'Customer Need to Cancel RBT',
+                    // 21-30
+                    'TP21_': 'System Problem',
+                    'TP22_': 'Cancle Call Forward',
+                    'TP23_': 'Scratch Card Was not Activate with Bonus',
+                    'TP24_': 'Scratch Card was used up ',
+                    'TP25_': 'More checking with Owner Apps',
+                    'TP26_': 'Wrong Default PW',
+                    'TP27_': 'Sites were down in that area',
+                    'TP30_': 'More checking with Owner Apps',
+                    // 31-40
+                    'TP32_': 'Weak Coverage Signal',
+                    'TP33_': 'Received SMS(They did not check SMS)',
+                    'TP34_': 'Number Was Operational(Sugestion to Setting SMS Center)',
+                    'TP35_': 'Money Was Deducted by Lottery Service',
+                    'TP36_': 'Customer Capture 2G signal)',
+                    'TP40_': 'Call to Invalid Number',
+                    'TP41_': 'No Offerring In CBS',
+                    'TP42_': 'Money Was Deducted by Rentle Package Service',
+                    'TP43_': 'Money Was Deducted by Package Service',
+                    'TP44_': 'PIN Code of Scrath Card In Correct',
+                    'TP45_': 'Life Cycle Was Expired',
+                    'TP46_': 'Activate Sim Failure',
+                    'TP50_': 'In Corrected UCSI Template',
+                    'TP51_': 'Full Counter (Package) in Supernova',
+                    'TP52_': 'Received Promotion Normal(They did not check SMS)',
+                    'TP53_': 'Blocking on their Mobile',
+                    'TP54_': 'In Corrected USSD Code ',
+                    'TP56_': 'Customer turn off Mobile',
+                    'TP59_': 'Customer Need to Cancel Package( It Usage Up)',
+                    'TP60_': 'Data Package is avaliable',
+                    'TP57_': 'Extended Lifecycle of Package Expire',
+                    'TP63_': 'Number Was IDLE Status in OCS',
+                    'TP64_': 'No SMSMT in HSS',
+                    // add more entries if needed
+                };
+                const name = idToNameMap[ID] || ID; // use the mapped name or the original ID if not found
+                return name;
+            } else {
+                return ID;
             }
         },
         // -------- Function Assuming "SERVICE_GROUP" date time do
@@ -1097,7 +1152,16 @@ export default {
             // Set up the initial interval
             this.intervalId = setInterval(() => {
                 if (this.i) {
-                    this.getData();
+                    if (this.tabledisplay === 'Customer complaint') {
+                        this.dataCustomer();
+                    }
+                    else if (this.tabledisplay === 'Root Cause') {
+                        this.dataRoot();
+                    }
+                    else if (this.tabledisplay === 'Root Cause Report') {
+                        this.dataReport();
+                    }
+                    // this.getData();
                     // Clear the current interval
                     clearInterval(this.intervalId);
                     // Set up a new interval for the next cycle
@@ -1172,6 +1236,11 @@ export default {
 
 .resizable {
     cursor: ew-resize;
+}
+
+.table-title-hiegth {
+    max-height: 260px;
+    overflow-y: auto;
 }
 
 @media only screen and (max-width: 980px) {

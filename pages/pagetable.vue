@@ -202,7 +202,9 @@
                         <v-btn fab small color="#000" @mouseenter="datelang()" @click="getData()">
                           <v-icon :color="iconColor"> mdi-magnify </v-icon>
                         </v-btn>
-                        Search
+                        <span @click="getData()">
+                          Search
+                        </span>
                       </v-card-text>
                     </v-col>
                     <!--sto baton search date-->
@@ -238,13 +240,11 @@
                   <span v-if="!showgraph" class="tooltip" ref="tooltip">Display Graph</span>
                   <span v-else class="tooltip" ref="tooltip">Display Table Data</span>
                 </v-tooltip>
-
               </v-card-text>
             </v-col>
           </v-row>
         </v-card-text>
         <!--Sto title page-->
-
         <!--Sta table---------------------------------------------------------------------------------------------------------------------->
         <v-card-actions v-if="!showgraph" class="expandable-row py-0">
           <div ref="resizableCol2" class="my-4 " @mousedown="startResize">
@@ -264,7 +264,6 @@
                       <v-list-item-action>
                         <v-checkbox v-model="item.active" :input-value="active"></v-checkbox>
                       </v-list-item-action>
-
                       <v-list-item-content>
                         <v-list-item-title>{{ item.title }}</v-list-item-title>
                       </v-list-item-content>
@@ -275,15 +274,20 @@
             </v-card>
           </div>
           <v-col class="py-0 pl-1" :style="{ 'max-width': 'calc(100% - ' + col1Width + 'px)' }">
-            <v-card outlined style="background-color: #ffff00;" class="table-hiegth table-container text-center">
+            <v-card outlined style="background-color: #ffff00;" height="474" class=" table-container text-center">
               <v-card-text v-if="loading" class="pa-0">
                 <v-progress-linear indeterminate color="#4d3d00"></v-progress-linear>
               </v-card-text>
-              <v-data-table v-if="!overlay" dense :headers="visibleHeaders" :items="visibleItems" :items-per-page="10"
-                item-key="name" class="elevation-1 pl-1 pr-8  px-4 ">
+              <v-data-table v-if="!overlay" height="397px" fixed-header dense :headers="visibleHeaders"
+                :items="visibleItems" :items-per-page="10" item-key="TICKETID" class="elevation-1 pt-4">
+                <template v-slot:header="{ header }">
+                  <th v-if="header" style="background-color: #000; color: #ffff00;">
+                    {{ header.text }}
+                  </th>
+                </template>
               </v-data-table>
               <v-card-text v-else class="pa-1">
-                <v-card flat min-height="474px" class="text-h5">
+                <v-card flat min-height="470px" class="text-h5">
                   <span style="color: #cccccc;">
                     Data Not found
                   </span>
@@ -309,6 +313,7 @@
             </v-card>
           </v-col>
         </v-card-actions>
+        <!-- page graph------------------------>
         <v-card v-if="showgraph" class="my-4">
           <v-progress-linear v-if="loading" indeterminate color="#4d3d00"></v-progress-linear>
           <chartgraph :desserts="desserts" />
@@ -338,6 +343,7 @@ export default {
       buttonColor: '#ffff00',
       iconColor: '#fff',
       desserts: [],
+      // column show of table
       columns: [
         { key: 'TICKETID', title: 'TICKETID', active: true },
         { key: 'CLASSIFICATION', title: 'CLASSIFICATION', active: true },
@@ -350,31 +356,20 @@ export default {
         { key: 'QUEUED_OWNERGROUP', title: 'QUEUED_OWNERGROUP', active: true },
         { key: 'INPROGRESS_DATE', title: 'INPROGRESS_DATE', active: true },
         { key: 'INPROGRESS_OWNER', title: 'INPROGRESS_OWNER', active: true },
-        {
-          key: 'INPROGRESS_OWNERGROUP',
-          title: 'INPROGRESS_OWNERGROUP',
-          active: true,
-        },
-        {
-          key: 'INPROGRESS_CHANGBY',
-          title: 'INPROGRESS_CHANGBY',
-          active: true,
-        },
+        { key: 'INPROGRESS_OWNERGROUP', title: 'INPROGRESS_OWNERGROUP', active: true },
+        { key: 'INPROGRESS_CHANGBY', title: 'INPROGRESS_CHANGBY', active: true },
+        { key: 'ROOT_CAUSE', title: 'ROOT_CAUSE', active: true, },
+        { key: 'SOLUTION_SHOT', title: 'SOLUTION_SHOT', active: true, },
+        { key: 'ROOT_CAUSE_DESCRIPTIONS', title: 'ROOT_CAUSE_DESCRIPTIONS', active: true },
+        { key: 'ROOT_CAUSE_BY_STATUS', title: 'ROOT_CAUSE_BY_STATUS', active: true },
+        { key: 'ROOT_CAUSE_BY_TIER', title: 'ROOT_CAUSE_BY_TIER', active: true, },
         { key: 'RESOLVE_DATE', title: 'RESOLVE_DATE', active: true },
         { key: 'RESOLVE_OWNER', title: 'RESOLVE_OWNER', active: true },
-        {
-          key: 'RESOLVE_OWNERGROUP',
-          title: 'RESOLVE_OWNERGROUP',
-          active: true,
-        },
+        { key: 'RESOLVE_OWNERGROUP', title: 'RESOLVE_OWNERGROUP', active: true },
         { key: 'RESOLVE_CHANGBY', title: 'RESOLVE_CHANGBY', active: true },
         { key: 'TIME_CARE_TPLUS', title: 'TIME_CARE_TPLUS', active: true },
         { key: 'TIME_DO_TPLUS', title: 'TIME_DO_TPLUS', active: true },
-        {
-          key: 'WORKLONG_DESCRIPTOIN',
-          title: 'WORKLONG_DESCRIPTOIN',
-          active: true,
-        },
+        { key: 'WORKLONG_DESCRIPTOIN', title: 'WORKLONG_DESCRIPTOIN', active: true },
         { key: 'MODIFY_DATE', title: 'MODIFY_DATE', active: true },
         { key: 'MODIFY__BY', title: 'MODIFYBY', active: true },
         { key: 'PROVINCE', title: 'PROVINCE', active: true },
@@ -389,7 +384,9 @@ export default {
           title: 'TIME_CLOSE_BY_CENTER',
           active: true,
         },
+
       ],
+      // title table
       headers: [
         {
           text: 'TICKETID',
@@ -409,6 +406,11 @@ export default {
         { text: 'INPROGRESS_OWNER', value: 'INPROGRESS_OWNER' },
         { text: 'INPROGRESS_OWNERGROUP', value: 'INPROGRESS_OWNERGROUP' },
         { text: 'INPROGRESS_CHANGBY', value: 'INPROGRESS_CHANGBY' },
+        { text: 'ROOT_CAUSE_DESCRIPTIONS', value: 'ROOT_CAUSE_DESCRIPTIONS' },
+        { text: 'SOLUTION_SHOT', value: 'SOLUTION_SHOT' },
+        { text: 'ROOT_CAUSE_BY_DEPARTMENT', value: 'ROOT_CAUSE_BY_DEPARTMENT' },
+        { text: 'ROOT_CAUSE_BY_STATUS', value: 'ROOT_CAUSE_BY_STATUS' },
+        { text: 'ROOT_CAUSE_BY_TIER', value: 'ROOT_CAUSE_BY_TIER' },
         { text: 'RESOLVE_DATE', value: 'RESOLVE_DATE' },
         { text: 'RESOLVE_OWNER', value: 'RESOLVE_OWNER' },
         { text: 'RESOLVE_OWNERGROUP', value: 'RESOLVE_OWNERGROUP' },
@@ -426,6 +428,7 @@ export default {
         { text: 'CLOSE_BY', value: 'CLOSE_BY' },
         { text: 'STATUS_TICKET', value: 'STATUS_TICKET' },
         { text: 'TIME_CLOSE_BY_CENTER', value: 'TIME_CLOSE_BY_CENTER' },
+
       ],
       col1Width: 80,
       minCol1Width: 60,
@@ -438,7 +441,7 @@ export default {
       color: '#e5e5e5',
       date: new Date(
         Date.now() -
-        (29*24) * 60 * 60 * 1000 -
+        (7 * 24) * 60 * 60 * 1000 -
         new Date().getTimezoneOffset() * 60000
       )
         .toISOString()
@@ -453,12 +456,14 @@ export default {
     }
   },
   computed: {
+    // -- header table 
     visibleHeaders() {
       return this.headers.filter((header) => {
         const column = this.columns.find((col) => col.key === header.value)
         return column ? column.active : false
       })
     },
+    // ---- data table
     visibleItems() {
       return this.desserts.map((item) => {
         const newItem = { ...item }
@@ -471,11 +476,9 @@ export default {
       })
     },
   },
-
   mounted() {
     this.getData()
     this.coloricon()
-    // this.closealrt()
   },
   methods: {
     setOutlined(value) {
@@ -484,7 +487,7 @@ export default {
     detOutlined(value) {
       this.show = value
     },
-
+    //  function export file excel
     exportToExcel() {
       const workbook = XLSX.utils.book_new()
       const worksheet = XLSX.utils.json_to_sheet(this.desserts)
@@ -508,7 +511,7 @@ export default {
       })
     },
 
-    // ------------- function craet
+    // ------------- function create name file excel 
     async someAsyncFunction() {
       try {
         const exportedFileName = await this.exportToExcel()
@@ -523,25 +526,20 @@ export default {
       }
     },
     // sta function alert file download success---------------------------------------------------------------->
-    // sto function alert file download success---------------------------------------------------------------->
 
+    // function change date style date
     formatDate(date) {
       if (!date) return null
-
       const [year, month, day] = date.split('-')
       return `${month}/${day}/${year}` //
     },
 
     parseDate(date) {
       if (!date) return null
-
       const [month, day, year] = date.split('/')
       return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
     },
-
-
-    // ------------- function Get data in server
-
+    // function check date start and date stop
     datelang() {
       const datestart = new Date(this.date)
       const datestop = new Date(this.dates)
@@ -553,38 +551,32 @@ export default {
         this.overlay = true;
       }
     },
+    // ------------- function Get data in api
     async getData() {
       this.showgraph = false;
-      // const hours = Math.floor(datelang / (1000 * 60 * 60))
-      // if (datelang >= 0) {
-
-      // console.log(hours)
       this.loading = true
-
       try {
         const startDate = this.date
         const endDate = this.dates
-
         const res = await this.$axios.$get(
           `http://172.28.26.23:3000/ticket?startDate=${encodeURIComponent(
             startDate
           )}&endDate=${encodeURIComponent(endDate)}`
         )
-        // console.log(res)
         // --------- loop data in lastindex of Object in group ID
         const lastIndexes = {}
         const firstIndexes = {}
         const resolvebyIndex = {}
         const indateIndex = {}
         const inownerIndex = {}
-
+        // index of last - 3 in ticket ID similar
         for (let i = res.length - 1; i >= 0; i--) {
           const currentTicketID = res[i].TICKETID
           if (typeof inownerIndex[currentTicketID] === 'undefined') {
             inownerIndex[currentTicketID] = i - 3
           }
         }
-
+        // index of last in ticket ID similar
         for (let i = res.length - 1; i >= 0; i--) {
           const currentTicketID = res[i].TICKETID
 
@@ -592,7 +584,7 @@ export default {
             lastIndexes[currentTicketID] = i
           }
         }
-
+        // index of last - 2 in ticket ID similar
         for (let i = res.length - 1; i >= 0; i--) {
           const currentTicketID = res[i].TICKETID
 
@@ -600,7 +592,7 @@ export default {
             indateIndex[currentTicketID] = i - 2
           }
         }
-
+        // index of last - 1 in ticket ID similar
         for (let i = res.length - 1; i >= 0; i--) {
           const currentTicketID = res[i].TICKETID
 
@@ -608,21 +600,21 @@ export default {
             resolvebyIndex[currentTicketID] = i - 1
           }
         }
-
+        // index of fist index in ticket ID similar
         for (let i = 0; i < res.length; i++) {
           const currentTicketID = res[i].TICKETID
           if (typeof firstIndexes[currentTicketID] === 'undefined') {
             firstIndexes[currentTicketID] = i
           }
         }
-
         // --------- last  data in lastindex of Object in group ID
-
         const desserts = Object.values(firstIndexes).map((firstIndex) => {
           // ---------------- fech data in desserts
+          // first and last index get Index of res 
           const firstItem = res[firstIndex]
           const lastItemIndex = lastIndexes[firstItem.TICKETID]
           const lastItem = res[lastItemIndex]
+          // first index get Index of res
           const resolveItemIndex = resolvebyIndex[firstItem.TICKETID]
           const resolveItem =
             resolveItemIndex !== undefined ? res[resolveItemIndex] : null
@@ -632,18 +624,15 @@ export default {
           const inownerItemIndex = inownerIndex[firstItem.TICKETID]
           const inownerItem =
             inownerItemIndex !== undefined ? res[inownerItemIndex] : null
-
           function convertToISOFormat(dateString) {
             if (!dateString) {
               return null // or handle the case where dateString is undefined
             }
-
             const dateParts = dateString.split(' ')
 
             if (dateParts.length !== 2) {
               return null // or handle the case where the expected format is not found
             }
-
             const [day, month, year] = dateParts[0].split('-')
             const [hours, minutes, seconds] = dateParts[1].split(':')
 
@@ -653,17 +642,14 @@ export default {
             inprogressItem && inprogressItem.QUEUED_OWNER
               ? inprogressItem.QUEUED_OWNER
               : '';
-
           const inownerItemQUEUEDOWNER =
             inownerItem && inownerItem.QUEUED_OWNER
               ? inownerItem.QUEUED_OWNER
               : '';
-          //
           const inownerItemINPROGRESSCHANGEBY =
             inownerItem && inownerItem.INPROGRESS_CHANGEBY
               ? inownerItem.INPROGRESS_CHANGEBY
               : '';
-
           const inprogressItemINPROGRESSCHANGEBY =
             inprogressItem && inprogressItem.INPROGRESS_CHANGEBY
               ? inprogressItem.INPROGRESS_CHANGEBY
@@ -672,13 +658,6 @@ export default {
           const date2 = new Date(convertToISOFormat(firstItem.QUEUED_DATE))
           const date3 = new Date(convertToISOFormat(resolveItem.QUEUED_DATE))
           const date4 = new Date(convertToISOFormat(lastItem.QUEUED_DATE))
-          // console.log('d1', res)
-          // console.log(resolveItem.QUEUED_DATE)
-          // console.log('d2', date2)
-          // console.log(firstItem.QUEUED_DATE)
-
-          // const time  care  tplus = resolvedateValue.getDate() - qeuredateValue.getDate()
-
           const timecare = date1 - date2
           const hours = Math.floor(timecare / (1000 * 60 * 60))
           const minutes = Math.floor(
@@ -695,19 +674,36 @@ export default {
           const timedotplus = (timedo, hoursdo, minutesdo)
           // console.log('tic', timedotplus)
           // --------------------------------
-
           const timecenter = date4 - date3
           const hourscenter = Math.floor(timecenter / (1000 * 60 * 60))
           const minutescenter = Math.floor(
             (timecenter % (1000 * 60 * 60)) / (1000 * 60)
           )
           const timecolsebycenter = (timecenter, hourscenter, minutescenter)
+          // change data of table SERVICE_GROUP
+          let service = '';
+          if (firstItem.CLASSIFICATION.startsWith('D')) {
+            service = 'DATA';
+          } else if (firstItem.CLASSIFICATION.startsWith('S')) {
+            service = 'SMS';
+          } else if (firstItem.CLASSIFICATION.startsWith('VA')) {
+            service = 'VAS';
+          } else if (firstItem.CLASSIFICATION.startsWith('V') && firstItem.CLASSIFICATION.substring(1, 2) !== 'A') {
+            service = 'VOICE';
+          } else {
+            service = firstItem.SERVICE_GROUP || '';
+          }
+          const department = this.changeNameroot(this.adjustName(firstItem.FIRST_WORKLOG_DESCRIPTION), 'DP');
+          const rootownwe = this.changeNameroot(this.adjustName(firstItem.FIRST_WORKLOG_DESCRIPTION), 'ON');
+          const tier = this.changeNameroot(this.adjustName(firstItem.FIRST_WORKLOG_DESCRIPTION), 'Ti');
+          const solution = this.changeNameroot(this.adjustName(firstItem.FIRST_WORKLOG_DESCRIPTION), 'SOLU');
+          const rootCause = this.changeNameroot(this.adjustName(firstItem.FIRST_WORKLOG_DESCRIPTION), 'ROOT');
           //  data in desertes
           return {
             TICKETID: firstItem.TICKETID,
             CLASSIFICATION: firstItem.CLASSIFICATION,
             MSISDN: firstItem.MSISDN,
-            SERVICE_GROUP: firstItem.SERVICE_GROUP,
+            SERVICE_GROUP: service,
             COMMODITY: firstItem.COMMODITY,
             CREATEDBY: firstItem.CREATEDBY,
             CREATIONDATE: firstItem.CREATIONDATE,
@@ -717,6 +713,11 @@ export default {
             INPROGRESS_OWNER: inownerItemQUEUEDOWNER, //         QUEUED_OWNER === null
             INPROGRESS_OWNERGROUP: firstItem.OWNERGROUP,
             INPROGRESS_CHANGBY: inownerItemINPROGRESSCHANGEBY, //
+            ROOT_CAUSE_DESCRIPTIONS: rootCause, //
+            SOLUTION_SHOT: solution, //
+            ROOT_CAUSE_BY_DEPARTMENT: department, // colsedateValue - resolvedateValue
+            ROOT_CAUSE_BY_STATUS: rootownwe, // colsedateValue - resolvedateValue
+            ROOT_CAUSE_BY_TIER: tier,
             RESOLVE_DATE: resolveItem.QUEUED_DATE,
             RESOLVE_OWNER: inprogressItemQUEUEDOWNER, //         QUEUED_OWNER === null
             RESOLVE_OWNERGROUP: inprogressItem.OWNERGROUP,
@@ -736,18 +737,103 @@ export default {
             TIME_CLOSE_BY_CENTER: timecolsebycenter, // colsedateValue - resolvedateValue
           }
         })
-
         this.desserts = desserts
       } catch (error) {
         console.error('Error fetching data:', error)
       }
       this.loading = false;
     },
+    adjustName(name) {
+      if (typeof name === 'string') {
+        const text = name.substring(0, 7);
+        for (let i = 0; i < text.length; i++) {
+          const a = text.substring(i, i + 1);
+          if (a === '_') {
+            const id = name.substring(0, i + 1);
+            return id.substring(0, 2) === 'TP' ? (id.substring(2, 3) === '0' ? id.substring(0, 2) + id.substring(3) : id.substring(0)) : name.substring(0, i + 1);
+          }
+        }
+        return name;
+      } else {
+        return name;
+      }
+    },
+    changeNameroot(ID, status) {
+      if (ID !== undefined && ID.indexOf('_') > 0 && ID.startsWith('TP')) {
+        const idToNameMap = {
+          'TP01_': status === 'DP' ? 'MB' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Unber In System' : (status === 'ROOT' ? 'Number Was Barring in HSS' : 'SOC'))),
+          'TP02_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Number Was Operational' : 'SOC'))),
+          'TP03_': status === 'DP' ? 'IT' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Unblickilist In System' : (status === 'ROOT' ? 'Number was Blacklist in OCS' : 'SOC'))),
+          'TP04_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Usage Up Package Already' : 'SOC'))),
+          'TP05_': status === 'DP' ? 'MB' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Update Location' : (status === 'ROOT' ? 'High PRB' : 'SOC'))),
+          'TP06_': status === 'DP' ? 'MB' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'Add 3G/4G Profile' : (status === 'ROOT' ? 'No Have 3G/4G Profile' : 'SOC'))),
+          'TP07_': status === 'DP' ? 'IT' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Modifi Profile SPNV' : (status === 'ROOT' ? 'Wrong Profile in SPNV' : 'SOC'))),
+          'TP08_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'No Package' : 'SOC'))),
+          'TP09_': status === 'DP' ? 'IT' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Exended lifecycle' : (status === 'ROOT' ? 'Number was suspended in OCS' : 'SOC'))),
+          'TP10_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Money Was Deducted by Voice' : 'SOC'))),
+          'TP11_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Money Was Deducted by SMS' : 'SOC'))),
+          'TP12_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Money Was Deducted by Games' : 'SOC'))),
+          'TP13_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Money Was Deducted by Loan Money' : 'SOC'))),
+          'TP14_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Money Was Deducted by Transfer to Others' : 'SOC'))),
+          'TP15_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'No Balance' : 'SOC'))),
+          'TP16_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Usage Old Beeline SIM' : 'SOC'))),
+          'TP17_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'Provided PIN & PUK' : (status === 'ROOT' ? 'SIM WASLOCKED PROVIDED PIN&PUK' : 'SOC'))),
+          'TP18_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Received Package Normal(They did not check SMS)' : 'SOC'))),
+          'TP19_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Received Balance Normal(They did not check SMS)' : 'SOC'))),
+          'TP20_': status === 'DP' ? 'MB' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'Cancel RPT' : (status === 'ROOT' ? 'Customer Need to Cancel RBT' : 'SOC'))),
+          'TP21_': status === 'DP' ? 'IT' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Cooperate With Tier 3' : (status === 'ROOT' ? 'System Problem' : 'IT'))),
+          'TP22_': status === 'DP' ? 'MB' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'Cancel Call Forward' : (status === 'ROOT' ? 'Cancle Call Forward' : 'SOC'))),
+          'TP23_': status === 'DP' ? 'ISD' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Scratch Card Was not Activate with Bonus' : 'ISD')),
+          'TP24_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Scratch Card was used up' : 'SOC'))),
+          'TP25_': status === 'DP' ? 'IT' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Cooperate With Tier 3' : (status === 'ROOT' ? 'More checking with Owner Apps' : 'IT'))),
+          'TP26_': status === 'DP' ? 'USER' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Wrong Default PW' : 'SOC'))),
+          'TP27_': status === 'DP' ? 'MB' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Cooperate With Tier 3' : (status === 'ROOT' ? 'Sites were down in that area' : 'MB'))),
+          'TP28_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Activated by *503#Call' : 'SOC'))),
+          'TP29_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Activated by *121/122#Call' : 'SOC'))),
+          'TP30_': status === 'DP' ? 'IT' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Cooperate With Tier 3' : (status === 'ROOT' ? 'System Problem' : 'IT'))),
+          'TP31_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'TP031_' : 'SOC'))), // -------------test 031 not
+          'TP32_': status === 'DP' ? 'USER' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Update Location' : (status === 'ROOT' ? 'Weak Coverage Signal' : 'SOC'))),
+          'TP33_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Received SMS(They did not check SMS)' : 'SOC'))),
+          'TP34_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Number Was Operational(Sugestion to Setting SMS Center)' : 'SOC'))),
+          'TP35_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Money Was Deducted by Lottery Service' : 'SOC'))),
+          'TP36_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Customer Capture 2G signal)' : 'SOC'))),
+          'TP37_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'PT037_' : 'SOC'))), // -------------test 037 not
+          'TP38_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Transfer Money Incorrect way' : 'SOC'))),
+          'TP39_': status === 'DP' ? 'IT' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'IR Service is Not avalable ' : 'SOC'))),
+          'TP40_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Call to Invalid Number' : 'SOC'))),
+          'TP41_': status === 'DP' ? 'IT' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Cooperate With Tier 3' : (status === 'ROOT' ? 'No Offerring In CBS' : 'IT'))),
+          'TP42_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Money Was Deducted by Rentle Package Service' : 'SOC'))),
+          'TP43_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : 'IT'),
+          'TP44_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'PIN Code of Scrath Card In Correct' : 'SOC'))),
+          'TP45_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Life Cycle Was Expired' : 'SOC'))),
+          'TP46_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Activate Sim Failure' : 'SOC'))),
+          'TP47_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Mismatch Condition to Loan Money' : 'SOC'))),
+          'TP48_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Sim Type Mismatch Condition' : 'SOC'))),
+          'TP49_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'Cancel Game' : (status === 'ROOT' ? 'Customer Need to Cancle Game Service' : 'SOC'))),
+          'TP50_': status === 'DP' ? 'MB' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'System' : (status === 'ROOT' ? 'In Corrected UCSI Template' : 'SOC'))),
+          'TP51_': status === 'DP' ? 'IT' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'Remove Counter' : (status === 'ROOT' ? 'Full Counter (Package) in Supernova' : 'SOC'))),
+          'TP52_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Received Promotion Normal(They did not check SMS)' : 'SOC'))),
+          'TP53_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Blocking on their Mobile' : 'SOC'))),
+          'TP54_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'In Corrected USSD Code' : 'SOC'))),
+          'TP55_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Customer not Receice Balance' : 'SOC'))),
+          'TP56_': status === 'DP' ? 'USER' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Customer turn off Mobile' : 'SOC'))),
+          'TP57_': status === 'DP' ? 'IT' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Exanded PIN & PUK' : (status === 'ROOT' ? 'Extended Lifecycle of Package Expire' : 'SOC'))),
+          'TP58_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Number was Pool in OCS' : 'SOC'))),
+          'TP59_': status === 'DP' ? 'IT' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'Remove Counter' : (status === 'ROOT' ? 'Customer Need to Cancel Package( It Usage Up)' : 'SOC'))),
+          'TP60_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Data Package is avaliable' : 'SOC'))),
+          'TP61_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Money Was Deducted by RBT Service' : 'SOC'))),
+          'TP62_': status === 'DP' ? 'IT' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Cooperate With Tier 3' : (status === 'ROOT' ? 'Scratch Card Was not Activate with Bonus' : 'IT'))),
+          'TP63_': status === 'DP' ? 'IT' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Cooperate With Tier 3' : (status === 'ROOT' ? 'Number Was IDLE Status in OCS' : 'IT'))),
+          'TP64_': status === 'DP' ? 'MB' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Add SMS MT' : (status === 'ROOT' ? 'UNo SMSMT in HSS' : 'SOC'))),
+          // 'TP65_': status === 'DP' ? 'MB' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Unber In System' : 'SOC'))), // ----65 not data
+        };
+        const name = idToNameMap[ID] || ID; // use the mapped name or the original ID if not found
+        return name;
+      } else {
+        return ID;
+      }
+    },
     // goto page graph and send desserts data to page graph
-    // navigateToGraph() {
-    //   this.$router.push({ name: 'graph', params: { desserts: this.desserts, date: this.date, dates: this.dates } });
-    // },
-
     coloricon() {
       // Change button and icon colors every second
       setInterval(() => {
@@ -767,7 +853,6 @@ export default {
       document.addEventListener('mousemove', this.handleMouseMove)
       document.addEventListener('mouseup', this.handleMouseUp)
     },
-
     handleMouseUp() {
       if (this.resizing) {
         this.resizing = false
@@ -776,7 +861,6 @@ export default {
       }
     },
   },
-
 }
 </script>
 <style>
@@ -811,14 +895,10 @@ export default {
   cursor: ew-resize;
 }
 
-.table-hiegth {
-  max-height: 474px;
-  overflow-y: auto;
-}
-
 .table-title-hiegth {
   max-height: 400px;
   overflow-y: auto;
+
 }
 </style>
   

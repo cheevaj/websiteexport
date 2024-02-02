@@ -1,4 +1,4 @@
-{/* <template>
+<!-- <template>
     <div>
         <v-card-text>
             <v-row>
@@ -187,7 +187,6 @@ export default {
             pasend: '',
             numnotsend: [],
             numsend: [],
-            num: [],
             imageqr: '',
             numberphone: "",
             text: '',
@@ -216,6 +215,7 @@ export default {
             this.dialog2 = false;
             this.renderFunc();
         },
+        // -------------------------------------------------------------------
         handleFileUpload(event) {
             const fileInput = this.$refs.fileInput;
             const file = event.target.files[0];
@@ -230,9 +230,8 @@ export default {
                 const sheetName = workbook.SheetNames[0];
                 const sheet = workbook.Sheets[sheetName];
                 const jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
-                this.num = jsonData.flat().map(cell => String(cell));
                 this.numsend = jsonData.flat().map(cell => String(cell));
-                console.log('kkl', this.num)
+                this.numberphone = this.numsend;
             };
             reader.readAsBinaryString(file);
         },
@@ -258,12 +257,9 @@ export default {
                 console.log('ll', this.numnotsend)
                 this.numsend = num;
             } else {
-                if (this.num === undefined) {
-                    const title = 'The numbers phone is less than 8 digits.';
-                    const desc = ' Check your number phones.';
-                    this.error(false, title, desc);
-                }
-                return '';
+                const title = 'The numbers phone is less than 8 digits.';
+                const desc = ' Check your number phones.';
+                this.error(false, title, desc);
             }
             this.show = true;
             console.log(this.numsend)
@@ -300,6 +296,7 @@ export default {
                 desc: nodesc ? '' : desc,
             });
         },
+
     }
 
 }
@@ -309,4 +306,4 @@ export default {
     background-color: #ffff00;
     color: #000;
 }
-</style> */}
+</style> -->

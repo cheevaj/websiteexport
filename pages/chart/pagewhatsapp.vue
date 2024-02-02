@@ -1,4 +1,4 @@
-{/* <template>
+<template>
     <div>
         <v-card-text>
             <v-row>
@@ -34,19 +34,19 @@
                     </v-card-text>
                     <v-card-text class="pr-0 ">
                         <h4>Send to</h4>
-                        <div>
-                            <v-card-actions class="pr-0">
-                                <v-text-field v-model="numberphone" label="207xxx, 207xx" :rules="rules"
-                                    hide-details="auto" />
-                                <v-divider class="ml-1 pr-0 my-2" vertical style="background-color: #009242;" />
-                                <input type="file" ref="fileInput" style="display: none" @change="handleFileUpload" />
-                                <v-btn text outlined fab class="px-0 ml-1 mr-0" @click="$refs.fileInput.click()">
+                        <v-card-actions class="pr-0">
+                            <v-text-field v-model="numberphone" label="207xxx, 207xx" :rules="rules" hide-details="auto" />
+                            <v-divider class="ml-1 pr-0 my-2" vertical style="background-color: #009242;" />
+                            <Tooltip content="Import file Excel." placement="bottom" :delay="800">
+                                <input type="file" ref="fileInput" style="display: none"
+                                    @change="handleFileUpload('send_num', $event)" />
+                                <v-btn text fab class="px-0 ml-1 mr-0" @click="$refs.fileInput.click()">
                                     <v-icon size="35" style="color: rgb(41, 163, 41);">
                                         mdi-file-excel-outline
                                     </v-icon>
                                 </v-btn>
-                            </v-card-actions>
-                        </div>
+                            </Tooltip>
+                        </v-card-actions>
                     </v-card-text>
                     <div v-if="numnotsend !== null && numnotsend !== undefined && numnotsend.length > 0">
                         <v-card-text class="py-0">
@@ -59,10 +59,47 @@
                         </v-card-text>
                     </div>
                 </v-col>
-                <v-col cols="12" md="7" sm="7" class="pl-1">
-                    <v-card-title>
-                        <h2>Message</h2>
-                    </v-card-title>
+                <v-col cols="12" md="8" sm="8" class="pl-1">
+                    <v-card-actions>
+                        <v-card-title>
+                            <h2>Message</h2>
+                        </v-card-title>
+                        <v-spacer></v-spacer>
+                        <Tooltip content="Edit file import." placement="bottom" :delay="800">
+                            <v-btn fab text style="background-color: #ffff00; color: #000;" @click="dialogseting = true">
+                                <v-icon size="35">
+                                    mdi-file-cog
+                                </v-icon>
+                            </v-btn>
+                        </Tooltip>
+                        <v-dialog v-model="dialogseting" persistent max-width="300">
+                            <v-card>
+                                <v-card-title style="color: rgb(115, 115, 115);">
+                                    Excel table
+                                </v-card-title>
+                                <v-divider style="background-color: #ffff00;"></v-divider>
+                                <v-card-actions>
+                                    <div>
+                                        <p>Row</p>
+                                        <InputNumber :min="1" v-model="rowNum" />
+                                    </div>
+                                    <div>
+                                        <p>Column</p>
+                                        <InputNumber :min="0" v-model="colNum" />
+                                    </div>
+                                </v-card-actions>
+                                <v-card-actions>
+                                    <v-spacer></v-spacer>
+                                    <v-btn color="error darken-1" text @click="changeRow(false)">
+                                        Resat
+                                    </v-btn>
+                                    <v-btn color="#ffff" style="background-color: #ffff00;" text @click="changeRow(true)">
+                                        save
+                                    </v-btn>
+                                </v-card-actions>
+                            </v-card>
+                        </v-dialog>
+                    </v-card-actions>
                     <v-container fluid>
                         <v-card-actions>
                             <v-textarea outlined name="input-7-4" v-model="text"></v-textarea>
@@ -93,8 +130,8 @@
                                                 @click:append="show = show === 'eye' ? 'noteye' : 'eye'">
                                             </v-text-field>
                                         </v-card-actions>
-                                        <v-card class="d-flex align-center justify-center mx-auto" min-width="450"
-                                            min-height="76" outlined>
+                                        <v-card class="d-flex align-center justify-center mx-auto overflow-auto"
+                                            min-width="450" max-height="100px" min-height="76" outlined>
                                             <div v-if="numsend !== null && numsend !== undefined && numsend.length > 0">
                                                 {{ text }}
                                             </div>
@@ -102,12 +139,13 @@
                                         <v-row>
                                             <v-col cols="12" sm="6" md="6" class="pr-0"
                                                 v-if="numnotsend !== null && numnotsend !== undefined && numnotsend.length > 0">
-                                                <v-card-text class="pb-0 pl-0">
+                                                <v-card-text class="pb-0 pl-0 ">
                                                     <div style="color: #000;">
                                                         Numbers that not be Tplus number.
                                                     </div>
                                                 </v-card-text>
-                                                <v-card class="rounded-0" min-height="76" outlined>
+                                                <v-card class="rounded-0 overflow-auto" min-height="76" max-height="200px"
+                                                    outlined>
                                                     <v-card-text>
                                                         <div v-for="(element, index) in numnotsend" :key="index">
                                                             <div>
@@ -144,7 +182,8 @@
                                                         Tplus number.
                                                     </div>
                                                 </v-card-text>
-                                                <v-card class="rounded-0" min-height="76" outlined>
+                                                <v-card class="rounded-0 overflow-auto" min-height="76" max-height="200px"
+                                                    outlined>
                                                     <v-card-text>
                                                         <div v-for="(element, index) in numsend" :key="index">
                                                             <div
@@ -171,6 +210,92 @@
                     </v-container>
                 </v-col>
             </v-row>
+            <v-card-title class="pb-0">
+                <h3>
+                    Add number phone to Database
+                </h3>
+            </v-card-title>
+            <v-divider style="background-color: #ffff00;" />
+            <v-card-text>
+                <v-row>
+                    <v-col cols="12" md="4" sm="4">
+                        <p>
+                            Import your phone number file by clicking <span><v-icon
+                                    style="color:rgb(41,163,41)">mdi-microsoft-excel</v-icon></span>
+                        </p>
+                        <p>
+                            Click Save in bock Pop Up to add number phone to database
+                        </p>
+                    </v-col>
+                    <v-col cols="12" md="3" sm="3">
+                        <template>
+                            <Tooltip content="Import file Excel." placement="bottom" :delay="800">
+                                <input type="file" ref="fileAdd" style="display: none"
+                                    @change="handleFileUpload('add_num', $event)" />
+                                <v-btn outlined class="ml-1 mr-0 text-center" height="50px"
+                                    style="background-color:#fafabd;" @click="$refs.fileAdd.click()">
+                                    <v-icon size="45" style="color: rgb(41, 163, 41);">
+                                        mdi-microsoft-excel
+                                    </v-icon>
+                                </v-btn>
+                            </Tooltip>
+                        </template>
+                        <v-dialog v-model="dialog3" fullscreen hide-overlay transition="dialog-bottom-transition">
+                            <v-card max-height="100%">
+                                <v-row class="yellow pa-0 ma-0">
+                                    <v-col cols="8" md="9" sm="9" class="pa-0 ma-0">
+                                        <v-card-text class="yellow pa-0">
+                                            <v-card-text class="text-h6 pa-4">
+                                                Number phone Upload
+                                            </v-card-text>
+                                            <v-spacer></v-spacer>
+                                        </v-card-text>
+                                    </v-col>
+                                    <v-col cols="4" md="3" sm="3" class="pa-0 ma-0">
+                                        <v-card-actions class="mr-12 pt-3">
+                                            <v-spacer></v-spacer>
+                                            <v-btn class="mr-4" color="error" text @click="deleteNum()">
+                                                cancel
+                                            </v-btn>
+                                            <v-btn class="mx-2" @click="addNumber_database()"
+                                                style="background-color: #000; color: #ffff00;">
+                                                <v-icon>mdi-content-save-move-outline</v-icon>
+                                                Add
+                                            </v-btn>
+                                        </v-card-actions>
+                                    </v-col>
+                                </v-row>
+                                <v-divider></v-divider>
+                                <v-card-text class="px-0">
+                                    <v-simple-table fixed-header height="580px">
+                                        <template v-slot:default>
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-left" style="background-color: #000;color: #ffff00;">
+                                                        Index
+                                                    </th>
+                                                    <th class="text-left" style="background-color: #000;color: #ffff00;">
+                                                        Numbers
+                                                    </th>
+                                                    <th class="text-left" style="background-color:#000;color: #ffff00;">
+                                                        Whatsapp
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr v-for="(item, index) in addNumber" :key="index">
+                                                    <td>{{ index }}</td>
+                                                    <td>{{ item }}</td>
+                                                </tr>
+                                            </tbody>
+                                        </template>
+                                    </v-simple-table>
+                                </v-card-text>
+                            </v-card>
+                        </v-dialog>
+                    </v-col>
+                </v-row>
+            </v-card-text>
         </v-card-text>
     </div>
 </div></template>
@@ -179,17 +304,20 @@ import * as XLSX from 'xlsx';
 export default {
     data() {
         return {
+            dialogseting: false,
             show: false,
             dialog: false,
             dialog2: false,
-            loading: false,
+            dialog3: false,
+            colNum: 1,
+            rowNum: 1,
             value: '',
             pasend: '',
             numnotsend: [],
             numsend: [],
-            num: [],
             imageqr: '',
             numberphone: "",
+            addNumber: [],
             text: '',
             model: '',
             rules: [
@@ -205,7 +333,7 @@ export default {
     methods: {
         async sedQrchart() {
             try {
-                const response = await this.$axios.post('http://172.28.26.23:3335/sendtouser/alerttouser', {
+                const response = await this.$axios.post('http://172.28.26.23:3335/sendtouser/saveandalerttouser', {
                     numeros: this.numsend,
                     mensaje: this.text,
                 });
@@ -214,32 +342,77 @@ export default {
                 console.error('Error al enviar el mensaje:', error);
             }
             this.dialog2 = false;
-            this.renderFunc();
+            this.numsend = [];
+            this.numberphone = "";
+            this.renderFunc('Messages sent successfully.', ' You sent messages submitted successfully.');
         },
-        handleFileUpload(event) {
-            const fileInput = this.$refs.fileInput;
-            const file = event.target.files[0];
-            fileInput.value = '';
-            this.readFile(file);
+        async addNumber_database() {
+            try {
+                const response = await this.$axios.post('http://172.28.26.23:3335/sendtouser/insertnumbers', {
+                    numeros: this.addNumber,
+                });
+                this.resultados = response.data.resultados;
+            } catch (error) {
+                console.error('Error al enviar el mensaje:', error);
+            }
+            this.addNumber = [];
+            this.dialog3 = false;
+            this.renderFunc('Add number phone success.', ' You can add number to database successfully.');
         },
-        readFile(file) {
+        // -------------------------------------------------------------------
+        handleFileUpload(tyNum, event) {
+            const fileInput = tyNum === 'send_num' ? this.$refs.fileInput : this.$refs.fileAdd; // ---- undefined
+            if (event.target.files.length > 0) {
+                const file = event.target.files[0];
+                fileInput.value = '';
+                this.readFile(tyNum, file);
+            } else {
+                console.log('No file selected');
+            }
+        },
+        readFile(tyNum, file) {
             const reader = new FileReader();
             reader.onload = (e) => {
                 const data = e.target.result;
                 const workbook = XLSX.read(data, { type: 'binary' });
                 const sheetName = workbook.SheetNames[0];
                 const sheet = workbook.Sheets[sheetName];
-                const jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
-                this.num = jsonData.flat().map(cell => String(cell));
-                this.numsend = jsonData.flat().map(cell => String(cell));
-                console.log('kkl', this.num)
+
+                // -------------- Assuming phone numbers are in the specified column (colNum)
+                const jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1, range: this.colNum - 1 });
+                console.log(jsonData)
+
+                // ---------------- Extract data from the specified column and row
+                const extractedData = jsonData.map(row => row[this.rowNum - 1]);
+
+                // ---------------- Remove the header (assuming the header is in the first row)
+                extractedData.shift();
+
+                // --------------- Set this.numsend to the extracted phone numbers
+                if (tyNum === 'send_num') {
+                    this.numsend = extractedData.map(cell => String(cell));
+                    this.numberphone = this.numsend;
+                } else if (tyNum === 'add_num') {
+                    const addnum = extractedData.map(cell => String(cell));
+                    this.addNumber = addnum.filter(item => item !== 'undefined');
+                    this.dialog3 = true;
+                } else {
+                    return '';
+                }
             };
             reader.readAsBinaryString(file);
         },
+        deleteNum() {
+            this.addNumber = [];
+            this.dialog3 = false;
+        },
         changeNameber() {
             const numeber = this.numberphone;
-            if (numeber && numeber.length > 7) {
-                const numeros = this.numberphone.split(',').map(numero => numero.trim());
+            const num = Math.max(...this.numsend.map(Number));
+            // console.log('llo', num)
+            // Check if numeber is a string
+            if ((typeof numeber === 'string' && numeber.length > 7) || num >= 0) {
+                const numeros = numeber.split(',').map(numero => numero.trim());
                 const num = numeros.map((n) => {
                     if (n.substring(n.length - 8, n.length - 7) === '7') {
                         return "20" + n.substring(n.length - 8);
@@ -247,26 +420,23 @@ export default {
                         return '';
                     }
                 }).filter(n => n !== '');
-                this.numnotsend = numeros.map((n, index) => {
+                this.numnotsend = numeros.map((n) => {
                     if (n.substring(n.length - 8, n.length - 7) === '7') {
                         return '';
                     } else {
-
-                        return (n);
+                        return n;
                     }
                 }).filter(n => n !== '');
-                console.log('ll', this.numnotsend)
+
                 this.numsend = num;
             } else {
-                if (this.num === undefined) {
-                    const title = 'The numbers phone is less than 8 digits.';
-                    const desc = ' Check your number phones.';
-                    this.error(false, title, desc);
-                }
-                return '';
+                // Handle the case where numeber is not a string or has length <= 7
+                const title = 'Invalid input';
+                const desc = 'The input should be a string with length greater than 7.';
+                this.error(false, title, desc);
             }
+
             this.show = true;
-            console.log(this.numsend)
         },
         changePassword() {
             const nunpa = this.numsend[0];
@@ -285,12 +455,23 @@ export default {
                 this.error(false, title, desc);
             }
         },
-        renderFunc() {
+        changeRow(status) {
+            if (status) {
+                this.dialogseting = false;
+            }
+            else {
+                this.colNum = 1;
+                this.rowNum = 1;
+                this.dialogseting = false;
+            }
+            console.log('ll', this.colNum, this.rowNum)
+        },
+        renderFunc(smsTitle, smsText) {
             this.text = '';
             this.pasend = ''
             this.$Notice.success({
-                title: 'Messages sent successfully.',
-                desc: ' You sent messages submitted successfully.',
+                title: smsTitle,
+                desc: smsText,
             });
 
         },
@@ -300,6 +481,7 @@ export default {
                 desc: nodesc ? '' : desc,
             });
         },
+
     }
 
 }
@@ -309,4 +491,23 @@ export default {
     background-color: #ffff00;
     color: #000;
 }
-</style> */}
+
+.top,
+.bottom {
+    text-align: center;
+}
+
+.center {
+    width: 300px;
+    margin: 10px auto;
+    overflow: hidden;
+}
+
+.center-left {
+    float: left;
+}
+
+.center-right {
+    float: right;
+}
+</style>
