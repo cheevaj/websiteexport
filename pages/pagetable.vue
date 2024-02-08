@@ -1,8 +1,7 @@
 <template>
   <div ref="pdfContent">
-    <!-- @click="$router.go(-1)" -->
     <!-- start button download----------------------------------------------------------------------------------------------->
-    <div class="shrink">
+    <div class="shrink " >
       <!--Sta book use------------------------------------------------------------------------------------------------------------------->
       <div class="text-right" style="
           min-height: 1px;
@@ -100,7 +99,7 @@
     <!--Sta title page------------------------------------------------------------------------------------------------------->
 
     <v-row :dark="dark" style="margin-top: 0px">
-      <v-col style="background-color: hsl(0, 0%, 96%)">
+      <v-col class="pt-1" style="background-color: hsl(0, 0%, 96%)">
         <v-card-text class="py-0">
           <v-row>
             <!--Sta title table-->
@@ -407,7 +406,7 @@ export default {
         { text: 'INPROGRESS_OWNERGROUP', value: 'INPROGRESS_OWNERGROUP' },
         { text: 'INPROGRESS_CHANGBY', value: 'INPROGRESS_CHANGBY' },
         { text: 'ROOT_CAUSE_DESCRIPTIONS', value: 'ROOT_CAUSE_DESCRIPTIONS' },
-        { text: 'SOLUTION_SHOT', value: 'SOLUTION_SHOT' },
+        { text: 'TABLE_SOLUTION_SHOT', value: 'SOLUTION_SHOT' },
         { text: 'ROOT_CAUSE_BY_DEPARTMENT', value: 'ROOT_CAUSE_BY_DEPARTMENT' },
         { text: 'ROOT_CAUSE_BY_STATUS', value: 'ROOT_CAUSE_BY_STATUS' },
         { text: 'ROOT_CAUSE_BY_TIER', value: 'ROOT_CAUSE_BY_TIER' },
@@ -761,71 +760,71 @@ export default {
     changeNameroot(ID, status) {
       if (ID !== undefined && ID.indexOf('_') > 0 && ID.startsWith('TP')) {
         const idToNameMap = {
-          'TP01_': status === 'DP' ? 'MB' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Unber In System' : (status === 'ROOT' ? 'Number Was Barring in HSS' : 'SOC'))),
-          'TP02_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Number Was Operational' : 'SOC'))),
-          'TP03_': status === 'DP' ? 'IT' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Unblickilist In System' : (status === 'ROOT' ? 'Number was Blacklist in OCS' : 'SOC'))),
-          'TP04_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Usage Up Package Already' : 'SOC'))),
-          'TP05_': status === 'DP' ? 'MB' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Update Location' : (status === 'ROOT' ? 'High PRB' : 'SOC'))),
-          'TP06_': status === 'DP' ? 'MB' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'Add 3G/4G Profile' : (status === 'ROOT' ? 'No Have 3G/4G Profile' : 'SOC'))),
-          'TP07_': status === 'DP' ? 'IT' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Modifi Profile SPNV' : (status === 'ROOT' ? 'Wrong Profile in SPNV' : 'SOC'))),
-          'TP08_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'No Package' : 'SOC'))),
-          'TP09_': status === 'DP' ? 'IT' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Exended lifecycle' : (status === 'ROOT' ? 'Number was suspended in OCS' : 'SOC'))),
-          'TP10_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Money Was Deducted by Voice' : 'SOC'))),
-          'TP11_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Money Was Deducted by SMS' : 'SOC'))),
-          'TP12_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Money Was Deducted by Games' : 'SOC'))),
-          'TP13_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Money Was Deducted by Loan Money' : 'SOC'))),
-          'TP14_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Money Was Deducted by Transfer to Others' : 'SOC'))),
-          'TP15_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'No Balance' : 'SOC'))),
-          'TP16_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Usage Old Beeline SIM' : 'SOC'))),
-          'TP17_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'Provided PIN & PUK' : (status === 'ROOT' ? 'SIM WASLOCKED PROVIDED PIN&PUK' : 'SOC'))),
-          'TP18_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Received Package Normal(They did not check SMS)' : 'SOC'))),
-          'TP19_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Received Balance Normal(They did not check SMS)' : 'SOC'))),
-          'TP20_': status === 'DP' ? 'MB' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'Cancel RPT' : (status === 'ROOT' ? 'Customer Need to Cancel RBT' : 'SOC'))),
-          'TP21_': status === 'DP' ? 'IT' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Cooperate With Tier 3' : (status === 'ROOT' ? 'System Problem' : 'IT'))),
-          'TP22_': status === 'DP' ? 'MB' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'Cancel Call Forward' : (status === 'ROOT' ? 'Cancle Call Forward' : 'SOC'))),
-          'TP23_': status === 'DP' ? 'ISD' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Scratch Card Was not Activate with Bonus' : 'ISD')),
-          'TP24_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Scratch Card was used up' : 'SOC'))),
-          'TP25_': status === 'DP' ? 'IT' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Cooperate With Tier 3' : (status === 'ROOT' ? 'More checking with Owner Apps' : 'IT'))),
-          'TP26_': status === 'DP' ? 'USER' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Wrong Default PW' : 'SOC'))),
-          'TP27_': status === 'DP' ? 'MB' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Cooperate With Tier 3' : (status === 'ROOT' ? 'Sites were down in that area' : 'MB'))),
-          'TP28_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Activated by *503#Call' : 'SOC'))),
-          'TP29_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Activated by *121/122#Call' : 'SOC'))),
-          'TP30_': status === 'DP' ? 'IT' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Cooperate With Tier 3' : (status === 'ROOT' ? 'System Problem' : 'IT'))),
-          'TP31_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'TP031_' : 'SOC'))), // -------------test 031 not
-          'TP32_': status === 'DP' ? 'USER' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Update Location' : (status === 'ROOT' ? 'Weak Coverage Signal' : 'SOC'))),
-          'TP33_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Received SMS(They did not check SMS)' : 'SOC'))),
-          'TP34_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Number Was Operational(Sugestion to Setting SMS Center)' : 'SOC'))),
-          'TP35_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Money Was Deducted by Lottery Service' : 'SOC'))),
-          'TP36_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Customer Capture 2G signal)' : 'SOC'))),
-          'TP37_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'PT037_' : 'SOC'))), // -------------test 037 not
-          'TP38_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Transfer Money Incorrect way' : 'SOC'))),
-          'TP39_': status === 'DP' ? 'IT' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'IR Service is Not avalable ' : 'SOC'))),
-          'TP40_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Call to Invalid Number' : 'SOC'))),
-          'TP41_': status === 'DP' ? 'IT' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Cooperate With Tier 3' : (status === 'ROOT' ? 'No Offerring In CBS' : 'IT'))),
-          'TP42_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Money Was Deducted by Rentle Package Service' : 'SOC'))),
-          'TP43_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : 'IT'),
-          'TP44_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'PIN Code of Scrath Card In Correct' : 'SOC'))),
-          'TP45_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Life Cycle Was Expired' : 'SOC'))),
-          'TP46_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Activate Sim Failure' : 'SOC'))),
-          'TP47_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Mismatch Condition to Loan Money' : 'SOC'))),
-          'TP48_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Sim Type Mismatch Condition' : 'SOC'))),
-          'TP49_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'Cancel Game' : (status === 'ROOT' ? 'Customer Need to Cancle Game Service' : 'SOC'))),
-          'TP50_': status === 'DP' ? 'MB' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'System' : (status === 'ROOT' ? 'In Corrected UCSI Template' : 'SOC'))),
-          'TP51_': status === 'DP' ? 'IT' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'Remove Counter' : (status === 'ROOT' ? 'Full Counter (Package) in Supernova' : 'SOC'))),
-          'TP52_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Received Promotion Normal(They did not check SMS)' : 'SOC'))),
-          'TP53_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Blocking on their Mobile' : 'SOC'))),
-          'TP54_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'In Corrected USSD Code' : 'SOC'))),
-          'TP55_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Customer not Receice Balance' : 'SOC'))),
-          'TP56_': status === 'DP' ? 'USER' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Customer turn off Mobile' : 'SOC'))),
-          'TP57_': status === 'DP' ? 'IT' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Exanded PIN & PUK' : (status === 'ROOT' ? 'Extended Lifecycle of Package Expire' : 'SOC'))),
-          'TP58_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Number was Pool in OCS' : 'SOC'))),
-          'TP59_': status === 'DP' ? 'IT' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'Remove Counter' : (status === 'ROOT' ? 'Customer Need to Cancel Package( It Usage Up)' : 'SOC'))),
-          'TP60_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Data Package is avaliable' : 'SOC'))),
-          'TP61_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Money Was Deducted by RBT Service' : 'SOC'))),
-          'TP62_': status === 'DP' ? 'IT' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Cooperate With Tier 3' : (status === 'ROOT' ? 'Scratch Card Was not Activate with Bonus' : 'IT'))),
-          'TP63_': status === 'DP' ? 'IT' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Cooperate With Tier 3' : (status === 'ROOT' ? 'Number Was IDLE Status in OCS' : 'IT'))),
-          'TP64_': status === 'DP' ? 'MB' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Add SMS MT' : (status === 'ROOT' ? 'UNo SMSMT in HSS' : 'SOC'))),
-          // 'TP65_': status === 'DP' ? 'MB' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Unber In System' : 'SOC'))), // ----65 not data
+          'TP01_': status === 'DP' ? 'MB' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Unber In System' : (status === 'ROOT' ? 'Number Was Barring in HSS' : 'Tier_2(SOC)'))),
+          'TP02_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Number Was Operational' : 'Tier_2(SOC)'))),
+          'TP03_': status === 'DP' ? 'IT' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Unblickilist In System' : (status === 'ROOT' ? 'Number was Blacklist in OCS' : 'Tier_2(SOC)'))),
+          'TP04_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Usage Up Package Already' : 'Tier_2(SOC)'))),
+          'TP05_': status === 'DP' ? 'MB' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Update Location' : (status === 'ROOT' ? 'High PRB' : 'Tier_2(SOC)'))),
+          'TP06_': status === 'DP' ? 'MB' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'Add 3G/4G Profile' : (status === 'ROOT' ? 'No Have 3G/4G Profile' : 'Tier_2(SOC)'))),
+          'TP07_': status === 'DP' ? 'IT' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Modifi Profile SPNV' : (status === 'ROOT' ? 'Wrong Profile in SPNV' : 'Tier_2(SOC)'))),
+          'TP08_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'No Package' : 'Tier_2(SOC)'))),
+          'TP09_': status === 'DP' ? 'IT' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Exended lifecycle' : (status === 'ROOT' ? 'Number was suspended in OCS' : 'Tier_2(SOC)'))),
+          'TP10_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Money Was Deducted by Voice' : 'Tier_2(SOC)'))),
+          'TP11_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Money Was Deducted by SMS' : 'Tier_2(SOC)'))),
+          'TP12_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Money Was Deducted by Games' : 'Tier_2(SOC)'))),
+          'TP13_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Money Was Deducted by Loan Money' : 'Tier_2(SOC)'))),
+          'TP14_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Money Was Deducted by Transfer to Others' : 'Tier_2(SOC)'))),
+          'TP15_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'No Balance' : 'Tier_2(SOC)'))),
+          'TP16_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Usage Old Beeline SIM' : 'Tier_2(SOC)'))),
+          'TP17_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'Provided PIN & PUK' : (status === 'ROOT' ? 'SIM WASLOCKED PROVIDED PIN&PUK' : 'Tier_2(SOC)'))),
+          'TP18_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Received Package Normal(They did not check SMS)' : 'Tier_2(SOC)'))),
+          'TP19_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Received Balance Normal(They did not check SMS)' : 'Tier_2(SOC)'))),
+          'TP20_': status === 'DP' ? 'MB' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'Cancel RPT' : (status === 'ROOT' ? 'Customer Need to Cancel RBT' : 'Tier_2(SOC)'))),
+          'TP21_': status === 'DP' ? 'IT' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Cooperate With Tier 3' : (status === 'ROOT' ? 'System Problem' : 'Tier_3(IT)'))),
+          'TP22_': status === 'DP' ? 'MB' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'Cancel Call Forward' : (status === 'ROOT' ? 'Cancle Call Forward' : 'Tier_2(SOC)'))),
+          'TP23_': status === 'DP' ? 'ISD' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Scratch Card Was not Activate with Bonus' : 'Tier_3(ISD)')),
+          'TP24_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Scratch Card was used up' : 'Tier_2(SOC)'))),
+          'TP25_': status === 'DP' ? 'IT' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Cooperate With Tier 3' : (status === 'ROOT' ? 'More checking with Owner Apps' : 'Tier_3(IT)'))),
+          'TP26_': status === 'DP' ? 'USER' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Wrong Default PW' : 'Tier_2(SOC)'))),
+          'TP27_': status === 'DP' ? 'MB' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Cooperate With Tier 3' : (status === 'ROOT' ? 'Sites were down in that area' : 'Tier_3(MB)'))),
+          'TP28_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Activated by *503#Call' : 'Tier_2(SOC)'))),
+          'TP29_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Activated by *121/122#Call' : 'Tier_2(SOC)'))),
+          'TP30_': status === 'DP' ? 'IT' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Cooperate With Tier 3' : (status === 'ROOT' ? 'System Problem' : 'Tier_3(IT)'))),
+          'TP31_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'TP031_' : 'Tier_2(SOC)'))), // -------------test 031 not
+          'TP32_': status === 'DP' ? 'USER' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Update Location' : (status === 'ROOT' ? 'Weak Coverage Signal' : 'Tier_2(SOC)'))),
+          'TP33_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Received SMS(They did not check SMS)' : 'Tier_2(SOC)'))),
+          'TP34_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Number Was Operational(Sugestion to Setting SMS Center)' : 'Tier_2(SOC)'))),
+          'TP35_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Money Was Deducted by Lottery Service' : 'Tier_2(SOC)'))),
+          'TP36_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Customer Capture 2G signal)' : 'Tier_2(SOC)'))),
+          'TP37_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'PT037_' : 'Tier_2(SOC)'))), // -------------test 037 not
+          'TP38_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Transfer Money Incorrect way' : 'Tier_2(SOC)'))),
+          'TP39_': status === 'DP' ? 'IT' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'IR Service is Not avalable ' : 'Tier_2(SOC)'))),
+          'TP40_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Call to Invalid Number' : 'Tier_2(SOC)'))),
+          'TP41_': status === 'DP' ? 'IT' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Cooperate With Tier 3' : (status === 'ROOT' ? 'No Offerring In CBS' : 'Tier_3(IT)'))),
+          'TP42_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Money Was Deducted by Rentle Package Service' : 'Tier_2(SOC)'))),
+          'TP43_': status === 'DP' ? 'USER' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Money Was Deducted by Package Service' : 'Tier_3(IT)'))),
+          'TP44_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'PIN Code of Scrath Card In Correct' : 'Tier_2(SOC)'))),
+          'TP45_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Life Cycle Was Expired' : 'Tier_2(SOC)'))),
+          'TP46_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Activate Sim Failure' : 'Tier_2(SOC)'))),
+          'TP47_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Mismatch Condition to Loan Money' : 'Tier_2(SOC)'))),
+          'TP48_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Sim Type Mismatch Condition' : 'Tier_2(SOC)'))),
+          'TP49_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'Cancel Game' : (status === 'ROOT' ? 'Customer Need to Cancle Game Service' : 'Tier_2(SOC)'))),
+          'TP50_': status === 'DP' ? 'MB' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'System' : (status === 'ROOT' ? 'In Corrected UCSI Template' : 'Tier_2(SOC)'))),
+          'TP51_': status === 'DP' ? 'IT' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'Remove Counter' : (status === 'ROOT' ? 'Full Counter (Package) in Supernova' : 'Tier_2(SOC)'))),
+          'TP52_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Received Promotion Normal(They did not check SMS)' : 'Tier_2(SOC)'))),
+          'TP53_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Blocking on their Mobile' : 'Tier_2(SOC)'))),
+          'TP54_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'In Corrected USSD Code' : 'Tier_2(SOC)'))),
+          'TP55_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Customer not Receice Balance' : 'Tier_2(SOC)'))),
+          'TP56_': status === 'DP' ? 'USER' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Customer turn off Mobile' : 'Tier_2(SOC)'))),
+          'TP57_': status === 'DP' ? 'IT' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Exanded PIN & PUK' : (status === 'ROOT' ? 'Extended Lifecycle of Package Expire' : 'Tier_2(SOC)'))),
+          'TP58_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Number was Pool in OCS' : 'Tier_2(SOC)'))),
+          'TP59_': status === 'DP' ? 'IT' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'Remove Counter' : (status === 'ROOT' ? 'Customer Need to Cancel Package( It Usage Up)' : 'Tier_2(SOC)'))),
+          'TP60_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Data Package is avaliable' : 'Tier_2(SOC)'))),
+          'TP61_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Money Was Deducted by RBT Service' : 'Tier_2(SOC)'))),
+          'TP62_': status === 'DP' ? 'IT' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Cooperate With Tier 3' : (status === 'ROOT' ? 'Scratch Card Was not Activate with Bonus' : 'Tier_3(IT)'))),
+          'TP63_': status === 'DP' ? 'IT' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Cooperate With Tier 3' : (status === 'ROOT' ? 'Number Was IDLE Status in OCS' : 'Tier_3(IT)'))),
+          'TP64_': status === 'DP' ? 'MB' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Add SMS MT' : (status === 'ROOT' ? 'UNo SMSMT in HSS' : 'Tier_2(SOC)'))),
+          'TP65_': status === 'DP' ? 'MB' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'No register 3Grap/One grap' : 'Tier_2(SOC)'))), // ----65 not data
         };
         const name = idToNameMap[ID] || ID; // use the mapped name or the original ID if not found
         return name;

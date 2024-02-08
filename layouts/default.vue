@@ -154,7 +154,6 @@
       </v-col>
       <!-- Sta baton Search -->
     </v-app-bar>
-
     <v-main>
       <v-divider style="background-color: #ffff00"></v-divider>
       <Nuxt />
