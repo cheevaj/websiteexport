@@ -1,7 +1,6 @@
-// MyChartLine.vue
 <template>
-  <div>
-    <canvas height="105px" ref="chart"></canvas>
+  <div class="pt-0">
+    <canvas height="100px" id="myChartBar"></canvas>
   </div>
 </template>
 
@@ -9,55 +8,99 @@
 import Chart from 'chart.js';
 
 export default {
-  props: {
-    data: Array,
-    labels: Array,
+  mounted() {
+    this.createChart();
   },
-  data() {
-    return {
-      chart: null,
-      chartData: {
-        labels: this.labels,
+  methods: {
+    createChart() {
+      const ctx = document.getElementById('myChartBar').getContext('2d');
+      if (this.myChartBar) {
+        this.myChartBar.destroy();
+      }
+      // console.log(this.datasetdatatime)
+      // Perform element-wise subtraction to calculate value1 and value2
+      const datasetDataTimeSubset = this.datasetdatatime.slice(0, 4);
+      const names = datasetDataTimeSubset.map(item => item.name);
+      const valueAll = datasetDataTimeSubset.map(item => item.valueminall);
+      const valueMaxD = datasetDataTimeSubset.map(item => item.valuemax);
+      const valueMaxC = datasetDataTimeSubset.map(item => item.valuemaxC);
+      const sumValue = datasetDataTimeSubset.map(item => item.valueall);
+      const chartData =
+      {
+        labels: names,
         datasets: [
           {
-            data: this.data,
-            backgroundColor: 'rgba(75, 192, 192, 0.8)',
-            borderColor: 'rgba(75, 192, 192, 1)',
+            label: 'Perfect',
+            data: valueAll,
+            backgroundColor: 'rgba(54, 162, 235, 0.8)',
+            borderColor: 'rgba(54, 162, 235, 1)',
+            borderWidth: 1,
+          },
+          {
+            label: 'Time Do Tplus',
+            data: valueMaxD,
+            backgroundColor: 'rgba(255, 99, 132, 0.8)',
+            borderColor: 'rgba(255, 99, 132, 1)',
+            borderWidth: 1,
+          },
+          {
+            label: 'Time Care Tplus',
+            data: valueMaxC,
+            backgroundColor: 'rgba(255, 206, 86, 0.8)',
+            borderColor: 'rgba(255, 206, 86, 1)',
             borderWidth: 1,
           },
         ],
-      },
-      options: {
-        // Set your chart options here
-      },
-    };
-  },
-  watch: {
-    data(newData) {
-      this.updateChartData(newData);
-    },
-  },
-  methods: {
-    initializeChart() {
-      const ctx = this.$refs.chart.getContext('2d');
-      this.chart = new Chart(ctx, {
-        type: 'line',
-        data: this.chartData,
-        options: this.options,
+        datasetData: [{
+          data: sumValue,
+        }]
+      }
+      this.myChartBar = new Chart(ctx, {
+        type: 'horizontalBar',
+        data: chartData,
+        options: {
+          legend: {
+            display: false,
+          },
+          tooltips: {
+            mode: 'index',
+            intersect: false,
+          },
+          animation: {
+            duration: 1,
+            onComplete: () => {
+              const chartInstance = this.myChartBar;
+              const ctx = chartInstance.ctx;
+              ctx.font = Chart.helpers.fontString(
+                Chart.defaults.global.defaultFontSize,
+                Chart.defaults.global.defaultFontStyle,
+                Chart.defaults.global.defaultFontFamily
+              );
+              ctx.textAlign = 'center';
+              ctx.textBaseline = 'bottom';
+              chartData.datasets.forEach((dataset, i) => {
+                const meta = chartInstance.controller.getDatasetMeta(i);
+                meta.data.forEach((bar, index) => {
+                  const data = dataset.data[index];
+                  if (data !== 0) {
+                    ctx.fillText(data, bar._model.x, bar._model.y - 5);
+                  }
+                });
+              });
+            },
+          },
+          scales: { xAxes: [{}], yAxes: [{ ticks: { beginAtZero: true } }] },
+        },
       });
     },
-    updateChartData(newData) {
-      this.chart.data.datasets[0].data = newData;
-      this.chart.update();
-    },
   },
-  mounted() {
-    this.initializeChart();
+  props: {
+    datasetdatatime: Array,
   },
-  beforeDestroy() {
-    if (this.chart) {
-      this.chart.destroy();
-    }
+  data() {
+    return {
+      myChartBar: null,
+    };
   },
 };
 </script>

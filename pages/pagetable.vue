@@ -2,30 +2,13 @@
   <div ref="pdfContent">
     <!-- start button download----------------------------------------------------------------------------------------------->
     <div class="shrink " >
-      <!--Sta book use------------------------------------------------------------------------------------------------------------------->
-      <div class="text-right" style="
-          min-height: 1px;
-          max-width: 180px;
-          position: fixed;
-          z-index: 100;
-          top: 68px;
-          right: 20px;
-        ">
-        <v-btn text fab small color="#000" style="z-index: 100" @click="shows = !shows">
-          <v-icon color="#000">mdi-clipboard-text-multiple-outline</v-icon>
-        </v-btn>
-      </div>
-      <!--Sto book---------------------------------------------->
-
-      <!---stop alert file download-------------------------------------------------------------------------------------->
-
       <!-- Sta slid baton Download------------------------------------------------------------------------------------------------------------------->
       <div class="text-right" style="
           min-height: 1px;
           max-width: 180px;
           position: fixed;
           z-index: 100;
-          top: 110px;
+          top: 90px;
           right: 20px;
         " @mouseleave="expand = false">
         <v-btn v-if="(!expand && !overlay)" fab small color="#000" @mouseenter="expand = true">
@@ -315,7 +298,7 @@
         <!-- page graph------------------------>
         <v-card v-if="showgraph" class="my-4">
           <v-progress-linear v-if="loading" indeterminate color="#4d3d00"></v-progress-linear>
-          <chartgraph :desserts="desserts" />
+          <chartgraph :desserts="desserts"/>
         </v-card>
       </v-col>
     </v-row>

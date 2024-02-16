@@ -123,10 +123,27 @@
                     </div>
                     <div v-else>
                         <v-card flat class="rounded-0" style="background-color: #ffffe6;">
-                            <v-card-text class="pa-0" style="background-color:#ffff00;color:#000">
-                                <h3>
-                                    Targets
-                                </h3>
+                            <v-card-text class="pa-0" style="background-color:#000;color:#ffff00">
+                                <v-row>
+                                    <v-col cols="6" class="pr-0 pt-0">
+                                        <v-card-text class="mb-1 pa-0" style=" background-color: #ffff00;">
+                                            <v-btn class="py-2 rounded-0" text
+                                                style="width: 100%; height: 100%; color: #000;" @click="targetDate = true">
+                                                <span style="color: #000;">
+                                                    dates
+                                                </span>
+                                            </v-btn>
+                                        </v-card-text>
+                                    </v-col>
+                                    <v-col cols="6" class="pl-1 pt-0" style="padding-right: 13px;">
+                                        <v-card-text class="pa-0 mb-1" style="color: #000; background-color: #ffff00;">
+                                            <v-btn class="py-2 rounded-0" text
+                                                style="width: 100%; height: 100%; color: #000;" @click="targetDate = false">
+                                                service
+                                            </v-btn>
+                                        </v-card-text>
+                                    </v-col>
+                                </v-row>
                                 <v-divider style="background-color: #000;"></v-divider>
                             </v-card-text>
                             <v-card-text class="px-2 py-1" style="color: #000;">
@@ -136,7 +153,7 @@
                                     </h4>
                                     <div>
                                         <v-card-actions class="pa-0">
-                                            <p class="px-2"
+                                            <p class="px-2 rounded-6"
                                                 :style="{ backgroundColor: checkTargetDo === 'Achieved the Target' ? 'rgb(198, 255, 179)' : 'rgb(255, 214, 204)' }">
                                                 {{
                                                     checkTargetDo }}</p>
@@ -145,7 +162,8 @@
                                                 color="rgb(0, 230, 0)">mdi-checkbox-marked</v-icon>
                                             <v-icon v-else color="error">mdi-close-box</v-icon>
                                         </v-card-actions>
-                                        <h3>
+                                        <h3
+                                            :style="{ color: checkTargetDo === 'Achieved the Target' ? 'rgb(0, 230, 0)' : 'rgb(255, 71, 26)' }">
                                             {{ percentTimeDoTa }}
                                         </h3>
                                     </div>
@@ -166,7 +184,8 @@
                                             <v-icon v-else color="error">mdi-close-box</v-icon>
                                         </v-card-actions>
                                     </div>
-                                    <h3>
+                                    <h3
+                                        :style="{ color: checkTargetCare === 'Achieved the Target' ? 'rgb(0, 230, 0)' : 'rgb(255, 71, 26)' }">
                                         {{ percentTimeCareTa }}
                                     </h3>
                                 </div>
@@ -206,7 +225,10 @@
                                             </div>
                                             <canvas v-if="this.tabledisplay !== 'Targets'" height="100px"
                                                 id="myChart"></canvas>
-                                            <MyChartBar v-else :datasetdatatime="datasetdatatime" />
+                                            <div v-else>
+                                                <MyChartBar v-if="targetDate" :desserts="desserts" />
+                                                <MyChartLine v-else :datasetdatatime="datasetdatatime" />
+                                            </div>
                                         </v-card-text>
                                     </v-col>
                                 </v-row>
@@ -223,8 +245,8 @@
                                         <v-card-text class="px-1 pt-0 pb-1" style="color: #000000;">
                                             <h4 style="color: #b3b300;">DATA TABLE</h4>
                                             <v-simple-table dense flat fixed-header class="table-container"
-                                                :height="dataset.length >= 4 ? '192px' : null"
-                                                :max-height="dataset.length < 4 ? '192px' : null">
+                                                :height="dataset.length >= 5 ? '225px' : null"
+                                                :max-height="dataset.length < 5 ? '225px' : null">
                                                 <template v-slot:default>
                                                     <thead>
                                                         <tr>
@@ -232,7 +254,7 @@
                                                                 Row Labels
                                                             </th>
                                                             <th class="text-center" style="color:#ffff00;">
-                                                                Count of SERVICE GROUP
+                                                                Count of SERVICE
                                                             </th>
                                                             <th class="text-center" style="color:#ffff00;">
                                                                 percentages(%)
@@ -273,8 +295,8 @@
                                         <v-card-text class="px-1 pt-0 pb-1" style="color: #000000;">
                                             <h4 style="color: #b3b300;">DATA TABLE</h4>
                                             <v-simple-table dense flat fixed-header class="table-container"
-                                                :height="dataset.length >= 4 ? '192px' : null"
-                                                :max-height="dataset.length < 4 ? '192px' : null">
+                                                :height="dataset.length >= 5 ? '225px' : null"
+                                                :max-height="dataset.length < 5 ? '225px' : null">
                                                 <template v-slot:default>
                                                     <thead>
                                                         <tr>
@@ -321,8 +343,8 @@
                                         <v-card-text class="px-1 pt-0 pb-1" style="color: #000000;">
                                             <h4 style="color: #b3b300;">TABLE TIME</h4>
                                             <v-simple-table dense flat fixed-header class="table-container"
-                                                :height="dataset.length >= 4 ? '192px' : null"
-                                                :max-height="dataset.length < 4 ? '192px' : null">
+                                                :height="datasetdatatime.length >= 5 ? '225px' : null"
+                                                :max-height="datasetdatatime.length < 5 ? '225px' : null">
                                                 <template v-slot:default>
                                                     <thead>
                                                         <tr>
@@ -384,8 +406,8 @@
                                             <v-card-text class="px-1 pt-0 pb-1" style="color: #000000;">
                                                 <h4 style="color: #b3b300;">TABLE TIME</h4>
                                                 <v-simple-table dense flat fixed-header class="table-container"
-                                                    :height="dataset.length >= 4 ? '192px' : null"
-                                                    :max-height="dataset.length < 4 ? '192px' : null">
+                                                    :height="userTarget.length >= 6 ? '225px' : null"
+                                                    :max-height="userTarget.length < 6 ? '225px' : null">
                                                     <template v-slot:default>
                                                         <thead>
                                                             <tr>
@@ -401,10 +423,17 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            <tr v-for="item in userTarget" :key="item.name">
-                                                                <td style="color: #ffff00;">{{ item.name }}</td>
-                                                                <td>{{ item.Time_Do }}</td>
-                                                                <td>{{ item.Time_Care }}</td>
+                                                            <tr v-for="(item, index) in userTarget" :key="item.name"
+                                                                :style="{ backgroundColor: index !== userTarget.length - 1 ? '#000' : '#ffff00' }">
+                                                                <td
+                                                                    :style="{ backgroundColor: index !== userTarget.length - 1 ? '#000' : '#ffff00', color: index !== userTarget.length - 1 ? '#ffff' : '#000' }">
+                                                                    {{ item.name }}</td>
+                                                                <td
+                                                                    :style="{ backgroundColor: index !== userTarget.length - 1 ? '#000' : '#ffff00', color: index !== userTarget.length - 1 ? '#ffff' : '#000' }">
+                                                                    {{ item.Time_Do }}</td>
+                                                                <td
+                                                                    :style="{ backgroundColor: index !== userTarget.length - 1 ? '#000' : '#ffff00', color: index !== userTarget.length - 1 ? '#ffff' : '#000' }">
+                                                                    {{ item.Time_Care }}</td>
                                                             </tr>
                                                         </tbody>
                                                     </template>
@@ -415,8 +444,8 @@
                                             <v-card-text class="px-1 pt-0 pb-1" style="color: #000000;">
                                                 <h4 style="color: #b3b300;">TABLE TIME</h4>
                                                 <v-simple-table dense flat fixed-header class="table-container"
-                                                    :height="dataset.length >= 4 ? '192px' : null"
-                                                    :max-height="dataset.length < 4 ? '192px' : null">
+                                                    :height="datasetdatatime.length >= 5 ? '225px' : null"
+                                                    :max-height="datasetdatatime.length < 5 ? '225px' : null">
                                                     <template v-slot:default>
                                                         <thead>
                                                             <tr>
@@ -438,7 +467,7 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            <tr v-for="item in datasetdatatime" :key="item.name">
+                                                            <tr v-for=" item  in  datasetdatatime " :key="item.name">
                                                                 <td style="color: #ffff00;">{{ item.name }}</td>
                                                                 <td style="color: #ffff00;">{{ item.dataall }}</td>
                                                                 <td>{{ item.valueminall }}</td>
@@ -483,7 +512,6 @@
                                                 </v-simple-table>
                                             </v-card-text>
                                         </v-col>
-
                                     </v-row>
                                 </div>
                             </v-card-text>
@@ -496,18 +524,21 @@
 </template>
 <script>
 import Chart from 'chart.js';
-// import MychartTarget from '~/components/MychartTarget.vue';
+// import MyChartBar from '~/components/MyChartBar.vue';
+// import MyChartLine from '~/components/MyChartLine.vue';
 const graphstyle = [['#00c6ff', '#F0F', '#FF0']]
 export default {
     Currency: 'components',
     components: {
-        // MychartTarget,
+        // MyChartBar,
+        // MyChartLine,
     },
     props: {
         desserts: Array,
     },
     data() {
         return {
+            targetDate: true,
             checkTargetDo: '',
             checkTargetCare: '',
             expand: 'btn-1',
@@ -619,13 +650,22 @@ export default {
                 this.checkTargetCare = max === 0 ? 100 + '%' : ((max / allDT) * 100).toFixed(2) >= 99.5 ? 'Achieved the Target' : 'Not on Target';
                 // Create an array of data objects for each service group
                 const dataObjects = [
-                    { name: 'DATA', valuemax: datamax, valuemin: datamin, valueminall: datavalue - (datamaxC + datamax), dataall: datavalue, valuemaxC: datamaxC },
-                    { name: 'SMS', valuemax: datamaxsms, valuemin: dataminsms, valueminall: datavaluesms - (datamaxsms + datamaxsmsC), dataall: datavaluesms, valuemaxC: datamaxsmsC },
-                    { name: 'VAS', valuemax: datamaxvas, valuemin: dataminvas, valueminall: datavaluevas - (datamaxvas + datamaxvasC), dataall: datavaluevas, valuemaxC: datamaxvasC },
-                    { name: 'VOICE', valuemax: datamaxvoi, valuemin: dataminvoi, valueminall: datavaluevoi - (datamaxvoi + datamaxvoiC), dataall: datavaluevoi, valuemaxC: datamaxvoiC },
+                    { name: 'DATA', valueall: datavalue, valuemax: datamax, valuemin: datamin, valueminall: datavalue - (datamaxC + datamax), dataall: datavalue, valuemaxC: datamaxC },
+                    { name: 'SMS', valueall: datavaluesms, valuemax: datamaxsms, valuemin: dataminsms, valueminall: datavaluesms - (datamaxsms + datamaxsmsC), dataall: datavaluesms, valuemaxC: datamaxsmsC },
+                    { name: 'VAS', valueall: datavaluevas, valuemax: datamaxvas, valuemin: dataminvas, valueminall: datavaluevas - (datamaxvas + datamaxvasC), dataall: datavaluevas, valuemaxC: datamaxvasC },
+                    { name: 'VOICE', valueall: datavaluevoi, valuemax: datamaxvoi, valuemin: dataminvoi, valueminall: datavaluevoi - (datamaxvoi + datamaxvoiC), dataall: datavaluevoi, valuemaxC: datamaxvoiC },
                 ];
                 // Extract names, max values, min values, and total values from dataObjects
                 dataObjects.sort((a, b) => b.dataall - a.dataall);
+                // Append 'Total' object to dataObjects
+                dataObjects.push({
+                    name: 'Total:',
+                    valuemax: datamax + datamaxsms + datamaxvas + datamaxvoi,
+                    valuemin: datamin + dataminsms + dataminvas + dataminvoi,
+                    valueminall: (datavalue + datavaluesms + datavaluevas + datavaluevoi) - (datamaxvoi + datamaxvoiC + datamaxvas + datamaxvasC + datamaxsms + datamaxsmsC + datamaxC + datamaxvoiC),
+                    valuemaxC: datamaxC + datamaxsmsC + datamaxvasC + datamaxvoiC,
+                    dataall: datavalue + datavaluesms + datavaluevas + datavaluevoi,
+                });
                 const names = dataObjects.map(item => item.name);
                 const valuemax = dataObjects.map(item => item.valuemax);
                 const valuemin = dataObjects.map(item => item.valuemin);
@@ -657,6 +697,7 @@ export default {
                         nameCountTimeC[name] = (nameCountTimeC[name] || 0) + 1;
                     });
                     const allNames = new Set([...Object.keys(nameCount), ...Object.keys(nameCountTimeC)]);
+                    // console.log(allNames)
 
                     // Initialize the userTarget array
                     // Loop through each unique name
@@ -668,19 +709,33 @@ export default {
                         // Push an object with name, timeDo, and timeCare to the userTarget array
                         allvalue.push({ name, Time_Do: timeDo, Time_Care: timeCare });
                     });
-                    this.userTarget = allvalue;
-                    // Now userTarget contains the desired array of objects
-                    // Convert the nameCount object into an array of objects with name and value properties
+
+                    // Calculate the sums for Time_Do and Time_Care
+                    let sumTimeDo = 0;
+                    let sumTimeCare = 0;
+                    allvalue.forEach(item => {
+                        sumTimeDo += item.Time_Do;
+                        sumTimeCare += item.Time_Care;
+                    });
+
+                    // Add summary entry with total values to userTarget array
+                    this.userTarget = [
+                        ...allvalue, // Individual entries
+                        { name: 'Total:' + allvalue.length, Time_Do: sumTimeDo, Time_Care: sumTimeCare } // Summary entry
+                    ];
+                    this.i = false;
                 }
                 if (this.selectedItem === 0) {
-                    // Calculate min, max, and total values for different service groups (DATA, SMS, VAS, VOICE)
-
                     // Handle different cases based on tabledisplay option
                     if (this.tabledisplay === 'Root Cause') {
                         const uniqueNames = this.loopname(this.desserts, '', 'Cause');
                         const dataObjects = uniqueNames.map(name => ({
                             name,
-                            value: this.calculateDataValue(this.desserts, name, 'Cause'),
+                            value: this.calculateDataValue(this.desserts, name, 'Cause', ''),
+                            valueData: this.calculateDataValue(this.desserts, name, 'DATARoot', 'DATA'),
+                            valueSms: this.calculateDataValue(this.desserts, name, 'DATARoot', 'SMS'),
+                            valueVas: this.calculateDataValue(this.desserts, name, 'DATARoot', 'VAS'),
+                            valueVoice: this.calculateDataValue(this.desserts, name, 'DATARoot', 'VOICE'),
                         }));
                         this.tablename = 'All';
                         const dataallvalue = dataObjects.reduce((sum, item) => sum + item.value, 0);
@@ -688,10 +743,18 @@ export default {
                         dataObjects.sort((a, b) => b.value - a.value);
                         this.names = dataObjects.map(item => item.name);
                         this.value = dataObjects.map(item => item.value);
+                        const valueData = dataObjects.map(item => item.valueData);
+                        const valueSms = dataObjects.map(item => item.valueSms);
+                        const valueVas = dataObjects.map(item => item.valueVas);
+                        const valueVoice = dataObjects.map(item => item.valueVoice);
                         const percentages = this.value.map(value => ((value / dataallvalue) * 100).toFixed(2));
                         this.dataset = this.names.map((item, index) => ({
                             name: item,
                             value: this.value[index],
+                            valueData: valueData[index],
+                            valueSms: valueSms[index],
+                            valueVas: valueVas[index],
+                            valueVoice: valueVoice[index],
                             percentage: `${percentages[index]}%`,
                         }));
                     }
@@ -756,7 +819,7 @@ export default {
                         const uniqueNames = this.loopname(this.desserts, 'DATA', 'Root');
                         const dataObjects = uniqueNames.map(name => ({
                             name,
-                            value: this.calculateDataValue(this.desserts, name, 'Root', 'DATA'),
+                            value: this.calculateDataValue(this.desserts, name, 'DATARoot', 'DATA'),
                         }));
                         // arrow function find value max to min  
                         dataObjects.sort((a, b) => b.value - a.value); // Sort dataObjects based on value in descending order
@@ -804,56 +867,84 @@ export default {
                         const d3Entries = dataObjects.filter(item => item.name.startsWith('D3_'));
                         const d4Entries = dataObjects.filter(item => item.name.startsWith('D4_'));
                         const d5Entries = dataObjects.filter(item => item.name.startsWith('D5_'));
+                        const d6Entries = dataObjects.filter(item => item.name.startsWith('DATA'));
                         // Combine values for value entries
                         const d1Sum = d1Entries.reduce((sum, entry) => sum + entry.value, 0);
                         const d3Sum = d3Entries.reduce((sum, entry) => sum + entry.value, 0);
                         const d4Sum = d4Entries.reduce((sum, entry) => sum + entry.value, 0);
                         const d5Sum = d5Entries.reduce((sum, entry) => sum + entry.value, 0);
+                        const d6Sum = d6Entries.reduce((sum, entry) => sum + entry.value, 0);
                         const s1Entries = dataObjects.filter(item => item.name.startsWith('S1_'));
                         const s3Entries = dataObjects.filter(item => item.name.startsWith('S2_'));
                         const s4Entries = dataObjects.filter(item => item.name.startsWith('S3_'));
+                        const s5Entries = dataObjects.filter(item => item.name.startsWith('S5_'));
+                        const s6Entries = dataObjects.filter(item => item.name.startsWith('S6_'));
+                        const sSEntries = dataObjects.filter(item => item.name.startsWith('SMS'));
                         // Combine values for value entries
                         const S1Sum = s1Entries.reduce((sum, entry) => sum + entry.value, 0);
                         const S2Sum = s4Entries.reduce((sum, entry) => sum + entry.value, 0);
                         const S3Sum = s3Entries.reduce((sum, entry) => sum + entry.value, 0);
+                        const S5Sum = s5Entries.reduce((sum, entry) => sum + entry.value, 0);
+                        const S6Sum = s6Entries.reduce((sum, entry) => sum + entry.value, 0);
+                        const SSSum = sSEntries.reduce((sum, entry) => sum + entry.value, 0);
                         const v1Entries = dataObjects.filter(item => item.name.startsWith('V1_'));
                         const v3Entries = dataObjects.filter(item => item.name.startsWith('V2_'));
                         const v4Entries = dataObjects.filter(item => item.name.startsWith('V3_'));
+                        const v5Entries = dataObjects.filter(item => item.name.startsWith('V5_'));
                         const vcal1Entries = dataObjects.filter(item => item.name.startsWith('ບັນຫາ ໂທ​​ເຂົ້າ'));
                         const vcal2Entries = dataObjects.filter(item => item.name.startsWith('ໂທ​​ເຂົ້າ-​​ໂທອອກ'));
+                        const vVEntries = dataObjects.filter(item => item.name.startsWith('VOICE'));
+
                         // Combine values for value entries
                         const v1Sum = v1Entries.reduce((sum, entry) => sum + entry.value, 0);
                         const v2Sum = v3Entries.reduce((sum, entry) => sum + entry.value, 0);
                         const v3Sum = v4Entries.reduce((sum, entry) => sum + entry.value, 0);
+                        const v5Sum = v5Entries.reduce((sum, entry) => sum + entry.value, 0);
+                        const vVSum = vVEntries.reduce((sum, entry) => sum + entry.value, 0);
                         const cal1Sum = vcal1Entries.reduce((sum, entry) => sum + entry.value, 0);
                         const cal2Sum = vcal2Entries.reduce((sum, entry) => sum + entry.value, 0);
+                        const va1Entries = dataObjects.filter(item => item.name.startsWith('VA1_'));
+                        const vaVAEntries = dataObjects.filter(item => item.name.startsWith('VAS'));
+                        const va1Sum = va1Entries.reduce((sum, entry) => sum + entry.value, 0);
+                        const vaVASum = vaVAEntries.reduce((sum, entry) => sum + entry.value, 0);
+
                         // Create a new entry with combined values
                         const combinedEntryv1 = {
                             name: 'V1_ມີ​ສັນຍານ​ໂທ​​ເຂົ້າ-​​ໂທອອກບໍ່​ໄດ້',
-                            value: v1Sum + v2Sum + v3Sum + cal1Sum + cal2Sum,
+                            value: v1Sum + v2Sum + v3Sum + cal1Sum + cal2Sum + vVSum + v5Sum,
                         };
                         // Remove D1 and D4 entries from dataObjects
 
                         // Create a new entry with combined values
                         const combinedEntryS1 = {
                             name: 'S1_ສົ່ງ-ຮັບ SMS ບໍ່​ໄດ້​',
-                            value: S1Sum + S2Sum + S3Sum,
+                            value: S1Sum + S2Sum + S3Sum + SSSum,
+                        };
+                        const combinedEntryS5 = {
+                            name: 'S1_ສົ່ງ-ຮັບ SMS ບໍ່​ໄດ້​',
+                            value: S5Sum + S6Sum,
                         };
                         // Create a new entry with combined values
                         const combinedEntryD1 = {
                             name: 'D1_CONNCET INTERNET ບໍ່ໄດ້',
-                            value: d1Sum + d4Sum,
+                            value: d1Sum + d4Sum + d6Sum,
                         };
                         const combinedEntryD3 = {
                             name: 'D3_INTERNET ຊ້າ',
                             value: d3Sum + d5Sum,
                         };
+                        const combinedEntryVA1 = {
+                            name: 'VA1_ເງີນຫາຍ (ບໍ່ຮູ້ສາເຫດ)',
+                            value: va1Sum + vaVASum,
+                        };
                         // Remove D1 and D4 entries from dataObjects
                         const updatedDataObjects = dataObjects.filter(item => !item.name.startsWith('D1_') && !item.name.startsWith('D3_') && !item.name.startsWith('D4_') &&
-                            !item.name.startsWith('D5_') && !item.name.startsWith('S1_') && !item.name.startsWith('S2_') && !item.name.startsWith('S3_') && !item.name.startsWith('V1_')
-                            && !item.name.startsWith('V2_') && !item.name.startsWith('V3_') && !item.name.startsWith('ບັນຫາ ໂທ​​ເຂົ້າ') && !item.name.startsWith('ໂທ​​ເຂົ້າ-​​ໂທອອກ'));
+                            !item.name.startsWith('D5_') && !item.name.startsWith('DATA') && !item.name.startsWith('S1_') && !item.name.startsWith('S2_') && !item.name.startsWith('S3_') && !item.name.startsWith('S5_')
+                            && !item.name.startsWith('S6_') && !item.name.startsWith('SMS') && !item.name.startsWith('V1_')
+                            && !item.name.startsWith('V2_') && !item.name.startsWith('V3_') && !item.name.startsWith('V5_') && !item.name.startsWith('ບັນຫາ ໂທ​​ເຂົ້າ') && !item.name.startsWith('ໂທ​​ເຂົ້າ-​​ໂທອອກ')
+                            && !item.name.startsWith('VOICE') && !item.name.startsWith('VA1_') && !item.name.startsWith('VAS'));
                         // Add the combined entry back to dataObjects
-                        updatedDataObjects.unshift(combinedEntryD1, combinedEntryD3, combinedEntryS1, combinedEntryv1);
+                        updatedDataObjects.unshift(combinedEntryD1, combinedEntryD3, combinedEntryS1, combinedEntryv1, combinedEntryS5, combinedEntryVA1);
                         updatedDataObjects.sort((a, b) => b.value - a.value);
                         this.names = updatedDataObjects.map(item => item.name);
                         this.value = updatedDataObjects.map(item => item.value);
@@ -876,7 +967,7 @@ export default {
                         const uniqueNames = this.loopname(this.desserts, 'SMS', 'Root');
                         const dataObjects = uniqueNames.map(name => ({
                             name,
-                            value: this.calculateDataValue(this.desserts, name, 'Root', 'SMS'),
+                            value: this.calculateDataValue(this.desserts, name, 'DATARoot', 'SMS'),
                         }));
                         dataObjects.sort((a, b) => b.value - a.value);
                         this.names = dataObjects.map((item) => item.name);
@@ -921,23 +1012,26 @@ export default {
                         const d3Entries = dataObjects.filter(item => item.name.startsWith('D3_'));
                         const d4Entries = dataObjects.filter(item => item.name.startsWith('D4_'));
                         const d5Entries = dataObjects.filter(item => item.name.startsWith('D5_'));
+                        const dDEntries = dataObjects.filter(item => item.name.startsWith('DATA'));
                         // Combine values for value entries
                         const d1Sum = d1Entries.reduce((sum, entry) => sum + entry.value, 0);
                         const d3Sum = d3Entries.reduce((sum, entry) => sum + entry.value, 0);
                         const d4Sum = d4Entries.reduce((sum, entry) => sum + entry.value, 0);
                         const d5Sum = d5Entries.reduce((sum, entry) => sum + entry.value, 0);
+                        const dDSum = dDEntries.reduce((sum, entry) => sum + entry.value, 0);
 
                         // Create a new entry with combined values
                         const combinedEntryD1 = {
                             name: 'D1_CONNCET INTERNET ບໍ່ໄດ້',
-                            value: d1Sum + d4Sum,
+                            value: d1Sum + d4Sum + dDSum,
                         };
                         const combinedEntryD3 = {
                             name: 'D3_INTERNET ຊ້າ',
                             value: d3Sum + d5Sum,
                         };
                         // Remove D1 and D4 entries from dataObjects
-                        const updatedDataObjects = dataObjects.filter(item => !item.name.startsWith('D1_') && !item.name.startsWith('D3_') && !item.name.startsWith('D4_') && !item.name.startsWith('D5_'));
+                        const updatedDataObjects = dataObjects.filter(item => !item.name.startsWith('D1_') && !item.name.startsWith('D3_') && !item.name.startsWith('D4_') && !item.name.startsWith('D5_')
+                            && !item.name.startsWith('DATA'));
                         // Add the combined entry back to dataObjects
                         updatedDataObjects.unshift(combinedEntryD1, combinedEntryD3);
                         updatedDataObjects.sort((a, b) => b.value - a.value);
@@ -962,7 +1056,7 @@ export default {
                         const uniqueNames = this.loopname(this.desserts, 'VAS', 'Root');
                         const dataObjects = uniqueNames.map(name => ({
                             name,
-                            value: this.calculateDataValue(this.desserts, name, 'Root', 'VAS'),
+                            value: this.calculateDataValue(this.desserts, name, 'DATARoot', 'VAS'),
                         }));
                         dataObjects.sort((a, b) => b.value - a.value);
                         this.names = dataObjects.map((item) => item.name);
@@ -981,19 +1075,22 @@ export default {
                             value: this.calculateDataValue(this.desserts, name, 'RSOWNER'),
                         }));
                         this.tablename = 'All';
-
                         const dataallvalue = dataObjects.reduce((sum, item) => sum + item.value, 0);
                         this.tabledataall = dataallvalue;
 
                         const Resolnull = dataObjects.filter(item => !item.name.trim());
                         const Resol = Resolnull.reduce((sum, entry) => sum + entry.value, 0);
-                        const combinedEntryS1 = {
-                            name: 'Null​',
-                            value: Resol,
-                        };
-                        const updatedDataObjects = dataObjects.filter(item => item.name.trim() !== '');
-                        updatedDataObjects.unshift(combinedEntryS1);
-                        updatedDataObjects.sort((a, b) => b.value - a.value);
+
+                        let updatedDataObjects = dataObjects; // Declare outside the block
+                        if (Resol >= 1) {
+                            const combinedEntryS1 = {
+                                name: 'Not Name',
+                                value: Resol,
+                            };
+                            updatedDataObjects = updatedDataObjects.filter(item => item.name.trim() !== '');
+                            updatedDataObjects.unshift(combinedEntryS1);
+                        }
+                        updatedDataObjects = (Resol >= 1 ? updatedDataObjects : dataObjects).sort((a, b) => b.value - a.value);
 
                         this.names = updatedDataObjects.map(item => item.name);
                         this.value = updatedDataObjects.map(item => item.value);
@@ -1020,17 +1117,19 @@ export default {
                         const d1Entries = dataObjects.filter(item => item.name.startsWith('S1_'));
                         const d3Entries = dataObjects.filter(item => item.name.startsWith('S2_'));
                         const d4Entries = dataObjects.filter(item => item.name.startsWith('S3_'));
+                        const d5Entries = dataObjects.filter(item => item.name.startsWith('SMS'));
                         // Combine values for value entries
                         const S1Sum = d1Entries.reduce((sum, entry) => sum + entry.value, 0);
                         const S2Sum = d4Entries.reduce((sum, entry) => sum + entry.value, 0);
                         const S3Sum = d3Entries.reduce((sum, entry) => sum + entry.value, 0);
+                        const S5Sum = d5Entries.reduce((sum, entry) => sum + entry.value, 0);
                         // Create a new entry with combined values
                         const combinedEntryS1 = {
                             name: 'S1_ສົ່ງ-ຮັບ SMS ບໍ່​ໄດ້​',
-                            value: S1Sum + S2Sum + S3Sum,
+                            value: S1Sum + S2Sum + S3Sum + S5Sum,
                         };
                         // Remove D1 and D4 entries from dataObjects
-                        const updatedDataObjects = dataObjects.filter(item => !item.name.startsWith('S1_') && !item.name.startsWith('S2_') && !item.name.startsWith('S3_'));
+                        const updatedDataObjects = dataObjects.filter(item => !item.name.startsWith('S1_') && !item.name.startsWith('S2_') && !item.name.startsWith('S3_') && !item.name.startsWith('SMS'));
                         // Add the combined entry back to dataObjects
                         updatedDataObjects.unshift(combinedEntryS1);
                         updatedDataObjects.sort((a, b) => b.value - a.value);
@@ -1055,7 +1154,7 @@ export default {
                         const uniqueNames = this.loopname(this.desserts, 'VOICE', 'Root');
                         const dataObjects = uniqueNames.map(name => ({
                             name,
-                            value: this.calculateDataValue(this.desserts, name, 'Root', 'VOICE'),
+                            value: this.calculateDataValue(this.desserts, name, 'DATARoot', 'VOICE'),
                         }));
                         dataObjects.sort((a, b) => b.value - a.value);
                         this.names = dataObjects.map((item) => item.name);
@@ -1096,9 +1195,24 @@ export default {
                             value: this.calculateDataD1Value(this.desserts, 'VAS', name)
                         }));
                         // Sort the dataObjects array based on the value property in descending order
-                        dataObjects.sort((a, b) => b.value - a.value);
-                        this.names = dataObjects.map(item => item.name);
-                        this.value = dataObjects.map(item => item.value);
+                        const va1Entries = dataObjects.filter(item => item.name.startsWith('VA1_'));
+                        const vaVAEntries = dataObjects.filter(item => item.name.startsWith('VAS'));
+                        // Combine values for value entries
+                        const va1Sum = va1Entries.reduce((sum, entry) => sum + entry.value, 0);
+                        const vaVASum = vaVAEntries.reduce((sum, entry) => sum + entry.value, 0);
+                        // Create a new entry with combined values
+                        const combinedEntryVA1 = {
+                            name: 'V1_ມີ​ສັນຍານ​ໂທ​​ເຂົ້າ-​​ໂທອອກບໍ່​ໄດ້',
+                            value: va1Sum + vaVASum,
+                        };
+                        // Remove D1 and D4 entries from dataObjects
+                        const updatedDataObjects = dataObjects.filter(item => !item.name.startsWith('VA1_') && !item.name.startsWith('VAS'));
+                        // Add the combined entry back to dataObjects
+                        updatedDataObjects.unshift(combinedEntryVA1);
+                        // Sort the dataObjects array based on the value property in descending order
+                        updatedDataObjects.sort((a, b) => b.value - a.value);
+                        this.names = updatedDataObjects.map(item => item.name);
+                        this.value = updatedDataObjects.map(item => item.value);
                         const percentages = this.value.map(value => ((value / dataallvalue) * 100).toFixed(2));
                         this.dataset = this.names.map((item, index) => ({
                             name: item,
@@ -1140,21 +1254,23 @@ export default {
                         const v1Entries = dataObjects.filter(item => item.name.startsWith('V1_'));
                         const v3Entries = dataObjects.filter(item => item.name.startsWith('V2_'));
                         const v4Entries = dataObjects.filter(item => item.name.startsWith('V3_'));
+                        const vVEntries = dataObjects.filter(item => item.name.startsWith('VOICE'));
                         const vcal1Entries = dataObjects.filter(item => item.name.startsWith('ບັນຫາ ໂທ​​ເຂົ້າ'));
                         const vcal2Entries = dataObjects.filter(item => item.name.startsWith('ໂທ​​ເຂົ້າ-​​ໂທອອກ'));
                         // Combine values for value entries
                         const v1Sum = v1Entries.reduce((sum, entry) => sum + entry.value, 0);
                         const v2Sum = v3Entries.reduce((sum, entry) => sum + entry.value, 0);
                         const v3Sum = v4Entries.reduce((sum, entry) => sum + entry.value, 0);
+                        const vVSum = vVEntries.reduce((sum, entry) => sum + entry.value, 0);
                         const cal1Sum = vcal1Entries.reduce((sum, entry) => sum + entry.value, 0);
                         const cal2Sum = vcal2Entries.reduce((sum, entry) => sum + entry.value, 0);
                         // Create a new entry with combined values
                         const combinedEntryS1 = {
                             name: 'V1_ມີ​ສັນຍານ​ໂທ​​ເຂົ້າ-​​ໂທອອກບໍ່​ໄດ້',
-                            value: v1Sum + v2Sum + v3Sum + cal1Sum + cal2Sum,
+                            value: v1Sum + v2Sum + v3Sum + cal1Sum + cal2Sum + vVSum,
                         };
                         // Remove D1 and D4 entries from dataObjects
-                        const updatedDataObjects = dataObjects.filter(item => !item.name.startsWith('V1_') && !item.name.startsWith('V2_') && !item.name.startsWith('V3_') && !item.name.startsWith('ບັນຫາ ໂທ​​ເຂົ້າ') && !item.name.startsWith('ໂທ​​ເຂົ້າ-​​ໂທອອກ'));
+                        const updatedDataObjects = dataObjects.filter(item => !item.name.startsWith('V1_') && !item.name.startsWith('V2_') && !item.name.startsWith('V3_') && !item.name.startsWith('VOICE') && !item.name.startsWith('ບັນຫາ ໂທ​​ເຂົ້າ') && !item.name.startsWith('ໂທ​​ເຂົ້າ-​​ໂທອອກ'));
                         // Add the combined entry back to dataObjects
                         updatedDataObjects.unshift(combinedEntryS1);
                         // Sort the dataObjects array based on the value property in descending order
@@ -1178,7 +1294,9 @@ export default {
                 throw error;
             }
             // --- go to function graphShow;
-            this.graphShow();
+            if (this.tabledisplay !== 'Targets') {
+                this.graphShow();
+            };
             this.loading = false;
         },
         tarGets() {
@@ -1205,6 +1323,9 @@ export default {
                     case 'Cause':
                         if (entry.ROOT_CAUSE_DESCRIPTIONS === serviceGroup) sum++;
                         break;
+                    case 'DATARoot':
+                        if (entry.ROOT_CAUSE_DESCRIPTIONS === serviceGroup && entry.SERVICE_GROUP === tyle) sum++;
+                        break;
                     // If 'status' is 'DP', check if the ROOT_CAUSE_BY_DEPARTMENT property of the entry matches the provided 'serviceGroup'
                     case 'DP':
                         if (entry.ROOT_CAUSE_BY_DEPARTMENT === serviceGroup) sum++;
@@ -1224,9 +1345,6 @@ export default {
                     // If 'status' is 'CHAN', check if the CREATEDBY property of the entry starts with the provided 'serviceGroup'
                     case 'CHAN':
                         if (entry.CREATEDBY.startsWith(serviceGroup)) sum++;
-                        break;
-                    case 'Root':
-                        if ((entry.SERVICE_GROUP === tyle) && entry.ROOT_CAUSE_DESCRIPTIONS.startsWith(serviceGroup)) sum++;
                         break;
                 }
                 // Return the accumulated sum
@@ -1302,7 +1420,6 @@ export default {
                     });
                     // Assign the value to namesArray
                     namesArray = Array.from(uniqueNames);
-                    // Output the namesArray to the console
                     // Return namesArray outside the switch statement
                     return namesArray;
                 case 'PV':
@@ -1427,53 +1544,96 @@ export default {
             if (this.myChart) {
                 this.myChart.destroy();
             }
+            const colorBK = [
+                'rgba(54, 162, 235, 0.8)',
+                'rgba(255, 99, 132, 0.8)',
+                'rgba(255, 206, 86, 0.8)',
+                'rgba(75, 192, 192, 0.8)',
+                'rgba(153, 102, 255, 0.8)',
+                'rgba(25, 159, 64, 0.8)',
+                'rgba(254, 19, 64, 0.8)',
+                'rgba(255, 99, 132, 0.8)',
+                'rgba(54, 162, 235, 0.8)',
+                'rgba(255, 206, 86, 0.8)',
+                'rgba(75, 192, 192, 0.8)',
+                'rgba(153, 102, 255, 0.8)',
+                'rgba(25, 159, 64, 0.8)',
+                'rgba(254, 19, 64, 0.8)',
+                'rgba(54, 162, 235, 0.8)',
+                'rgba(255, 206, 86, 0.8)',
+                'rgba(75, 192, 192, 0.8)',
+                'rgba(153, 102, 255, 0.8)',
+                'rgba(25, 159, 64, 0.8)',
+            ];
+            const colorBD = [
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 99, 132, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(25, 159, 64, 1)',
+                'rgba(254, 19, 64, 1)',
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(25, 159, 64, 1)',
+                'rgba(254, 19, 64, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(25, 159, 64, 1)',
+            ];
+            // let Data = [];
+            // if (this.tabledisplay === 'Root Cause' && this.selectedItem === 0) {
+            const valueData = this.dataset.map(item => item.valueData);
+            const valueSms = this.dataset.map(item => item.valueSms);
+            const valueVas = this.dataset.map(item => item.valueVas);
+            const valueVoice = this.dataset.map(item => item.valueVoice);
+            const Data = [
+                {
+                    label: 'DATA',
+                    data: valueData,
+                    backgroundColor: colorBK[0],
+                    borderColor: colorBD[0],
+                    borderWidth: 1,
+                },
+                {
+                    label: 'SMS',
+                    data: valueSms,
+                    backgroundColor: colorBK[1],
+                    borderColor: colorBD[1],
+                    borderWidth: 1,
+                },
+                {
+                    label: 'VAS',
+                    data: valueVas,
+                    backgroundColor: colorBK[2],
+                    borderColor: colorBD[2],
+                    borderWidth: 1,
+                },
+                {
+                    label: 'VOICE',
+                    data: valueVoice,
+                    backgroundColor: colorBK[3],
+                    borderColor: colorBD[3],
+                    borderWidth: 1,
+                },
+            ];
+            //     return Data;
+            // }
             const chartData = {
                 labels: this.names,
-                datasets: [{
-                    data: this.value,
-                    backgroundColor: [
-                        'rgba(54, 162, 235, 0.8)',
-                        'rgba(255, 99, 132, 0.8)',
-                        'rgba(255, 206, 86, 0.8)',
-                        'rgba(75, 192, 192, 0.8)',
-                        'rgba(153, 102, 255, 0.8)',
-                        'rgba(25, 159, 64, 0.8)',
-                        'rgba(254, 19, 64, 0.8)',
-                        'rgba(255, 99, 132, 0.8)',
-                        'rgba(54, 162, 235, 0.8)',
-                        'rgba(255, 206, 86, 0.8)',
-                        'rgba(75, 192, 192, 0.8)',
-                        'rgba(153, 102, 255, 0.8)',
-                        'rgba(25, 159, 64, 0.8)',
-                        'rgba(254, 19, 64, 0.8)',
-                        'rgba(54, 162, 235, 0.8)',
-                        'rgba(255, 206, 86, 0.8)',
-                        'rgba(75, 192, 192, 0.8)',
-                        'rgba(153, 102, 255, 0.8)',
-                        'rgba(25, 159, 64, 0.8)',
-                    ],
-                    borderColor: [
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(25, 159, 64, 1)',
-                        'rgba(254, 19, 64, 1)',
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(25, 159, 64, 1)',
-                        'rgba(254, 19, 64, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(25, 159, 64, 1)',
-                    ],
+                datasets: (this.tabledisplay === 'Root Cause' && this.selectedItem === 0) ? Data : [{
+                    data: this.value, // (this.tabledisplay === 'Root Cause Report' && this.selectedItem === 0) ? Data :
+                    backgroundColor: colorBK,
+                    borderColor: colorBD,
                     borderWidth: 1,
+                }],
+                datasetData: [{
+                    data: this.value,
                 }]
             }
             // ----- Gracph value
@@ -1486,6 +1646,10 @@ export default {
                     },
                     hover: {
                         animationDuration: 0
+                    },
+                    tooltips: {
+                        mode: 'index',
+                        intersect: false,
                     },
                     animation: {
                         duration: 1,
@@ -1500,23 +1664,36 @@ export default {
                             ctx.textAlign = 'center';
                             ctx.textBaseline = 'bottom';
                             if (this.graphform !== 'pie') {
-                                chartData.datasets.forEach((dataset, i) => {
-                                    const meta = chartInstance.controller.getDatasetMeta(i);
-                                    meta.data.forEach((bar, index) => {
-                                        const data = dataset.data[index];
-                                        ctx.fillText(data, bar._model.x, bar._model.y - 5);
+                                if (this.tabledisplay === 'Root Cause' && this.selectedItem === 0) {
+                                    chartData.datasetData.forEach((dataset, i) => {
+                                        const meta = chartInstance.controller.getDatasetMeta(i);
+                                        meta.data.forEach((bar, index) => {
+                                            const data = dataset.data[index];
+                                            ctx.fillText(data, bar._model.x, bar._model.y - 5);
+                                        });
                                     });
-                                });
+                                }
+                                else {
+                                    chartData.datasets.forEach((dataset, i) => {
+                                        const meta = chartInstance.controller.getDatasetMeta(i);
+                                        meta.data.forEach((bar, index) => {
+                                            const data = dataset.data[index];
+                                            ctx.fillText(data, bar._model.x, bar._model.y - 5);
+                                        });
+                                    });
+                                }
                             }
                         }
                     },
                     scales: {
                         yAxes: [{
+                            stacked: true,
                             ticks: {
                                 beginAtZero: true,
                             },
                         }],
                         xAxes: [{
+                            stacked: true,
                             gridLines: {
                                 display: true
                             },
@@ -1532,10 +1709,10 @@ export default {
         // clange graph style desplay  
         changeGraph(itemvalue) {
             this.i = true;
-            this.graphType(itemvalue);
+            this.graphType();
             this.tabledisplay = itemvalue;
         },
-        graphType(itemvalue) {
+        graphType() {
             // Set up the initial interval
             this.intervalId = setInterval(() => {
                 if (this.i) {

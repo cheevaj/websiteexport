@@ -26,7 +26,7 @@
           </v-col>
           <v-col :cols="show ? 2 : 4" class="px-0 text-center" @mouseleave="colortext = false">
             <v-btn height="100%" width="100%" class="pa-0" text style="background-color: transparent; color: transparent"
-              @mouseenter="colortext = 'web'">
+              @mouseenter="colortext = 'web'" @click="website = !website">
               <v-card-actions class="pa-0">
                 <v-card-text :style="{
                   color: colortext === 'web' ? '#ffff00' : '#000',
@@ -35,29 +35,6 @@
                   Web
                 </v-card-text>
               </v-card-actions>
-              <v-card v-if="colortext === 'web'" flat max-width="250" class="mx-auto pa-"
-                style="top: 95%; position: fixed; max-height: 200px">
-                <v-list three-line class="pa-0 ma-0">
-                  <template v-for="(item, index) in itemsss">
-                    <v-btn class="pa-0 rounded-0" :key="index" style="
-                        width: 99%;
-                        min-height: 60px;
-                        max-height: 65px;
-                        background-color: #ffffb3;
-                      " @click="openLinkInNewTab(item.link)">
-                      <v-list-item :key="item.title" class="py-0 my-0">
-                        <v-list-item-avatar color="my-auto">
-                          <v-img :src="item.avatar"></v-img>
-                        </v-list-item-avatar>
-
-                        <v-list-item-content>
-                          <v-list-item-title>{{ item.title }}</v-list-item-title>
-                        </v-list-item-content>
-                      </v-list-item>
-                    </v-btn>
-                  </template>
-                </v-list>
-              </v-card>
             </v-btn>
           </v-col>
           <v-col cols="8" v-if="show" class="text-right" @mouseleave="colortext = false">
@@ -91,7 +68,7 @@
               <v-btn height="100%" class="pa-0" text style="background-color: transparent; color: transparent"
                 @mouseenter="colortext = 'message'" @click="$router.push('/chart/pagewhatsapp')">
                 <v-card-actions class="pa-0">
-                  <v-card-text :style="{color: colortext === 'message' ? '#ffff00' : '#000'}">
+                  <v-card-text :style="{ color: colortext === 'message' ? '#ffff00' : '#000' }">
                     messages
                   </v-card-text>
                 </v-card-actions>
@@ -155,6 +132,18 @@
       <!-- Sta baton Search -->
     </v-app-bar>
     <v-main>
+      <v-card v-if="website" class="rounded-0"
+        style="position: fixed; z-index: 100; background-color: rgb(255, 255, 230);">
+        <div>
+          <!-- <v-card-actions class="pa-0"> -->
+            <!-- <v-card-text class="py-0 px-4 "><h3>Website of TPLUS</h3></v-card-text> -->
+            <v-card-text class="py-0 pr-8 pl-0 text-right"><v-btn @click="website = !website" fab x-small text style="position: fixed; z-index: 100;">
+                <v-icon size="25">mdi-close-circle</v-icon>
+              </v-btn></v-card-text>
+          <!-- </v-card-actions> -->
+        </div>
+        <pageWebsite />
+      </v-card>
       <v-divider style="background-color: #ffff00"></v-divider>
       <Nuxt />
     </v-main>
@@ -182,12 +171,18 @@
 </template>
 
 <script>
+import pageWebsite from '~/components/pageWebsite.vue';
 export default {
+  Currency: 'components',
+  components: {
+    pageWebsite,
+  },
   name: 'DefaultLayout',
   data() {
     return {
       selectedItem: 1,
       show: true,
+      website: false,
       menu: [
         { title: 'Ticket' },
         { title: 'Contact us' },

@@ -11,7 +11,7 @@
                             <template v-slot:activator="{ on, attrs }">
                                 <v-btn color="yellow" dark v-bind="attrs" v-on="on" outlined>
                                     <h4 style="color: #000;">
-                                        +856 2058812037
+                                        +856 2078929363
                                     </h4>
                                 </v-btn>
                             </template>
@@ -48,16 +48,6 @@
                             </Tooltip>
                         </v-card-actions>
                     </v-card-text>
-                    <div v-if="numnotsend !== null && numnotsend !== undefined && numnotsend.length > 0">
-                        <v-card-text class="py-0">
-                            <h4>Numbers that not be Tplus number.</h4>
-                            <v-card outlined>
-                                <v-card-text class="py-1">
-                                    <h4 v-for="(element, index) in numnotsend" :key="index">{{ element }}</h4>
-                                </v-card-text>
-                            </v-card>
-                        </v-card-text>
-                    </div>
                 </v-col>
                 <v-col cols="12" md="8" sm="8" class="pl-1">
                     <v-card-actions>
@@ -137,26 +127,7 @@
                                             </div>
                                         </v-card>
                                         <v-row>
-                                            <v-col cols="12" sm="6" md="6" class="pr-0"
-                                                v-if="numnotsend !== null && numnotsend !== undefined && numnotsend.length > 0">
-                                                <v-card-text class="pb-0 pl-0 ">
-                                                    <div style="color: #000;">
-                                                        Numbers that not be Tplus number.
-                                                    </div>
-                                                </v-card-text>
-                                                <v-card class="rounded-0 overflow-auto" min-height="76" max-height="200px"
-                                                    outlined>
-                                                    <v-card-text>
-                                                        <div v-for="(element, index) in numnotsend" :key="index">
-                                                            <div>
-                                                                {{ element }}
-                                                            </div>
-                                                        </div>
-                                                    </v-card-text>
-                                                </v-card>
-                                            </v-col>
-                                            <v-col cols="12" sm="5" md="5" class="pr-0"
-                                                v-if="numnotsend === null || numnotsend === undefined || numnotsend.length <= 0">
+                                            <v-col cols="12" sm="5" md="5" class="pr-0">
                                                 <v-card-text class="pb-0 pl-0">
                                                     <div style="color: #000;">
                                                         Number phone is
@@ -168,8 +139,7 @@
                                                     </v-card-text>
                                                 </v-card>
                                             </v-col>
-                                            <v-col cols="1"
-                                                v-if="numnotsend === null || numnotsend === undefined || numnotsend.length < 0">
+                                            <v-col cols="1">
                                                 <v-card-text class="px-0" min-height="76" align="center" justify="center">
                                                     <v-icon>
                                                         mdi-send
@@ -284,8 +254,9 @@
                                             </thead>
                                             <tbody>
                                                 <tr v-for="(item, index) in addNumber" :key="index">
-                                                    <td>{{ index }}</td>
+                                                    <td>{{ index + 1 }}</td>
                                                     <td>{{ item }}</td>
+                                                    <td>+856 {{ item }}</td>
                                                 </tr>
                                             </tbody>
                                         </template>
@@ -313,7 +284,6 @@ export default {
             rowNum: 1,
             value: '',
             pasend: '',
-            numnotsend: [],
             numsend: [],
             imageqr: '',
             numberphone: "",
@@ -325,15 +295,15 @@ export default {
             ],
             rules_pas: {
                 required: value => !!value || 'Required.',
-                min: v => v.length >= 8 || 'Min 8 characters',
+                min: v => v.length >= 1 || 'Min 1 characters',
                 emailMatch: () => (`The email and password you entered don't match`),
             },
         };
     },
     methods: {
         async sedQrchart() {
-            try {
-                const response = await this.$axios.post('http://172.28.26.23:3335/sendtouser/saveandalerttouser', {
+            try {                                                                                   // saveandalerttouser
+                const response = await this.$axios.post('http://172.28.26.23:3335/sendtouser/alerttouser', {
                     numeros: this.numsend,
                     mensaje: this.text,
                 });
@@ -380,7 +350,7 @@ export default {
 
                 // -------------- Assuming phone numbers are in the specified column (colNum)
                 const jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1, range: this.colNum - 1 });
-                console.log(jsonData)
+                // console.log(jsonData)
 
                 // ---------------- Extract data from the specified column and row
                 const extractedData = jsonData.map(row => row[this.rowNum - 1]);
@@ -408,50 +378,32 @@ export default {
         },
         changeNameber() {
             const numeber = this.numberphone;
-            const num = Math.max(...this.numsend.map(Number));
-            // console.log('llo', num)
             // Check if numeber is a string
-            if ((typeof numeber === 'string' && numeber.length > 7) || num >= 0) {
+            if (typeof numeber === 'string' && numeber.length > 0) {
                 const numeros = numeber.split(',').map(numero => numero.trim());
-                const num = numeros.map((n) => {
-                    if (n.substring(n.length - 8, n.length - 7) === '7') {
+                this.numsend = numeros.map((n) => {
+                    if (n.substring(n.length - 8)) {
                         return "20" + n.substring(n.length - 8);
                     } else {
                         return '';
                     }
                 }).filter(n => n !== '');
-                this.numnotsend = numeros.map((n) => {
-                    if (n.substring(n.length - 8, n.length - 7) === '7') {
-                        return '';
-                    } else {
-                        return n;
-                    }
-                }).filter(n => n !== '');
-
-                this.numsend = num;
+                console.log('p', this.numsend);
             } else {
-                // Handle the case where numeber is not a string or has length <= 7
+                // Handle the case where numeber is not a string or has length <= 0
                 const title = 'Invalid input';
-                const desc = 'The input should be a string with length greater than 7.';
+                const desc = 'The input should be a non-empty string.';
                 this.error(false, title, desc);
             }
 
             this.show = true;
         },
         changePassword() {
-            const nunpa = this.numsend[0];
-            if (nunpa === this.pasend) {
-                if (this.numnotsend.length <= 0) {
-                    this.sedQrchart();
-                }
-                else {
-                    const title = 'The numbers that not be Tplus.';
-                    const desc = ' Check your number phones.';
-                    this.error(false, title, desc);
-                }
+            if (this.pasend === ('1' || 1) && this.numsend.length > 0) {
+                this.sedQrchart();
             } else {
-                const title = 'The password is incorrect.';
-                const desc = 'check your password and Try again.';
+                const title = 'The password ro number is incorrect.';
+                const desc = 'check your password ro namber phone and Try again.';
                 this.error(false, title, desc);
             }
         },
@@ -464,7 +416,7 @@ export default {
                 this.rowNum = 1;
                 this.dialogseting = false;
             }
-            console.log('ll', this.colNum, this.rowNum)
+            // console.log('ll', this.colNum, this.rowNum)
         },
         renderFunc(smsTitle, smsText) {
             this.text = '';

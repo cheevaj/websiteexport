@@ -1,6 +1,6 @@
 <template>
   <div class="pt-0">
-    <canvas height="100px" id="myChartBar"></canvas>
+    <canvas height="100px" id="myChartLine"></canvas>
   </div>
 </template>
 
@@ -8,93 +8,209 @@
 import Chart from 'chart.js';
 
 export default {
-  mounted() {
-    this.createChart();
-  },
-  methods: {
-    createChart() {
-      const ctx = document.getElementById('myChartBar').getContext('2d');
-      if (this.myChartBar) {
-        this.myChartBar.destroy();
-      }
-      // Perform element-wise subtraction to calculate value1 and value2
-      console.log(this.datasetdatatime)
-      const names = this.datasetdatatime.map(item => item.name);
-      const valueAll = this.datasetdatatime.map(item => item.valueminall);
-      const valueMaxD = this.datasetdatatime.map(item => item.valuemax);
-      const valueMaxC = this.datasetdatatime.map(item => item.valuemaxC);
-      this.myChartBar = new Chart(ctx, {
-        type: 'horizontalBar',
-        data: {
-          labels: names,
-          datasets: [
-            {
-              data: valueAll,
-              backgroundColor: 'rgba(54, 162, 235, 0.8)',
-              borderColor: 'rgba(54, 162, 235, 1)',
-              borderWidth: 1,
-            },
-            {
-              data: valueMaxD,
-              backgroundColor: 'rgba(255, 99, 132, 0.8)',
-              borderColor: 'rgba(255, 99, 132, 1)',
-              borderWidth: 1,
-            },
-            {
-              data: valueMaxC,
-              backgroundColor: 'rgba(255, 206, 86, 0.8)',
-              borderColor: 'rgba(255, 206, 86, 1)',
-              borderWidth: 1,
-            },
-          ],
-        },
-        options: {
-          legend: {
-            display: false,
-          },
-          tooltips: {
-            mode: 'index',
-            intersect: false,
-          },
-          scales: {
-            xAxes: [{
-              stacked: true,
-            }],
-            yAxes: [{
-              stacked: true,
-              ticks: {
-                beginAtZero: true,
-              },
-            }],
-          },
-          // Add afterDraw hook to draw numbers on top of bars
-          // This function will be called after the chart is drawn
-          // It will draw the values on top of each bar
-          afterDraw: (chart) => {
-            const ctx = chart.ctx;
-            const meta = chart.getDatasetMeta(2); // Get the meta for the 'Vall' dataset (index 2)
-            meta.data.forEach((bar, index) => {
-              const data = chart.data.datasets[2].data[index]; // Get the data from the 'Vall' dataset
-              const model = bar._model;
-              ctx.save();
-              ctx.fillStyle = 'black'; // Color of the text
-              ctx.textAlign = 'center';
-              ctx.textBaseline = 'bottom';
-              ctx.fillText(data, model.x, model.y - 5); // Draw the value on top of the bar
-              ctx.restore();
-            });
-          },
-        },
-      });
-    },
-  },
   props: {
-    datasetdatatime: Array,
+    desserts: Array,
   },
   data() {
     return {
-      myChartBar: null,
+      datasetdatatime: [],
+      myChartLine: null,
     };
   },
+  mounted() {
+    this.getData();
+  },
+  methods: {
+    getData() {
+      const index = {};
+      const queuedDates = [];
+      this.desserts.forEach(dessert => {
+        const queuedDate = dessert.QUEUED_DATE.split(' ')[0]; // Extract date part only
+        queuedDates.push(queuedDate); // Collecting dates
+        const monthYear = queuedDate.split('-').slice(1).join('-'); // Getting month and year
+        if (!index[monthYear]) {
+          index[monthYear] = [];
+        }
+        index[monthYear].push(dessert);
+      });
+
+      // Get unique dates
+      const uniqueDates = [...new Set(queuedDates)];
+
+      const indexes = [];
+
+      uniqueDates.forEach(date => {
+        const firstIndex = this.desserts.findIndex(dessert => dessert.QUEUED_DATE.startsWith(date));
+        indexes.push(firstIndex);
+      });
+      const Data = [];
+      if (indexes.length >= 14) {
+        for (let i = 0; i < indexes.length; i += 7) {
+          const startIndex = indexes[i];
+          const endIndex = (i + 7 < indexes.length) ? indexes[i + 7] - 1 : this.desserts.length - 1;
+          const range = `${startIndex}-${endIndex}`;
+          const datAll = this.calculateDatamin(this.desserts.slice(startIndex, endIndex + 1), '');
+          const dataMaxD = this.calculateDatamin(this.desserts.slice(startIndex, endIndex + 1), 20);
+          const dataMaxC = this.calculateDatamin(this.desserts.slice(startIndex, endIndex + 1), 5);
+          Data.push({
+            nameValueall: range,
+            valueAll: datAll,
+            valuemaxD: dataMaxD,
+            valueminD: (datAll - dataMaxD),
+            valuemaxC: dataMaxC,
+            valueminC: (datAll - dataMaxC),
+          });
+        }
+      } else {
+        indexes.forEach((startIndex, i) => {
+          const endIndex = (i < indexes.length - 1) ? indexes[i + 1] - 1 : this.desserts.length - 1;
+          const range = `${startIndex}-${endIndex}`;
+          const datAll = this.calculateDatamin(this.desserts.slice(startIndex, endIndex + 1), '');
+          const dataMaxD = this.calculateDatamin(this.desserts.slice(startIndex, endIndex + 1), 20);
+          const dataMaxC = this.calculateDatamin(this.desserts.slice(startIndex, endIndex + 1), 5);
+          Data.push({
+            nameValueall: range,
+            valueAll: datAll,
+            valuemaxD: dataMaxD,
+            valueminD: (datAll - dataMaxD),
+            valuemaxC: dataMaxC,
+            valueminC: (datAll - dataMaxC),
+          });
+        });
+      }
+      this.datasetdatatime = Data;
+      this.createChart();
+
+    },
+    calculateDatamin(data, threshold) {
+      // Assuming "SERVICE_GROUP" is the key you want to filter on
+      return data.reduce((sum, entry) => {
+        if (threshold === 20) {
+          if (entry.TIME_DO_TPLUS > threshold) {
+            return sum + 1;
+          }
+        }
+        else if (threshold === 5) {
+          if (entry.TIME_CARE_TPLUS > threshold) {
+            return sum + 1;
+          }
+        }
+        else {
+          return sum + 1
+        }
+        return sum;
+      }, 0);
+    },
+    createChart() {
+      const ctx = document.getElementById('myChartLine').getContext('2d');
+      if (this.myChartLine) {
+        this.myChartLine.destroy();
+      }
+      const labels = this.datasetdatatime.map(({ nameValueall }) => nameValueall);
+      const valueAll = this.datasetdatatime.map(item => item.valueAll);
+
+      const timeDOmin = this.datasetdatatime.map(item => item.valueAll - item.valueminD);
+      const timeCAREmin = this.datasetdatatime.map(item => item.valueAll - item.valueminC);
+
+      const percentAll = valueAll.map((value, index) => {
+        if (value === 0) {
+          return 100;
+        } else {
+          return Number((value / valueAll[index] * 100).toFixed(2));
+        }
+      });
+
+      const percentTimeDo = timeDOmin.map((value, index) => {
+        if (value === 0) {
+          return 100;
+        } else {
+          return Number((value / valueAll[index] * 100).toFixed(2));
+        }
+      });
+
+      const percentTimeCare = timeCAREmin.map((value, index) => {
+        if (value === 0) {
+          return 100;
+        } else {
+          return Number((value / valueAll[index] * 100).toFixed(2));
+        }
+      });
+
+      const chartData = {
+        labels,
+        datasets: [
+          {
+            type: 'line',
+            data: percentTimeCare,
+            backgroundColor: 'transparent',
+            borderColor: 'rgba(255, 99, 132, 1)',
+            borderWidth: 1,
+          },
+          {
+            type: 'line',
+            data: percentTimeDo,
+            backgroundColor: 'transparent',
+            borderColor: '#000',
+            borderWidth: 1,
+          },
+          {
+            label: 'Perfect',
+            data: percentTimeCare,
+            backgroundColor: 'rgba(54, 162, 235, 1)',
+            borderColor: 'rgba(54, 162, 235, 1)',
+            borderWidth: 1,
+          },
+          {
+            data: percentTimeDo,
+            backgroundColor: 'rgba(255, 206, 86, 1)',
+            borderColor: 'rgba(255, 206, 86, 1)',
+            borderWidth: 1,
+          },
+          {
+            type: 'line',
+            label: 'Line Dataset',
+            data: percentAll,
+            backgroundColor: 'transparent',
+            borderColor: 'rgba(54, 162, 235, 1)',
+          },
+        ],
+      };
+
+      this.myChartLine = new Chart(ctx, {
+        type: 'bar',
+        data: chartData,
+        options: {
+          legend: { display: false },
+          tooltips: { mode: 'index', intersect: false },
+          animation: {
+            duration: 1,
+            onComplete: () => {
+              const chartInstance = this.myChartLine;
+              const ctx = chartInstance.ctx;
+              ctx.font = Chart.helpers.fontString(
+                Chart.defaults.global.defaultFontSize,
+                Chart.defaults.global.defaultFontStyle,
+                Chart.defaults.global.defaultFontFamily
+              );
+              ctx.textAlign = 'center';
+              ctx.textBaseline = 'bottom';
+              chartData.datasets.forEach((dataset, i) => {
+                const meta = chartInstance.controller.getDatasetMeta(i);
+                meta.data.forEach((bar, index) => {
+                  const data = dataset.data[index];
+                  if (data !== 0) {
+                    ctx.fillText(data, bar._model.x, bar._model.y - 5);
+                  }
+                });
+              });
+            },
+          },
+          scales: { xAxes: [{}], yAxes: [{ ticks: { beginAtZero: true } }] },
+        },
+      });
+    },
+
+  },
 };
+
 </script>
