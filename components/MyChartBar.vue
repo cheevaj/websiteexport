@@ -109,8 +109,10 @@ export default {
       const labels = this.datasetdatatime.map(({ nameValueall }) => nameValueall);
       const valueAll = this.datasetdatatime.map(item => item.valueAll);
 
-      const timeDOmin = this.datasetdatatime.map(item => item.valueAll - item.valueminD);
-      const timeCAREmin = this.datasetdatatime.map(item => item.valueAll - item.valueminC);
+      const timeDOmin = this.datasetdatatime.map(item => item.valueminD);
+      const timeCAREmin = this.datasetdatatime.map(item => item.valueminC);
+      const timeDOmax = this.datasetdatatime.map(item => item.valuemaxD);
+      const timeCAREmax = this.datasetdatatime.map(item => item.valuemaxC);
 
       const percentAll = valueAll.map((value, index) => {
         if (value === 0) {
@@ -141,7 +143,14 @@ export default {
         datasets: [
           {
             type: 'line',
-            data: percentTimeCare,
+            data: timeDOmax,
+            backgroundColor: 'transparent',
+            borderColor: 'rgba(255, 99, 132, 1)',
+            borderWidth: 1,
+          },
+          {
+            type: 'line',
+            data: timeCAREmax,
             backgroundColor: 'transparent',
             borderColor: 'rgba(255, 99, 132, 1)',
             borderWidth: 1,
@@ -154,16 +163,23 @@ export default {
             borderWidth: 1,
           },
           {
-            label: 'Perfect',
+            type: 'line',
             data: percentTimeCare,
-            backgroundColor: 'rgba(54, 162, 235, 1)',
-            borderColor: 'rgba(54, 162, 235, 1)',
+            backgroundColor: 'transparent',
+            borderColor: '#000',
             borderWidth: 1,
           },
           {
             data: percentTimeDo,
-            backgroundColor: 'rgba(255, 206, 86, 1)',
+            backgroundColor: 'rgba(255, 206, 86, 0.8)',
             borderColor: 'rgba(255, 206, 86, 1)',
+            borderWidth: 1,
+          },
+          {
+            label: 'Perfect',
+            data: percentTimeCare,
+            backgroundColor: 'rgba(75, 192, 192, 0.8)',
+            borderColor: 'rgba(75, 192, 192, 1)',
             borderWidth: 1,
           },
           {
