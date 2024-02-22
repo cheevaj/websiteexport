@@ -211,9 +211,11 @@
                                             <div v-if="this.tabledisplay !== 'Targets'">
                                                 <div v-for="(item, index) in (tabledisplay === 'Customer Complaint' ? itemdatacustomer : (tabledisplay === 'Root Cause' ? itemdatacust : itemdatarootall))"
                                                     :key="index">
-                                                    <h2 style="color:rgb(77, 77, 0);" v-if="index === selectedItem">
-                                                        {{ item.text }}
-                                                    </h2>
+                                                    <div v-if="!loading">
+                                                        <h2 style="color:rgb(77, 77, 0);" v-if="index === selectedItem">
+                                                            {{ item.text }}
+                                                        </h2>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div v-if="this.tabledisplay === 'Targets'">
@@ -223,9 +225,10 @@
                                                     </span>
                                                 </h2>
                                             </div>
-                                            <canvas v-if="this.tabledisplay !== 'Targets'" height="100px"
-                                                id="myChart"></canvas>
-                                            <div v-else>
+                                            <div v-if="this.tabledisplay !== 'Targets'" class="custom-font">
+                                                <canvas height="100px" id="myChart"></canvas>
+                                            </div>
+                                            <div v-else class="custom-font">
                                                 <MyChartBar v-if="targetDate" :desserts="desserts" />
                                                 <MyChartLine v-else :datasetdatatime="datasetdatatime" />
                                             </div>
@@ -244,7 +247,7 @@
                                         cols="12" sm="7" md="7" class="px-0 py-0">
                                         <v-card-text class="px-1 pt-0 pb-1" style="color: #000000;">
                                             <h4 style="color: #b3b300;">DATA TABLE</h4>
-                                            <v-simple-table dense flat fixed-header class="table-container"
+                                            <v-simple-table dense flat fixed-header class="table-container custom-font"
                                                 :height="dataset.length >= 5 ? '225px' : null"
                                                 :max-height="dataset.length < 5 ? '225px' : null">
                                                 <template v-slot:default>
@@ -294,7 +297,7 @@
                                         class="px-0 py-0">
                                         <v-card-text class="px-1 pt-0 pb-1" style="color: #000000;">
                                             <h4 style="color: #b3b300;">DATA TABLE</h4>
-                                            <v-simple-table dense flat fixed-header class="table-container"
+                                            <v-simple-table dense flat fixed-header class="table-container custom-font"
                                                 :height="dataset.length >= 5 ? '225px' : null"
                                                 :max-height="dataset.length < 5 ? '225px' : null">
                                                 <template v-slot:default>
@@ -342,7 +345,7 @@
                                     <v-col cols="12" sm="5" md="5" class="px-0 py-0">
                                         <v-card-text class="px-1 pt-0 pb-1" style="color: #000000;">
                                             <h4 style="color: #b3b300;">TABLE TIME</h4>
-                                            <v-simple-table dense flat fixed-header class="table-container"
+                                            <v-simple-table dense flat fixed-header class="table-container custom-font"
                                                 :height="datasetdatatime.length >= 5 ? '225px' : null"
                                                 :max-height="datasetdatatime.length < 5 ? '225px' : null">
                                                 <template v-slot:default>
@@ -405,7 +408,7 @@
                                         <v-col cols="12" sm="5" md="5" class="px-0 py-0">
                                             <v-card-text class="px-1 pt-0 pb-1" style="color: #000000;">
                                                 <h4 style="color: #b3b300;">TABLE TIME</h4>
-                                                <v-simple-table dense flat fixed-header class="table-container"
+                                                <v-simple-table dense flat fixed-header class="table-container custom-font"
                                                     :height="userTarget.length >= 6 ? '225px' : null"
                                                     :max-height="userTarget.length < 6 ? '225px' : null">
                                                     <template v-slot:default>
@@ -443,7 +446,7 @@
                                         <v-col cols="12" sm="7" md="7" class="px-0 py-0">
                                             <v-card-text class="px-1 pt-0 pb-1" style="color: #000000;">
                                                 <h4 style="color: #b3b300;">TABLE TIME</h4>
-                                                <v-simple-table dense flat fixed-header class="table-container"
+                                                <v-simple-table dense flat fixed-header class="table-container custom-font"
                                                     :height="datasetdatatime.length >= 5 ? '225px' : null"
                                                     :max-height="datasetdatatime.length < 5 ? '225px' : null">
                                                     <template v-slot:default>
@@ -487,12 +490,13 @@
                                                                 </td>
                                                                 <td style="color: #000;">
                                                                     <h4>
-                                                                        {{ percentTimeDoTa }}|{{ percentTimeCareTa }}
+                                                                        <!-- {{ percentTimeDoTa }}|{{ percentTimeCareTa }} -->
                                                                     </h4>
                                                                 </td>
                                                                 <td style="color: #000;">
                                                                     <h4>
-                                                                        {{ percentTimeDo }}|<v-icon
+                                                                        <!-- percentTimeDo -->
+                                                                        {{ percentTimeDoTa }}| <v-icon
                                                                             v-if="checkTargetDo === 'Achieved the Target'"
                                                                             color="rgb(0, 230, 0)">mdi-checkbox-marked</v-icon>
                                                                         <v-icon v-else color="error">mdi-close-box</v-icon>
@@ -500,7 +504,8 @@
                                                                 </td>
                                                                 <td style="color: #000;">
                                                                     <h4>
-                                                                        {{ percentTimeC }}|<v-icon
+                                                                        <!-- percentTimeC -->
+                                                                        {{ percentTimeCareTa }}|<v-icon
                                                                             v-if="checkTargetCare === 'Achieved the Target'"
                                                                             color="rgb(0, 230, 0)">mdi-checkbox-marked</v-icon>
                                                                         <v-icon v-else color="error">mdi-close-box</v-icon>
@@ -741,8 +746,8 @@ export default {
                         const dataallvalue = dataObjects.reduce((sum, item) => sum + item.value, 0);
                         this.tabledataall = dataallvalue;
                         dataObjects.sort((a, b) => b.value - a.value);
-                        this.names = dataObjects.map(item => item.name);
-                        this.value = dataObjects.map(item => item.value);
+                        this.names = dataObjects.filter(item => item.value > 0).map(item => item.name); // get data to use graph (graph names)
+                        this.value = dataObjects.filter(item => item.value > 0).map(item => item.value);
                         const valueData = dataObjects.map(item => item.valueData);
                         const valueSms = dataObjects.map(item => item.valueSms);
                         const valueVas = dataObjects.map(item => item.valueVas);
@@ -768,8 +773,8 @@ export default {
                         const dataallvalue = dataObjects.reduce((sum, item) => sum + item.value, 0);
                         this.tabledataall = dataallvalue;
                         dataObjects.sort((a, b) => b.value - a.value);
-                        this.names = dataObjects.map(item => item.name);
-                        this.value = dataObjects.map(item => item.value);
+                        this.names = dataObjects.filter(item => item.value > 0).map(item => item.name); // get data to use graph (graph names)
+                        this.value = dataObjects.filter(item => item.value > 0).map(item => item.value);
                         const percentages = this.value.map(value => ((value / dataallvalue) * 100).toFixed(2));
                         this.dataset = this.names.map((item, index) => ({
                             name: item,
@@ -824,8 +829,10 @@ export default {
                         // arrow function find value max to min  
                         dataObjects.sort((a, b) => b.value - a.value); // Sort dataObjects based on value in descending order
                         // get data to use graph 
-                        this.names = dataObjects.map((item) => item.name); // get data to use graph (graph names)
-                        this.value = dataObjects.map((item) => item.value); // get data to use graph (graph values)
+                        // this.names = dataObjects.map((item) => item.name); // get data to use graph (graph names)
+                        // this.value = dataObjects.map((item) => item.value); // get data to use graph (graph values)
+                        this.names = dataObjects.filter(item => item.value > 0).map(item => item.name); // get data to use graph (graph names)
+                        this.value = dataObjects.filter(item => item.value > 0).map(item => item.value);
                         const percentages = this.value.map((value) => ((value / this.tabledataall) * 100).toFixed(2));
                         // get data to use table desplay datas
                         // Format data for both graph and table display
@@ -845,8 +852,8 @@ export default {
                         const dataallvalue = dataObjects.reduce((sum, item) => sum + item.value, 0);
                         this.tabledataall = dataallvalue;
                         dataObjects.sort((a, b) => b.value - a.value);
-                        this.names = dataObjects.map(item => item.name);
-                        this.value = dataObjects.map(item => item.value);
+                        this.names = dataObjects.filter(item => item.value > 0).map(item => item.name); // get data to use graph (graph names)
+                        this.value = dataObjects.filter(item => item.value > 0).map(item => item.value);
                         const percentages = this.value.map(value => ((value / dataallvalue) * 100).toFixed(2));
                         this.dataset = this.names.map((item, index) => ({
                             name: item,
@@ -921,7 +928,7 @@ export default {
                             value: S1Sum + S2Sum + S3Sum + SSSum,
                         };
                         const combinedEntryS5 = {
-                            name: 'S1_ສົ່ງ-ຮັບ SMS ບໍ່​ໄດ້​',
+                            name: 'S5_ສະຫມັກ APP ແລ້ວບໍ່ໄດ້ຮັບ CODE ຢືນຢັນ​',
                             value: S5Sum + S6Sum,
                         };
                         // Create a new entry with combined values
@@ -989,8 +996,8 @@ export default {
                         const dataallvalue = dataObjects.reduce((sum, item) => sum + item.value, 0);
                         this.tabledataall = dataallvalue;
                         dataObjects.sort((a, b) => b.value - a.value);
-                        this.names = dataObjects.map(item => item.name);
-                        this.value = dataObjects.map(item => item.value);
+                        this.names = dataObjects.filter(item => item.value > 0).map(item => item.name); // get data to use graph (graph names)
+                        this.value = dataObjects.filter(item => item.value > 0).map(item => item.value);
                         const percentages = this.value.map(value => ((value / dataallvalue) * 100).toFixed(2));
                         this.dataset = this.names.map((item, index) => ({
                             name: item,
@@ -1176,8 +1183,8 @@ export default {
                         const dataallvalue = dataObjects.reduce((sum, item) => sum + item.value, 0);
                         this.tabledataall = dataallvalue;
                         dataObjects.sort((a, b) => b.value - a.value);
-                        this.names = dataObjects.map(item => item.name);
-                        this.value = dataObjects.map(item => item.value);
+                        this.names = dataObjects.filter(item => item.value > 0).map(item => item.name); // get data to use graph (graph names)
+                        this.value = dataObjects.filter(item => item.value > 0).map(item => item.value);
                         const percentages = this.value.map(value => ((value / dataallvalue) * 100).toFixed(2));
                         this.dataset = this.names.map((item, index) => ({
                             name: item,
@@ -1234,8 +1241,8 @@ export default {
                         const dataallvalue = dataObjects.reduce((sum, item) => sum + item.value, 0);
                         this.tabledataall = dataallvalue;
                         dataObjects.sort((a, b) => b.value - a.value);
-                        this.names = dataObjects.map(item => item.name);
-                        this.value = dataObjects.map(item => item.value);
+                        this.names = dataObjects.filter(item => item.value > 0).map(item => item.name); // get data to use graph (graph names)
+                        this.value = dataObjects.filter(item => item.value > 0).map(item => item.value);
                         const percentages = this.value.map(value => ((value / dataallvalue) * 100).toFixed(2));
                         this.dataset = this.names.map((item, index) => ({
                             name: item,
@@ -1586,52 +1593,71 @@ export default {
                 'rgba(153, 102, 255, 1)',
                 'rgba(25, 159, 64, 1)',
             ];
+            const calculateNiceNumber = (value) => {
+                if (value >= 500) {
+                    return Math.ceil(value % 100) * 100 === 0 ? Math.ceil(value / 100) * 100 + 50 : (Math.ceil(value / 100) * 100) - value >= 30 ? Math.ceil(value / 100) * 100 : Math.ceil(value / 100) * 100 + 50;
+                }
+                else if (value >= 100) {
+                    return Math.ceil(value % 100) * 100 === 0 ? Math.ceil(value / 100) * 100 + 50 : Math.ceil(value / 100) * 100;
+                } else if (value >= 50) {
+                    return Math.ceil(value / 50) * 50;
+                } else if (value > 20) {
+                    return Math.ceil(value / 20) * 20;
+                } else {
+                    return Math.ceil(value / 10) * 10;
+                }
+            };
+
+            const maxNum = calculateNiceNumber(Math.max(...this.value)) >= 1000 ? calculateNiceNumber(Math.max(...this.value) + 50) : calculateNiceNumber(Math.max(...this.value));
             // let Data = [];
             // if (this.tabledisplay === 'Root Cause' && this.selectedItem === 0) {
-            const valueData = this.dataset.map(item => item.valueData);
-            const valueSms = this.dataset.map(item => item.valueSms);
-            const valueVas = this.dataset.map(item => item.valueVas);
-            const valueVoice = this.dataset.map(item => item.valueVoice);
-            const Data = [
-                {
-                    label: 'DATA',
-                    data: valueData,
-                    backgroundColor: colorBK[0],
-                    borderColor: colorBD[0],
-                    borderWidth: 1,
-                },
-                {
-                    label: 'SMS',
-                    data: valueSms,
-                    backgroundColor: colorBK[1],
-                    borderColor: colorBD[1],
-                    borderWidth: 1,
-                },
-                {
-                    label: 'VAS',
-                    data: valueVas,
-                    backgroundColor: colorBK[2],
-                    borderColor: colorBD[2],
-                    borderWidth: 1,
-                },
-                {
-                    label: 'VOICE',
-                    data: valueVoice,
-                    backgroundColor: colorBK[3],
-                    borderColor: colorBD[3],
-                    borderWidth: 1,
-                },
-            ];
+            // const valueData = this.dataset.map(item => item.valueData);
+            // const valueSms = this.dataset.map(item => item.valueSms);
+            // const valueVas = this.dataset.map(item => item.valueVas);
+            // const valueVoice = this.dataset.map(item => item.valueVoice);
+
+            // const Data = [
+            //     {
+            //         label: 'DATA',
+            //         data: valueData,
+            //         backgroundColor: colorBK[0],
+            //         borderColor: colorBD[0],
+            //         borderWidth: 1,
+            //     },
+            //     {
+            //         label: 'SMS',
+            //         data: valueSms,
+            //         backgroundColor: colorBK[0],
+            //         borderColor: colorBD[0],
+            //         borderWidth: 1,
+            //     },
+            //     {
+            //         label: 'VAS',
+            //         data: valueVas,
+            //         backgroundColor: colorBK[0],
+            //         borderColor: colorBD[0],
+            //         borderWidth: 1,
+            //     },
+            //     {
+            //         label: 'VOICE',
+            //         data: valueVoice,
+            //         backgroundColor: colorBK[0],
+            //         borderColor: colorBD[0],
+            //         borderWidth: 1,
+            //     },
+            // ];
             //     return Data;
             // }
             const chartData = {
                 labels: this.names,
-                datasets: (this.tabledisplay === 'Root Cause' && this.selectedItem === 0) ? Data : [{
-                    data: this.value, // (this.tabledisplay === 'Root Cause Report' && this.selectedItem === 0) ? Data :
-                    backgroundColor: colorBK,
-                    borderColor: colorBD,
-                    borderWidth: 1,
-                }],
+                datasets:
+                    // (this.tabledisplay === 'Root Cause' && this.selectedItem === '// 0') ? Data : 
+                    [{
+                        data: this.value, // (this.tabledisplay === 'Root Cause Report' && this.selectedItem === 0) ? Data :
+                        backgroundColor: colorBK,
+                        borderColor: colorBD,
+                        borderWidth: 1,
+                    }],
                 datasetData: [{
                     data: this.value,
                 }]
@@ -1669,7 +1695,8 @@ export default {
                                         const meta = chartInstance.controller.getDatasetMeta(i);
                                         meta.data.forEach((bar, index) => {
                                             const data = dataset.data[index];
-                                            ctx.fillText(data, bar._model.x, bar._model.y - 5);
+                                            ctx.font = 'bold 14px Arial'; // Set the font size here
+                                            ctx.fillText(data, bar._model.x, bar._model.y + 4);
                                         });
                                     });
                                 }
@@ -1678,7 +1705,8 @@ export default {
                                         const meta = chartInstance.controller.getDatasetMeta(i);
                                         meta.data.forEach((bar, index) => {
                                             const data = dataset.data[index];
-                                            ctx.fillText(data, bar._model.x, bar._model.y - 5);
+                                            ctx.font = 'bold 14px Arial'; // Set the font size here
+                                            ctx.fillText(data, bar._model.x, bar._model.y - 4);
                                         });
                                     });
                                 }
@@ -1689,6 +1717,8 @@ export default {
                         yAxes: [{
                             stacked: true,
                             ticks: {
+                                max: maxNum, // Set the maximum value of x-axis ticks
+                                fontFamily: 'Noto Sans Lao', // Set font family for x-axis labels
                                 beginAtZero: true,
                             },
                         }],
@@ -1698,6 +1728,8 @@ export default {
                                 display: true
                             },
                             ticks: {
+                                // max: maxNum, // Set the maximum value of x-axis ticks
+                                fontFamily: 'Noto Sans Lao', // Set font family for y-axis labels
                                 beginAtZero: true
                             }
                         }]
@@ -1809,6 +1841,11 @@ export default {
 /* Use the custom property to set the 'show' property */
 .grid {
     display: var(--showstrygraph-value, grid);
+}
+
+.custom-font {
+    font-family: 'Noto Sans Lao', sans-serif;
+    /* You can specify additional styles here */
 }
 </style>
   

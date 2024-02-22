@@ -1,5 +1,5 @@
 <template>
-  <div class="pt-0">
+  <div class="mt-2 pt-0 custom-font">
     <canvas height="100px" id="myChartLine"></canvas>
   </div>
 </template>
@@ -15,6 +15,7 @@ export default {
     return {
       datasetdatatime: [],
       myChartLine: null,
+      Data: [],
     };
   },
   mounted() {
@@ -48,7 +49,10 @@ export default {
         for (let i = 0; i < indexes.length; i += 7) {
           const startIndex = indexes[i];
           const endIndex = (i + 7 < indexes.length) ? indexes[i + 7] - 1 : this.desserts.length - 1;
-          const range = `${startIndex}-${endIndex}`;
+          const queuedStart = this.desserts[startIndex].QUEUED_DATE.split(' ')[0]; // Extract start date part only
+          const queuedEnd = this.desserts[endIndex].QUEUED_DATE.split(' ')[0]; // Extract end date part only
+          // console.log(queuedStart, queuedEnd);
+          const range = `${queuedStart}|${queuedEnd}`;
           const datAll = this.calculateDatamin(this.desserts.slice(startIndex, endIndex + 1), '');
           const dataMaxD = this.calculateDatamin(this.desserts.slice(startIndex, endIndex + 1), 20);
           const dataMaxC = this.calculateDatamin(this.desserts.slice(startIndex, endIndex + 1), 5);
@@ -64,7 +68,10 @@ export default {
       } else {
         indexes.forEach((startIndex, i) => {
           const endIndex = (i < indexes.length - 1) ? indexes[i + 1] - 1 : this.desserts.length - 1;
-          const range = `${startIndex}-${endIndex}`;
+          const queuedStart = this.desserts[startIndex].QUEUED_DATE.split(' ')[0]; // Extract start date part only
+          // const queuedEnd = this.desserts[endIndex].QUEUED_DATE.split(' ')[0]; // Extract end date part only
+          // console.log(queuedStart);
+          const range = `${queuedStart}`;
           const datAll = this.calculateDatamin(this.desserts.slice(startIndex, endIndex + 1), '');
           const dataMaxD = this.calculateDatamin(this.desserts.slice(startIndex, endIndex + 1), 20);
           const dataMaxC = this.calculateDatamin(this.desserts.slice(startIndex, endIndex + 1), 5);
@@ -78,6 +85,7 @@ export default {
           });
         });
       }
+      console.log('kl', Data)
       this.datasetdatatime = Data;
       this.createChart();
 
@@ -108,7 +116,7 @@ export default {
       }
       const labels = this.datasetdatatime.map(({ nameValueall }) => nameValueall);
       const valueAll = this.datasetdatatime.map(item => item.valueAll);
-
+      this.Data = valueAll;
       const timeDOmin = this.datasetdatatime.map(item => item.valueminD);
       const timeCAREmin = this.datasetdatatime.map(item => item.valueminC);
       const timeDOmax = this.datasetdatatime.map(item => item.valuemaxD);
@@ -121,7 +129,6 @@ export default {
           return Number((value / valueAll[index] * 100).toFixed(2));
         }
       });
-
       const percentTimeDo = timeDOmin.map((value, index) => {
         if (value === 0) {
           return 100;
@@ -145,38 +152,41 @@ export default {
             type: 'line',
             data: timeDOmax,
             backgroundColor: 'transparent',
-            borderColor: 'rgba(255, 99, 132, 1)',
+            borderColor: 'rgb(179, 0, 0)',
             borderWidth: 1,
           },
           {
             type: 'line',
             data: timeCAREmax,
             backgroundColor: 'transparent',
-            borderColor: 'rgba(255, 99, 132, 1)',
+            borderColor: 'rgb(153, 0, 0)',
             borderWidth: 1,
           },
           {
+            label: 'Time Care',
             type: 'line',
             data: percentTimeDo,
             backgroundColor: 'transparent',
-            borderColor: '#000',
+            borderColor: 'rgb(51, 31, 0)',
             borderWidth: 1,
           },
           {
             type: 'line',
+            label: 'Time',
             data: percentTimeCare,
             backgroundColor: 'transparent',
-            borderColor: '#000',
+            borderColor: 'rgb(15, 61, 61)',
             borderWidth: 1,
           },
           {
+            label: 'Time Do',
             data: percentTimeDo,
             backgroundColor: 'rgba(255, 206, 86, 0.8)',
             borderColor: 'rgba(255, 206, 86, 1)',
             borderWidth: 1,
           },
           {
-            label: 'Perfect',
+            label: 'Time Care',
             data: percentTimeCare,
             backgroundColor: 'rgba(75, 192, 192, 0.8)',
             borderColor: 'rgba(75, 192, 192, 1)',
@@ -184,7 +194,7 @@ export default {
           },
           {
             type: 'line',
-            label: 'Line Dataset',
+            label: 'Target',
             data: percentAll,
             backgroundColor: 'transparent',
             borderColor: 'rgba(54, 162, 235, 1)',
@@ -197,36 +207,76 @@ export default {
         data: chartData,
         options: {
           legend: { display: false },
-          tooltips: { mode: 'index', intersect: false },
+          tooltips: {
+            mode: 'index',
+            intersect: false,
+            callbacks: {
+              label: function (tooltipItem, data) {
+                const dataset = data.datasets[tooltipItem.datasetIndex];
+                const datasetLabel = dataset.label || '';
+                const value = tooltipItem.yLabel;
+                if (dataset.borderColor === 'rgb(153, 0, 0)' || dataset.borderColor === 'rgb(179, 0, 0)') {
+                  return datasetLabel + ': ' + value;
+                } else {
+                  return datasetLabel + ': ' + value + '%';
+                }
+              }
+            }
+          },
           animation: {
             duration: 1,
             onComplete: () => {
               const chartInstance = this.myChartLine;
               const ctx = chartInstance.ctx;
+              ctx.font = 'h4 Arial'; // Set the font size here
               ctx.font = Chart.helpers.fontString(
                 Chart.defaults.global.defaultFontSize,
                 Chart.defaults.global.defaultFontStyle,
-                Chart.defaults.global.defaultFontFamily
+                Chart.defaults.global.defaultFontFamily,
               );
               ctx.textAlign = 'center';
-              ctx.textBaseline = 'bottom';
-              chartData.datasets.forEach((dataset, i) => {
-                const meta = chartInstance.controller.getDatasetMeta(i);
-                meta.data.forEach((bar, index) => {
-                  const data = dataset.data[index];
-                  if (data !== 0) {
-                    ctx.fillText(data, bar._model.x, bar._model.y - 5);
-                  }
-                });
+              ctx.textBaseline = 'bottom'; // Adjusted to bottom for better alignment
+              chartInstance.data.datasets.forEach((dataset, datasetIndex) => {
+                if (dataset.type === 'line') {
+                  const meta = chartInstance.getDatasetMeta(datasetIndex);
+                  meta.data.forEach((point, index) => {
+                    const data = this.Data[index];
+                    if (!isNaN(data) && dataset.label === 'Target') {
+                      ctx.fillStyle = 'black';
+                      ctx.font = 'bold 14px Arial'; // Set the font size here
+                      ctx.fillText(data, point._model.x, point._model.y - 10); // Adjust the position as needed
+                    }
+                  });
+                }
               });
             },
           },
-          scales: { xAxes: [{}], yAxes: [{ ticks: { beginAtZero: true } }] },
+          scales: {
+            xAxes: [{
+              ticks: {
+                fontFamily: 'Noto Sans Lao', // Set font family for x-axis labels
+              },
+            }],
+            yAxes: [{
+              ticks: {
+                beginAtZero: true,
+                max: 110,
+                fontFamily: 'Noto Sans Lao', // Set font family for y-axis labels
+                callback: function (value) {
+                  return value + '%';
+                }
+              }
+            }]
+          },
         },
       });
     },
-
   },
 };
-
 </script>
+<style>
+.custom-font {
+  font-family: 'Noto Sans Lao', sans-serif;
+  /* You can specify additional styles here */
+}
+</style>

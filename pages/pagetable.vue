@@ -261,7 +261,7 @@
                 <v-progress-linear indeterminate color="#4d3d00"></v-progress-linear>
               </v-card-text>
               <v-data-table v-if="!overlay" height="397px" fixed-header dense :headers="visibleHeaders"
-                :items="visibleItems" :items-per-page="10" item-key="TICKETID" class="elevation-1 pt-4">
+                :items="visibleItems" :items-per-page="10" item-key="TICKETID" class="elevation-1 pt-4 custom-font">
                 <template v-slot:header="{ header }">
                   <th v-if="header" style="background-color: #000; color: #ffff00;">
                     {{ header.text }}
@@ -765,7 +765,7 @@ export default {
           'TP20_': status === 'DP' ? 'MB' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'Cancel RPT' : (status === 'ROOT' ? 'Customer Need to Cancel RBT' : 'Tier_2(SOC)'))),
           'TP21_': status === 'DP' ? 'IT' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Cooperate With Tier 3' : (status === 'ROOT' ? 'System Problem' : 'Tier_3(IT)'))),
           'TP22_': status === 'DP' ? 'MB' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'Cancel Call Forward' : (status === 'ROOT' ? 'Cancle Call Forward' : 'Tier_2(SOC)'))),
-          'TP23_': status === 'DP' ? 'ISD' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Scratch Card Was not Activate with Bonus' : 'Tier_3(ISD)')),
+          'TP23_': status === 'DP' ? 'ISD' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Cooperate with Owner App to Sollved for Customers' : (status === 'ROOT' ? 'Scratch Card Was not Activate with Bonus'  : 'Tier_3(ISD)'))),
           'TP24_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Scratch Card was used up' : 'Tier_2(SOC)'))),
           'TP25_': status === 'DP' ? 'IT' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Cooperate With Tier 3' : (status === 'ROOT' ? 'More checking with Owner Apps' : 'Tier_3(IT)'))),
           'TP26_': status === 'DP' ? 'USER' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Wrong Default PW' : 'Tier_2(SOC)'))),
@@ -880,7 +880,10 @@ export default {
 .table-title-hiegth {
   max-height: 400px;
   overflow-y: auto;
-
+}
+.custom-font {
+    font-family: 'Noto Sans Lao', sans-serif;
+    /* You can specify additional styles here */
 }
 </style>
   

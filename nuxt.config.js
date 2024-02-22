@@ -1,6 +1,10 @@
 import colors from 'vuetify/es5/util/colors'
 
 export default {
+  // server: {
+  //   port: 3333, // default: 3000
+  //   host: '0.0.0.0' // default: localhost
+  // },
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
   ssr: false,
 
@@ -24,7 +28,7 @@ export default {
   css: ['iview/dist/styles/iview.css'],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: ['~/plugins/chartjs.js','@/plugins/iview'],
+  plugins: ['~/plugins/chartjs.js', '@/plugins/iview'],
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
 
@@ -37,13 +41,23 @@ export default {
   ],
 
   eslint: {},
-  
+
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
+    '@nuxtjs/google-fonts',
   ],
-
+  googleFonts: {
+    families: {
+      // Specify the fonts you want to use
+      // Example: 'Roboto:400,700', 'Open+Sans:400,700'
+      // You can also specify font styles and weights
+      // Example: 'Roboto:ital,wght@0,400;0,700,1;1,400&display=swap'
+      'Noto+Sans+Lao': true, // Include Noto Sans Lao font,
+      // 'Roboto': 'Roboto:400,700',
+    },
+  },
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
     // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
@@ -70,18 +84,5 @@ export default {
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
-  build: {
-    // extend(config, { isDev, isClient }) {
-    //   // ... other configurations
-
-    //   // Ensure HtmlWebpackPlugin is correctly configured
-    //   const HtmlWebpackPlugin = require('html-webpack-plugin')
-    //   config.config
-    //   plugins.push(
-    //     new HtmlWebpackPlugin({
-    //       /* your options here */
-    //     })
-    //   )
-    // },
-  },
+  build: {},
 }

@@ -17,8 +17,6 @@ export default {
       if (this.myChartBar) {
         this.myChartBar.destroy();
       }
-      // console.log(this.datasetdatatime)
-      // Perform element-wise subtraction to calculate value1 and value2
       const datasetDataTimeSubset = this.datasetdatatime.slice(0, 4);
       const names = datasetDataTimeSubset.map(item => item.name);
       const valueAll = datasetDataTimeSubset.map(item => item.valueminall);
@@ -83,13 +81,25 @@ export default {
                 meta.data.forEach((bar, index) => {
                   const data = dataset.data[index];
                   if (data !== 0) {
+                    ctx.font = 'bold 14px Arial'; // Set the font size here
                     ctx.fillText(data, bar._model.x, bar._model.y - 5);
                   }
                 });
               });
             },
           },
-          scales: { xAxes: [{}], yAxes: [{ ticks: { beginAtZero: true } }] },
+          scales: {
+            xAxes: [{
+              ticks: {
+                fontFamily: 'Noto Sans Lao', // Set font family for x-axis labels
+              },
+            }], yAxes: [{
+              ticks: {
+                beginAtZero: true,
+                fontFamily: 'Noto Sans Lao', // Set font family for y-axis labels
+              }
+            }]
+          },
         },
       });
     },

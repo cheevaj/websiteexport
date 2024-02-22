@@ -92,7 +92,7 @@
                     </v-card-actions>
                     <v-container fluid>
                         <v-card-actions>
-                            <v-textarea outlined name="input-7-4" v-model="text"></v-textarea>
+                            <v-textarea class="custom-font" outlined name="input-7-4" v-model="text"></v-textarea>
                             <v-dialog v-model="dialog2" persistent max-width="650px">
                                 <template v-slot:activator="{ on, attrs }">
                                     <div @mouseenter="show = 'color'" @mouseleave="show = 'notcolor'">
@@ -135,7 +135,7 @@
                                                 </v-card-text>
                                                 <v-card class="rounded-0" min-height="76" outlined>
                                                     <v-card-text>
-                                                        +856 2058812037
+                                                        +856 2078929363
                                                     </v-card-text>
                                                 </v-card>
                                             </v-col>
@@ -461,5 +461,9 @@ export default {
 
 .center-right {
     float: right;
+}
+.custom-font {
+    font-family: 'Noto Sans Lao', sans-serif;
+    /* You can specify additional styles here */
 }
 </style>
