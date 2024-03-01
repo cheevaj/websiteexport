@@ -1,6 +1,6 @@
 <template>
   <div class="pt-0">
-    <canvas height="100px" id="myChartBar"></canvas>
+    <canvas height="95px" id="myChartBar"></canvas>
   </div>
 </template>
 
@@ -30,15 +30,15 @@ export default {
           {
             label: 'Perfect',
             data: valueAll,
-            backgroundColor: 'rgba(54, 162, 235, 0.8)',
-            borderColor: 'rgba(54, 162, 235, 1)',
+            backgroundColor: '#ffff00',
+            borderColor: 'rgb(230, 230, 1)',
             borderWidth: 1,
           },
           {
             label: 'Time Do Tplus',
             data: valueMaxD,
-            backgroundColor: 'rgba(255, 99, 132, 0.8)',
-            borderColor: 'rgba(255, 99, 132, 1)',
+            backgroundColor: 'rgb(51, 51, 51,0.8)',
+            borderColor: 'rgb(51, 51, 51,1)',
             borderWidth: 1,
           },
           {
@@ -54,11 +54,11 @@ export default {
         }]
       }
       this.myChartBar = new Chart(ctx, {
-        type: 'horizontalBar',
+        type: 'bar',
         data: chartData,
         options: {
           legend: {
-            display: false,
+            display: true,
           },
           tooltips: {
             mode: 'index',
@@ -91,11 +91,16 @@ export default {
           scales: {
             xAxes: [{
               ticks: {
+                beginAtZero: true,
+                fontSize: 14,
+                fontColor: '#000',
                 fontFamily: 'Noto Sans Lao', // Set font family for x-axis labels
               },
             }], yAxes: [{
               ticks: {
                 beginAtZero: true,
+                fontSize: 14,
+                fontColor: '#000',
                 fontFamily: 'Noto Sans Lao', // Set font family for y-axis labels
               }
             }]

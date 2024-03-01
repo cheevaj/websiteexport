@@ -1,7 +1,7 @@
 <template>
   <div ref="pdfContent">
     <!-- start button download----------------------------------------------------------------------------------------------->
-    <div class="shrink " >
+    <div class="shrink ">
       <!-- Sta slid baton Download------------------------------------------------------------------------------------------------------------------->
       <div class="text-right" style="
           min-height: 1px;
@@ -298,7 +298,7 @@
         <!-- page graph------------------------>
         <v-card v-if="showgraph" class="my-4">
           <v-progress-linear v-if="loading" indeterminate color="#4d3d00"></v-progress-linear>
-          <chartgraph :desserts="desserts"/>
+          <chartgraph :desserts="desserts" />
         </v-card>
       </v-col>
     </v-row>
@@ -545,6 +545,7 @@ export default {
             startDate
           )}&endDate=${encodeURIComponent(endDate)}`
         )
+        // console.log(res)
         // --------- loop data in lastindex of Object in group ID
         const lastIndexes = {}
         const firstIndexes = {}
@@ -593,19 +594,16 @@ export default {
         const desserts = Object.values(firstIndexes).map((firstIndex) => {
           // ---------------- fech data in desserts
           // first and last index get Index of res 
-          const firstItem = res[firstIndex]
-          const lastItemIndex = lastIndexes[firstItem.TICKETID]
-          const lastItem = res[lastItemIndex]
-          // first index get Index of res
-          const resolveItemIndex = resolvebyIndex[firstItem.TICKETID]
-          const resolveItem =
-            resolveItemIndex !== undefined ? res[resolveItemIndex] : null
-          const inprogressItemIndex = indateIndex[firstItem.TICKETID]
-          const inprogressItem = //  -2
-            inprogressItemIndex !== undefined ? res[inprogressItemIndex] : null
-          const inownerItemIndex = inownerIndex[firstItem.TICKETID]
-          const inownerItem =
-            inownerItemIndex !== undefined ? res[inownerItemIndex] : null
+          const firstItem = res[firstIndex];
+          if (!firstItem) return null; // Check if firstItem is null or undefined
+          const lastItemIndex = lastIndexes[firstItem.TICKETID];
+          const lastItem = res[lastItemIndex];
+          const resolveItemIndex = resolvebyIndex[firstItem.TICKETID];
+          const resolveItem = resolveItemIndex !== undefined ? res[resolveItemIndex] : null;
+          const inprogressItemIndex = indateIndex[firstItem.TICKETID];
+          const inprogressItem = inprogressItemIndex !== undefined ? res[inprogressItemIndex] : null;
+          const inownerItemIndex = inownerIndex[firstItem.TICKETID];
+          const inownerItem = inownerItemIndex !== undefined ? res[inownerItemIndex] : null;
           function convertToISOFormat(dateString) {
             if (!dateString) {
               return null // or handle the case where dateString is undefined
@@ -620,60 +618,61 @@ export default {
 
             return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`
           }
-          const inprogressItemQUEUEDOWNER =
-            inprogressItem && inprogressItem.QUEUED_OWNER
-              ? inprogressItem.QUEUED_OWNER
-              : '';
-          const inownerItemQUEUEDOWNER =
-            inownerItem && inownerItem.QUEUED_OWNER
-              ? inownerItem.QUEUED_OWNER
-              : '';
-          const inownerItemINPROGRESSCHANGEBY =
-            inownerItem && inownerItem.INPROGRESS_CHANGEBY
-              ? inownerItem.INPROGRESS_CHANGEBY
-              : '';
-          const inprogressItemINPROGRESSCHANGEBY =
-            inprogressItem && inprogressItem.INPROGRESS_CHANGEBY
-              ? inprogressItem.INPROGRESS_CHANGEBY
-              : '';
-          const date1 = new Date(convertToISOFormat(inprogressItem.QUEUED_DATE))
-          const date2 = new Date(convertToISOFormat(firstItem.QUEUED_DATE))
-          const date3 = new Date(convertToISOFormat(resolveItem.QUEUED_DATE))
-          const date4 = new Date(convertToISOFormat(lastItem.QUEUED_DATE))
-          const timecare = date1 - date2
-          const hours = Math.floor(timecare / (1000 * 60 * 60))
-          const minutes = Math.floor(
-            (timecare % (1000 * 60 * 60)) / (1000 * 60)
-          )
-          const timecaretplus = (timecare, hours, minutes)
-          // --------------------------------
-          // const timedotplus = resolvedateValue.getDate() - qeuredateValue.getDate()
-          const timedo = date3 - date2
-          const hoursdo = Math.floor(timedo / (1000 * 60 * 60))
-          const minutesdo = Math.floor(
-            (timedo % (1000 * 60 * 60)) / (1000 * 60)
-          )
-          const timedotplus = (timedo, hoursdo, minutesdo)
-          // console.log('tic', timedotplus)
-          // --------------------------------
-          const timecenter = date4 - date3
-          const hourscenter = Math.floor(timecenter / (1000 * 60 * 60))
-          const minutescenter = Math.floor(
-            (timecenter % (1000 * 60 * 60)) / (1000 * 60)
-          )
-          const timecolsebycenter = (timecenter, hourscenter, minutescenter)
+          const inprogressItemQUEUEDOWNER = inprogressItem && inprogressItem.QUEUED_OWNER ? inprogressItem.QUEUED_OWNER : '';
+          const inownerItemQUEUEDOWNER = inownerItem && inownerItem.QUEUED_OWNER ? inownerItem.QUEUED_OWNER : '';
+          const inownerItemINPROGRESSCHANGEBY = inownerItem && inownerItem.INPROGRESS_CHANGEBY ? inownerItem.INPROGRESS_CHANGEBY : '';
+          const inprogressItemINPROGRESSCHANGEBY = inprogressItem && inprogressItem.INPROGRESS_CHANGEBY ? inprogressItem.INPROGRESS_CHANGEBY : '';
+          // Ensure QUEUED_DATE exists before trying to access it
+          const date1 = inprogressItem && inprogressItem.QUEUED_DATE ? new Date(convertToISOFormat(inprogressItem.QUEUED_DATE)) : null;
+          const date2 = firstItem && firstItem.QUEUED_DATE ? new Date(convertToISOFormat(firstItem.QUEUED_DATE)) : null;
+          const date3 = resolveItem && resolveItem.QUEUED_DATE ? new Date(convertToISOFormat(resolveItem.QUEUED_DATE)) : null;
+          const date4 = lastItem && lastItem.QUEUED_DATE ? new Date(convertToISOFormat(lastItem.QUEUED_DATE)) : null;
+          // Ensure all dates exist before performing calculations
+          const timecare = date1 - date2;
+          const hours = Math.floor(timecare / (1000 * 60 * 60));
+          const minutes = Math.floor((timecare % (1000 * 60 * 60)) / (1000 * 60));
+          const timecaretplus = (timecare, hours, minutes);
+          const timedo = (date3 || date2) === null ? '' : date3 - date2;
+          const hoursdo = (date3 || date2) === null ? '' : Math.floor(timedo / (1000 * 60 * 60));
+          const minutesdo = (date3 || date2) === null ? '' : Math.floor((timedo % (1000 * 60 * 60)) / (1000 * 60));
+          const timedotplus = (date3 || date2) === null ? '' : (timedo, hoursdo, minutesdo);
+          const timecenter = (date4 || date3) === null ? '' : date4 - date3;
+          const hourscenter = (date4 || date3) === null ? '' : Math.floor(timecenter / (1000 * 60 * 60));
+          const minutescenter = (date4 || date3) === null ? '' : Math.floor((timecenter % (1000 * 60 * 60)) / (1000 * 60));
+          const timecolsebycenter = (date4 || date3) === null ? '' : (timecenter, hourscenter, minutescenter);
           // change data of table SERVICE_GROUP
           let service = '';
-          if (firstItem.CLASSIFICATION.startsWith('D')) {
-            service = 'DATA';
-          } else if (firstItem.CLASSIFICATION.startsWith('S')) {
-            service = 'SMS';
-          } else if (firstItem.CLASSIFICATION.startsWith('VA')) {
-            service = 'VAS';
-          } else if (firstItem.CLASSIFICATION.startsWith('V') && firstItem.CLASSIFICATION.substring(1, 2) !== 'A') {
-            service = 'VOICE';
+          // 29 / 02
+          if (firstItem && firstItem.CLASSIFICATION) {
+            if (firstItem.CLASSIFICATION.startsWith('D')) {
+              service = 'DATA';
+            } else if (firstItem.CLASSIFICATION.startsWith('S')) {
+              service = 'SMS';
+            } else if (firstItem.CLASSIFICATION.startsWith('VA')) {
+              service = 'VAS';
+            } else if (firstItem.CLASSIFICATION.startsWith('V') && firstItem.CLASSIFICATION.substring(1, 2) !== 'A') {
+              service = 'VOICE';
+            } else {
+              // Handle the case where CLASSIFICATION doesn't match any condition
+              service = firstItem.SERVICE_GROUP || '';
+            }
+          } else if (lastItem && lastItem.CLASSIFICATION) {
+            // If firstItem doesn't have CLASSIFICATION, check first
+            if (lastItem.CLASSIFICATION.startsWith('D')) {
+              service = 'DATA';
+            } else if (lastItem.CLASSIFICATION.startsWith('S')) {
+              service = 'SMS';
+            } else if (lastItem.CLASSIFICATION.startsWith('VA')) {
+              service = 'VAS';
+            } else if (lastItem.CLASSIFICATION.startsWith('V') && lastItem.CLASSIFICATION.substring(1, 2) !== 'A') {
+              service = 'VOICE';
+            } else {
+              // Handle the case where CLASSIFICATION doesn't match any condition
+              service = firstItem.SERVICE_GROUP || '';
+            }
           } else {
-            service = firstItem.SERVICE_GROUP || '';
+            // Handle the case where both firstItem and first don't have CLASSIFICATION
+            service = 'Not data';
           }
           const department = this.changeNameroot(this.adjustName(firstItem.FIRST_WORKLOG_DESCRIPTION), 'DP');
           const rootownwe = this.changeNameroot(this.adjustName(firstItem.FIRST_WORKLOG_DESCRIPTION), 'ON');
@@ -690,36 +689,37 @@ export default {
             CREATEDBY: firstItem.CREATEDBY,
             CREATIONDATE: firstItem.CREATIONDATE,
             QUEUED_DATE: firstItem.QUEUED_DATE,
-            QUEUED_OWNERGROUP: firstItem.OWNERGROUP,
-            INPROGRESS_DATE: inprogressItem.QUEUED_DATE,
-            INPROGRESS_OWNER: inownerItemQUEUEDOWNER, //         QUEUED_OWNER === null
-            INPROGRESS_OWNERGROUP: firstItem.OWNERGROUP,
-            INPROGRESS_CHANGBY: inownerItemINPROGRESSCHANGEBY, //
-            ROOT_CAUSE_DESCRIPTIONS: rootCause, //
-            SOLUTION_SHOT: solution, //
-            ROOT_CAUSE_BY_DEPARTMENT: department, // colsedateValue - resolvedateValue
-            ROOT_CAUSE_BY_STATUS: rootownwe, // colsedateValue - resolvedateValue
+            QUEUED_OWNERGROUP: firstItem.OWNERGROUP ? firstItem.OWNERGROUP : null,
+            INPROGRESS_DATE: inprogressItem ? inprogressItem.QUEUED_DATE : null,
+            INPROGRESS_OWNER: inownerItemQUEUEDOWNER, // QUEUED_OWNER === null
+            INPROGRESS_OWNERGROUP: firstItem ? firstItem.OWNERGROUP : null,
+            INPROGRESS_CHANGBY: inownerItemINPROGRESSCHANGEBY,
+            ROOT_CAUSE_DESCRIPTIONS: rootCause,
+            SOLUTION_SHOT: solution,
+            ROOT_CAUSE_BY_DEPARTMENT: department,
+            ROOT_CAUSE_BY_STATUS: rootownwe,
             ROOT_CAUSE_BY_TIER: tier,
-            RESOLVE_DATE: resolveItem.QUEUED_DATE,
-            RESOLVE_OWNER: inprogressItemQUEUEDOWNER, //         QUEUED_OWNER === null
-            RESOLVE_OWNERGROUP: inprogressItem.OWNERGROUP,
-            RESOLVE_CHANGBY: inprogressItemINPROGRESSCHANGEBY, // 
-            TIME_CARE_TPLUS: timecaretplus, // inprogressdateValue - qeuredateValue
-            TIME_DO_TPLUS: timedotplus, // resolvedateValue - qeuredateValue
+            RESOLVE_DATE: resolveItem ? resolveItem.QUEUED_DATE : null,
+            RESOLVE_OWNER: inprogressItemQUEUEDOWNER, // QUEUED_OWNER === null
+            RESOLVE_OWNERGROUP: inprogressItem && inprogressItem.OWNERGROUP ? inprogressItem.OWNERGROUP : null,
+            RESOLVE_CHANGBY: inprogressItemINPROGRESSCHANGEBY,
+            TIME_CARE_TPLUS: timecaretplus,
+            TIME_DO_TPLUS: timedotplus,
             WORKLONG_DESCRIPTOIN: firstItem.FIRST_WORKLOG_DESCRIPTION,
-            MODIFY_DATE: resolveItem.QUEUED_DATE,
+            MODIFY_DATE: resolveItem ? resolveItem.QUEUED_DATE : null,
             MODIFYBY: firstItem.FIRST_WORKLOG_MODIFYBY,
             PROVINCE: firstItem.PROVINCE,
             DISTRICT: firstItem.DISTRICT,
             VILLAGE: firstItem.VILLAGE,
             COMPLAIN_BY: firstItem.COMPLAIN_BY,
-            CLOSE_DATE: lastItem.QUEUED_DATE,
-            CLOSE_BY: lastItem.INPROGRESS_CHANGEBY,
-            STATUS_TICKET: lastItem.STATUS,
-            TIME_CLOSE_BY_CENTER: timecolsebycenter, // colsedateValue - resolvedateValue
-          }
+            CLOSE_DATE: lastItem ? lastItem.QUEUED_DATE : null,
+            CLOSE_BY: lastItem ? lastItem.INPROGRESS_CHANGEBY : null,
+            STATUS_TICKET: lastItem ? lastItem.STATUS : null,
+            TIME_CLOSE_BY_CENTER: timecolsebycenter,
+          };
         })
-        this.desserts = desserts
+        // this.desserts = desserts
+        this.desserts = desserts.filter(item => item !== null); // Filter out null items
       } catch (error) {
         console.error('Error fetching data:', error)
       }
@@ -741,7 +741,7 @@ export default {
       }
     },
     changeNameroot(ID, status) {
-      if (ID !== undefined && ID.indexOf('_') > 0 && ID.startsWith('TP')) {
+      if (ID !== undefined && ID !== null && ID.indexOf('_') > 0 && ID.startsWith('TP')) {
         const idToNameMap = {
           'TP01_': status === 'DP' ? 'MB' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Unber In System' : (status === 'ROOT' ? 'Number Was Barring in HSS' : 'Tier_2(SOC)'))),
           'TP02_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Number Was Operational' : 'Tier_2(SOC)'))),
@@ -765,7 +765,7 @@ export default {
           'TP20_': status === 'DP' ? 'MB' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'Cancel RPT' : (status === 'ROOT' ? 'Customer Need to Cancel RBT' : 'Tier_2(SOC)'))),
           'TP21_': status === 'DP' ? 'IT' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Cooperate With Tier 3' : (status === 'ROOT' ? 'System Problem' : 'Tier_3(IT)'))),
           'TP22_': status === 'DP' ? 'MB' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'Cancel Call Forward' : (status === 'ROOT' ? 'Cancle Call Forward' : 'Tier_2(SOC)'))),
-          'TP23_': status === 'DP' ? 'ISD' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Cooperate with Owner App to Sollved for Customers' : (status === 'ROOT' ? 'Scratch Card Was not Activate with Bonus'  : 'Tier_3(ISD)'))),
+          'TP23_': status === 'DP' ? 'ISD' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Cooperate with Owner App to Sollved for Customers' : (status === 'ROOT' ? 'Scratch Card Was not Activate with Bonus' : 'Tier_3(ISD)'))),
           'TP24_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Scratch Card was used up' : 'Tier_2(SOC)'))),
           'TP25_': status === 'DP' ? 'IT' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Cooperate With Tier 3' : (status === 'ROOT' ? 'More checking with Owner Apps' : 'Tier_3(IT)'))),
           'TP26_': status === 'DP' ? 'USER' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Wrong Default PW' : 'Tier_2(SOC)'))),
@@ -881,9 +881,10 @@ export default {
   max-height: 400px;
   overflow-y: auto;
 }
+
 .custom-font {
-    font-family: 'Noto Sans Lao', sans-serif;
-    /* You can specify additional styles here */
+  font-family: 'Noto Sans Lao', sans-serif;
+  /* You can specify additional styles here */
 }
 </style>
   

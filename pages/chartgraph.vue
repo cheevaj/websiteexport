@@ -125,21 +125,35 @@
                         <v-card flat class="rounded-0" style="background-color: #ffffe6;">
                             <v-card-text class="pa-0" style="background-color:#000;color:#ffff00">
                                 <v-row>
-                                    <v-col cols="6" class="pr-0 pt-0">
-                                        <v-card-text class="mb-1 pa-0" style=" background-color: #ffff00;">
+                                    <v-col cols="12" class="pl-1 pt-0 pb-0" style="padding-right: 13px;">
+                                        <v-card-text class="pa-0 mb-1"
+                                            style="color: #000; background-color: #ffff00; border-radius: 20px;"
+                                            :style="{ backgroundColor: targetDate === 'date' ? '#b3b300' : '#ffff00' }">
                                             <v-btn class="py-2 rounded-0" text
-                                                style="width: 100%; height: 100%; color: #000;" @click="targetDate = true">
-                                                <span style="color: #000;">
-                                                    dates
-                                                </span>
+                                                style="width: 100%; height: 100%; color: #000;"
+                                                @click="targetDate = 'date'">
+                                                dates
                                             </v-btn>
                                         </v-card-text>
                                     </v-col>
-                                    <v-col cols="6" class="pl-1 pt-0" style="padding-right: 13px;">
-                                        <v-card-text class="pa-0 mb-1" style="color: #000; background-color: #ffff00;">
+                                    <v-col cols="12" class="pl-1 pt-0 pb-0" style="padding-right: 13px;">
+                                        <v-card-text class="pa-0 mb-1" style="color: #000; border-radius: 20px;"
+                                            :style="{ backgroundColor: targetDate === 'service' ? '#b3b300' : '#ffff00' }">
                                             <v-btn class="py-2 rounded-0" text
-                                                style="width: 100%; height: 100%; color: #000;" @click="targetDate = false">
+                                                style="width: 100%; height: 100%; color: #000;"
+                                                @click="targetDate = 'service'">
                                                 service
+                                            </v-btn>
+                                        </v-card-text>
+                                    </v-col>
+                                    <v-col cols="12" class="pl-1 pt-0" style="padding-right: 13px;">
+                                        <v-card-text class="pa-0 mb-1"
+                                            style="color: #000; background-color: #ffff00; border-radius: 20px;"
+                                            :style="{ backgroundColor: (targetDate === 'user') || (targetDate === 'userAll') ? '#b3b300' : '#ffff00' }">
+                                            <v-btn class="py-2 rounded-0" text
+                                                style="width: 100%; height: 100%; color: #000;"
+                                                @click="targetDate = 'user'">
+                                                user
                                             </v-btn>
                                         </v-card-text>
                                     </v-col>
@@ -220,8 +234,21 @@
                                             </div>
                                             <div v-if="this.tabledisplay === 'Targets'">
                                                 <h2 style="color:rgb(77, 77, 0);">
-                                                    <span>
-                                                        TARGETS
+                                                    <v-btn v-if="(targetDate === 'user') || (targetDate === 'userAll')"
+                                                        small class="pa-0" outlined
+                                                        @click="targetDate = targetDate === 'userAll' ? 'user' : 'userAll'">
+                                                        <span style="color: rgb(77, 77, 0)" class="pa-0">
+                                                            <v-card-actions class="pa-0 ma-0">
+                                                                <h2>
+                                                                    KPI
+                                                                </h2>
+                                                                <v-icon small
+                                                                    style="color: rgb(77, 77, 0);">mdi-cached</v-icon>
+                                                            </v-card-actions>
+                                                        </span>
+                                                    </v-btn>
+                                                    <span v-else>
+                                                        KPI
                                                     </span>
                                                 </h2>
                                             </div>
@@ -229,7 +256,19 @@
                                                 <canvas height="100px" id="myChart"></canvas>
                                             </div>
                                             <div v-else class="custom-font">
-                                                <MyChartBar v-if="targetDate" :desserts="desserts" />
+                                                <MyChartBar v-if="targetDate === 'date'" :desserts="desserts" :mount="mount"
+                                                    @chartBarData="receiveChartData" />
+                                                <div v-else-if="targetDate === 'user'">
+                                                    <v-row>
+                                                        <v-col cols="6">
+                                                            <MychartUserCare :userTarget="userTarget" />
+                                                        </v-col>
+                                                        <v-col cols="6">
+                                                            <myChartUserDo :userTarget="userTarget" />
+                                                        </v-col>
+                                                    </v-row>
+                                                </div>
+                                                <MycharUser v-else-if="targetDate === 'userAll'" :userTarget="userTarget" />
                                                 <MyChartLine v-else :datasetdatatime="datasetdatatime" />
                                             </div>
                                         </v-card-text>
@@ -405,7 +444,7 @@
                             <v-card-text v-else style="background-color: rgba(255, 206, 86,0.1);">
                                 <div>
                                     <v-row>
-                                        <v-col cols="12" sm="5" md="5" class="px-0 py-0">
+                                        <v-col v-if="targetDate !== 'date'" cols="12" sm="5" md="5" class="px-0 py-0">
                                             <v-card-text class="px-1 pt-0 pb-1" style="color: #000000;">
                                                 <h4 style="color: #b3b300;">TABLE TIME</h4>
                                                 <v-simple-table dense flat fixed-header class="table-container custom-font"
@@ -443,39 +482,142 @@
                                                 </v-simple-table>
                                             </v-card-text>
                                         </v-col>
-                                        <v-col cols="12" sm="7" md="7" class="px-0 py-0">
+                                        <v-col v-if="targetDate === 'date'" cols="12" sm="12" md="12" class="px-0 py-0">
                                             <v-card-text class="px-1 pt-0 pb-1" style="color: #000000;">
                                                 <h4 style="color: #b3b300;">TABLE TIME</h4>
                                                 <v-simple-table dense flat fixed-header class="table-container custom-font"
-                                                    :height="datasetdatatime.length >= 5 ? '225px' : null"
-                                                    :max-height="datasetdatatime.length < 5 ? '225px' : null">
+                                                    :height="dataDates.length >= 5 ? '225px' : null"
+                                                    :max-height="dataDates.length < 5 ? '225px' : null">
                                                     <template v-slot:default>
                                                         <thead>
                                                             <tr>
                                                                 <th class="text-center" style="color: #ffff00;">
-                                                                    Ticket/KPI
+                                                                    Date
                                                                 </th>
                                                                 <th class="text-center" style="color:#ffff00;">
                                                                     Total
                                                                 </th>
                                                                 <th class="text-center" style="color:#ffff00;">
-                                                                    Time Do-Care TP
+                                                                    Time Do TP
                                                                 </th>
                                                                 <th class="text-center" style="color:#ffff00;">
                                                                     Time Do &gt;20m
                                                                 </th>
                                                                 <th class="text-center" style="color:#ffff00;">
+                                                                    Time Care TP &le;5m
+                                                                </th>
+                                                                <th class="text-center" style="color:#ffff00;">
                                                                     Time Care &gt;5m
+                                                                </th>
+                                                                <th class="text-center" style="color:#ffff00;">
+                                                                    Percent (%) &le;20m
+                                                                </th>
+                                                                <th class="text-center" style="color:#ffff00;">
+                                                                    Percent (%) &le;5m
+                                                                </th>
+                                                                <th class="text-center" style="color:#ffff00;">
+                                                                    Targets
+                                                                    &le;20m | &gt;5m
                                                                 </th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            <tr v-for=" item  in  datasetdatatime " :key="item.name">
-                                                                <td style="color: #ffff00;">{{ item.name }}</td>
-                                                                <td style="color: #ffff00;">{{ item.dataall }}</td>
-                                                                <td>{{ item.valueminall }}</td>
-                                                                <td>{{ item.valuemax }}</td>
+                                                            <tr v-for=" item  in     dataDates    " :key="item.name">
+                                                                <td style="color: #ffff00;">{{ item.nameValueall }}</td>
+                                                                <td style="color: #ffff00;">{{ item.valueAll }}</td>
+                                                                <td>{{ item.valueminD }}</td>
+                                                                <td>{{ item.valuemaxD }}</td>
+                                                                <td>{{ item.valueminC }}</td>
                                                                 <td>{{ item.valuemaxC }}</td>
+                                                                <td>{{ item.percentMinD }}</td>
+                                                                <td>{{ item.percentMinC }}</td>
+                                                                <td><v-icon v-if="item.targetD"
+                                                                        color="rgb(0, 230, 0)">mdi-checkbox-marked</v-icon>
+                                                                    <v-icon v-else color="error">mdi-close-box</v-icon> |
+                                                                    <v-icon v-if="item.targetC"
+                                                                        color="rgb(0, 230, 0)">mdi-checkbox-marked</v-icon>
+                                                                    <v-icon v-else color="error">mdi-close-box</v-icon>
+                                                                </td>
+                                                            </tr>
+                                                            <tr style="background-color: #ffff00;">
+                                                                <td style="color: #000;">
+                                                                    <h4>
+                                                                        All
+                                                                    </h4>
+                                                                </td>
+                                                                <td v-for="(   item, index   ) in    DataAll   "
+                                                                    :key="index" style="color: #000;">
+                                                                    <h4>
+                                                                        {{ item }}
+                                                                    </h4>
+                                                                </td>
+                                                                <td style="color: #000;">
+                                                                    <h4>
+                                                                        {{ percentTimeDoTa }}
+                                                                    </h4>
+                                                                </td>
+                                                                <td style="color: #000;">
+                                                                    <h4>
+                                                                        {{ percentTimeCareTa }}
+                                                                    </h4>
+                                                                </td>
+                                                                <td style="color: #000;">
+                                                                    <h4>
+                                                                        <v-icon
+                                                                            v-if="checkTargetDo === 'Achieved the Target'"
+                                                                            color="rgb(0, 230, 0)">mdi-checkbox-marked</v-icon>
+                                                                        <v-icon v-else color="error">mdi-close-box</v-icon>
+                                                                        |
+                                                                        <v-icon
+                                                                            v-if="checkTargetCare === 'Achieved the Target'"
+                                                                            color="rgb(0, 230, 0)">mdi-checkbox-marked</v-icon>
+                                                                        <v-icon v-else color="error">mdi-close-box</v-icon>
+                                                                    </h4>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </template>
+                                                </v-simple-table>
+                                            </v-card-text>
+                                        </v-col>
+                                        <v-col v-else cols="12" sm="7" md="7" class="px-0 py-0">
+                                            <v-card-text class="px-1 pt-0 pb-1" style="color: #000000;">
+                                                <h4 style="color: #b3b300;">TABLE TIME</h4>
+                                                <v-simple-table dense flat fixed-header class="table-container custom-font"
+                                                    :height="datasetdatatime.length >= 5 ? '227px' : null"
+                                                    :max-height="datasetdatatime.length < 5 ? '227px' : null">
+                                                    <template v-slot:default>
+                                                        <thead>
+                                                            <tr>
+                                                                <th class="text-center" style="color: #ffff00;">
+                                                                    SERVICE
+                                                                </th>
+                                                                <th class="text-center" style="color:#ffff00;">
+                                                                    Time Do TP &le;20m
+                                                                </th>
+                                                                <th class="text-center" style="color:#ffff00;">
+                                                                    Time Do &gt; 20m
+                                                                </th>
+                                                                <th class="text-center" style="color:#ffff00;">
+                                                                    Time Care TP &le;5m
+                                                                </th>
+                                                                <th class="text-center" style="color:#ffff00;">
+                                                                    Time Care &gt;5m
+                                                                </th>
+                                                                <th class="text-center" style="color:#ffff00;">
+                                                                    Total
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr v-for="    item     in     datasetdatatime    "
+                                                                :key="item.name">
+                                                                <td style="color: #ffff00;">{{ item.name }}</td>
+                                                                <td>{{ item.valuemin }}</td>
+                                                                <td>{{ item.valuemax }}</td>
+                                                                <td>{{ item.valueminall }}</td>
+                                                                <td>{{ item.valuemaxC }}</td>
+                                                                <td style="color: #ffff00;">{{ item.dataall }}</td>
                                                             </tr>
                                                             <tr style="background-color: #ffff00;">
                                                                 <td style="color: #000;">
@@ -483,19 +625,14 @@
                                                                         percent(%)
                                                                     </h4>
                                                                 </td>
+
                                                                 <td style="color: #000;">
                                                                     <h4>
-                                                                        100%
+                                                                        {{ percentTimeDoTa }}
                                                                     </h4>
                                                                 </td>
                                                                 <td style="color: #000;">
                                                                     <h4>
-                                                                        <!-- {{ percentTimeDoTa }}|{{ percentTimeCareTa }} -->
-                                                                    </h4>
-                                                                </td>
-                                                                <td style="color: #000;">
-                                                                    <h4>
-                                                                        <!-- percentTimeDo -->
                                                                         {{ percentTimeDoTa }}| <v-icon
                                                                             v-if="checkTargetDo === 'Achieved the Target'"
                                                                             color="rgb(0, 230, 0)">mdi-checkbox-marked</v-icon>
@@ -504,11 +641,21 @@
                                                                 </td>
                                                                 <td style="color: #000;">
                                                                     <h4>
-                                                                        <!-- percentTimeC -->
-                                                                        {{ percentTimeCareTa }}|<v-icon
+                                                                        {{ percentTimeCareTa }}
+                                                                    </h4>
+                                                                </td>
+                                                                <td style="color: #000;">
+                                                                    <h4>
+
+                                                                        {{ percentTimeC }}|<v-icon
                                                                             v-if="checkTargetCare === 'Achieved the Target'"
                                                                             color="rgb(0, 230, 0)">mdi-checkbox-marked</v-icon>
                                                                         <v-icon v-else color="error">mdi-close-box</v-icon>
+                                                                    </h4>
+                                                                </td>
+                                                                <td style="color: #000;">
+                                                                    <h4>
+                                                                        100%
                                                                     </h4>
                                                                 </td>
                                                             </tr>
@@ -529,21 +676,16 @@
 </template>
 <script>
 import Chart from 'chart.js';
-// import MyChartBar from '~/components/MyChartBar.vue';
-// import MyChartLine from '~/components/MyChartLine.vue';
 const graphstyle = [['#00c6ff', '#F0F', '#FF0']]
 export default {
     Currency: 'components',
-    components: {
-        // MyChartBar,
-        // MyChartLine,
-    },
     props: {
         desserts: Array,
     },
     data() {
         return {
-            targetDate: true,
+            mount: false,
+            targetDate: 'date',
             checkTargetDo: '',
             checkTargetCare: '',
             expand: 'btn-1',
@@ -554,8 +696,10 @@ export default {
             percentTimeDoTa: 0,
             percentTimeCareTa: 0,
             percentTimeDo: 0,
+            dataDates: [],
             dataset: [],
             userTarget: [],
+            DataAll: {},
             datasetdatatime: [],
             tablename: '',
             tabledataall: 0,
@@ -612,6 +756,10 @@ export default {
         };
     },
     methods: {
+        receiveChartData(data, allData) {
+            this.dataDates = data;
+            this.DataAll = allData;
+        },
         showgraph(name) {
             this.graphform = name;
             this.graphShow();
@@ -644,21 +792,22 @@ export default {
                 const allDT = datavalue + datavaluevoi + datavaluesms + datavaluevas;
                 const minDTC = datamaxC + datamaxsmsC + datamaxvasC + datamaxvoiC;
                 const minDT = dataminsms + datamin + dataminvoi + dataminvas;
-                this.percentTimeDoTa = minDT === 0 ? 0 + '%' : (((minDT / allDT) * 100).toFixed(2) + '%');
+                this.percentTimeDoTa = minDT === 0 ? '0%' : (minDT === allDT ? '100%' : (((minDT / allDT) * 100).toFixed(2) + '%'));
                 const maxDT = datamaxsms + datamax + datamaxvoi + datamaxvas;
-                this.percentTimeDo = maxDT === 0 ? 0 + '%' : (((maxDT / allDT) * 100).toFixed(2) + '%');;
+                this.percentTimeDo = maxDT === 0 ? 0 + '%' : (((maxDT / allDT) * 100).toFixed(2) + '%');
+                this.percentTimeDo = maxDT === 0 ? 0 + '%' : (maxDT === allDT ? '100%' : (((maxDT / allDT) * 100).toFixed(2) + '%'));
 
                 const max = (datavalue + datavaluesms + datavaluevas + datavaluevoi) - (datamaxC + datamaxsmsC + datamaxvasC + datamaxvoiC)
-                this.percentTimeC = minDTC === 0 ? 0 + '%' : (((minDTC / allDT) * 100).toFixed(2) + '%');
-                this.percentTimeCareTa = max === 0 ? 100 + '%' : (((max / allDT) * 100).toFixed(2) + '%');
+                this.percentTimeC = minDTC === 0 ? 0 + '%' : (minDTC === allDT ? '100%' : (((minDTC / allDT) * 100).toFixed(2) + '%'));
+                this.percentTimeCareTa = max === 0 ? 100 + '%' : (max === allDT ? '100%' : (((max / allDT) * 100).toFixed(2) + '%'));
                 this.checkTargetDo = minDT === 0 ? 'Achieved the Target' : ((minDT / allDT) * 100).toFixed(2) >= 99.5 ? 'Achieved the Target' : 'Not on Target';
                 this.checkTargetCare = max === 0 ? 100 + '%' : ((max / allDT) * 100).toFixed(2) >= 99.5 ? 'Achieved the Target' : 'Not on Target';
                 // Create an array of data objects for each service group
                 const dataObjects = [
-                    { name: 'DATA', valueall: datavalue, valuemax: datamax, valuemin: datamin, valueminall: datavalue - (datamaxC + datamax), dataall: datavalue, valuemaxC: datamaxC },
-                    { name: 'SMS', valueall: datavaluesms, valuemax: datamaxsms, valuemin: dataminsms, valueminall: datavaluesms - (datamaxsms + datamaxsmsC), dataall: datavaluesms, valuemaxC: datamaxsmsC },
-                    { name: 'VAS', valueall: datavaluevas, valuemax: datamaxvas, valuemin: dataminvas, valueminall: datavaluevas - (datamaxvas + datamaxvasC), dataall: datavaluevas, valuemaxC: datamaxvasC },
-                    { name: 'VOICE', valueall: datavaluevoi, valuemax: datamaxvoi, valuemin: dataminvoi, valueminall: datavaluevoi - (datamaxvoi + datamaxvoiC), dataall: datavaluevoi, valuemaxC: datamaxvoiC },
+                    { name: 'DATA', valueall: datavalue, valuemax: datamax, valuemin: datamin, valueminall: datavalue - datamaxC, dataall: datavalue, valuemaxC: datamaxC },
+                    { name: 'SMS', valueall: datavaluesms, valuemax: datamaxsms, valuemin: dataminsms, valueminall: datavaluesms - datamaxsmsC, dataall: datavaluesms, valuemaxC: datamaxsmsC },
+                    { name: 'VAS', valueall: datavaluevas, valuemax: datamaxvas, valuemin: dataminvas, valueminall: datavaluevas - datamaxvasC, dataall: datavaluevas, valuemaxC: datamaxvasC },
+                    { name: 'VOICE', valueall: datavaluevoi, valuemax: datamaxvoi, valuemin: dataminvoi, valueminall: datavaluevoi - datamaxvoiC, dataall: datavaluevoi, valuemaxC: datamaxvoiC },
                 ];
                 // Extract names, max values, min values, and total values from dataObjects
                 dataObjects.sort((a, b) => b.dataall - a.dataall);
@@ -667,7 +816,7 @@ export default {
                     name: 'Total:',
                     valuemax: datamax + datamaxsms + datamaxvas + datamaxvoi,
                     valuemin: datamin + dataminsms + dataminvas + dataminvoi,
-                    valueminall: (datavalue + datavaluesms + datavaluevas + datavaluevoi) - (datamaxvoi + datamaxvoiC + datamaxvas + datamaxvasC + datamaxsms + datamaxsmsC + datamaxC + datamaxvoiC),
+                    valueminall: (datavalue + datavaluesms + datavaluevas + datavaluevoi) - (datamaxvoiC + datamaxvasC + datamaxsmsC + datamaxC),
                     valuemaxC: datamaxC + datamaxsmsC + datamaxvasC + datamaxvoiC,
                     dataall: datavalue + datavaluesms + datavaluevas + datavaluevoi,
                 });
@@ -1552,9 +1701,11 @@ export default {
                 this.myChart.destroy();
             }
             const colorBK = [
+                'rgb(255, 255, 0,0.8)',
+                'rgb(255, 0, 255,0.8)',
+                'rgba(255, 206, 86, 0.8)',
                 'rgba(54, 162, 235, 0.8)',
                 'rgba(255, 99, 132, 0.8)',
-                'rgba(255, 206, 86, 0.8)',
                 'rgba(75, 192, 192, 0.8)',
                 'rgba(153, 102, 255, 0.8)',
                 'rgba(25, 159, 64, 0.8)',
@@ -1573,9 +1724,11 @@ export default {
                 'rgba(25, 159, 64, 0.8)',
             ];
             const colorBD = [
+                'rgb(230, 230, 1)',
+                'rgb(255, 0, 255,1)',
+                'rgba(255, 206, 86, 1)',
                 'rgba(54, 162, 235, 1)',
                 'rgba(255, 99, 132, 1)',
-                'rgba(255, 206, 86, 1)',
                 'rgba(75, 192, 192, 1)',
                 'rgba(153, 102, 255, 1)',
                 'rgba(25, 159, 64, 1)',
@@ -1600,72 +1753,72 @@ export default {
                 else if (value >= 100) {
                     return Math.ceil(value % 100) * 100 === 0 ? Math.ceil(value / 100) * 100 + 50 : Math.ceil(value / 100) * 100;
                 } else if (value >= 50) {
-                    return Math.ceil(value / 50) * 50;
+                    return Math.ceil(value % 50) * 50 === 0 ? Math.ceil(value / 50) * 50 + 10 : (Math.ceil(value / 50) * 50) - value >= 5 ? Math.ceil(value / 50) * 50 : Math.ceil(value / 50) * 50 + 10;
                 } else if (value > 20) {
-                    return Math.ceil(value / 20) * 20;
+                    return Math.ceil(value % 20) * 20 === 0 ? Math.ceil(value / 20) * 20 + 5 : (Math.ceil(value / 20) * 20) - value >= 5 ? Math.ceil(value / 20) * 20 : Math.ceil(value / 20) * 20 + 5;
                 } else {
                     return Math.ceil(value / 10) * 10;
                 }
             };
 
             const maxNum = calculateNiceNumber(Math.max(...this.value)) >= 1000 ? calculateNiceNumber(Math.max(...this.value) + 50) : calculateNiceNumber(Math.max(...this.value));
-            // let Data = [];
-            // if (this.tabledisplay === 'Root Cause' && this.selectedItem === 0) {
-            // const valueData = this.dataset.map(item => item.valueData);
-            // const valueSms = this.dataset.map(item => item.valueSms);
-            // const valueVas = this.dataset.map(item => item.valueVas);
-            // const valueVoice = this.dataset.map(item => item.valueVoice);
+            let Data = [];
+            if (this.tabledisplay === 'Root Cause' && this.selectedItem === 0) {
+                const valueData = this.dataset.map(item => item.valueData);
+                const valueSms = this.dataset.map(item => item.valueSms);
+                const valueVas = this.dataset.map(item => item.valueVas);
+                const valueVoice = this.dataset.map(item => item.valueVoice);
 
-            // const Data = [
-            //     {
-            //         label: 'DATA',
-            //         data: valueData,
-            //         backgroundColor: colorBK[0],
-            //         borderColor: colorBD[0],
-            //         borderWidth: 1,
-            //     },
-            //     {
-            //         label: 'SMS',
-            //         data: valueSms,
-            //         backgroundColor: colorBK[0],
-            //         borderColor: colorBD[0],
-            //         borderWidth: 1,
-            //     },
-            //     {
-            //         label: 'VAS',
-            //         data: valueVas,
-            //         backgroundColor: colorBK[0],
-            //         borderColor: colorBD[0],
-            //         borderWidth: 1,
-            //     },
-            //     {
-            //         label: 'VOICE',
-            //         data: valueVoice,
-            //         backgroundColor: colorBK[0],
-            //         borderColor: colorBD[0],
-            //         borderWidth: 1,
-            //     },
-            // ];
-            //     return Data;
-            // }
-            const chartData = {
-                labels: this.names,
-                datasets:
-                    // (this.tabledisplay === 'Root Cause' && this.selectedItem === '// 0') ? Data : 
-                    [{
-                        data: this.value, // (this.tabledisplay === 'Root Cause Report' && this.selectedItem === 0) ? Data :
+                Data = [
+                    {
+                        label: 'DATA',
+                        data: valueData,
                         backgroundColor: colorBK,
                         borderColor: colorBD,
                         borderWidth: 1,
-                    }],
+                    },
+                    {
+                        label: 'SMS',
+                        data: valueSms,
+                        backgroundColor: colorBK,
+                        borderColor: colorBD,
+                        borderWidth: 1,
+                    },
+                    {
+                        label: 'VAS',
+                        data: valueVas,
+                        backgroundColor: colorBK,
+                        borderColor: colorBD,
+                        borderWidth: 1,
+                    },
+                    {
+                        label: 'VOICE',
+                        data: valueVoice,
+                        backgroundColor: colorBK,
+                        borderColor: colorBD,
+                        borderWidth: 1,
+                    },
+                ];
+            }
+            const chartData = {
+                labels: this.names,
+                datasets: (this.tabledisplay === 'Root Cause' && this.selectedItem === 0) ? Data : [{
+                    data: this.value,
+                    backgroundColor: colorBK,
+                    borderColor: colorBD,
+                    borderWidth: 1,
+                }],
                 datasetData: [{
                     data: this.value,
                 }]
-            }
-            // ----- Gracph value
+            };
+            // ----- Graph value dataset.percentage
+            const filteredValueCare = this.value.filter(value => value > 0);
+            const valueAll = Math.max(...filteredValueCare);
+            // console.log(valueAll)
             this.myChart = new Chart(ctx, {
                 type: this.graphform,
-                data: chartData, // -------- data of graph
+                data: chartData,
                 options: {
                     legend: {
                         display: this.graphform === '_',
@@ -1693,21 +1846,52 @@ export default {
                                 if (this.tabledisplay === 'Root Cause' && this.selectedItem === 0) {
                                     chartData.datasetData.forEach((dataset, i) => {
                                         const meta = chartInstance.controller.getDatasetMeta(i);
-                                        meta.data.forEach((bar, index) => {
-                                            const data = dataset.data[index];
-                                            ctx.font = 'bold 14px Arial'; // Set the font size here
-                                            ctx.fillText(data, bar._model.x, bar._model.y + 4);
-                                        });
+                                        if (this.graphform === 'horizontalBar') {
+                                            meta.data.forEach((bar, index) => {
+                                                const data = dataset.data[index];
+                                                ctx.font = 'bold 14px Arial';
+                                                ctx.fillText(data, bar._model.x + 10, bar._model.y + 8);
+                                            });
+                                        }
+                                        else {
+                                            meta.data.forEach((bar, index) => {
+                                                const data = dataset.data[index];
+                                                ctx.font = 'bold 14px Arial';
+                                                ctx.fillText(data, bar._model.x, bar._model.y + 4);
+                                            });
+                                        }
                                     });
                                 }
                                 else {
                                     chartData.datasets.forEach((dataset, i) => {
                                         const meta = chartInstance.controller.getDatasetMeta(i);
-                                        meta.data.forEach((bar, index) => {
-                                            const data = dataset.data[index];
-                                            ctx.font = 'bold 14px Arial'; // Set the font size here
-                                            ctx.fillText(data, bar._model.x, bar._model.y - 4);
-                                        });
+                                        if (this.graphform === 'horizontalBar') {
+                                            meta.data.forEach((bar, index) => {
+                                                const formattedData = dataset.data.map((value, index) => {
+                                                    const percentage = this.dataset[index].percentage;
+                                                    return `${value}|${percentage}`;
+                                                });
+                                                const data = (this.selectedItem === 0 && (this.tabledisplay === 'Customer Complaint' || this.tabledisplay === 'Root Cause Report')) ||
+                                                    ((this.selectedItem === 1 || this.selectedItem === 2) && this.tabledisplay === 'Root Cause Report') ?
+                                                    formattedData[index] : dataset.data[index]; // dataset.data[index]
+                                                const xleng = (this.selectedItem === 0 && (this.tabledisplay === 'Customer Complaint' || this.tabledisplay === 'Root Cause Report')) ||
+                                                    ((this.selectedItem === 1 || this.selectedItem === 2) && this.tabledisplay === 'Root Cause Report') ? 38 : 15; // dataset.data[index]
+                                                ctx.font = 'bold 14px Arial';
+                                                ctx.fillText(data, bar._model.x + xleng, bar._model.y + 8);
+                                            });
+                                        }
+                                        else {
+                                            meta.data.forEach((bar, index) => {
+                                                const formattedData = dataset.data.map((value, index) => {
+                                                    const percentage = this.dataset[index].percentage;
+                                                    return `${value}|${percentage}`;
+                                                });
+                                                const data = (this.selectedItem === 0 && (this.tabledisplay === 'Customer Complaint' || this.tabledisplay === 'Root Cause Report')) ||
+                                                    ((this.selectedItem === 1 || this.selectedItem === 2) && this.tabledisplay === 'Root Cause Report') ? formattedData[index] : dataset.data[index]; // dataset.data[index]
+                                                ctx.font = 'bold 14px Arial';
+                                                ctx.fillText(data, bar._model.x, bar._model.y - 4);
+                                            });
+                                        }
                                     });
                                 }
                             }
@@ -1717,8 +1901,10 @@ export default {
                         yAxes: [{
                             stacked: true,
                             ticks: {
-                                max: maxNum, // Set the maximum value of x-axis ticks
-                                fontFamily: 'Noto Sans Lao', // Set font family for x-axis labels
+                                max: maxNum,
+                                fontFamily: 'Noto Sans Lao',
+                                fontSize: 14,
+                                fontColor: '#000',
                                 beginAtZero: true,
                             },
                         }],
@@ -1728,8 +1914,19 @@ export default {
                                 display: true
                             },
                             ticks: {
-                                // max: maxNum, // Set the maximum value of x-axis ticks
-                                fontFamily: 'Noto Sans Lao', // Set font family for y-axis labels
+                                max: (
+                                    this.graphform === 'horizontalBar' &&
+                                    (this.selectedItem === 0 && (this.tabledisplay === 'Customer Complaint' || this.tabledisplay === 'Root Cause Report')) ||
+                                    ((this.selectedItem === 1 || this.selectedItem === 2) && this.tabledisplay === 'Root Cause Report')
+                                ) ? (
+                                    valueAll > 100 ? valueAll + 25 : (valueAll + 15
+
+                                    )
+                                ) : valueAll > 15 ? valueAll + 10 : valueAll + 5,
+
+                                fontSize: 14,
+                                fontColor: '#000',
+                                fontFamily: 'Noto Sans Lao',
                                 beginAtZero: true
                             }
                         }]
@@ -1738,6 +1935,7 @@ export default {
             });
             this.i = false;
         },
+
         // clange graph style desplay  
         changeGraph(itemvalue) {
             this.i = true;
@@ -1779,7 +1977,6 @@ export default {
     mounted() {
         this.graphType();
         this.updateShowProperty();
-
         // Listen for window resize events and update 'show' property accordingly
         window.addEventListener('resize', this.updateShowProperty);
     },
