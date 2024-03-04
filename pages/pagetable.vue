@@ -262,11 +262,13 @@
               </v-card-text>
               <v-data-table v-if="!overlay" height="397px" fixed-header dense :headers="visibleHeaders"
                 :items="visibleItems" :items-per-page="10" item-key="TICKETID" class="elevation-1 pt-4 custom-font">
-                <template v-slot:header="{ header }">
-                  <th v-if="header" style="background-color: #000; color: #ffff00;">
-                    {{ header.text }}
+                <!-- <template v-slot:header="{ header }">
+                  <th v-if="header">
+                    <div style="background-color: #000; color: #ffff00; padding: 12px;">
+                      {{ header.text }}j
+                    </div>
                   </th>
-                </template>
+                </template> -->
               </v-data-table>
               <v-card-text v-else class="pa-1">
                 <v-card flat min-height="470px" class="text-h5">

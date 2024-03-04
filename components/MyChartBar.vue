@@ -10,7 +10,6 @@ import Chart from 'chart.js';
 export default {
   props: {
     desserts: Array,
-    mount: Boolean,
   },
   data() {
     return {
@@ -273,7 +272,7 @@ export default {
         datasets: [
           {
             type: 'line',
-            label: 'Time Care >5min',
+            label: 'Customer troubleshooting >5min',
             data: percentTimeCareMax,
             backgroundColor: 'transparent',
             borderColor: 'rgb(255, 51, 0)',
@@ -281,28 +280,28 @@ export default {
           },
           {
             type: 'line',
-            label: 'Time Care ≤5min',
+            label: 'Customer troubleshooting ≤5min',
             data: percentTimeCare,
             backgroundColor: 'transparent',
             borderColor: 'rgb(255, 51, 153)',
           },
           {
             type: 'bar',
-            label: '(%) of ≤5min',
+            label: 'Customer troubleshooting Success(User)(%) ≤5min',
             data: percentTimeCare,
             backgroundColor: 'rgb(51, 51, 51,0.8)',
             borderColor: 'rgb(51, 51, 51,1)',
           },
           {
             type: 'line',
-            label: 'Time Do >20min',
+            label: 'Customer troubleshooting >20min',
             data: percentTimeDoMax,
             backgroundColor: 'transparent',
             borderColor: 'rgb(0, 204, 0)',
           },
 
           {
-            label: 'Time Do ≤20min',
+            label: 'Customer troubleshooting ≤20min',
             type: 'line',
             data: percentTimeDo,
             backgroundColor: 'transparent',
@@ -311,7 +310,7 @@ export default {
           },
           {
             type: 'bar',
-            label: '(%) of ≤20min',
+            label: 'Customer troubleshooting Success(User)(%) ≤20min',
             data: percentTimeDo,
             backgroundColor: 'rgb(255, 255, 0,0.8)',
             borderColor: 'rgb(230, 230, 0)',
@@ -319,7 +318,7 @@ export default {
 
           {
             type: 'line',
-            label: 'Target',
+            label: 'Target(100%)',
             data: percentAll,
             backgroundColor: indexes.length === 1 ? 'rgba(26, 117, 255, 0.8)' : 'transparent',
             borderColor: 'rgba(26, 117, 255, 1)',
@@ -376,7 +375,7 @@ export default {
                     const data = dataset.data[index];
                     if (data !== 0) {
                       ctx.font = 'bold 14px Arial';
-                      ctx.fillStyle = dataset.label === '(%) of ≤5min' ? '#000' : 'rgb(255, 153, 0)';
+                      ctx.fillStyle = dataset.label === 'Customer troubleshooting Success(User)(%) ≤5min' ? '#000' : 'rgb(255, 153, 0)';
                       ctx.fillText(data + '%', bar._model.x, bar._model.y - 5);
                     }
                   });

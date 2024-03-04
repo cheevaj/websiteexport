@@ -190,29 +190,6 @@ export default {
         { title: 'Products' },
         { title: 'Contact us' },
       ],
-      itemsss: [
-        {
-          avatar: 'https://tplus.la/Black-Tplus-logo.png',
-          title: 'MyCCare web',
-          subtitle: 'ff',
-          link: 'http://10.30.6.94:7878/Replaceisdn/index.php',
-        },
-        {
-          avatar:
-            'https://tse4.mm.bing.net/th?id=OIP.Es4Sc4gJqjV7Lh9BDs21WwHaEK&pid=Api&P=0&h=220',
-          title: 'TPLUS',
-          subtitle: 'ff',
-          link: 'http://0.30.6.94:9999/Hlred.php',
-        },
-        {
-          avatar:
-            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqufX2HiXw-7qV1mSUg6KiZKeQQ9RBX1F-Yly5uj5AyBmdZ5rU0lg_76ol3kXnv3CsDWs&usqp=CAU',
-          title: 'TPLUS',
-          subtitle: 'ff',
-          link: 'http://2.28.17.137:7789/Services/?mode=login',
-        },
-      ],
-
       link: [
         'https://tplus.la/tplus/about-us',
         'https://tplus.la/new-number/sim/',

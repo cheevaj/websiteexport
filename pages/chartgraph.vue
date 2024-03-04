@@ -13,8 +13,8 @@
                         <v-menu flat transition="slide-x-transition" bottom right>
                             <template v-slot:activator="{ on, attrs }">
                                 <!-- Button to activate the menu -->
-                                <v-btn style=" width: 99%; border-radius: 0%; background-color: #ffff00; color: #000;" dark
-                                    v-bind="attrs" v-on="on">
+                                <v-btn style=" width: 99%; border-radius: 0%; background-color: #ffff00; color: #000;"
+                                    dark v-bind="attrs" v-on="on">
                                     MENU TABLES
                                     <v-icon>mdi-table-sync</v-icon>
                                 </v-btn>
@@ -63,7 +63,8 @@
                             <v-subheader style="color: #ffff00;">{{ tabledisplay }}</v-subheader>
                             <v-list-item-group v-model="selectedItem" color="yellow">
                                 <!-- Use v-if on the v-list-item to conditionally render it -->
-                                <v-list-item v-for="(item, i) in itemdatacust" :key="i" @click="changeGraph('Root Cause')">
+                                <v-list-item v-for="(item, i) in itemdatacust" :key="i"
+                                    @click="changeGraph('Root Cause')">
                                     <v-list-item-content>
                                         <v-list-item-title>
                                             {{ item.text }}
@@ -105,14 +106,14 @@
                                                 style="background-color: transparent; color: transparent;"
                                                 @click="showgraph(item.name)">
                                                 <v-card flat :style="{
-                                                    background: graphstyle[0],
-                                                    border: '2px solid',
-                                                    borderColor: active ? '#000' : 'white'
-                                                }" class="text-center pa-1" @click="toggle">
+                                background: graphstyle[0],
+                                border: '2px solid',
+                                borderColor: active ? '#000' : 'white'
+                            }" class="text-center pa-1" @click="toggle">
                                                     <v-icon size="35"
                                                         :style="{ color: graphform === item.name ? '#000' : '#fff' }">{{
-                                                            item.icon
-                                                        }}</v-icon>
+                                item.icon
+                            }}</v-icon>
                                                 </v-card>
                                             </v-btn>
                                         </v-item>
@@ -170,7 +171,7 @@
                                             <p class="px-2 rounded-6"
                                                 :style="{ backgroundColor: checkTargetDo === 'Achieved the Target' ? 'rgb(198, 255, 179)' : 'rgb(255, 214, 204)' }">
                                                 {{
-                                                    checkTargetDo }}</p>
+                                checkTargetDo }}</p>
                                             <v-spacer></v-spacer>
                                             <v-icon v-if="checkTargetDo === 'Achieved the Target'"
                                                 color="rgb(0, 230, 0)">mdi-checkbox-marked</v-icon>
@@ -256,7 +257,7 @@
                                                 <canvas height="100px" id="myChart"></canvas>
                                             </div>
                                             <div v-else class="custom-font">
-                                                <MyChartBar v-if="targetDate === 'date'" :desserts="desserts" :mount="mount"
+                                                <MyChartBar v-if="targetDate === 'date'" :desserts="desserts"
                                                     @chartBarData="receiveChartData" />
                                                 <div v-else-if="targetDate === 'user'">
                                                     <v-row>
@@ -268,7 +269,8 @@
                                                         </v-col>
                                                     </v-row>
                                                 </div>
-                                                <MycharUser v-else-if="targetDate === 'userAll'" :userTarget="userTarget" />
+                                                <MycharUser v-else-if="targetDate === 'userAll'"
+                                                    :userTarget="userTarget" />
                                                 <MyChartLine v-else :datasetdatatime="datasetdatatime" />
                                             </div>
                                         </v-card-text>
@@ -283,12 +285,13 @@
                                 <v-row>
                                     <v-col
                                         v-if="(!loading && (tabledisplay === 'Customer Complaint' || tabledisplay === 'Root Cause Report'))"
-                                        cols="12" sm="7" md="7" class="px-0 py-0">
+                                        cols="12" sm="6" md="6" class="px-0 py-0">
                                         <v-card-text class="px-1 pt-0 pb-1" style="color: #000000;">
                                             <h4 style="color: #b3b300;">DATA TABLE</h4>
                                             <v-simple-table dense flat fixed-header class="table-container custom-font"
                                                 :height="dataset.length >= 5 ? '225px' : null"
                                                 :max-height="dataset.length < 5 ? '225px' : null">
+
                                                 <template v-slot:default>
                                                     <thead>
                                                         <tr>
@@ -332,13 +335,14 @@
                                             </v-simple-table>
                                         </v-card-text>
                                     </v-col>
-                                    <v-col v-if="(!loading && tabledisplay === 'Root Cause')" cols="12" sm="7" md="7"
+                                    <v-col v-if="(!loading && tabledisplay === 'Root Cause')" cols="12" sm="6" md="6"
                                         class="px-0 py-0">
                                         <v-card-text class="px-1 pt-0 pb-1" style="color: #000000;">
                                             <h4 style="color: #b3b300;">DATA TABLE</h4>
                                             <v-simple-table dense flat fixed-header class="table-container custom-font"
                                                 :height="dataset.length >= 5 ? '225px' : null"
                                                 :max-height="dataset.length < 5 ? '225px' : null">
+
                                                 <template v-slot:default>
                                                     <thead>
                                                         <tr>
@@ -381,12 +385,13 @@
                                             </v-simple-table>
                                         </v-card-text>
                                     </v-col>
-                                    <v-col cols="12" sm="5" md="5" class="px-0 py-0">
+                                    <v-col cols="12" sm="6" md="6" class="px-0 py-0">
                                         <v-card-text class="px-1 pt-0 pb-1" style="color: #000000;">
                                             <h4 style="color: #b3b300;">TABLE TIME</h4>
                                             <v-simple-table dense flat fixed-header class="table-container custom-font"
                                                 :height="datasetdatatime.length >= 5 ? '225px' : null"
                                                 :max-height="datasetdatatime.length < 5 ? '225px' : null">
+
                                                 <template v-slot:default>
                                                     <thead>
                                                         <tr>
@@ -394,10 +399,10 @@
                                                                 Ticket/KPI
                                                             </th>
                                                             <th class="text-center" style="color:#ffff00;">
-                                                                ≤ 20m
+                                                                ≤ 20min
                                                             </th>
                                                             <th class="text-center" style="color:#ffff00;">
-                                                                &gt; 20m
+                                                                &gt; 20min
                                                             </th>
                                                             <th class="text-center" style="color:#ffff00;">
                                                                 Total
@@ -447,9 +452,11 @@
                                         <v-col v-if="targetDate !== 'date'" cols="12" sm="5" md="5" class="px-0 py-0">
                                             <v-card-text class="px-1 pt-0 pb-1" style="color: #000000;">
                                                 <h4 style="color: #b3b300;">TABLE TIME</h4>
-                                                <v-simple-table dense flat fixed-header class="table-container custom-font"
+                                                <v-simple-table dense flat fixed-header
+                                                    class="table-container custom-font"
                                                     :height="userTarget.length >= 6 ? '225px' : null"
                                                     :max-height="userTarget.length < 6 ? '225px' : null">
+
                                                     <template v-slot:default>
                                                         <thead>
                                                             <tr>
@@ -485,39 +492,41 @@
                                         <v-col v-if="targetDate === 'date'" cols="12" sm="12" md="12" class="px-0 py-0">
                                             <v-card-text class="px-1 pt-0 pb-1" style="color: #000000;">
                                                 <h4 style="color: #b3b300;">TABLE TIME</h4>
-                                                <v-simple-table dense flat fixed-header class="table-container custom-font"
+                                                <v-simple-table dense flat fixed-header
+                                                    class="table-container custom-font"
                                                     :height="dataDates.length >= 5 ? '225px' : null"
                                                     :max-height="dataDates.length < 5 ? '225px' : null">
+
                                                     <template v-slot:default>
                                                         <thead>
                                                             <tr>
                                                                 <th class="text-center" style="color: #ffff00;">
-                                                                    Date
+                                                                    Date/Month/Year
                                                                 </th>
                                                                 <th class="text-center" style="color:#ffff00;">
                                                                     Total
                                                                 </th>
                                                                 <th class="text-center" style="color:#ffff00;">
-                                                                    Time Do TP
+                                                                    Customer troubleshooting &le;20min
                                                                 </th>
                                                                 <th class="text-center" style="color:#ffff00;">
-                                                                    Time Do &gt;20m
+                                                                    Customer troubleshooting &gt;20min
                                                                 </th>
                                                                 <th class="text-center" style="color:#ffff00;">
-                                                                    Time Care TP &le;5m
+                                                                    Customer troubleshooting Success(User)(%) &le;20m
                                                                 </th>
                                                                 <th class="text-center" style="color:#ffff00;">
-                                                                    Time Care &gt;5m
+                                                                    Customer troubleshooting &le;5min
                                                                 </th>
                                                                 <th class="text-center" style="color:#ffff00;">
-                                                                    Percent (%) &le;20m
+                                                                    Customer troubleshooting &gt;5min
                                                                 </th>
                                                                 <th class="text-center" style="color:#ffff00;">
-                                                                    Percent (%) &le;5m
+                                                                    Customer troubleshooting Success(User)(%) &le;5m
                                                                 </th>
                                                                 <th class="text-center" style="color:#ffff00;">
                                                                     Targets
-                                                                    &le;20m | &gt;5m
+                                                                    &le;20m|&gt;5m
                                                                 </th>
                                                             </tr>
                                                         </thead>
@@ -527,13 +536,14 @@
                                                                 <td style="color: #ffff00;">{{ item.valueAll }}</td>
                                                                 <td>{{ item.valueminD }}</td>
                                                                 <td>{{ item.valuemaxD }}</td>
+                                                                <td>{{ item.percentMinD }}</td>
                                                                 <td>{{ item.valueminC }}</td>
                                                                 <td>{{ item.valuemaxC }}</td>
-                                                                <td>{{ item.percentMinD }}</td>
                                                                 <td>{{ item.percentMinC }}</td>
                                                                 <td><v-icon v-if="item.targetD"
                                                                         color="rgb(0, 230, 0)">mdi-checkbox-marked</v-icon>
-                                                                    <v-icon v-else color="error">mdi-close-box</v-icon> |
+                                                                    <v-icon v-else color="error">mdi-close-box</v-icon>
+                                                                    |
                                                                     <v-icon v-if="item.targetC"
                                                                         color="rgb(0, 230, 0)">mdi-checkbox-marked</v-icon>
                                                                     <v-icon v-else color="error">mdi-close-box</v-icon>
@@ -566,12 +576,14 @@
                                                                         <v-icon
                                                                             v-if="checkTargetDo === 'Achieved the Target'"
                                                                             color="rgb(0, 230, 0)">mdi-checkbox-marked</v-icon>
-                                                                        <v-icon v-else color="error">mdi-close-box</v-icon>
+                                                                        <v-icon v-else
+                                                                            color="error">mdi-close-box</v-icon>
                                                                         |
                                                                         <v-icon
                                                                             v-if="checkTargetCare === 'Achieved the Target'"
                                                                             color="rgb(0, 230, 0)">mdi-checkbox-marked</v-icon>
-                                                                        <v-icon v-else color="error">mdi-close-box</v-icon>
+                                                                        <v-icon v-else
+                                                                            color="error">mdi-close-box</v-icon>
                                                                     </h4>
                                                                 </td>
                                                             </tr>
@@ -583,9 +595,11 @@
                                         <v-col v-else cols="12" sm="7" md="7" class="px-0 py-0">
                                             <v-card-text class="px-1 pt-0 pb-1" style="color: #000000;">
                                                 <h4 style="color: #b3b300;">TABLE TIME</h4>
-                                                <v-simple-table dense flat fixed-header class="table-container custom-font"
+                                                <v-simple-table dense flat fixed-header
+                                                    class="table-container custom-font"
                                                     :height="datasetdatatime.length >= 5 ? '227px' : null"
                                                     :max-height="datasetdatatime.length < 5 ? '227px' : null">
+
                                                     <template v-slot:default>
                                                         <thead>
                                                             <tr>
@@ -593,16 +607,16 @@
                                                                     SERVICE
                                                                 </th>
                                                                 <th class="text-center" style="color:#ffff00;">
-                                                                    Time Do TP &le;20m
+                                                                    &le;20m
                                                                 </th>
                                                                 <th class="text-center" style="color:#ffff00;">
-                                                                    Time Do &gt; 20m
+                                                                    &gt; 20m
                                                                 </th>
                                                                 <th class="text-center" style="color:#ffff00;">
-                                                                    Time Care TP &le;5m
+                                                                    &le;5m
                                                                 </th>
                                                                 <th class="text-center" style="color:#ffff00;">
-                                                                    Time Care &gt;5m
+                                                                    &gt;5m
                                                                 </th>
                                                                 <th class="text-center" style="color:#ffff00;">
                                                                     Total
@@ -610,8 +624,7 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            <tr v-for="    item     in     datasetdatatime    "
-                                                                :key="item.name">
+                                                            <tr v-for="item in datasetdatatime" :key="item.name">
                                                                 <td style="color: #ffff00;">{{ item.name }}</td>
                                                                 <td>{{ item.valuemin }}</td>
                                                                 <td>{{ item.valuemax }}</td>
@@ -636,7 +649,8 @@
                                                                         {{ percentTimeDoTa }}| <v-icon
                                                                             v-if="checkTargetDo === 'Achieved the Target'"
                                                                             color="rgb(0, 230, 0)">mdi-checkbox-marked</v-icon>
-                                                                        <v-icon v-else color="error">mdi-close-box</v-icon>
+                                                                        <v-icon v-else
+                                                                            color="error">mdi-close-box</v-icon>
                                                                     </h4>
                                                                 </td>
                                                                 <td style="color: #000;">
@@ -650,7 +664,8 @@
                                                                         {{ percentTimeC }}|<v-icon
                                                                             v-if="checkTargetCare === 'Achieved the Target'"
                                                                             color="rgb(0, 230, 0)">mdi-checkbox-marked</v-icon>
-                                                                        <v-icon v-else color="error">mdi-close-box</v-icon>
+                                                                        <v-icon v-else
+                                                                            color="error">mdi-close-box</v-icon>
                                                                     </h4>
                                                                 </td>
                                                                 <td style="color: #000;">
@@ -674,6 +689,7 @@
         </v-card>
     </div>
 </template>
+
 <script>
 import Chart from 'chart.js';
 const graphstyle = [['#00c6ff', '#F0F', '#FF0']]
@@ -684,7 +700,6 @@ export default {
     },
     data() {
         return {
-            mount: false,
             targetDate: 'date',
             checkTargetDo: '',
             checkTargetCare: '',
@@ -1986,6 +2001,7 @@ export default {
     },
 }
 </script>
+
 <style scoped>
 .v-progress-circular {
     margin: 1rem;
@@ -2045,4 +2061,3 @@ export default {
     /* You can specify additional styles here */
 }
 </style>
-  
