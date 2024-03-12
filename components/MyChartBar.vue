@@ -179,17 +179,17 @@ export default {
       const timeCAREmin = this.datasetdatatime.reduce((acc, item) => acc + item.valueminC, 0);
       const timeDOmax = this.datasetdatatime.reduce((acc, item) => acc + item.valuemaxD, 0);
       const timeCAREmax = this.datasetdatatime.reduce((acc, item) => acc + item.valuemaxC, 0);
-      // const percentD = this.dataTable.reduce((acc, item) => acc + item.percentMinD, 0) / this.dataTable.length;
-      // const percentC = this.dataTable.reduce((acc, item) => acc + item.percentMinC, 0) / this.dataTable.length;
-
+      const percentD = Number((timeDOmin / valueAll * 100).toFixed(2));
+      const percentC = Number((timeCAREmin / valueAll * 100).toFixed(2));
+      console.log(percentD, percentC)
       this.itemTable = {
         allValueAll: valueAll,
         allTimeDOmin: timeDOmin,
         allTimeDOmax: timeDOmax,
+        percentMinD: percentD + "%",
         allTimeCAREmin: timeCAREmin,
         allTimeCAREmax: timeCAREmax,
-        // percentMinC: percentC,
-        // percentMinD: percentD,
+        percentMinC: percentC + "%",
       };
       this.createChart(indexes);
       this.createChart(indexes);
@@ -228,9 +228,9 @@ export default {
       const timeCAREmax = this.datasetdatatime.map(item => item.valuemaxC);
       const percentAll = valueAll.map((value, index) => {
         if (value === 0) {
-          return 100;
+          return 99.5;
         } else {
-          return Number((value / valueAll[index] * 100).toFixed(2));
+          return Number((value / valueAll[index] * 100).toFixed(2) - 0.5);
         }
       });
       const percentTimeDo = timeDOmin.map((value, index) => {
@@ -318,7 +318,7 @@ export default {
 
           {
             type: 'line',
-            label: 'Target(100%)',
+            label: 'Target(99.5%)',
             data: percentAll,
             backgroundColor: indexes.length === 1 ? 'rgba(26, 117, 255, 0.8)' : 'transparent',
             borderColor: 'rgba(26, 117, 255, 1)',
@@ -411,6 +411,7 @@ export default {
   },
 };
 </script>
+
 <style>
 .custom-font {
   font-family: 'Noto Sans Lao', sans-serif;

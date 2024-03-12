@@ -38,7 +38,7 @@
             </v-btn>
           </v-col>
           <v-col cols="8" v-if="show" class="text-right" @mouseleave="colortext = false">
-            <v-card-text class="pa-0 text-right pr-12">
+            <v-card-text class="pa-0 text-right">
               <v-tooltip bottom class="px-4">
                 <template #activator="{ on, attrs }">
                   <v-btn height="100%" class="pa-0" text v-bind="attrs" v-on="on"
@@ -93,6 +93,14 @@
                   </v-card-text>
                 </v-card-actions>
               </v-btn>
+              <v-btn height="100%" class="pa-0 pl-12" text style="background-color: transparent; color: transparent"
+                @mouseenter="colortext = 'logout'" @click=" $router.push('/login/login')">
+                  <v-card-text :style="{
+                    color: colortext === 'logout' ? '#ffff00' : '#000',
+                  }">
+                    <v-icon>mdi-account-arrow-right-outline</v-icon>
+                  </v-card-text>
+              </v-btn>
             </v-card-text>
           </v-col>
           <v-col cols="4" v-else>
@@ -119,6 +127,17 @@
                       <v-list-item-title style="color: #000;" :style="{
                         color: colortext === 'menu' + index ? '#ffff00' : '#000',
                       }">{{ item.title }}
+                        <v-divider style="background-color: #ffff00;"></v-divider>
+                      </v-list-item-title>
+                    </v-btn>
+                  </v-list-item>
+                  <v-list-item>
+                    <v-btn height="100%" class="pa-0" text style="background-color: transparent; color: transparent"
+                      @mouseenter="colortext = 'menu' + index" @mouseleave="colortext = false"
+                      @click=" $router.push('/chart/pagewhatsapp')">
+                      <v-list-item-title style="color: #000;" :style="{
+                        color: colortext === 'menu' + index ? '#ffff00' : '#000',
+                      }"><v-icon>mdi-account-arrow-right-outline</v-icon>
                         <v-divider style="background-color: #ffff00;"></v-divider>
                       </v-list-item-title>
                     </v-btn>
@@ -263,7 +282,7 @@ export default {
     },
     updateShowProperty() {
       // Update 'show' property based on window width
-      this.show = window.innerWidth > 980;
+      this.show = window.innerWidth > 1200;
     }
   },
   beforeDestroy() {
@@ -281,7 +300,7 @@ export default {
   display: inline-block;
 }
 
-@media only screen and (max-width: 980px) {
+@media only screen and (max-width: 1200px) {
   .grid {
     display: none;
   }

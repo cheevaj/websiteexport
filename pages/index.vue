@@ -3,7 +3,7 @@
     <v-window v-model="onboarding">
       <v-window-item v-for="item in image" :key="`card-${item}`">
         <v-col cols="12">
-          <v-card @mouseenter="stopAutoSlide" @mouseleave="startAutoSlide" style="height: 100%; width: 100#">
+          <v-card @mouseenter="stopAutoSlide" @mouseleave="startAutoSlide" style="height: 100%; width: 100%">
             <v-row class="fill-height" align="center" justify="center">
               <v-img style="
                   max-height: 450px;

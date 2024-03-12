@@ -563,16 +563,6 @@
                                                                 </td>
                                                                 <td style="color: #000;">
                                                                     <h4>
-                                                                        {{ percentTimeDoTa }}
-                                                                    </h4>
-                                                                </td>
-                                                                <td style="color: #000;">
-                                                                    <h4>
-                                                                        {{ percentTimeCareTa }}
-                                                                    </h4>
-                                                                </td>
-                                                                <td style="color: #000;">
-                                                                    <h4>
                                                                         <v-icon
                                                                             v-if="checkTargetDo === 'Achieved the Target'"
                                                                             color="rgb(0, 230, 0)">mdi-checkbox-marked</v-icon>
@@ -773,6 +763,7 @@ export default {
     methods: {
         receiveChartData(data, allData) {
             this.dataDates = data;
+            console.log(allData)
             this.DataAll = allData;
         },
         showgraph(name) {

@@ -44,14 +44,14 @@
             <v-col>
               <!-- Sta slid baton Download Excel------------------------------------------------------------------------------------------------------------------->
               <v-btn class="mt-2" :style="{
-                boxShadow: show ? '#00ff55' : 'rgb(217, 217, 217)',
-              }" text height="25%" width="100%" small color="#009933" :outlined="show === 'button1' ? false : true"
+          boxShadow: show ? '#00ff55' : 'rgb(217, 217, 217)',
+        }" text height="25%" width="100%" small color="#009933" :outlined="show === 'button1' ? false : true"
                 @mouseenter="setOutlined('button1')" @mouseleave="detOutlined(true)" @click="someAsyncFunction()">
-                <v-icon style="background-color: #009933; border-radius=50%" size="35"
+                <v-icon style="background-color: #009933; border-radius:50%" size="35"
                   color="#ffffff">mdi-microsoft-excel</v-icon>
                 <v-card-text :style="{
-                  color: show === 'button1' ? '#009933' : '#000',
-                }">Excel</v-card-text>
+          color: show === 'button1' ? '#009933' : '#000',
+        }">Excel</v-card-text>
               </v-btn>
 
               <!-- Sta slid baton Download CSV------------------------------------------------------------------------------------------------------------------->
@@ -59,14 +59,14 @@
               <v-tooltip bottom>
                 <template #activator="{ on, attrs }">
                   <v-btn v-bind="attrs" class="mt-2" text height="25%" width="100%" small :style="{
-                    boxShadow: show ? '#00ff55' : 'rgb(217, 217, 217)',
-                  }" color="#ff3333" :outlined="show === 'button2' ? false : true" v-on="on"
+          boxShadow: show ? '#00ff55' : 'rgb(217, 217, 217)',
+        }" color="#ff3333" :outlined="show === 'button2' ? false : true" v-on="on"
                     @mouseenter="setOutlined('button2')" @mouseleave="detOutlined(true)">
-                    <v-icon style="background-color: #ff3333; border-radius=50%" size="35"
+                    <v-icon style="background-color: #ff3333; border-radius:50%" size="35"
                       color="#ffffff">mdi-file-pdf-box</v-icon>
                     <v-card-text :style="{
-                      color: show === 'button2' ? '#ff3333' : '#000',
-                    }">
+          color: show === 'button2' ? '#ff3333' : '#000',
+        }">
                       PDF</v-card-text>
                   </v-btn>
                 </template>
@@ -125,6 +125,7 @@
                     <v-col cols="12" sm="4" md="4" class="pl-4">
                       <v-menu ref="menu" v-model="menu" :close-on-content-click="false" :return-value.sync="date"
                         transition="scale-transition" offset-y min-width="auto">
+
                         <template #activator="{ on, attrs }">
                           <v-text-field v-model="date" label="Start Date" prepend-icon="mdi-calendar" readonly
                             v-bind="attrs" v-on="on"></v-text-field>
@@ -150,6 +151,7 @@
                     <v-col cols="12" sm="4" md="4">
                       <v-menu ref="menus" v-model="menus" :close-on-content-click="false" :return-value.sync="dates"
                         transition="scale-transition" offset-y min-width="auto">
+
                         <template #activator="{ on, attrs }">
                           <v-text-field v-model="dates" label="End Date" prepend-icon="mdi-calendar" readonly
                             v-bind="attrs" v-on="on"></v-text-field>
@@ -203,6 +205,7 @@
                   bottom: 1px;
                   right: 90px;">
                 <v-tooltip v-if="loading" bottom class="px-4">
+
                   <template #activator="{ on, attrs }">
                     <v-btn text style=" background-color: transparent; color: transparent;" v-bind="attrs" v-on="on"
                       @mouseenter="colWidth = true" @mouseleave="colWidth = false">
@@ -212,6 +215,7 @@
                   <span class="tooltip" ref="tooltip">Loading Graph</span>
                 </v-tooltip>
                 <v-tooltip v-else bottom class="px-4">
+
                   <template #activator="{ on, attrs }">
                     <v-btn text style=" background-color: transparent; color: transparent;" v-bind="attrs" v-on="on"
                       @click="showgraph = !showgraph" @mouseenter="colWidth = true" @mouseleave="colWidth = false">
@@ -242,6 +246,7 @@
               <v-list subheader two-line flat>
                 <v-list-item-group class="table-title-hiegth">
                   <v-list-item v-for="item in columns" :key="item.key">
+
                     <template #default="{ active }">
                       <v-list-item-action>
                         <v-checkbox v-model="item.active" :input-value="active"></v-checkbox>
@@ -308,6 +313,7 @@
     <!--Sto title table-->
   </div>
 </template>
+
 <script>
 import * as XLSX from 'xlsx'
 import chartgraph from './chartgraph.vue'
@@ -847,6 +853,7 @@ export default {
   },
 }
 </script>
+
 <style>
 .v-card--reveal {
   align-items: center;
@@ -889,4 +896,3 @@ export default {
   /* You can specify additional styles here */
 }
 </style>
-  
