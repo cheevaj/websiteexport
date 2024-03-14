@@ -1,6 +1,33 @@
 <template>
   <v-app>
-    <v-app-bar style="z-index: 100" flat clipped-left fixed app>
+    <v-app-bar v-if="token" style="z-index: 100" flat clipped-left fixed app>
+      <div class="text-center">
+        <v-dialog v-model="dialog" width="300">
+          <v-card class="text-center">
+            <v-icon class="mt-4" color="yellow" size="55">mdi-alert-circle-outline</v-icon>
+            <v-card-text class="text-h8 a text-center">
+              <h4>
+                Are you leaving?
+              </h4>
+              <p>
+                Are you sure want to log out ? All your unsaved data will bet lost.
+              </p>
+            </v-card-text>
+            <v-divider></v-divider>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-card-actions>
+                <v-btn color="error" text @click="dialog = false">
+                  cancel
+                </v-btn>
+                <v-btn color="yellow" @click="logOut">
+                  Getout
+                </v-btn>
+              </v-card-actions>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+      </div>
       <v-col cols="12" class="px-0">
         <v-row>
           <v-col :cols="show ? 2 : 4" align="center" justify="center" @mouseleave="colortext = false"
@@ -15,9 +42,7 @@
               <v-btn height="100%" @mouseenter="colortext = 'tplus'" class="pa-0" text
                 style="background-color: transparent; color: transparent" @click="$router.push('/')">
                 <v-card-actions class="pa-0">
-                  <v-card-text class="px-0" :style="{
-                    color: colortext === 'tplus' ? '#ffff00' : '#000',
-                  }">
+                  <v-card-text class="px-0" :style="{ color: colortext === 'tplus' ? '#ffff00' : '#000' }">
                     TPLUS
                   </v-card-text>
                 </v-card-actions>
@@ -25,12 +50,11 @@
             </v-list-item>
           </v-col>
           <v-col :cols="show ? 2 : 4" class="px-0 text-center" @mouseleave="colortext = false">
-            <v-btn height="100%" width="100%" class="pa-0" text style="background-color: transparent; color: transparent"
-              @mouseenter="colortext = 'web'" @click="website = !website">
+            <v-btn height="100%" width="100%" class="pa-0" text
+              style="background-color: transparent; color: transparent" @mouseenter="colortext = 'web'"
+              @click="website = !website">
               <v-card-actions class="pa-0">
-                <v-card-text :style="{
-                  color: colortext === 'web' ? '#ffff00' : '#000',
-                }">
+                <v-card-text :style="{ color: colortext === 'web' ? '#ffff00' : '#000' }">
                   <v-icon style="bottom: 2px"> mdi-web-sync </v-icon>
                   Web
                 </v-card-text>
@@ -45,9 +69,7 @@
                     style="background-color: transparent; color: transparent" @mouseenter="startTimer"
                     @mouseleave="clearTimer" @click="$router.push('/pagetable')">
                     <v-card-actions class="pa-0">
-                      <v-card-text :style="{
-                        color: colortext === 'number' ? '#ffff00' : '#000',
-                      }">
+                      <v-card-text :style="{ color: colortext === 'number' ? '#ffff00' : '#000' }">
                         view TICKET
                       </v-card-text>
                     </v-card-actions>
@@ -58,9 +80,7 @@
               <v-btn height="100%" text style="background-color: transparent; color: transparent"
                 @click="openLinkInNewTab(link[0])" @mouseenter="colortext = 'about'" @mouseleave="colortext = false">
                 <v-card-actions class="pa-0">
-                  <v-card-text :style="{
-                    color: colortext === 'about' ? '#ffff00' : '#000',
-                  }">
+                  <v-card-text :style="{ color: colortext === 'about' ? '#ffff00' : '#000' }">
                     about us
                   </v-card-text>
                 </v-card-actions>
@@ -76,9 +96,7 @@
               <v-btn height="100%" class="pa-0" text style="background-color: transparent; color: transparent"
                 @mouseenter="colortext = 'product'" @click="openLinkInNewTab(link[1])">
                 <v-card-actions class="pa-0">
-                  <v-card-text :style="{
-                    color: colortext === 'product' ? '#ffff00' : '#000',
-                  }">
+                  <v-card-text :style="{ color: colortext === 'product' ? '#ffff00' : '#000' }">
                     Products
                   </v-card-text>
                 </v-card-actions>
@@ -86,20 +104,16 @@
               <v-btn height="100%" class="pa-0" text style="background-color: transparent; color: transparent"
                 @mouseenter="colortext = 'services'" @click="openLinkInNewTab(link[2])">
                 <v-card-actions class="pa-0">
-                  <v-card-text :style="{
-                    color: colortext === 'services' ? '#ffff00' : '#000',
-                  }">
+                  <v-card-text :style="{ color: colortext === 'services' ? '#ffff00' : '#000' }">
                     Contact us
                   </v-card-text>
                 </v-card-actions>
               </v-btn>
               <v-btn height="100%" class="pa-0 pl-12" text style="background-color: transparent; color: transparent"
-                @mouseenter="colortext = 'logout'" @click=" $router.push('/login/login')">
-                  <v-card-text :style="{
-                    color: colortext === 'logout' ? '#ffff00' : '#000',
-                  }">
-                    <v-icon>mdi-account-arrow-right-outline</v-icon>
-                  </v-card-text>
+                @mouseenter="colortext = 'logout'" @click="dialog = true">
+                <v-card-text :style="{ color: colortext === 'logout' ? '#ffff00' : '#000', }">
+                  <span>Getout</span><v-icon>mdi-exit-to-app</v-icon>
+                </v-card-text>
               </v-btn>
             </v-card-text>
           </v-col>
@@ -111,9 +125,7 @@
                     style="background-color: transparent; color: transparent" @mouseenter="colortext = 'menu'"
                     @mouseleave="colortext = false">
                     <v-card-actions class="pa-0">
-                      <v-card-text :style="{
-                        color: colortext === 'menu' ? '#ffff00' : '#000',
-                      }">
+                      <v-card-text :style="{ color: colortext === 'menu' ? '#ffff00' : '#000' }">
                         <v-icon>mdi-menu</v-icon>
                       </v-card-text>
                     </v-card-actions>
@@ -124,21 +136,19 @@
                     <v-btn height="100%" class="pa-0" text style="background-color: transparent; color: transparent"
                       @mouseenter="colortext = 'menu' + index" @mouseleave="colortext = false"
                       @click=" (index === 0 || index === 2) ? index === 0 ? $router.push('/pagetable') : $router.push('/chart/pagewhatsapp') : openLinkInNewTab(link[index])">
-                      <v-list-item-title style="color: #000;" :style="{
-                        color: colortext === 'menu' + index ? '#ffff00' : '#000',
-                      }">{{ item.title }}
+                      <v-list-item-title style="color: #000;"
+                        :style="{ color: colortext === 'menu' + index ? '#ffff00' : '#000' }">
+                        {{ item.title }}
                         <v-divider style="background-color: #ffff00;"></v-divider>
                       </v-list-item-title>
                     </v-btn>
                   </v-list-item>
-                  <v-list-item>
+                  <v-list-item class="text-right">
                     <v-btn height="100%" class="pa-0" text style="background-color: transparent; color: transparent"
-                      @mouseenter="colortext = 'menu' + index" @mouseleave="colortext = false"
-                      @click=" $router.push('/chart/pagewhatsapp')">
-                      <v-list-item-title style="color: #000;" :style="{
-                        color: colortext === 'menu' + index ? '#ffff00' : '#000',
-                      }"><v-icon>mdi-account-arrow-right-outline</v-icon>
-                        <v-divider style="background-color: #ffff00;"></v-divider>
+                      @mouseenter="colortext = 'logout'" @mouseleave="colortext = false" @click="dialog = true">
+                      <v-list-item-title style="color: #000;"
+                        :style="{ color: colortext === 'logout' ? '#ffff00' : '#000' }">
+                        <span>Getout</span><v-icon>mdi-exit-to-app</v-icon>
                       </v-list-item-title>
                     </v-btn>
                   </v-list-item>
@@ -155,10 +165,11 @@
         style="position: fixed; z-index: 100; background-color: rgb(255, 255, 230);">
         <div>
           <!-- <v-card-actions class="pa-0"> -->
-            <!-- <v-card-text class="py-0 px-4 "><h3>Website of TPLUS</h3></v-card-text> -->
-            <v-card-text class="py-0 pr-8 pl-0 text-right"><v-btn @click="website = !website" fab x-small text style="position: fixed; z-index: 100;">
-                <v-icon size="25">mdi-close-circle</v-icon>
-              </v-btn></v-card-text>
+          <!-- <v-card-text class="py-0 px-4 "><h3>Website of TPLUS</h3></v-card-text> -->
+          <v-card-text class="py-0 pr-8 pl-0 text-right"><v-btn @click="website = !website" fab x-small text
+              style="position: fixed; z-index: 100;">
+              <v-icon size="25">mdi-close-circle</v-icon>
+            </v-btn></v-card-text>
           <!-- </v-card-actions> -->
         </div>
         <pageWebsite />
@@ -166,7 +177,7 @@
       <v-divider style="background-color: #ffff00"></v-divider>
       <Nuxt />
     </v-main>
-    <v-footer padless style="background-color: #ffff00">
+    <v-footer v-if="token" padless style="background-color: #ffff00">
       <v-card flat tile class="white--text text-center" style="background-color: #000">
         <v-card-text>
           <v-btn :style="{ backgroundColor: item.backgroundColor }" v-for="item in icons" :key="item.icon"
@@ -201,6 +212,7 @@ export default {
     return {
       selectedItem: 1,
       show: true,
+      dialog: false,
       website: false,
       menu: [
         { title: 'Ticket' },
@@ -239,7 +251,7 @@ export default {
         },
       ],
       colortext: false,
-      image: 'https://api.tplus.la/images/defaultTplusLogo.jpg',
+      image: 'https://api.tplus.la/images/defaultTplusLogo.jpg', // ~/static/Tpluslogo.png
       items: [
         {
           img: 'https://api.tplus.la/images/defaultTplusLogo.jpg',
@@ -258,14 +270,26 @@ export default {
       tooltipTimer: null,
     }
   },
+  computed: {
+    token() {
+      return this.$store.state.tokenShow;
+    },
+  },
   mounted() {
     // Update 'show' property on component mount
     this.updateShowProperty();
-
+    // console.log('hi', this.token)
     // Listen for window resize events and update 'show' property accordingly
     window.addEventListener('resize', this.updateShowProperty);
   },
   methods: {
+    logOut() {
+      this.dialog = false;
+      this.$auth.strategy.token.reset();
+      this.$store.commit('setToken', false);
+
+      this.$router.push('/login/login');
+    },
     openLinkInNewTab(link) {
       window.open(link, '_blank')
     },

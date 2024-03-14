@@ -318,6 +318,7 @@
 import * as XLSX from 'xlsx'
 import chartgraph from './chartgraph.vue'
 export default {
+  middleware:'auth',
   Currency: 'DefaultLayout',
   components: {
     chartgraph,

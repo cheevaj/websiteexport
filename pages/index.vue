@@ -198,6 +198,7 @@
 </template>
 <script>
 export default {
+  middleware:'auth',
   Currency: 'DefaultLayout',
   data() {
     return {

@@ -47,7 +47,39 @@ export default {
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
     '@nuxtjs/google-fonts',
+    '@nuxtjs/auth-next',
   ],
+  modules: [
+    // https://go.nuxtjs.dev/axios
+    '@nuxtjs/axios',
+    '@nuxtjs/auth-next',
+  ],
+  // nuxt.config.js
+
+  auth: {
+    store: '~/store',
+    redirect: {
+      login: '/login/login',
+    },
+    strategies: {
+      local: {
+        token: {
+          property: 'user.token',
+          global: true,
+          name: 'authorization',
+          type: '',
+        },
+        user: {
+          property: 'user',
+        },
+        endpoints: {
+          login: { url: '/users/login', method: 'post' },
+          logout: { url: '/users/logout', method: 'delete' },
+          user: { url: '/users/me', method: 'get' },
+        },
+      },
+    },
+  },
   googleFonts: {
     families: {
       // Specify the fonts you want to use
@@ -61,7 +93,7 @@ export default {
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
     // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
-    baseURL: '/',
+    baseURL: 'http://172.28.26.23:3100',
   },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify

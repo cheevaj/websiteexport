@@ -1,9 +1,12 @@
 export const state = () => ({
-    mount: false,
-  })
-  export const mutations = {
-    setLanguage(state, value) {
-      state.mount = value
-    },
-  }
-  
+  tokenShow: null, // Initialize tokenShow to null initially
+})
+
+export const mutations = {
+  setToken(state, value) {
+    state.tokenShow = value
+  },
+}
+export const actions = {}
+
+export const getters = {}

@@ -684,6 +684,7 @@
 import Chart from 'chart.js';
 const graphstyle = [['#00c6ff', '#F0F', '#FF0']]
 export default {
+    middleware: 'auth',
     Currency: 'components',
     props: {
         desserts: Array,
