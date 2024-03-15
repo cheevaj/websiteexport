@@ -60,7 +60,7 @@ export default {
     store: '~/store',
     redirect: {
       login: '/login/login',
-      // home:'/'
+      home:'/'
     },
     strategies: {
       local: {

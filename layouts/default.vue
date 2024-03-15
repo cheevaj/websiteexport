@@ -296,6 +296,7 @@ export default {
       this.$auth.strategy.token.reset();
       this.$store.commit('setToken', false);
       this.$router.push('/login/login');
+      this.$auth.logout();
     },
     openLinkInNewTab(link) {
       window.open(link, '_blank')
