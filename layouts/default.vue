@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-app-bar v-if="token" style="z-index: 100" flat clipped-left fixed app>
+    <v-app-bar v-if="token || tokenShow" style="z-index: 100" flat clipped-left fixed app>
       <div class="text-center">
         <v-dialog v-model="dialog" width="300">
           <v-card class="text-center">
@@ -177,7 +177,7 @@
       <v-divider style="background-color: #ffff00"></v-divider>
       <Nuxt />
     </v-main>
-    <v-footer v-if="token" padless style="background-color: #ffff00">
+    <v-footer v-if="token || tokenShow" padless style="background-color: #ffff00">
       <v-card flat tile class="white--text text-center" style="background-color: #000">
         <v-card-text>
           <v-btn :style="{ backgroundColor: item.backgroundColor }" v-for="item in icons" :key="item.icon"
@@ -272,6 +272,14 @@ export default {
   },
   computed: {
     token() {
+      if (this.$route.path === '/login/login') {
+        return this.$auth.strategy.token.reset();
+      } else {
+        // Return the token without resetting it for other routes
+        return this.$auth.strategy.token.get();
+      }
+    },
+    tokenShow() {
       return this.$store.state.tokenShow;
     },
   },
@@ -287,7 +295,6 @@ export default {
       this.dialog = false;
       this.$auth.strategy.token.reset();
       this.$store.commit('setToken', false);
-
       this.$router.push('/login/login');
     },
     openLinkInNewTab(link) {
