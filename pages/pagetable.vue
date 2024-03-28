@@ -871,6 +871,7 @@ export default {
 } */
 .table-container ::-webkit-scrollbar {
   width: 2px;
+  height: 4px;
 }
 
 .table-container ::-webkit-scrollbar-thumb {

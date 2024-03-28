@@ -1,0 +1,5 @@
+{
+    "editor.formatOnSave": false,
+    "editor.defaultFormatter": "formulahendry.auto-rename-tag",
+    "reactSnippets.settings.prettierEnabled": false
+}

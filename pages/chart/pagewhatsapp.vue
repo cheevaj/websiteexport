@@ -35,7 +35,8 @@
                     <v-card-text class="pr-0 ">
                         <h4>Send to</h4>
                         <v-card-actions class="pr-0">
-                            <v-text-field v-model="numberphone" label="207xxx, 207xx" :rules="rules" hide-details="auto" />
+                            <v-text-field v-model="numberphone" label="207xxx, 207xx" :rules="rules"
+                                hide-details="auto" />
                             <v-divider class="ml-1 pr-0 my-2" vertical style="background-color: #009242;" />
                             <Tooltip content="Import file Excel." placement="bottom" :delay="800">
                                 <input type="file" ref="fileInput" style="display: none"
@@ -56,7 +57,8 @@
                         </v-card-title>
                         <v-spacer></v-spacer>
                         <Tooltip content="Edit file import." placement="bottom" :delay="800">
-                            <v-btn fab text style="background-color: #ffff00; color: #000;" @click="dialogseting = true">
+                            <v-btn fab text style="background-color: #ffff00; color: #000;"
+                                @click="dialogseting = true">
                                 <v-icon size="35">
                                     mdi-file-cog
                                 </v-icon>
@@ -83,7 +85,8 @@
                                     <v-btn color="error darken-1" text @click="changeRow(false)">
                                         Resat
                                     </v-btn>
-                                    <v-btn color="#ffff" style="background-color: #ffff00;" text @click="changeRow(true)">
+                                    <v-btn color="#ffff" style="background-color: #ffff00;" text
+                                        @click="changeRow(true)">
                                         save
                                     </v-btn>
                                 </v-card-actions>
@@ -140,7 +143,8 @@
                                                 </v-card>
                                             </v-col>
                                             <v-col cols="1">
-                                                <v-card-text class="px-0" min-height="76" align="center" justify="center">
+                                                <v-card-text class="px-0" min-height="76" align="center"
+                                                    justify="center">
                                                     <v-icon>
                                                         mdi-send
                                                     </v-icon>
@@ -152,8 +156,8 @@
                                                         Tplus number.
                                                     </div>
                                                 </v-card-text>
-                                                <v-card class="rounded-0 overflow-auto" min-height="76" max-height="200px"
-                                                    outlined>
+                                                <v-card class="rounded-0 overflow-auto" min-height="76"
+                                                    max-height="200px" outlined>
                                                     <v-card-text>
                                                         <div v-for="(element, index) in numsend" :key="index">
                                                             <div
@@ -241,10 +245,12 @@
                                         <template v-slot:default>
                                             <thead>
                                                 <tr>
-                                                    <th class="text-left" style="background-color: #000;color: #ffff00;">
+                                                    <th class="text-left"
+                                                        style="background-color: #000;color: #ffff00;">
                                                         Index
                                                     </th>
-                                                    <th class="text-left" style="background-color: #000;color: #ffff00;">
+                                                    <th class="text-left"
+                                                        style="background-color: #000;color: #ffff00;">
                                                         Numbers
                                                     </th>
                                                     <th class="text-left" style="background-color:#000;color: #ffff00;">
@@ -269,7 +275,7 @@
             </v-card-text>
         </v-card-text>
     </div>
-</div></template>
+</template>
 <script>
 import * as XLSX from 'xlsx';
 export default {
@@ -388,7 +394,7 @@ export default {
                         return '';
                     }
                 }).filter(n => n !== '');
-                console.log('p', this.numsend);
+                // console.log('p', this.numsend);
             } else {
                 // Handle the case where numeber is not a string or has length <= 0
                 const title = 'Invalid input';
@@ -462,6 +468,7 @@ export default {
 .center-right {
     float: right;
 }
+
 .custom-font {
     font-family: 'Noto Sans Lao', sans-serif;
     /* You can specify additional styles here */

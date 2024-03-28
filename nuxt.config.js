@@ -3,8 +3,9 @@ import colors from 'vuetify/es5/util/colors'
 export default {
   // server: {
   //   port: 3333, // default: 3000
-  //   host: '0.0.0.0' // default: localhost
+  //   host: '172.28.17.102', // default: localhost
   // },
+
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
   ssr: false,
 
@@ -21,7 +22,21 @@ export default {
       { hid: 'description', name: 'description', content: '' },
       { name: 'format-detection', content: 'telephone=no' },
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/Tpluslogo.png' }],
+    link: [
+      { rel: 'icon', type: 'image/x-icon', href: '/Tpluslogo.png' },
+      {
+        rel: 'stylesheet',
+        href: 'https://fonts.googleapis.com/icon?family=Material+Icons+Sharp',
+      },
+      {
+        rel: 'stylesheet',
+        href: 'https://fonts.googleapis.com/icon?family=Material+Icons',
+      },
+      {
+        rel: 'stylesheet',
+        href: 'https://fonts.googleapis.com/icon?family=Material+Icons',
+      },
+    ],
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
@@ -60,7 +75,7 @@ export default {
     store: '~/store',
     redirect: {
       login: '/login/login',
-      home:'/'
+      home: '/',
     },
     strategies: {
       local: {

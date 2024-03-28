@@ -52,7 +52,7 @@
                                 style="margin-top: 1px;min-width: 250px;border-top-left-radius: 30%; border-top-right-radius: 30%; border-bottom-left-radius: 10px; 
                                 border-bottom-right-radius: 10px; top:10%; box-shadow: 0px 2px 20px rgba(0, 0, 0, 0.5);">
                                 <v-img
-                                    src="https://www.hdwallpapers.in/download/sparkling_stars_in_yellow_background_hd_yellow-HD.jpg">
+                                :src="require('@/static/boder.png')">
                                     <h1 class="mt-6"><span style="color: #ffff;">TI</span>CKET</h1>
                                 </v-img>
                             </v-card>
@@ -110,25 +110,26 @@ export default {
                     },
                 });
 
-                if (response.data && response.data.encryptedData) {
-                    const key = response.data.encryptedData.key.data;
-                    const decryptedData = this.decryptResponse(
-                        response.data.encryptedData,
-                        key
-                    );
-                    const encryptedToken = this.encryptToken(decryptedData.user.token);
+                // if (response.data && response.data.encryptedData) {
+                //     const key = response.data.encryptedData.key.data;
+                //     const decryptedData = this.decryptResponse(
+                //         response.data.encryptedData,
+                //         key
+                //     );
+                //     const encryptedToken = this.encryptToken(decryptedData.user.token);
 
-                    this.dataresponse = decryptedData;
+                //     this.dataresponse = decryptedData;
 
-                    // Set the encrypted token as the user token
-                    this.$auth.setUserToken(encryptedToken);
+                //     // Set the encrypted token as the user token
+                //     this.$auth.setUserToken(encryptedToken);
 
-                    this.$store.commit('setToken', decryptedData.user.token);
-                    
-                    this.$router.push('/index');
-                } else {
-                    console.error('Invalid response data');
-                }
+                //     this.$store.commit('setToken', decryptedData.user.token);
+                if(response){
+                    this.$router.push('/');
+                }    
+                // } else {
+                        // console.error('Invalid response data');
+                    // }
             } catch (err) {
                 this.errorMessage();
             }

@@ -49,7 +49,7 @@
               </v-btn>
             </v-list-item>
           </v-col>
-          <v-col :cols="show ? 2 : 4" class="px-0 text-center" @mouseleave="colortext = false">
+          <v-col :cols="show ? 1 : 2" class="px-0 text-center" @mouseleave="colortext = false">
             <v-btn height="100%" width="100%" class="pa-0" text
               style="background-color: transparent; color: transparent" @mouseenter="colortext = 'web'"
               @click="website = !website">
@@ -57,6 +57,18 @@
                 <v-card-text :style="{ color: colortext === 'web' ? '#ffff00' : '#000' }">
                   <v-icon style="bottom: 2px"> mdi-web-sync </v-icon>
                   Web
+                </v-card-text>
+              </v-card-actions>
+            </v-btn>
+          </v-col>
+          <v-col :cols="show ? 1 : 2" class="px-0 text-center" @mouseleave="colortext = false">
+            <v-btn height="100%" width="100%" class="pa-0" text
+              style="background-color: transparent; color: transparent" @mouseenter="colortext = 'MenuAll'"
+              @click="$router.push('../one_million')">
+              <v-card-actions class="pa-0">
+                <v-card-text :style="{ color: colortext === 'MenuAll' ? '#ffff00' : '#000' }">
+                  <v-icon style="bottom: 2px"> mdi-layers-triple</v-icon>
+                  Menu
                 </v-card-text>
               </v-card-actions>
             </v-btn>
@@ -85,6 +97,7 @@
                   </v-card-text>
                 </v-card-actions>
               </v-btn>
+
               <v-btn height="100%" class="pa-0" text style="background-color: transparent; color: transparent"
                 @mouseenter="colortext = 'message'" @click="$router.push('/chart/pagewhatsapp')">
                 <v-card-actions class="pa-0">
