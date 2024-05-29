@@ -1,6 +1,8 @@
 <template>
   <div>
-    <v-card-text class="White" v-if="numberNull"> hi </v-card-text>
+    <v-card-text v-if="numberNull">
+      hi
+    </v-card-text>
     <v-card-text v-else
       style="
         display: flex;
@@ -17,9 +19,9 @@
       >
         <h3>Enter your number phone.</h3>
         <br>
-        <v-icon size="85" color="rgb(153, 153, 0)">mdi-smart-card</v-icon>
+        <v-icon size="85" color="rgb(102, 102, 0)">mdi-account-circle</v-icon>
         <br>
-        <h2><span style="color: rgb(255, 255, 0);">CARD</span> not found</h2>
+        <h2><span style="color: rgb(255, 255, 0);">USER</span> data not found</h2>
       </v-card>
     </v-card-text>
   </div>
@@ -28,14 +30,14 @@
 export default {
   Currency: 'index',
   props: {
-    dataCard: Object,
+    dataUser: Object,
     numberNull: Boolean,
   },
   data() {
     return {}
   },
   mounted() {
-    // console.log(this.dataCard)
+    // console.log(this.dataUser)
   },
 }
 </script>

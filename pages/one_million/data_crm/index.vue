@@ -1,11 +1,15 @@
 <template>
   <div>
     <v-card-text
+      v-if="numberNull"
       class="px-5 py-6 scrollbar screen"
       style="background-color: #ffff; overflow-y: auto"
       :style="{ height: heightPx + 'px' }"
     >
       <v-row>
+        <!-- <v-col v-if="true" cols="6">
+          <DataSet />
+        </v-col> -->
         <v-col cols="6" class="pa-0">
           <v-row>
             <v-col cols="6" class="pr-0">
@@ -33,13 +37,13 @@
                     >
                     BSS Status:
                     <v-spacer />
-                    Un know
+                    Un know&nbsp;
                     <v-icon color="#ffff" size="20">mdi-close-circle</v-icon>
                   </v-card-actions>
                   <v-card-actions class="pa-1">
                     <v-icon>mdi-cellphone-sound</v-icon>&nbsp;&nbsp;:
                     <v-spacer />
-                    2078663685
+                    {{ numberPhonSend }}
                   </v-card-actions>
                   <v-divider></v-divider>
                   <v-card-actions class="pa-1">
@@ -75,10 +79,10 @@
                     >
                     CSB Status:
                     <v-spacer />
-                    Idle
+                    Idle&nbsp;
                     <v-icon color="#ffff" size="20">mdi-close-circle</v-icon>
                   </v-card-actions>
-                  <v-card-actions class="pa-1">
+                  <v-card-actions class="pa-1 mt-1">
                     <span class="text-color"> Offering ID: </span>
                     <v-spacer />
                     Null
@@ -105,25 +109,25 @@
                     >
                     BlackList Status:
                     <v-spacer />
-                    No
+                    No&nbsp;
                     <v-icon color="#ffff" size="20">mdi-close-circle</v-icon>
                   </v-card-actions>
                   <v-card-actions class="pa-1">
                     <span class="text-color"> Main Point: </span>
                     <v-spacer />
-                    Null
+                    {{ this.dataPoint.MainPoint }}
                   </v-card-actions>
                   <v-divider></v-divider>
                   <v-card-actions class="pa-1">
                     <span class="text-color"> Bonus Point: </span>
                     <v-spacer />
-                    Null
+                    {{ this.dataPoint.BonusPoint }}
                   </v-card-actions>
                   <v-divider></v-divider>
                   <v-card-actions class="pa-1">
                     <span class="text-color"> Total Point: </span>
                     <v-spacer />
-                    Null
+                    {{ this.dataPoint.Total }}
                   </v-card-actions>
                   <v-divider></v-divider>
                   <v-card-actions class="pa-1">
@@ -136,7 +140,7 @@
               </div>
               <div>
                 <v-card-title
-                  class="px-2 py-0"
+                  class="mt-2 px-2 py-0"
                   style="
                     background-color: rgb(255, 255, 179);
                     border-radius: 5px;
@@ -216,6 +220,7 @@
                         )
                     "
                   />
+                  <!-- <span><v-icon small>mdi-circle</v-icon> | <v-icon color="rgb(0, 230, 0)" small>mdi-circle</v-icon></span> -->
                 </v-card-actions>
                 <v-divider></v-divider>
                 <v-card-actions class="pa-1">
@@ -253,6 +258,7 @@
                         )
                     "
                   />
+                  <!-- <span><v-icon small>mdi-circle</v-icon> | <v-icon color="rgb(0, 230, 0)" small>mdi-circle</v-icon></span> -->
                 </v-card-actions>
                 <v-divider></v-divider>
                 <v-card-actions class="pa-1">
@@ -270,6 +276,7 @@
                         )
                     "
                   />
+                  <!-- <span><v-icon small>mdi-circle</v-icon> | <v-icon color="rgb(0, 230, 0)" small>mdi-circle</v-icon></span> -->
                 </v-card-actions>
                 <v-divider></v-divider>
                 <v-card-actions class="pa-1">
@@ -282,6 +289,7 @@
                       () => handleBeforeChange('RBT', 'RBT', valueSwitchRBT)
                     "
                   />
+                  <!-- <span><v-icon small>mdi-circle</v-icon> | <v-icon color="rgb(0, 230, 0)" small>mdi-circle</v-icon></span> -->
                 </v-card-actions>
                 <v-divider></v-divider>
                 <v-card-actions class="pa-1">
@@ -299,6 +307,7 @@
                         )
                     "
                   />
+                  <!-- <span><v-icon small>mdi-circle</v-icon> | <v-icon color="rgb(0, 230, 0)" small>mdi-circle</v-icon></span> -->
                 </v-card-actions>
                 <v-divider></v-divider>
                 <v-card-actions class="pa-1">
@@ -316,6 +325,7 @@
                         )
                     "
                   />
+                  <!-- <span><v-icon small>mdi-circle</v-icon> | <v-icon color="rgb(0, 230, 0)" small>mdi-circle</v-icon></span> -->
                 </v-card-actions>
                 <v-divider></v-divider>
                 <v-card-actions class="pa-1">
@@ -329,6 +339,7 @@
                         handleBeforeChange('System SMS', 'MSM', valueSwitchSMS)
                     "
                   />
+                  <!-- <span><v-icon small>mdi-circle</v-icon> | <v-icon color="rgb(0, 230, 0)" small>mdi-circle</v-icon></span> -->
                 </v-card-actions>
                 <v-divider></v-divider>
               </v-card>
@@ -346,6 +357,25 @@
                   <v-card-actions class="pa-1">
                     <h4 class="text-color">M-Service:</h4>
                     <v-spacer />
+                    <!-- <span
+                      ><v-icon color="rgb(255, 51, 0)"
+                        >mdi-close-circle</v-icon
+                      ></span> -->
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <span>
+                      <div
+                        class="px-2 py-0"
+                        style="border-radius: 2px; color: #ffff"
+                        :style="{
+                          backgroundColor:
+                            number === 0
+                              ? 'rgb(179, 179, 179)'
+                              : 'rgb(0, 230, 0)',
+                        }"
+                      >
+                        0
+                      </div>
+                    </span>
                   </v-card-actions>
                   <v-divider></v-divider>
                   <v-card-actions class="pa-1">
@@ -368,6 +398,10 @@
             </v-col>
           </v-row>
         </v-col>
+        <!-- <v-col v-if="false" cols="6">
+          <DataSet />
+        </v-col>
+        <v-col></v-col> -->
         <v-col cols="6" class="pa-0 pl-1">
           <v-card-title
             class="px-2 py-0"
@@ -375,22 +409,28 @@
           >
             <h5>Bill Query</h5>
           </v-card-title>
-          <div class="text-center mt-1" width="100%">
-            <span style="color: #737373" class="material-icons"
+          <div class="text-center mt-2" width="100%">
+            <!-- <span style="color: #737373" class="material-icons"
               >monetization_on</span
-            >
+            > -->
           </div>
           <v-row>
             <v-col cols="4" class="pr-0 py-1">
               <v-card outlined class="my-2 rounded-0">
-                <v-card-actions class="pa-1">
-                  <v-icon>mdi-signal-cellular-3</v-icon>&nbsp;&nbsp;<span
-                    class="text-color"
-                    >Package:</span
-                  >
+                <v-btn
+                  class="rounded-0 px-1 py-0"
+                  width="100%"
+                  small
+                  text
+                  @click="showData('Packages')"
+                >
+                  <v-icon style="color: rgb(102, 102, 102)"
+                    >mdi-signal-cellular-3</v-icon
+                  >&nbsp;<span class="text-color">Packages:</span>
                   <v-spacer />
-                  0
-                </v-card-actions>
+                  <span class="font_size_14">0</span>
+                </v-btn>
+                <v-divider></v-divider>
                 <v-divider></v-divider>
                 <v-card-actions class="pa-1">
                   <v-icon>mdi-currency-usd</v-icon>&nbsp;&nbsp;<span
@@ -518,25 +558,37 @@
                   <h5>Data Package</h5>
                 </v-card-title>
                 <v-card-text class="pa-0 pt-2 text-h12">
-                  <v-card-actions class="pa-1">
-                    <v-icon>mdi-network-strength-3</v-icon>&nbsp;&nbsp;<span
-                      class="text-color"
-                      >Data Package:</span
-                    >
+                  <v-btn
+                    class="rounded-0 px-1 py-0"
+                    width="100%"
+                    small
+                    text
+                    @click="showData('Data Package')"
+                  >
+                    <v-icon color="#737373">mdi-network-strength-3</v-icon
+                    >&nbsp;&nbsp;<span class="text-color">Data Package:</span>
                     <v-spacer />
                     <div
-                      class="px-2"
+                      class="px-2 py-1"
                       style="border-radius: 2px; color: #ffff"
                       :style="{
                         backgroundColor:
-                          number === 0 ? 'rgb(255, 51, 0)' : 'rgb(0, 230, 0)',
+                          number === 0
+                            ? 'rgb(179, 179, 179)'
+                            : 'rgb(0, 230, 0)',
                       }"
                     >
                       2
                     </div>
-                  </v-card-actions>
+                  </v-btn>
                   <v-divider></v-divider>
-                  <v-card-actions class="pa-1">
+                  <v-btn
+                    class="rounded-0 px-1 py-0"
+                    width="100%"
+                    small
+                    text
+                    @click="showData('Package History')"
+                  >
                     <span style="color: #737373" class="material-icons-sharp"
                       >account_tree</span
                     >&nbsp;&nbsp;<span class="text-color">
@@ -544,56 +596,75 @@
                     </span>
                     <v-spacer />
                     <div
-                      class="px-2"
+                      class="py-1"
+                      :class="dataHPackage.length <= 9 ? 'px-2' : 'px-1'"
                       style="border-radius: 2px; color: #ffff"
                       :style="{
                         backgroundColor:
-                          number === 0 ? 'rgb(255, 51, 0)' : 'rgb(0, 230, 0)',
+                          dataHPackage.length === 0
+                            ? 'rgb(179, 179, 179)'
+                            : 'rgb(0, 230, 0)',
                       }"
                     >
-                      2
+                      {{ dataHPackage.length }}
                     </div>
-                  </v-card-actions>
+                  </v-btn>
                   <v-divider></v-divider>
-                  <v-card-actions class="pa-1">
-                    <v-icon>mdi-store</v-icon>&nbsp;&nbsp;<span
+                  <v-btn
+                    class="rounded-0 px-1 py-0"
+                    width="100%"
+                    small
+                    text
+                    @click="showData('Buy Data Package')"
+                  >
+                    <v-icon color="#737373">mdi-store</v-icon>&nbsp;&nbsp;<span
                       class="text-color"
                       >Buy Data Package:</span
                     >
                     <v-spacer />
                     <div
-                      class="px-2"
+                      class="px-2 py-1"
                       style="border-radius: 2px; color: #ffff"
                       :style="{
                         backgroundColor:
-                          number === 0 ? 'rgb(255, 51, 0)' : 'rgb(0, 230, 0)',
+                          number === 0
+                            ? 'rgb(179, 179, 179)'
+                            : 'rgb(0, 230, 0)',
                       }"
                     >
                       2
                     </div>
-                  </v-card-actions>
+                  </v-btn>
                   <v-divider></v-divider>
-                  <v-card-actions class="pa-1">
-                    <v-icon>mdi-text-box-check-outline</v-icon>&nbsp;&nbsp;<span
-                      class="text-color"
+                  <v-btn
+                    class="rounded-0 px-1 py-0"
+                    width="100%"
+                    small
+                    text
+                    @click="showData('Special Package')"
+                  >
+                    <v-icon color="#737373">mdi-text-box-check-outline</v-icon
+                    >&nbsp;&nbsp;<span class="text-color"
                       >Special Package:</span
                     >
                     <v-spacer />
                     <div
-                      class="px-2"
+                      class="px-2 py-1"
                       style="border-radius: 2px; color: #ffff"
                       :style="{
                         backgroundColor:
-                          number === 0 ? 'rgb(255, 51, 0)' : 'rgb(0, 230, 0)',
+                          number === 0
+                            ? 'rgb(179, 179, 179)'
+                            : 'rgb(0, 230, 0)',
                       }"
                     >
                       2
                     </div>
-                  </v-card-actions>
+                  </v-btn>
                   <v-divider></v-divider>
                 </v-card-text>
                 <v-card-title
-                  class="px-2 py-0"
+                  class="mt-2 px-2 py-0"
                   style="
                     background-color: rgb(255, 255, 179);
                     border-radius: 5px;
@@ -602,76 +673,106 @@
                   <h5>Banking</h5>
                 </v-card-title>
                 <v-card-text class="pa-0 pt-2 text-h12">
-                  <v-card-actions class="pa-1">
-                    <v-icon>mdi-currency-usd</v-icon>&nbsp;&nbsp;<span
-                      class="text-color"
+                  <v-btn
+                    class="rounded-0 px-1 py-0"
+                    width="100%"
+                    small
+                    text
+                    @click="showData('Borrow and cut Money')"
+                  >
+                    <v-icon color="#737373">mdi-currency-usd</v-icon
+                    >&nbsp;&nbsp;<span class="text-color"
                       >Borrow and cut Money:</span
                     >
                     <v-spacer />
                     <div
-                      class="px-2"
+                      class="px-2 py-1"
                       style="border-radius: 2px; color: #ffff"
                       :style="{
                         backgroundColor:
-                          number === 0 ? 'rgb(255, 51, 0)' : 'rgb(0, 230, 0)',
+                          number === 0
+                            ? 'rgb(179, 179, 179)'
+                            : 'rgb(0, 230, 0)',
                       }"
                     >
                       2
                     </div>
-                  </v-card-actions>
+                  </v-btn>
                   <v-divider></v-divider>
-                  <v-card-actions class="pa-1">
-                    <v-icon>mdi-plus-box-multiple</v-icon>&nbsp;&nbsp;<span
-                      class="text-color"
+                  <v-btn
+                    class="rounded-0 px-1 py-0"
+                    width="100%"
+                    small
+                    text
+                    @click="showData('Topup and M - Topup')"
+                  >
+                    <v-icon color="#737373">mdi-plus-box-multiple</v-icon
+                    >&nbsp;&nbsp;<span class="text-color"
                       >Topup and M-Topup:</span
                     >
                     <v-spacer />
                     <div
-                      class="px-2"
+                      class="px-2 py-1"
                       style="border-radius: 2px; color: #ffff"
                       :style="{
                         backgroundColor:
-                          number === 0 ? 'rgb(255, 51, 0)' : 'rgb(0, 230, 0)',
+                          number === 0
+                            ? 'rgb(179, 179, 179)'
+                            : 'rgb(0, 230, 0)',
                       }"
                     >
                       2
                     </div>
-                  </v-card-actions>
+                  </v-btn>
                   <v-divider></v-divider>
-                  <v-card-actions class="pa-1">
+                  <v-btn
+                    class="rounded-0 px-1 py-0"
+                    width="100%"
+                    small
+                    text
+                    @click="showData('Topup Banking')"
+                  >
                     <span style="color: #737373" class="material-icons-sharp"
                       >local_atm</span
                     >&nbsp;&nbsp;<span class="text-color">Topup Banking:</span>
                     <v-spacer />
                     <div
-                      class="px-2"
+                      class="px-2 py-1"
                       style="border-radius: 2px; color: #ffff"
                       :style="{
                         backgroundColor:
-                          number === 0 ? 'rgb(255, 51, 0)' : 'rgb(0, 230, 0)',
+                          number === 0
+                            ? 'rgb(179, 179, 179)'
+                            : 'rgb(0, 230, 0)',
                       }"
                     >
                       2
                     </div>
-                  </v-card-actions>
+                  </v-btn>
                   <v-divider></v-divider>
-                  <v-card-actions class="pa-1">
-                    <v-icon>mdi-currency-usd-off</v-icon>&nbsp;&nbsp;<span
-                      class="text-color"
-                      >Payment:</span
-                    >
+                  <v-btn
+                    class="rounded-0 px-1 py-0"
+                    width="100%"
+                    small
+                    text
+                    @click="showData('Payment')"
+                  >
+                    <v-icon color="#737373">mdi-currency-usd-off</v-icon
+                    >&nbsp;&nbsp;<span class="text-color">Payment:</span>
                     <v-spacer />
                     <div
-                      class="px-2"
+                      class="px-2 py-1"
                       style="border-radius: 2px; color: #ffff"
                       :style="{
                         backgroundColor:
-                          number === 0 ? 'rgb(255, 51, 0)' : 'rgb(0, 230, 0)',
+                          number === 0
+                            ? 'rgb(179, 179, 179)'
+                            : 'rgb(0, 230, 0)',
                       }"
                     >
                       2
                     </div>
-                  </v-card-actions>
+                  </v-btn>
                   <v-divider></v-divider>
                 </v-card-text>
               </v-col>
@@ -713,23 +814,81 @@
                   <h5>Other</h5>
                 </v-card-title>
                 <v-card outlined class="pa-0 my-2 text-h12 rounded-0">
-                  <v-card-actions class="pa-1">
-                    <v-icon>mdi-notification-clear-all</v-icon>&nbsp;&nbsp;<span
+                  <v-btn
+                    class="rounded-0 px-1 py-0"
+                    width="100%"
+                    small
+                    text
+                    @click="showData('History changes')"
+                  >
+                    <v-icon>mdi-notification-clear-all</v-icon>&nbsp;<span
                       class="text-color"
                       >History changes:</span
                     >
                     <v-spacer />
                     <div
-                      class="px-2"
+                      class="px-2 py-1"
                       style="border-radius: 2px; color: #ffff"
                       :style="{
                         backgroundColor:
-                          number === 0 ? 'rgb(255, 51, 0)' : 'rgb(0, 230, 0)',
+                          number === 0
+                            ? 'rgb(179, 179, 179)'
+                            : 'rgb(0, 230, 0)',
                       }"
                     >
                       2
                     </div>
-                  </v-card-actions>
+                  </v-btn>
+                  <v-divider></v-divider>
+                  <v-btn
+                    class="rounded-0 px-1 py-0"
+                    width="100%"
+                    small
+                    text
+                    @click="showData('SMS Ticket')"
+                  >
+                    <v-icon style="color: rgb(102, 102, 102)"
+                      >mdi-message-processing</v-icon
+                    >&nbsp;<span class="text-color">SMS Ticket:</span>
+                    <v-spacer />
+                    <div
+                      class="px-2 py-1"
+                      style="border-radius: 2px; color: #ffff"
+                      :style="{
+                        backgroundColor:
+                          number === 0
+                            ? 'rgb(179, 179, 179)'
+                            : 'rgb(0, 230, 0)',
+                      }"
+                    >
+                      2
+                    </div>
+                  </v-btn>
+                  <v-divider></v-divider>
+                  <v-btn
+                    class="rounded-0 px-1 py-0"
+                    width="100%"
+                    small
+                    text
+                    @click="showData('LTC WIFI')"
+                  >
+                    <v-icon style="color: rgb(102, 102, 102)"
+                      >mdi-wifi-strength-3</v-icon
+                    >&nbsp;<span class="text-color">LTC WIFI:</span>
+                    <v-spacer />
+                    <div
+                      class="px-2 py-1"
+                      style="border-radius: 2px; color: #ffff"
+                      :style="{
+                        backgroundColor:
+                          number === 0
+                            ? 'rgb(179, 179, 179)'
+                            : 'rgb(0, 230, 0)',
+                      }"
+                    >
+                      2
+                    </div>
+                  </v-btn>
                   <v-divider></v-divider>
                   <v-card-actions class="pa-1">
                     <v-icon>mdi-sim-outline</v-icon>&nbsp;&nbsp;<span
@@ -771,95 +930,87 @@
                     <v-spacer />
                   </v-card-actions>
                   <v-divider></v-divider>
-                  <v-btn
-                    class="rounded-0 px-1 py-0"
-                    width="100%"
-                    small
-                    text
-                    @click="showData('SMS Ticket')"
-                  >
-                    <v-icon style="color: rgb(102, 102, 102)"
-                      >mdi-message-processing</v-icon
-                    >&nbsp;<span class="text-color">SMS Ticket:</span>
-                    <v-spacer />
-                    <div
-                      class="px-2 py-1"
-                      style="border-radius: 2px; color: #ffff"
-                      :style="{
-                        backgroundColor:
-                          number === 0 ? 'rgb(255, 51, 0)' : 'rgb(0, 230, 0)',
-                      }"
-                    >
-                      2
-                    </div>
-                  </v-btn>
-                  <v-divider></v-divider>
-                  <v-btn
-                    class="rounded-0 px-1 py-0"
-                    width="100%"
-                    small
-                    text
-                    @click="showData('LTC WIFI')"
-                  >
-                    <v-icon style="color: rgb(102, 102, 102)"
-                      >mdi-wifi-strength-3</v-icon
-                    >&nbsp;<span class="text-color">LTC WIFI:</span>
-                    <v-spacer />
-                    <div
-                      class="px-2 py-1"
-                      style="border-radius: 2px; color: #ffff"
-                      :style="{
-                        backgroundColor:
-                          number === 0 ? 'rgb(255, 51, 0)' : 'rgb(0, 230, 0)',
-                      }"
-                    >
-                      2
-                    </div>
-                  </v-btn>
-                  <v-divider></v-divider>
                 </v-card>
               </v-col>
             </v-row>
           </div>
           <div class="text-center">
-            <v-dialog v-model="dialog" persistent width="600">
-              <v-card>
-                <v-card-title
-                  class="text-h6 py-1"
-                  style="background-color: #ffff00; color: black"
-                >
-                  Privacy Policy
-                </v-card-title>
-                <v-card-text>
-                  {{ text }}
-                </v-card-text>
-                <v-divider></v-divider>
-                <v-card-actions class="pa-1">
-                  <v-spacer></v-spacer>
+            <v-dialog v-model="dialog" persistent width="80%" height="70%">
+              <v-card style="background-color: rgb(255, 255, 80);">
+                <v-card-actions class="pa-0 BK_color_YL color_Iconclose">
+                  <v-card-title
+                    class="text-h6 py-1"
+                  >
+                    Privacy Policy
+                  </v-card-title>
+                  <v-spacer />
                   <v-btn
+                    fab
+                    x-small
                     outlined
-                    style="color: rgb(153, 153, 0)"
+                    style="color: rgb(128, 128, 0); margin-right: 4px;"
                     @click="dialog = false"
                   >
-                    close
+                    <v-icon>mdi-close</v-icon>
                   </v-btn>
                 </v-card-actions>
+                <v-card-text class="text-center" style="padding-left: 3px; padding-right: 3px; padding-top: 0px; padding-bottom: 2px;">
+                  <DataSet :dataHPackage="dataHPackage" />
+                </v-card-text>
+                <v-divider></v-divider>
               </v-card>
             </v-dialog>
           </div>
         </v-col>
       </v-row>
     </v-card-text>
+    <v-card-text
+      v-else
+      style="
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 95vh;
+      "
+    >
+      <v-card
+        min-width="450"
+        min-height="300"
+        class="text-center"
+        style="display: flex; flex-direction: column; justify-content: center"
+      >
+        <h3>Enter your number phone.</h3>
+        <br />
+        <v-icon size="85" color="rgb(128, 128, 0)"
+          >mdi-monitor-dashboard</v-icon
+        >
+        <br />
+        <h2><span style="color: rgb(255, 255, 0)">CRM</span> data not found</h2>
+      </v-card>
+    </v-card-text>
   </div>
 </template>
 <script>
+import DataSet from '../data_crm/dataSet.vue'
+// import DataSet2 from '../../money3K/query_register.vue';
 export default {
+  Currency: 'index',
+  props: {
+    numberPhonSend: String,
+    dataPoint: Object,
+    dataHPackage: Array,
+    numberNull: Boolean,
+  },
+  components: {
+    DataSet,
+    // DataSet2
+  },
   data() {
     return {
       text: '',
       dialog: false,
       heightPx: 0,
-      number: 1,
+      number: 0,
       valueSwitch5G: false,
       valueSwitch4G: false,
       valueSwitch3G: false,
@@ -867,14 +1018,44 @@ export default {
       valueSwitchVoiceIR: false,
       valueSwitchDataIR: false,
       valueSwitchSMS: false,
+      menu: [
+        { name: 'Package 1', value: 1 },
+        { name: 'Package 2', value: 2 },
+        { name: 'Package 3', value: 3 },
+        { name: 'Package 4', value: 4 },
+        { name: 'Package 5', value: 5 },
+      ],
     }
   },
   mounted() {
+    this.$emit(
+      'switch',
+      this.valueSwitch5G,
+      this.valueSwitch4G,
+      this.valueSwitch3G,
+      this.valueSwitchRBT,
+      this.valueSwitchVoiceIR,
+      this.valueSwitchDataIR,
+      this.valueSwitchSMS
+    )
+    // setInterval(() => {
+    //   console.log(
+    //     this.valueSwitch5G,
+    //     this.valueSwitch4G,
+    //     this.valueSwitch3G,
+    //     this.valueSwitchRBT,
+    //     this.valueSwitchVoiceIR,
+    //     this.valueSwitchDataIR,
+    //     this.valueSwitchSMS
+    //   )
+    // }, 1000);
+    // setInterval(() => {
+    //   if (this.numberNull === this.numberPhonSend) {
+    //     console.log('status:', this.dataHPackage)
+    //   }
+    // }, 2000)
     this.setSheetHeight()
     window.addEventListener('resize', this.setSheetHeight)
-  },
-  beforeDestroy() {
-    window.removeEventListener('resize', this.setSheetHeight)
   },
   methods: {
     handleBeforeChange(title, content, status) {
@@ -889,11 +1070,17 @@ export default {
     setSheetHeight() {
       // Get the height of the computer screen
       this.heightPx = window.innerHeight - 64
+      console.log('C', this.dataPoint)
+      console.log('P', this.dataHPackage)
     },
     showData(textValue) {
       this.text = textValue
       this.dialog = true
     },
+    // showData(textValue) {
+    //   this.text = textValue
+    //   this.dialog = true
+    // },
   },
 }
 </script>
@@ -926,5 +1113,28 @@ export default {
 .small-table {
   font-size: 10px;
   /* Adjust the font size as needed */
+}
+.hover-pointer {
+  cursor: pointer;
+  background-color: rgb(255, 255, 77);
+}
+.card-title {
+  background-color: rgb(255, 255, 179);
+  border-radius: 5px;
+  transition: background-color 0.3s; /* Add transition for smooth color change */
+}
+
+/* Change background color on hover */
+.card-title:hover {
+  background-color: rgb(255, 255, 77);
+}
+.font_size_14 {
+  font-size: 14px;
+}
+.BK_color_YL {
+  background-color: rgb(255, 255, 80);
+}
+.color_Iconclose {
+  color: rgb(51, 51, 0);
 }
 </style>

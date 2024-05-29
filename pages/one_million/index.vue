@@ -10,10 +10,8 @@
         left: 0;
         overflow: y;
         z-index: 10;
+        background-color: #f2f2f2;
       "
-      :style="{
-        backgroundColor: colorMenu === 2 ? 'rgb(242, 242, 242)' : '#ffff',
-      }"
     >
       <div style="position: fixed; z-index: 100; right: 1px">
         <v-card-actions class="pa-0">
@@ -24,7 +22,7 @@
                   <form @submit.prevent="handleSearch">
                     <Input
                       v-model="numberPhon"
-                      placeholder="Enter serial number..."
+                      placeholder="Serial number is ( 20789... )"
                       clearable
                       style="width: 200px; height: 34px"
                       @keydown.enter="handleSearch"
@@ -141,13 +139,22 @@
           <template #right>
             <div style="margin-left: 6px">
               <div v-if="colorMenu === 0">
-                <Home />
+                <Home :numberNull="numberNull ? numberPhon : 'Null'" />
               </div>
               <div v-if="colorMenu === 1">
-                <Crm />
+                <Crm
+                  :numberPhonSend="numberPhonSend"
+                  :dataPoint="dataPoint"
+                  :numberNull="numberNull"
+                  :dataHPackage="dataHPackage"
+                  @switch="receiveSwitchData"
+                />
               </div>
               <div v-if="colorMenu === 2">
-                <Card />
+                <Card :dataCard="dataCard" :numberNull="numberNull" />
+              </div>
+              <div v-if="colorMenu === 3">
+                <User :dataUser="dataUser" :numberNull="numberNull" />
               </div>
             </div>
           </template>
@@ -157,21 +164,29 @@
   </div>
 </template>
 <script>
-import Crm from './data_crm'
 import Home from './homemenu.vue'
+import Crm from './data_crm'
 import Card from './card.vue'
+import User from './user.vue'
 export default {
   middleware: 'auth',
   Currency: 'index',
   components: {
-    Crm,
     Home,
+    Crm,
     Card,
+    User,
   },
   data() {
     return {
+      dataPoint: {},
+      dataCard: {},
+      dataHPackage: [],
+      dataUser: {},
       loading: false,
       numberPhon: '',
+      numberPhonSend: '',
+      numberNull: false,
       mouseHover: 0,
       buttonanime: true,
       colorMenu: 0,
@@ -197,6 +212,29 @@ export default {
     window.removeEventListener('resize', this.setSheetHeight)
   },
   methods: {
+    receiveSwitchData(
+      valueSwitch5G,
+      valueSwitch4G,
+      valueSwitch3G,
+      valueSwitchRBT,
+      valueSwitchVoiceIR,
+      valueSwitchDataIR,
+      valueSwitchSMS
+    ) {
+      // Execute only if less than 2 times
+      setTimeout(() => {
+        console.log(
+          'switch',
+          valueSwitch5G,
+          valueSwitch4G,
+          valueSwitch3G,
+          valueSwitchRBT,
+          valueSwitchVoiceIR,
+          valueSwitchDataIR,
+          valueSwitchSMS
+        )
+      }, 500) // Delay of 3 seconds
+    },
     slipMenu(index) {
       if (index === 4) {
         this.$router.go(-1) // Navigate back one step
@@ -214,25 +252,75 @@ export default {
     handleMenuItemClick(item) {
       this.activeMenuItem = item.name
     },
-    async handleSearch() {
-      this.loading = !this.loading
+    handleSearch() {
+      this.loading = true
+      const Num = this.numberPhon
+      this.numberPhonSend = Num;
+      this.dataOfPoint(Num)
+      this.dataOfHQRPackage(Num)
+      this.loading = false
+    },
+    async dataOfPoint(Num) {
       try {
-        const num = this.numberPhon
-        const res = await this.$axios.$get(
-          `https://172.28.26.72:9443/ltc-smart-reward/read-point?userIdData=${encodeURIComponent(
-            num
-          )}`
+        const response = await this.$axios.post(
+          'http://172.28.26.23:3400/ltc-smart-reward/ReadPointDetail',
+          {
+            userIdData: Num,
+          }
         )
-        console.log(res)
-        this.loading = !this.loading
+        const responseData = response.data.data
+        // responseData.number = this.numberPhon // Assuming this.numberPhon holds the phone number
+        this.dataPoint = responseData
+        if (response) {
+          this.colorMenu = 1
+          this.mouseHover = 1
+        }
       } catch (error) {
         console.error('Error fetching data:', error)
+      } finally {
+        // console.log(this.numberPhon, this.numberNull)
+        this.numberNull = this.numberPhon !== ''
+        this.loading = false
+      }
+    },
+    async dataOfHQRPackage(Num) {
+      this.loading = true
+      const Number = [
+        '2076616633',
+        '2078378917',
+        '2078663685',
+        '2076616633,2078378917',
+      ].includes(Num)
+        ? ''
+        : Num
+      try {
+        const response = await this.$axios.post(
+          'http://172.28.26.23:9085/api/spnv/query-register-history',
+          {
+            ClientIP: '1.1.1.1',
+            UserId: 'APITPLUS',
+            Chanel: 'TPLUS',
+            Msisdn: Number,
+            PageNo: 1,
+            PageSize: 10,
+          }
+        )
+        if (response.data && response.data.Detail) {
+          this.dataHPackage = response.data.Detail
+          console.log('dataP:', this.dataHPackage)
+        } else {
+          console.log('data:No')
+        }
+        this.data_num = true
+      } catch (error) {
+        console.error('Error fetching data:', error)
+      } finally {
+        this.loading = false
       }
     },
   },
   watch: {
     split(newValue) {
-      // Ensure that the split ratio is within the specified range
       if (newValue < this.minSplit) {
         this.split = this.minSplit
       } else if (newValue > this.maxSplit) {

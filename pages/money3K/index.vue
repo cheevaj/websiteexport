@@ -1,0 +1,190 @@
+<template>
+  <div>
+    <v-card-actions style="background-color: rgb(255, 255, 128)">
+      <v-btn
+        fab
+        x-small
+        text
+        style="background-color: #000"
+        @click="$router.go(-1)"
+      >
+        <v-icon color="#ffff00" size="25">mdi-arrow-left</v-icon>
+      </v-btn>
+      <v-spacer />
+      <h2 class="text-center">List Menu</h2>
+      <v-spacer />
+      <div></div>
+    </v-card-actions>
+    <div
+      class="pa-12"
+      flat
+      style="
+        height: calc(100vh - 14vh);
+        background-color: rgb(255, 255, 204);
+        box-shadow: inset;
+      "
+    >
+      <v-row
+        class="text-center"
+        active-class="success"
+        show-arrows
+        :justify="
+          Object.keys(items_menu).length % 4 === 0 ||
+          Object.keys(items_menu).length % 7 === 0
+            ? 'center'
+            : 'start'
+        "
+      >
+        <v-col
+          cols="12"
+          xs="12"
+          sm="4"
+          md="3"
+          lg="3"
+          xl="3"
+          v-for="(item, index) in items_menu"
+          :key="index"
+          class="px-2 mb-6"
+        >
+          <!--col-custom-->
+          <v-card
+            :outlined="buttonWeb === index ? false : true"
+            :bordered="false"
+            class="mouse_senter"
+            style="
+              color: transparent;
+              border-top-left-radius: 50px;
+              border-bottom-left-radius: 50px;
+              border-top-right-radius: 10px;
+              border-bottom-right-radius: 10px;
+              border: 2px solid #808080;
+            "
+            @mouseenter="buttonWeb = index"
+            @mouseleave="buttonWeb = false"
+            @click="openLinkInNewTab(item.path)"
+          >
+            <v-card-actions class="pa-0">
+              <div>
+                <v-card
+                  flat
+                  height="54px"
+                  width="54"
+                  size="avatarSize"
+                  style="
+                    padding: 2px;
+                    border-radius: 50%;
+                    background-color: rgb(217, 217, 217);
+                  "
+                >
+                  <v-card
+                    flat
+                    height="50"
+                    width="50"
+                    size="avatarSize"
+                    style="border-radius: 50%"
+                  >
+                    <v-img white="100%" height="100%" :src="item.avatar" />
+                  </v-card>
+                </v-card>
+              </div>
+              <div
+                style="
+                  border-bottom-left-radius: 0px;
+                  border-bottom-right-radius: 0px;
+                "
+              >
+                <v-card-text class="text-center pl-2 pr-1">
+                  <h3 style="color: rgb(102, 102, 0)">
+                    {{ item.title }}
+                  </h3>
+                  <v-divider
+                    class="mx-4"
+                    style="background-color: rgb(102, 102, 0)"
+                  />
+                </v-card-text>
+              </div>
+            </v-card-actions>
+          </v-card>
+        </v-col>
+      </v-row>
+    </div>
+  </div>
+</template>
+<script>
+export default {
+  middleware: 'auth',
+  Currency: 'DefaultLayout',
+  data() {
+    return {
+      buttonWeb: false,
+      // All website
+      items_menu: [
+        {
+          avatar:
+            'http://172.28.17.137:7789/Services/asset/images//logo-round.png',
+          title: 'Money Cuts Bye Soxay App',
+          path: '../money3K/findnumber',
+        },
+        {
+          avatar:
+            'http://172.28.17.137:7789/Services/asset/images//logo-round.png',
+          title: 'Cuts Money 3000 kip',
+          path: '../money3K/getadjustment',
+        },
+        {
+          avatar:
+            'http://172.28.17.137:7789/Services/asset/images//logo-round.png',
+          title: 'History Query Packages',
+          path: '../money3K/query_register',
+        },
+        {
+          avatar:
+            'http://172.28.17.137:7789/Services/asset/images//logo-round.png',
+          title: "CCare's Top-up History",
+          path: '../money3K/register_packages',
+        },
+        {
+          avatar:
+            'http://172.28.17.137:7789/Services/asset/images//logo-round.png',
+          title: 'Data BCEL ONE',
+          path: '../money3K/bcel_oneData',
+        },
+        {
+          avatar:
+            'http://172.28.17.137:7789/Services/asset/images//logo-round.png',
+          title: 'Nice Number Detail.',
+          path: '../money3K/nicenumberdetaill',
+        },
+      ],
+    }
+  },
+  methods: {
+    openLinkInNewTab(path) {
+      this.$router.push({
+        path,
+      })
+    },
+  },
+}
+</script>
+
+<style>
+/* .col-custom {
+  flex-basis: calc(20% - 0px); 
+  max-width: calc(20% - 0px);
+} */
+.colorBK {
+  background-color: #ffff00;
+}
+.mouse_senter {
+  cursor: pointer;
+}
+.font_size_12 {
+  font-size: 12px;
+  /* Adjust the font size as needed */
+}
+.font_size_18 {
+  font-size: 18px;
+  /* Adjust the font size as needed */
+}
+</style>
