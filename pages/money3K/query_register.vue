@@ -155,6 +155,7 @@ export default {
       outlined: false,
       loading: false,
       numberPhon: '',
+      heightPx:0,
       data_num: false,
       buttonanime: true,
       dataResponse: [],

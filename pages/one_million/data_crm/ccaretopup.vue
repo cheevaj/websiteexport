@@ -21,7 +21,7 @@
         :items="transformedDataHPackage"
         :items-per-page="itemsPerPage"
         item-key="ProductNumber"
-        class="elevation-1 custom-font table-container"
+        class="elevation-1 custom-font table-container scrollbar"
       >
         <template v-slot:item="{ item }">
           <tr
@@ -47,7 +47,7 @@
 export default {
   Currency: 'index',
   props: {
-    dataHPackage: Array,
+    dataCCare: Array,
   },
   data() {
     return {
@@ -59,29 +59,17 @@ export default {
       overlay: false,
       columns: [
         { key: 'index', title: 'Index' },
-        { key: 'Msisdn', title: 'SIS' },
-        { key: 'Net', title: 'Net' },
-        { key: 'Price', title: 'Price' },
-        { key: 'PackageCode', title: 'Package Code' },
-        { key: 'ProductNumber', title: 'Product Number' },
-        { key: 'Duration', title: 'Duration' },
-        { key: 'StartTime', title: 'Start Time' },
-        { key: 'ExpiryTime', title: 'Expiry Time' },
-        { key: 'Oder_Ref', title: 'Oder Ref' },
-        { key: 'ResultDesc', title: 'Result Desc' },
+        { key: 'QTY', title: 'QTY' },
+        { key: 'Packagecode', title: 'Package Code' },
+        { key: 'Staff_Name', title: 'Staff Name' },
+        { key: 'Month', title: 'Month' },
       ],
       headers: [
         { text: 'Index', value: 'index' },
-        { text: 'SIS', value: 'Msisdn' },
-        { text: 'Net', value: 'Net' },
-        { text: 'Price', value: 'Price' },
-        { text: 'Package Code', value: 'PackageCode' },
-        { text: 'Product Number', value: 'ProductNumber' },
-        { text: 'Duration', value: 'Duration' },
-        { text: 'Start Time', value: 'StartTime' },
-        { text: 'Expiry Time', value: 'ExpiryTime' },
-        { text: 'Oder Ref', value: 'Oder_Ref' },
-        { text: 'Result Desc', value: 'ResultDesc' },
+        { text: 'QTY', value: 'QTY' },
+        { text: 'Package Code', value: 'Packagecode' },
+        { text: 'Staff Name', value: 'Staff_Name' },
+        { text: 'Month', value: 'Month' },
       ],
     }
   },
@@ -94,16 +82,18 @@ export default {
       )
     },
     itemsPerPage() {
-      return this.transformedDataHPackage.length > 0
+        return this.transformedDataHPackage.length > 0
         ? this.transformedDataHPackage[this.transformedDataHPackage.length - 1]
-            .index
+        .index
         : 10
     },
     transformedDataHPackage() {
-      return this.dataHPackage.map((item, index) => {
+        console.log(this.dataCCare)
+      return this.dataCCare.map((item, index) => {
         return {
           ...item,
           index: index + 1,
+          Month: item.Month.substring(0, 4) + '/' + item.Month.substring(4),
           StartTime: this.formatAdjustDate(item.StartTime),
           ExpiryTime: this.formatAdjustDate(item.ExpiryTime),
         }
@@ -176,7 +166,7 @@ export default {
 }
 
 .scrollbar::-webkit-scrollbar {
-  width: 8px;
+  width: 4px;
   /* Set the width of the scrollbar */
   height: 2px;
 }

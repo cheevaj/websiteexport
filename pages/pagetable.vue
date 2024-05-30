@@ -870,8 +870,8 @@ export default {
   overflow-y: auto;
 } */
 .table-container ::-webkit-scrollbar {
-  width: 2px;
-  height: 4px;
+  width: 6px;
+  height: 6px;
 }
 
 .table-container ::-webkit-scrollbar-thumb {

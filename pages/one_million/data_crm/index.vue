@@ -208,18 +208,24 @@
                 <v-card-actions class="pa-1">
                   <span class="text-color"> 5G: </span>
                   <v-spacer />
-                  <i-Switch
+                  <v-card-actions class="pa-0">
+                    <span v-if="valueSwitch5G" class="text-color">Off</span>
+                    <span v-else>On</span>
+                    &nbsp;&nbsp;
+                    <i-Switch
+                    disabled
                     v-model="valueSwitch5G"
                     size="small"
                     :before-change="
                       () =>
-                        handleBeforeChange(
-                          'Internet 5G',
-                          'Internet 5G',
-                          valueSwitch5G
-                        )
-                    "
+                      handleBeforeChange(
+                        'Internet 5G',
+                        'Internet 5G',
+                        valueSwitch5G
+                      )
+                      "
                   />
+                </v-card-actions>
                   <!-- <span><v-icon small>mdi-circle</v-icon> | <v-icon color="rgb(0, 230, 0)" small>mdi-circle</v-icon></span> -->
                 </v-card-actions>
                 <v-divider></v-divider>
@@ -246,7 +252,12 @@
                 <v-card-actions class="pa-1">
                   <span class="text-color"> 4G: </span>
                   <v-spacer />
+                  <v-card-actions class="pa-0">
+                    <span v-if="valueSwitch4G" class="text-color">Off</span>
+                    <span v-else>On</span>
+                    &nbsp;&nbsp;
                   <i-Switch
+                    disabled
                     v-model="valueSwitch4G"
                     size="small"
                     :before-change="
@@ -258,13 +269,19 @@
                         )
                     "
                   />
+                  </v-card-actions>
                   <!-- <span><v-icon small>mdi-circle</v-icon> | <v-icon color="rgb(0, 230, 0)" small>mdi-circle</v-icon></span> -->
                 </v-card-actions>
                 <v-divider></v-divider>
                 <v-card-actions class="pa-1">
                   <span class="text-color"> 3G: </span>
                   <v-spacer />
+                  <v-card-actions class="pa-0">
+                    <span v-if="valueSwitch4G" class="text-color">Off</span>
+                    <span v-else>On</span>
+                    &nbsp;&nbsp;
                   <i-Switch
+                    disabled
                     v-model="valueSwitch3G"
                     size="small"
                     :before-change="
@@ -276,26 +293,38 @@
                         )
                     "
                   />
+                  </v-card-actions>
                   <!-- <span><v-icon small>mdi-circle</v-icon> | <v-icon color="rgb(0, 230, 0)" small>mdi-circle</v-icon></span> -->
                 </v-card-actions>
                 <v-divider></v-divider>
                 <v-card-actions class="pa-1">
                   <span class="text-color"> RBT: </span>
                   <v-spacer />
+                  <v-card-actions class="pa-0">
+                    <span v-if="valueSwitch4G" class="text-color">Off</span>
+                    <span v-else>On</span>
+                    &nbsp;&nbsp;
                   <i-Switch
+                    disabled
                     v-model="valueSwitchRBT"
                     size="small"
                     :before-change="
                       () => handleBeforeChange('RBT', 'RBT', valueSwitchRBT)
                     "
                   />
+                  </v-card-actions>
                   <!-- <span><v-icon small>mdi-circle</v-icon> | <v-icon color="rgb(0, 230, 0)" small>mdi-circle</v-icon></span> -->
                 </v-card-actions>
                 <v-divider></v-divider>
                 <v-card-actions class="pa-1">
                   <span class="text-color"> Voice IR: </span>
                   <v-spacer />
+                  <v-card-actions class="pa-0">
+                    <span v-if="valueSwitch4G" class="text-color">Off</span>
+                    <span v-else>On</span>
+                    &nbsp;&nbsp;
                   <i-Switch
+                    disabled
                     v-model="valueSwitchVoiceIR"
                     size="small"
                     :before-change="
@@ -307,13 +336,19 @@
                         )
                     "
                   />
+                  </v-card-actions>
                   <!-- <span><v-icon small>mdi-circle</v-icon> | <v-icon color="rgb(0, 230, 0)" small>mdi-circle</v-icon></span> -->
                 </v-card-actions>
                 <v-divider></v-divider>
                 <v-card-actions class="pa-1">
                   <span class="text-color"> Data IR: </span>
                   <v-spacer />
+                  <v-card-actions class="pa-0">
+                    <span v-if="valueSwitch4G" class="text-color">Off</span>
+                    <span v-else>On</span>
+                    &nbsp;&nbsp;
                   <i-Switch
+                    disabled
                     v-model="valueSwitchDataIR"
                     size="small"
                     :before-change="
@@ -325,13 +360,19 @@
                         )
                     "
                   />
+                  </v-card-actions>
                   <!-- <span><v-icon small>mdi-circle</v-icon> | <v-icon color="rgb(0, 230, 0)" small>mdi-circle</v-icon></span> -->
                 </v-card-actions>
                 <v-divider></v-divider>
                 <v-card-actions class="pa-1">
                   <span class="text-color"> SMS: </span>
                   <v-spacer />
+                  <v-card-actions class="pa-0">
+                    <span v-if="valueSwitch4G" class="text-color">Off</span>
+                    <span v-else>On</span>
+                    &nbsp;&nbsp;
                   <i-Switch
+                    disabled
                     v-model="valueSwitchSMS"
                     size="small"
                     :before-change="
@@ -339,7 +380,7 @@
                         handleBeforeChange('System SMS', 'MSM', valueSwitchSMS)
                     "
                   />
-                  <!-- <span><v-icon small>mdi-circle</v-icon> | <v-icon color="rgb(0, 230, 0)" small>mdi-circle</v-icon></span> -->
+                  </v-card-actions>
                 </v-card-actions>
                 <v-divider></v-divider>
               </v-card>
@@ -587,6 +628,7 @@
                     width="100%"
                     small
                     text
+                    :disabled="dataHPackage.length === 0"
                     @click="showData('Package History')"
                   >
                     <span style="color: #737373" class="material-icons-sharp"
@@ -775,6 +817,51 @@
                   </v-btn>
                   <v-divider></v-divider>
                 </v-card-text>
+                <v-card-title
+                  class="mt-2 px-2 py-0"
+                  style="
+                    background-color: rgb(255, 255, 179);
+                    border-radius: 5px;
+                  "
+                >
+                  <h5>C'Care</h5>
+                </v-card-title>
+                <v-card-text class="pa-0 pt-2 text-h12">
+                  <v-btn
+                    class="rounded-0 px-1 py-0"
+                    width="100%"
+                    small
+                    text
+                    :disabled="dataHPackage.length === 0"
+                    @click="showData('History Top-up')"
+                  >
+                    <span
+                      ><v-icon color="#737373">mdi-text-box-plus</v-icon></span
+                    >&nbsp;&nbsp;<span class="text-color">
+                      History Top-up
+                      {{
+                        monthAndYear().substring(0, 4) +
+                        '/' +
+                        monthAndYear().substring(4)
+                      }}:
+                    </span>
+                    <v-spacer />
+                    <div
+                      class="py-1"
+                      :class="dataCCare.length <= 9 ? 'px-2' : 'px-1'"
+                      style="border-radius: 2px; color: #ffff"
+                      :style="{
+                        backgroundColor:
+                          dataCCare.length === 0
+                            ? 'rgb(179, 179, 179)'
+                            : 'rgb(0, 230, 0)',
+                      }"
+                    >
+                      {{ dataCCare.length }}
+                    </div>
+                  </v-btn>
+                  <v-divider></v-divider>
+                </v-card-text>
               </v-col>
               <v-col cols="6" class="pl-1 py-1">
                 <v-card-title
@@ -935,12 +1022,24 @@
             </v-row>
           </div>
           <div class="text-center">
-            <v-dialog v-model="dialog" persistent width="80%" height="70%">
-              <v-card style="background-color: rgb(255, 255, 80);">
-                <v-card-actions class="pa-0 BK_color_YL color_Iconclose">
-                  <v-card-title
-                    class="text-h6 py-1"
-                  >
+            <v-dialog
+              v-model="dialog"
+              class="scrollbar"
+              persistent
+              width="80%"
+              height=" calc(100vh - 18vh)"
+            >
+              <v-card
+                class="scrollbar"
+                style="
+                  height: calc(100vh - 13vh);
+                  background-color: rgb(255, 255, 80);
+                "
+              >
+                <v-card-actions
+                  class="pa-0 BK_color_YL color_Iconclose scrollbar"
+                >
+                  <v-card-title class="text-h6 py-1">
                     Privacy Policy
                   </v-card-title>
                   <v-spacer />
@@ -948,16 +1047,31 @@
                     fab
                     x-small
                     outlined
-                    style="color: rgb(128, 128, 0); margin-right: 4px;"
+                    style="color: rgb(128, 128, 0); margin-right: 4px"
                     @click="dialog = false"
                   >
                     <v-icon>mdi-close</v-icon>
                   </v-btn>
                 </v-card-actions>
-                <v-card-text class="text-center" style="padding-left: 3px; padding-right: 3px; padding-top: 0px; padding-bottom: 2px;">
-                  <DataSet :dataHPackage="dataHPackage" />
+                <v-card-text
+                  class="scrollbar"
+                  style="
+                    height: calc(100vh - 19vh) - 4px;
+                    padding-left: 3px;
+                    padding-right: 3px;
+                    padding-top: 0px;
+                    padding-bottom: 2px;
+                  "
+                >
+                  <DataSet
+                    v-if="text === 'Package History'"
+                    :dataHPackage="dataHPackage"
+                  />
+                  <CCareTopUp
+                    v-else-if="text === 'History Top-up'"
+                    :dataCCare="dataCCare"
+                  />
                 </v-card-text>
-                <v-divider></v-divider>
               </v-card>
             </v-dialog>
           </div>
@@ -992,7 +1106,7 @@
 </template>
 <script>
 import DataSet from '../data_crm/dataSet.vue'
-// import DataSet2 from '../../money3K/query_register.vue';
+import CCareTopUp from '../data_crm/ccaretopup.vue'
 export default {
   Currency: 'index',
   props: {
@@ -1003,16 +1117,18 @@ export default {
   },
   components: {
     DataSet,
+    CCareTopUp,
     // DataSet2
   },
   data() {
     return {
       text: '',
       dialog: false,
+      dataCCare: [],
       heightPx: 0,
       number: 0,
-      valueSwitch5G: false,
-      valueSwitch4G: false,
+      valueSwitch5G: true,
+      valueSwitch4G: true,
       valueSwitch3G: false,
       valueSwitchRBT: false,
       valueSwitchVoiceIR: false,
@@ -1039,21 +1155,11 @@ export default {
       this.valueSwitchSMS
     )
     // setInterval(() => {
-    //   console.log(
-    //     this.valueSwitch5G,
-    //     this.valueSwitch4G,
-    //     this.valueSwitch3G,
-    //     this.valueSwitchRBT,
-    //     this.valueSwitchVoiceIR,
-    //     this.valueSwitchDataIR,
-    //     this.valueSwitchSMS
-    //   )
-    // }, 1000);
-    // setInterval(() => {
-    //   if (this.numberNull === this.numberPhonSend) {
-    //     console.log('status:', this.dataHPackage)
-    //   }
+    //   // if (this.numberNull === this.numberPhonSend) {
+    //   // }
+    //   console.log('dataP:', this.dataHPackage)
     // }, 2000)
+    this.dataOfCCare()
     this.setSheetHeight()
     window.addEventListener('resize', this.setSheetHeight)
   },
@@ -1070,8 +1176,34 @@ export default {
     setSheetHeight() {
       // Get the height of the computer screen
       this.heightPx = window.innerHeight - 64
-      console.log('C', this.dataPoint)
-      console.log('P', this.dataHPackage)
+      // console.log('C', this.dataPoint)
+      // console.log('P', this.dataHPackage)
+    },
+    monthAndYear() {
+      const now = new Date()
+      const year = now.getFullYear()
+      const month = (now.getMonth() + 1).toString().padStart(2, '0')
+      return `${year}${month}`
+    },
+    async dataOfCCare() {
+      const Num = this.monthAndYear()
+      try {
+        const response = await this.$axios.post(
+          'http://172.28.17.102:9960/finddate/findcareregister',
+          {
+            datetime: Num,
+          }
+        )
+        if (response.data) {
+          this.dataCCare = response.data
+        } else {
+          this.dataCCare = []
+        }
+        // console.log('dta:',this.dataCCare);
+      } catch (error) {
+        this.dataCCare = []
+        console.error('Error fetching data:', error)
+      }
     },
     showData(textValue) {
       this.text = textValue
@@ -1095,6 +1227,7 @@ export default {
 
 .scrollbar {
   overflow-x: hidden;
+  /* height: 4px; */
   /* Prevent horizontal overflow */
 }
 

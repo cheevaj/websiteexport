@@ -307,9 +307,10 @@ export default {
         )
         if (response.data && response.data.Detail) {
           this.dataHPackage = response.data.Detail
-          console.log('dataP:', this.dataHPackage)
+          // console.log('dataP:', this.dataHPackage)
         } else {
-          console.log('data:No')
+          // console.log('data:No')
+          this.dataHPackage = [];
         }
         this.data_num = true
       } catch (error) {
