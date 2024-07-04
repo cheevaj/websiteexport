@@ -93,23 +93,11 @@
                   </v-btn>
                 </v-card-text>
               </v-card>
-              <!-- <div class="py-2">
-                <v-btn
-                  @mouseenter="setOutlined('button2')"
-                  @mouseleave="detOutlined(true)"
-                  color="#ffff00"
-                  :outlined="show === 'button2' ? false : true"
-                  :style="{ boxShadow: show ? 'none' : '0' }"
-                >
-                  See More
-                </v-btn>
-              </div> -->
             </v-card-text>
           </v-col>
         </v-col>
       </v-row>
     </v-container>
-
     <v-img height="450px" gradient="to top right, rgba(0,0,0,0.7), rgba(0,0,0,0.7)"
       src="https://scontent.fvte2-1.fna.fbcdn.net/v/t39.30808-6/334105025_962924015083673_5923475944932159423_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeF9u1gXNMg7lY3mQaa-n5DFzfyfG5x7yMDN_J8bnHvIwM3DC5e6dKd9d3MR2oVbmrqJpuygZC1pVUbUVBLyoEOH&_nc_ohc=XStMk_qKkwoAX8HivxO&_nc_ht=scontent.fvte2-1.fna&oh=00_AfDDgnFsJdYUGJkm9KrRJBzuWO-Zbrp5Bbi3B_F_Y_5O_Q&oe=656A3055">
       <v-container style="height: 100%" class="py-center">

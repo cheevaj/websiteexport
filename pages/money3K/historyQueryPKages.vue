@@ -8,8 +8,9 @@
               <div style="display: flex">
                 <form @submit.prevent="handleSearch">
                   <Input
+                  class="custom-font"
                     v-model="numberPhon"
-                    placeholder="Serial Year and Month is 202402"
+                    :placeholder="en ? 'ກະລຸນາປ້ອມເບີໂທລະສັບ ( 20789... )' : 'Enter number is ( 20789... )'"
                     clearable
                     style="width: 250px; height: 34px; margin-top: 1px"
                     @keydown.enter="handleSearch"
@@ -30,7 +31,7 @@
                     padding-right: 4px;
                   "
                 >
-                  Search
+                  <h4 class="custom-font">{{en ? 'ຄົ້ນຫາ' : 'Search'}}</h4>
                 </v-btn>
                 <v-btn
                   text
@@ -70,7 +71,7 @@
         <v-icon color="#ffff00" size="25">mdi-arrow-left</v-icon>
       </v-btn>
       <v-card-text class="pa-0">
-        <h2 class="text-center color_CL">CCare's Top-Up Package History.</h2>
+        <h2 class="text-center color_CL custom-font" style="color: #ffff00;">{{en ? 'ປະຫວັດການເຕີມແພັກເກັດ.' : 'History Query Data Packages'}}</h2>
       </v-card-text>
       <div></div>
     </v-card-actions>
@@ -133,14 +134,15 @@
         class="text-center"
         style="display: flex; flex-direction: column; justify-content: center"
       >
-        <h3>Enter New number phone.</h3>
+        <h3></h3><h3 class="custom-font">{{en ? 'ກະລຸນາປ້ອມເບີໂທລະສັບໃໝ່.' : 'Enter New number phone.'}}</h3>
         <br />
         <div class="mouse_senter" @click="buttonanime = !buttonanime">
           <v-icon size="85" color="rgb(128, 128, 0)">mdi-database-alert</v-icon>
         </div>
         <br />
-        <h2>
-          <span style="color: rgb(255, 255, 0)">CCare's top-up&nbsp;</span>data
+        <h2 v-if="en" class="custom-font">ຍັງບໍ່ມີຂໍ້ມູນ</h2>
+        <h2 v-else>
+          <span style="color: rgb(255, 255, 0)">Number"s &nbsp;</span>data
           history is not found
         </h2>
       </v-card>
@@ -151,13 +153,13 @@
         class="text-center"
         style="display: flex; flex-direction: column; justify-content: center"
       >
-        <h3>Enter your number phone.</h3>
+      <h3 class="custom-font">{{en ? 'ກະລຸນາປ້ອມເບີໂທລະສັບ.' : 'Enter your number phone.'}}</h3>
         <br />
         <div class="mouse_senter" @click="buttonanime = !buttonanime">
           <v-icon size="85" color="rgb(128, 128, 0)">mdi-phone-classic</v-icon>
         </div>
         <br />
-        <h2><span style="color: rgb(255, 255, 0)">Data</span> not found</h2>
+        <h2 class="custom-font" ><span class="custom-font" style="color: rgb(255, 255, 0)">{{en ? '' :'Data'}}</span>{{ en ? 'ຍັງບໍ່ມີຂໍ້ມູນ' : 'not found' }}</h2>
       </v-card>
     </v-card-text>
   </div>
@@ -165,33 +167,51 @@
 
 <script>
 export default {
+  middleware: 'auth',
   data() {
     return {
       outlined: false,
       loading: false,
       numberPhon: '',
+      heightPx: 0,
       data_num: false,
       buttonanime: true,
       dataResponse: [],
-      overlay: false, // Add this line
+      overlay: false,
       columns: [
         { key: 'index', title: 'N' },
-        { key: 'Month', title: 'Month' },
-        { key: 'Packagecode', title: 'Package code' },
-        { key: 'QTY', title: 'QTY' },
-        { key: 'Staff_Name', title: 'Staff Name' },
+        { key: 'SIS', title: 'Msisdn' },
+        { key: 'Net', title: 'Net' },
+        { key: 'Price', title: 'Price' },
+        { key: 'Package_Code', title: 'Package Code' },
         { key: 'Product_Number', title: 'Product Number' },
+        { key: 'Duration', title: 'Duration' },
+        { key: 'Start_Time', title: 'Start Time' },
+        { key: 'ExpiryTime', title: 'Expiry Time' },
+        { key: 'Oder_Ref', title: 'Oder Ref' },
+        { key: 'Result_Desc', title: 'Result Desc' },
+        { key: 'Chanel', title: 'Chanel' },
       ],
       headers: [
         { text: 'N', value: 'index' },
-        { text: 'Month', value: 'Month' },
-        { text: 'Package code', value: 'Packagecode' },
-        { text: 'QTY', value: 'QTY' },
-        { text: 'Staff Name', value: 'Staff_Name' },
+        { text: 'Msisdn', value: 'SIS' },
+        { text: 'Net', value: 'Net' },
+        { text: 'Price', value: 'Price' },
+        { text: 'Package Code', value: 'Package_Code' },
+        { text: 'Product Number', value: 'Product_Number' },
+        { text: 'Duration', value: 'Duration' },
+        { text: 'Start Time', value: 'Start_Time' },
+        { text: 'Expiry Time', value: 'ExpiryTime' },
+        { text: 'Oder Ref', value: 'Oder_Ref' },
+        { text: 'Result Desc', value: 'Result_Desc' },
+        { text: 'Chanel', value: 'Chanel' },
       ],
     }
   },
   computed: {
+    en() {
+      return this.$store.state.en;
+    },
     visibleHeaders() {
       return this.headers.filter((header) =>
         this.columns.some(
@@ -202,7 +222,7 @@ export default {
     itemsPerPage() {
       return this.dataResponse.length > 0
         ? this.dataResponse[this.dataResponse.length - 1].index
-        : 10;
+        : 10
     },
   },
   mounted() {
@@ -210,25 +230,59 @@ export default {
     window.addEventListener('resize', this.setSheetHeight)
   },
   methods: {
+    formatAdjustDate(dateString) {
+      const date = new Date(dateString)
+      const formattedDate = date
+        .toLocaleString('en-US', {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+        })
+        .replace(',', '')
+      return formattedDate
+    },
     async handleSearch() {
-      this.dataResponse = {}
       this.loading = true
       const Num = this.numberPhon
+      const Number = [
+        '2076616633',
+        '2078378917',
+        '2078663685',
+        '2076616633,2078378917',
+      ].includes(Num)
+        ? '200'
+        : Num
       try {
         const response = await this.$axios.post(
-          'http://172.28.17.102:9960/finddate/findcareregister',
+          'http://172.28.26.23:9085/api/spnv/query-register-history',
           {
-            datetime: Num,
+            ClientIP: '1.1.1.1',
+            UserId: 'APITPLUS',
+            Chanel: 'TPLUS',
+            Msisdn: Number,
+            PageNo: 1,
+            PageSize: 10,
           }
         )
-        if (response.data) {
-          this.dataResponse = response.data.map((detail, index) => ({
+        console.log(response.data.Detail)
+        if (response.data && response.data.Detail) {
+          this.dataResponse = response.data.Detail.map((detail, index) => ({
             index: index + 1,
-            Month:
-              detail.Month.substring(0, 4) + '/' + detail.Month.substring(4),
-            Packagecode: detail.Packagecode,
-            QTY: detail.QTY,
-            Staff_Name: detail.Staff_Name,
+            SIS: detail.Msisdn,
+            Duration: detail.Duration,
+            Start_Time: this.formatAdjustDate(detail.StartTime),
+            ExpiryTime: this.formatAdjustDate(detail.ExpiryTime),
+            Net: this.formatResultDesc(detail.Net),
+            Oder_Ref: detail.Oder_Ref,
+            Package_Code: detail.PackageCode,
+            Package_Name: detail.PackageName,
+            Price: this.formatResultDesc(detail.Price),
+            Product_Number: detail.ProductNumber,
+            Result_Desc: detail.ResultDesc,
+            Chanel: detail.Chanel,
           }))
         } else {
           this.dataResponse = []
@@ -244,6 +298,14 @@ export default {
     setSheetHeight() {
       // Get the height of the computer screen
       this.heightPx = window.innerHeight - 190
+    },
+    formatResultDesc(value) {
+      // Check if value is a valid number
+      const num = Number(value)
+      if (!isNaN(num)) {
+        return new Intl.NumberFormat().format(num)
+      }
+      return value // Return the original value if it's not a valid number
     },
   },
 }

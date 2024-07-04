@@ -21,14 +21,14 @@
                     border-radius: 5px;
                   "
                 >
-                  <h5>Info</h5>
+                  <h5 class="custom-font" >{{ en ? 'ຂໍ້ມູນ' : 'Info' }}</h5>
                 </v-card-title>
                 <v-card-text class="pa-0 pt-2 text-h12">
                   <v-card-actions
                     class="pa-1"
                     style="
                       color: #ffff;
-                      background-color: red;
+                      background-color: rgb(0, 230, 0);
                       border-radius: 4px;
                     "
                   >
@@ -38,28 +38,115 @@
                     BSS Status:
                     <v-spacer />
                     Un know&nbsp;
-                    <v-icon color="#ffff" size="20">mdi-close-circle</v-icon>
+                    <v-icon color="#ffff" size="20">mdi-check-circle</v-icon>
                   </v-card-actions>
+                  <div v-if="uRegister.length > 0">
+                    <div v-for="(item, index) in uRegister" :key="index">
+                      <v-card-actions class="pa-1">
+                        <v-icon>mdi-cellphone-sound</v-icon>&nbsp;&nbsp;
+                        <span class="text-color custom-font">{{ en ? 'ເບີໂທ' : 'Number' }}</span>:
+                        <v-spacer />
+                        <h6 class="font_size_14">{{ numberPhonSend }}</h6>
+                      </v-card-actions>
+                      <v-divider></v-divider>
+                      <v-card-actions class="pa-1">
+                        <v-icon>mdi-account</v-icon>&nbsp;&nbsp;<span class="text-color custom-font">{{ en ? 'ຊື່ ແລະ ນາມສະກຸນ' : 'Name' }}</span>:
+                        <v-spacer />
+                        <span class="custom-font" >{{ item.Name }}&nbsp;{{ item.Surname }}</span>
+                      </v-card-actions>
+                      <v-divider></v-divider>
+                      <v-card-actions class="pa-1">
+                        <v-icon>mdi-human-male-female</v-icon>&nbsp;&nbsp;<span class="text-color custom-font">{{ en ? 'ເພດ' : 'Gender' }}</span>:
+                        <v-spacer />
+                        <span class="custom-font">{{ en ? item.Gender === 'M' ? 'ຊາຍ' : 'ຍີງ' : item.Gender === 'M' ? 'Male' : 'Female' }}</span>
+                      </v-card-actions>
+                      <v-divider></v-divider>
+                      <v-card-actions class="pa-1">
+                        <v-icon>mdi-image</v-icon>&nbsp;&nbsp;<span class="text-color custom-font">{{ en ? 'ຮູບພາບ' : 'Image' }}</span>:&nbsp;&nbsp;
+                        <span v-if="!showImage">
+                          {{ truncateText(item.Photo, 25) }}</span
+                        >
+                        <v-spacer />
+                        <v-icon
+                          v-if="!showImage"
+                          class="hover-pointer"
+                          @click="showImage = !showImage"
+                          >mdi-eye-off</v-icon
+                        >
+                        <v-icon
+                          v-else
+                          class="hover-pointer"
+                          @click="showImage = !showImage"
+                          >mdi-eye</v-icon
+                        >
+                      </v-card-actions>
+                      <v-card-actions
+                        class="pt-0 pb-1 pl-0 pr-1 hover-pointer"
+                        style="
+                          display: flex;
+                          flex-direction: column;
+                          justify-content: center;
+                        "
+                        @click="showData('image')"
+                      >
+                        <v-card
+                          v-if="showImage"
+                          class="pa-0"
+                          style="height: 300px; width: 270px"
+                        >
+                          <v-img :src="item.Photo" height="100%" width="100%" />
+                        </v-card>
+                      </v-card-actions>
+                      <v-divider></v-divider>
+                    </div>
+                  </div>
+                  <div v-else class="pa-0">
+                    <v-card-actions class="pa-1">
+                      <v-icon>mdi-cellphone-sound</v-icon>&nbsp;&nbsp;<span
+                        class="text-color"
+                        >Number</span
+                      >:
+                      <v-spacer />
+                      <h6 class="font_size_14">{{ numberPhonSend }}</h6>
+                    </v-card-actions>
+                    <v-card-text class="pt-2 text-center" style="color:rgb(166, 166, 166);" >
+                      <h5>
+                        Number is not register 
+                      </h5> 
+                    </v-card-text>
+                    <v-divider></v-divider>
+                  </div>
                   <v-card-actions class="pa-1">
-                    <v-icon>mdi-cellphone-sound</v-icon>&nbsp;&nbsp;:
+                    <v-icon>mdi-cash-multiple</v-icon>&nbsp;&nbsp;
+                    <span class="text-color">Credit limit:</span>
                     <v-spacer />
-                    {{ numberPhonSend }}
+                    <span>{{ formatResultDesc(debtMoney.Credit_limit) }}</span>
                   </v-card-actions>
                   <v-divider></v-divider>
                   <v-card-actions class="pa-1">
-                    <v-icon>mdi-account</v-icon>&nbsp;&nbsp;:
+                    <v-icon>mdi-inbox-arrow-up</v-icon>&nbsp;&nbsp;
+                    <span class="text-color">Current Usage:</span>
+                    <v-spacer />
+                    <span>{{ debtMoney.Current_Usage }}</span>
+                  </v-card-actions>
+                  <v-divider></v-divider>
+                  <v-card-actions class="pa-1">
+                    <v-icon>mdi-inbox-arrow-down</v-icon>&nbsp;&nbsp;
+                    <span class="text-color">Out Standing:</span>
+                    <v-spacer />
+                    <span>{{ debtMoney.Out_standing }}</span>
+                  </v-card-actions>
+                  <v-divider></v-divider>
+                  <v-card-actions class="pa-1">
+                    <v-icon>mdi-network-strength-2</v-icon>&nbsp;&nbsp;
+                    <span class="text-color custom-font">{{ en ? 'ຊື່ອິນເຕີເນັດ:' : 'Network name:' }}</span>
                     <v-spacer />
                     Null
                   </v-card-actions>
                   <v-divider></v-divider>
                   <v-card-actions class="pa-1">
-                    <span class="text-color">Network name:</span>
-                    <v-spacer />
-                    Null
-                  </v-card-actions>
-                  <v-divider></v-divider>
-                  <v-card-actions class="pa-1">
-                    <span class="text-color"> Product Type: </span>
+                    <v-icon>mdi-network-pos</v-icon>&nbsp;&nbsp;
+                    <span class="text-color custom-font">{{ en ? 'ປະເພດເນັດ:' : 'Product Type:' }}</span>
                     <v-spacer />
                     Null
                   </v-card-actions>
@@ -115,25 +202,15 @@
                   <v-card-actions class="pa-1">
                     <span class="text-color"> Main Point: </span>
                     <v-spacer />
-                    {{ this.dataPoint.MainPoint }}
+                    <!-- {{ (this.dataPoint.MainPoint) !== "" ? this.dataPoint.MainPoint : 0 }} -->
+                    0
                   </v-card-actions>
                   <v-divider></v-divider>
                   <v-card-actions class="pa-1">
                     <span class="text-color"> Bonus Point: </span>
                     <v-spacer />
-                    {{ this.dataPoint.BonusPoint }}
-                  </v-card-actions>
-                  <v-divider></v-divider>
-                  <v-card-actions class="pa-1">
-                    <span class="text-color"> Total Point: </span>
-                    <v-spacer />
-                    {{ this.dataPoint.Total }}
-                  </v-card-actions>
-                  <v-divider></v-divider>
-                  <v-card-actions class="pa-1">
-                    <span class="text-color"> Change Password CBS: </span>
-                    <v-spacer />
-                    Null
+                    <!-- {{ this.dataPoint.BonusPoint !== "" ? this.dataPoint.BonusPoint : 0  }} -->
+                    0
                   </v-card-actions>
                   <v-divider></v-divider>
                 </v-card-text>
@@ -151,16 +228,55 @@
                 <v-card-actions class="pa-1">
                   <span class="text-color"> Main Point: </span>
                   <v-spacer />
-                  Null
+                  {{
+                    this.dataPoint.MainPoint !== ''
+                      ? this.dataPoint.MainPoint
+                      : 0
+                  }}
                 </v-card-actions>
                 <v-divider></v-divider>
                 <v-card-actions class="pa-1">
                   <span class="text-color"> Bonus Point: </span>
                   <v-spacer />
-                  Null
+                  {{
+                    this.dataPoint.BonusPoint !== ''
+                      ? this.dataPoint.BonusPoint
+                      : 0
+                  }}
+                </v-card-actions>
+                <v-divider></v-divider>
+                <v-card-actions class="pa-1">
+                  <span class="text-color"> Total Point: </span>
+                  <v-spacer />
+                  {{ this.dataPoint.Total !== '' ? this.dataPoint.Total : 0 }}
                 </v-card-actions>
                 <v-divider></v-divider>
               </div>
+              <v-card-title
+                class="mt-2 px-2 py-0"
+                style="background-color: rgb(255, 255, 179); border-radius: 5px"
+              >
+                <h5>Cuts Money 3000 kip</h5>
+              </v-card-title>
+              <v-card-text class="pa-0 pt-2 text-h12">
+                <v-card-actions class="rounded-0 px-1 py-0" width="100%">
+                  <span
+                    ><v-icon color="#737373">mdi-calendar-check</v-icon></span
+                  >&nbsp;&nbsp;<span class="text-color"> Latest Cut: </span>
+                  <v-spacer />
+                  <h6
+                    class="font_size_12"
+                    :style="{
+                      color: cutMoney3K
+                        ? 'rgb(38, 38, 38)'
+                        : 'rgb(115, 115, 115)',
+                    }"
+                  >
+                    {{ cutMoney3K ? cutMoney3K : 'Not data' }}
+                  </h6>
+                </v-card-actions>
+                <v-divider></v-divider>
+              </v-card-text>
             </v-col>
             <v-col cols="6" class="pl-1">
               <v-card-title
@@ -213,19 +329,19 @@
                     <span v-else>On</span>
                     &nbsp;&nbsp;
                     <i-Switch
-                    disabled
-                    v-model="valueSwitch5G"
-                    size="small"
-                    :before-change="
-                      () =>
-                      handleBeforeChange(
-                        'Internet 5G',
-                        'Internet 5G',
-                        valueSwitch5G
-                      )
+                      disabled
+                      v-model="valueSwitch5G"
+                      size="small"
+                      :before-change="
+                        () =>
+                          handleBeforeChange(
+                            'Internet 5G',
+                            'Internet 5G',
+                            valueSwitch5G
+                          )
                       "
-                  />
-                </v-card-actions>
+                    />
+                  </v-card-actions>
                   <!-- <span><v-icon small>mdi-circle</v-icon> | <v-icon color="rgb(0, 230, 0)" small>mdi-circle</v-icon></span> -->
                 </v-card-actions>
                 <v-divider></v-divider>
@@ -256,19 +372,19 @@
                     <span v-if="valueSwitch4G" class="text-color">Off</span>
                     <span v-else>On</span>
                     &nbsp;&nbsp;
-                  <i-Switch
-                    disabled
-                    v-model="valueSwitch4G"
-                    size="small"
-                    :before-change="
-                      () =>
-                        handleBeforeChange(
-                          'Internet 4G',
-                          'Internet 4G',
-                          valueSwitch4G
-                        )
-                    "
-                  />
+                    <i-Switch
+                      disabled
+                      v-model="valueSwitch4G"
+                      size="small"
+                      :before-change="
+                        () =>
+                          handleBeforeChange(
+                            'Internet 4G',
+                            'Internet 4G',
+                            valueSwitch4G
+                          )
+                      "
+                    />
                   </v-card-actions>
                   <!-- <span><v-icon small>mdi-circle</v-icon> | <v-icon color="rgb(0, 230, 0)" small>mdi-circle</v-icon></span> -->
                 </v-card-actions>
@@ -280,19 +396,19 @@
                     <span v-if="valueSwitch4G" class="text-color">Off</span>
                     <span v-else>On</span>
                     &nbsp;&nbsp;
-                  <i-Switch
-                    disabled
-                    v-model="valueSwitch3G"
-                    size="small"
-                    :before-change="
-                      () =>
-                        handleBeforeChange(
-                          'Internet 3G',
-                          'Enable Internet 3G',
-                          valueSwitch3G
-                        )
-                    "
-                  />
+                    <i-Switch
+                      disabled
+                      v-model="valueSwitch3G"
+                      size="small"
+                      :before-change="
+                        () =>
+                          handleBeforeChange(
+                            'Internet 3G',
+                            'Enable Internet 3G',
+                            valueSwitch3G
+                          )
+                      "
+                    />
                   </v-card-actions>
                   <!-- <span><v-icon small>mdi-circle</v-icon> | <v-icon color="rgb(0, 230, 0)" small>mdi-circle</v-icon></span> -->
                 </v-card-actions>
@@ -304,14 +420,14 @@
                     <span v-if="valueSwitch4G" class="text-color">Off</span>
                     <span v-else>On</span>
                     &nbsp;&nbsp;
-                  <i-Switch
-                    disabled
-                    v-model="valueSwitchRBT"
-                    size="small"
-                    :before-change="
-                      () => handleBeforeChange('RBT', 'RBT', valueSwitchRBT)
-                    "
-                  />
+                    <i-Switch
+                      disabled
+                      v-model="valueSwitchRBT"
+                      size="small"
+                      :before-change="
+                        () => handleBeforeChange('RBT', 'RBT', valueSwitchRBT)
+                      "
+                    />
                   </v-card-actions>
                   <!-- <span><v-icon small>mdi-circle</v-icon> | <v-icon color="rgb(0, 230, 0)" small>mdi-circle</v-icon></span> -->
                 </v-card-actions>
@@ -323,19 +439,19 @@
                     <span v-if="valueSwitch4G" class="text-color">Off</span>
                     <span v-else>On</span>
                     &nbsp;&nbsp;
-                  <i-Switch
-                    disabled
-                    v-model="valueSwitchVoiceIR"
-                    size="small"
-                    :before-change="
-                      () =>
-                        handleBeforeChange(
-                          'Voice IR',
-                          'Voice IR',
-                          valueSwitchVoiceIR
-                        )
-                    "
-                  />
+                    <i-Switch
+                      disabled
+                      v-model="valueSwitchVoiceIR"
+                      size="small"
+                      :before-change="
+                        () =>
+                          handleBeforeChange(
+                            'Voice IR',
+                            'Voice IR',
+                            valueSwitchVoiceIR
+                          )
+                      "
+                    />
                   </v-card-actions>
                   <!-- <span><v-icon small>mdi-circle</v-icon> | <v-icon color="rgb(0, 230, 0)" small>mdi-circle</v-icon></span> -->
                 </v-card-actions>
@@ -347,19 +463,19 @@
                     <span v-if="valueSwitch4G" class="text-color">Off</span>
                     <span v-else>On</span>
                     &nbsp;&nbsp;
-                  <i-Switch
-                    disabled
-                    v-model="valueSwitchDataIR"
-                    size="small"
-                    :before-change="
-                      () =>
-                        handleBeforeChange(
-                          'Data IR',
-                          'Data IR',
-                          valueSwitchDataIR
-                        )
-                    "
-                  />
+                    <i-Switch
+                      disabled
+                      v-model="valueSwitchDataIR"
+                      size="small"
+                      :before-change="
+                        () =>
+                          handleBeforeChange(
+                            'Data IR',
+                            'Data IR',
+                            valueSwitchDataIR
+                          )
+                      "
+                    />
                   </v-card-actions>
                   <!-- <span><v-icon small>mdi-circle</v-icon> | <v-icon color="rgb(0, 230, 0)" small>mdi-circle</v-icon></span> -->
                 </v-card-actions>
@@ -371,15 +487,19 @@
                     <span v-if="valueSwitch4G" class="text-color">Off</span>
                     <span v-else>On</span>
                     &nbsp;&nbsp;
-                  <i-Switch
-                    disabled
-                    v-model="valueSwitchSMS"
-                    size="small"
-                    :before-change="
-                      () =>
-                        handleBeforeChange('System SMS', 'MSM', valueSwitchSMS)
-                    "
-                  />
+                    <i-Switch
+                      disabled
+                      v-model="valueSwitchSMS"
+                      size="small"
+                      :before-change="
+                        () =>
+                          handleBeforeChange(
+                            'System SMS',
+                            'MSM',
+                            valueSwitchSMS
+                          )
+                      "
+                    />
                   </v-card-actions>
                 </v-card-actions>
                 <v-divider></v-divider>
@@ -463,15 +583,29 @@
                   width="100%"
                   small
                   text
-                  @click="showData('Packages')"
+                  :disabled="dataHPackage.length === 0"
+                  @click="showData('Package History')"
                 >
                   <v-icon style="color: rgb(102, 102, 102)"
                     >mdi-signal-cellular-3</v-icon
                   >&nbsp;<span class="text-color">Packages:</span>
                   <v-spacer />
-                  <span class="font_size_14">0</span>
+                  <span class="font_size_12">
+                    <div
+                      class="py-1"
+                      :class="dataHPackage.length <= 9 ? 'px-2' : 'px-1'"
+                      style="border-radius: 2px; color: #ffff"
+                      :style="{
+                        backgroundColor:
+                          dataHPackage.length === 0
+                            ? 'rgb(179, 179, 179)'
+                            : 'rgb(0, 230, 0)',
+                      }"
+                    >
+                      {{ dataHPackage.length }}
+                    </div>
+                  </span>
                 </v-btn>
-                <v-divider></v-divider>
                 <v-divider></v-divider>
                 <v-card-actions class="pa-1">
                   <v-icon>mdi-currency-usd</v-icon>&nbsp;&nbsp;<span
@@ -816,6 +950,63 @@
                     </div>
                   </v-btn>
                   <v-divider></v-divider>
+                  <v-btn
+                    class="rounded-0 px-1 py-0"
+                    width="100%"
+                    small
+                    text
+                    :disabled="dataB_celOne.length === 0"
+                    @click="showData('BCel-One')"
+                  >
+                    <span
+                      ><v-avatar class="my-0pa-0" size="25">
+                        <img
+                          src="~/static/bcelone.png"
+                          alt="John"
+                        /> </v-avatar></span
+                    >&nbsp;&nbsp;<span class="text-color"> BCel-One </span>
+                    <v-spacer />
+                    <div
+                      class="py-1"
+                      :class="dataB_celOne.length <= 9 ? 'px-2' : 'px-1'"
+                      style="border-radius: 2px; color: #ffff"
+                      :style="{
+                        backgroundColor:
+                          dataB_celOne.length === 0
+                            ? 'rgb(179, 179, 179)'
+                            : 'rgb(0, 230, 0)',
+                      }"
+                    >
+                      {{ dataB_celOne.length }}
+                    </div>
+                  </v-btn>
+                  <v-divider></v-divider>
+                  <v-btn
+                    class="rounded-0 px-1 py-0"
+                    width="100%"
+                    small
+                    text
+                    :disabled="dataSoXay.length === 0"
+                    @click="showData('Soxay-App')"
+                  >
+                    <span><v-icon color="#737373">mdi-weight-gram</v-icon></span
+                    >&nbsp;&nbsp;<span class="text-color"> Soxay-App </span>
+                    <v-spacer />
+                    <div
+                      class="py-1"
+                      :class="dataSoXay.length <= 9 ? 'px-2' : 'px-1'"
+                      style="border-radius: 2px; color: #ffff"
+                      :style="{
+                        backgroundColor:
+                          dataSoXay.length === 0
+                            ? 'rgb(179, 179, 179)'
+                            : 'rgb(0, 230, 0)',
+                      }"
+                    >
+                      {{ dataSoXay.length }}
+                    </div>
+                  </v-btn>
+                  <v-divider></v-divider>
                 </v-card-text>
                 <v-card-title
                   class="mt-2 px-2 py-0"
@@ -832,7 +1023,7 @@
                     width="100%"
                     small
                     text
-                    :disabled="dataHPackage.length === 0"
+                    :disabled="dataCCare.length === 0"
                     @click="showData('History Top-up')"
                   >
                     <span
@@ -840,9 +1031,11 @@
                     >&nbsp;&nbsp;<span class="text-color">
                       History Top-up
                       {{
+                        '(' +
                         monthAndYear().substring(0, 4) +
                         '/' +
-                        monthAndYear().substring(4)
+                        monthAndYear().substring(4) +
+                        ')'
                       }}:
                     </span>
                     <v-spacer />
@@ -1025,9 +1218,9 @@
             <v-dialog
               v-model="dialog"
               class="scrollbar"
-              persistent
-              width="80%"
-              height=" calc(100vh - 18vh)"
+              :persistent="text === 'image' ? false : true"
+              :width="text === 'image' ? '600' : '80%'"
+              height="calc(100vh - 18vh)"
             >
               <v-card
                 class="scrollbar"
@@ -1037,6 +1230,7 @@
                 "
               >
                 <v-card-actions
+                  v-if="text !== 'image'"
                   class="pa-0 BK_color_YL color_Iconclose scrollbar"
                 >
                   <v-card-title class="text-h6 py-1">
@@ -1071,7 +1265,31 @@
                     v-else-if="text === 'History Top-up'"
                     :dataCCare="dataCCare"
                   />
+                  <BCelOne
+                    v-else-if="text === 'BCel-One'"
+                    :dataB_celOne="dataB_celOne"
+                  />
+                  <SoXayApp
+                    v-else-if="text === 'Soxay-App'"
+                    :dataSoXay="dataSoXay"
+                  />
                 </v-card-text>
+                <v-card
+                  v-if="text === 'image'"
+                  style="
+                    max-width: 600px;
+                    max-height: 80%;
+                    margin-left: 2px;
+                    margin-bottom: 2px;
+                  "
+                >
+                  <v-img
+                    v-for="(item, index) in uRegister"
+                    :key="index"
+                    :src="item.Photo"
+                    :style="computeImageStyle(item)"
+                  />
+                </v-card>
               </v-card>
             </v-dialog>
           </div>
@@ -1105,20 +1323,29 @@
   </div>
 </template>
 <script>
-import DataSet from '../data_crm/dataSet.vue'
-import CCareTopUp from '../data_crm/ccaretopup.vue'
+import DataSet from '../data_crm/dataSet'
+import CCareTopUp from '../data_crm/ccaretopup'
+import BCelOne from '../data_crm/bCelone'
+import SoXayApp from '../data_crm/soXayApp'
 export default {
+  middleware: 'auth',
   Currency: 'index',
   props: {
     numberPhonSend: String,
     dataPoint: Object,
     dataHPackage: Array,
+    dataB_celOne: Array,
     numberNull: Boolean,
+    dataSoXay: Array,
+    cutMoney3K: String,
+    uRegister: Array,
+    debtMoney: Object,
   },
   components: {
     DataSet,
     CCareTopUp,
-    // DataSet2
+    BCelOne,
+    SoXayApp,
   },
   data() {
     return {
@@ -1127,6 +1354,7 @@ export default {
       dataCCare: [],
       heightPx: 0,
       number: 0,
+      showImage: false,
       valueSwitch5G: true,
       valueSwitch4G: true,
       valueSwitch3G: false,
@@ -1144,24 +1372,29 @@ export default {
     }
   },
   mounted() {
-    this.$emit(
-      'switch',
-      this.valueSwitch5G,
-      this.valueSwitch4G,
-      this.valueSwitch3G,
-      this.valueSwitchRBT,
-      this.valueSwitchVoiceIR,
-      this.valueSwitchDataIR,
-      this.valueSwitchSMS
-    )
+    // this.$emit(
+    //   'switch',
+    //   this.valueSwitch5G,
+    //   this.valueSwitch4G,
+    //   this.valueSwitch3G,
+    //   this.valueSwitchRBT,
+    //   this.valueSwitchVoiceIR,
+    //   this.valueSwitchDataIR,
+    //   this.valueSwitchSMS
+    // )
     // setInterval(() => {
     //   // if (this.numberNull === this.numberPhonSend) {
     //   // }
-    //   console.log('dataP:', this.dataHPackage)
+    //   console.log('dataP:', this.uRegister)
     // }, 2000)
     this.dataOfCCare()
     this.setSheetHeight()
     window.addEventListener('resize', this.setSheetHeight)
+  },
+  computed: {
+    en() {
+      return this.$store.state.en;
+    },
   },
   methods: {
     handleBeforeChange(title, content, status) {
@@ -1176,8 +1409,6 @@ export default {
     setSheetHeight() {
       // Get the height of the computer screen
       this.heightPx = window.innerHeight - 64
-      // console.log('C', this.dataPoint)
-      // console.log('P', this.dataHPackage)
     },
     monthAndYear() {
       const now = new Date()
@@ -1188,10 +1419,11 @@ export default {
     async dataOfCCare() {
       const Num = this.monthAndYear()
       try {
+        const num = Number(Num)
         const response = await this.$axios.post(
           'http://172.28.17.102:9960/finddate/findcareregister',
           {
-            datetime: Num,
+            datetime: num,
           }
         )
         if (response.data) {
@@ -1199,20 +1431,47 @@ export default {
         } else {
           this.dataCCare = []
         }
-        // console.log('dta:',this.dataCCare);
       } catch (error) {
         this.dataCCare = []
         console.error('Error fetching data:', error)
       }
     },
     showData(textValue) {
+      if (textValue === 'image') {
+        this.uRegister.forEach((item) => this.computeImageStyle(item))
+      }
       this.text = textValue
       this.dialog = true
     },
-    // showData(textValue) {
-    //   this.text = textValue
-    //   this.dialog = true
-    // },
+    truncateText(text, maxLength) {
+      if (text.length <= maxLength) return text
+      return text.substring(0, maxLength) + '...'
+    },
+    computeImageStyle(item) {
+      const img = new Image()
+      img.src = item.Photo
+      const height = img.height
+      const width = img.width
+      if (height > width * 1.5) {
+        return {
+          maxWidth: '600px',
+          height: 'auto',
+        }
+      } else {
+        return {
+          maxWidth: '100%',
+          height: 'auto',
+        }
+      }
+    },
+    formatResultDesc(value) {
+      // Check if value is a valid number
+      const num = Number(value)
+      if (!isNaN(num)) {
+        return new Intl.NumberFormat().format(num)
+      }
+      return value // Return the original value if it's not a valid number
+    },
   },
 }
 </script>
@@ -1232,14 +1491,14 @@ export default {
 }
 
 .scrollbar::-webkit-scrollbar {
-  width: 4px;
+  width: 2px;
   /* Set the width of the scrollbar */
   height: 2px;
 }
 
 /* Increase specificity of thumb styles */
 .scrollbar::-webkit-scrollbar-thumb {
-  background-color: yellow;
+  background-color: rgb(204, 204, 0);
   /* Set the color of the thumb */
 }
 
@@ -1249,8 +1508,8 @@ export default {
 }
 .hover-pointer {
   cursor: pointer;
-  background-color: rgb(255, 255, 77);
 }
+
 .card-title {
   background-color: rgb(255, 255, 179);
   border-radius: 5px;
@@ -1258,16 +1517,22 @@ export default {
 }
 
 /* Change background color on hover */
-.card-title:hover {
+.background_color {
   background-color: rgb(255, 255, 77);
 }
 .font_size_14 {
   font-size: 14px;
+}
+.font_size_12 {
+  font-size: 12px;
 }
 .BK_color_YL {
   background-color: rgb(255, 255, 80);
 }
 .color_Iconclose {
   color: rgb(51, 51, 0);
+}
+.custom-font {
+  font-family: 'Noto Sans Lao', sans-serif;
 }
 </style>

@@ -11,7 +11,7 @@
         <v-icon color="#ffff00" size="25">mdi-arrow-left</v-icon>
       </v-btn>
       <v-spacer />
-      <h2 class="text-center">List Menu</h2>
+      <h2 class="text-center custom-font">{{ en ? 'ລາຍການຂໍ້ມູນ' : 'List Menu'}}</h2>
       <v-spacer />
       <div></div>
     </v-card-actions>
@@ -29,8 +29,7 @@
         active-class="success"
         show-arrows
         :justify="
-          Object.keys(items_menu).length % 4 === 0 ||
-          Object.keys(items_menu).length % 7 === 0
+          Object.keys(items_menu).length % 4 === 0 
             ? 'center'
             : 'start'
         "
@@ -93,9 +92,9 @@
                   border-bottom-right-radius: 0px;
                 "
               >
-                <v-card-text class="text-center pl-2 pr-1">
+                <v-card-text class="text-center pl-2 pr-1 custom-font">
                   <h3 style="color: rgb(102, 102, 0)">
-                    {{ item.title }}
+                    {{ en ? item.titleLao : item.titleEn }}
                   </h3>
                   <v-divider
                     class="mx-4"
@@ -122,41 +121,66 @@ export default {
         {
           avatar:
             'http://172.28.17.137:7789/Services/asset/images//logo-round.png',
-          title: 'Money Cuts Bye Soxay App',
-          path: '../money3K/findnumber',
+          titleEn: 'Money Cuts Bye Soxay App',
+          titleLao: 'ເງີນຖືກຕັດໂດຍແອບ Soxay',
+          path: '../money3K/moneySoxayApp',
         },
         {
           avatar:
             'http://172.28.17.137:7789/Services/asset/images//logo-round.png',
-          title: 'Cuts Money 3000 kip',
-          path: '../money3K/getadjustment',
+          titleEn: 'Cuts Money 3000 kip',
+          titleLao: 'ກອດລາຍການຕັດເງີນ 3000 ກີບ',
+          path: '../money3K/cutMoney3K',
         },
         {
           avatar:
             'http://172.28.17.137:7789/Services/asset/images//logo-round.png',
-          title: 'History Query Packages',
-          path: '../money3K/query_register',
+          titleEn: 'History Query Packages',
+          titleLao: 'History Query Packages',
+          path: '../money3K/historyQueryPKages',
         },
         {
           avatar:
             'http://172.28.17.137:7789/Services/asset/images//logo-round.png',
-          title: "CCare's Top-up History",
-          path: '../money3K/register_packages',
+          titleEn: "CCare's Top-up History",
+          titleLao: "ປະຫວັດການເຕີມເງີນຂອງ C'Care",
+          path: '../money3K/ccareCandidatePKage',
         },
         {
           avatar:
             'http://172.28.17.137:7789/Services/asset/images//logo-round.png',
-          title: 'Data BCEL ONE',
+          titleEn: 'Data BCEL ONE',
+          titleLao: 'Data BCEL ONE',
           path: '../money3K/bcel_oneData',
         },
         {
           avatar:
             'http://172.28.17.137:7789/Services/asset/images//logo-round.png',
-          title: 'Nice Number Detail.',
-          path: '../money3K/nicenumberdetaill',
+          titleEn: 'Check The Price SIS.',
+          titleLao: "ກອດເບີ່ງຂໍ້ມູນ ແລະ ລາຄາເບີ",
+          path: '../money3K/checkPrieNumber',
+        },
+        {
+          avatar:
+            'http://172.28.17.137:7789/Services/asset/images//logo-round.png',
+          titleEn:"C'Care Register Package",
+          titleLao:"ສະໝັກແພັກເກັດຜ່ານ C'Care",
+          path: '../money3K/ccareRegisterPKages',
+        },
+        {
+          avatar:
+            'http://172.28.17.137:7789/Services/asset/images//logo-round.png',
+          titleEn:"C'Care Register Package via counter",
+          titleLao:"ສະໝັກແພັກເກັດຜ່ານ C'Care",
+          path: '../money3K/ccareRegisterViacounter',
         },
       ],
     }
+  },
+  computed: {
+    en() {
+      return this.$store.state.en;
+    },
   },
   methods: {
     openLinkInNewTab(path) {
@@ -169,10 +193,6 @@ export default {
 </script>
 
 <style>
-/* .col-custom {
-  flex-basis: calc(20% - 0px); 
-  max-width: calc(20% - 0px);
-} */
 .colorBK {
   background-color: #ffff00;
 }
@@ -186,5 +206,8 @@ export default {
 .font_size_18 {
   font-size: 18px;
   /* Adjust the font size as needed */
+}
+.custom-font {
+  font-family: 'Noto Sans Lao', sans-serif;
 }
 </style>

@@ -27,6 +27,7 @@
 <script>
 export default {
   Currency: 'index',
+  middleware: 'auth',
   props: {
     dataCard: Object,
     numberNull: Boolean,

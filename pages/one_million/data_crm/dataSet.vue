@@ -2,7 +2,6 @@
   <div class="background_color">
     <v-card
       v-if="transformedDataHPackage.length > 0"
-      outlined
       class="rounded-0 scrollbar"
       style="
         overflow-y: auto;
@@ -13,7 +12,6 @@
       "
     >
       <v-data-table
-        v-if="!overlay"
         height="calc(100vh - 27vh)"
         fixed-header
         dense
@@ -42,21 +40,15 @@
     </v-card>
   </div>
 </template>
-
 <script>
 export default {
+  middleware: 'auth',
   Currency: 'index',
   props: {
     dataHPackage: Array,
   },
   data() {
     return {
-      outlined: false,
-      loading: false,
-      numberPhon: '',
-      data_num: false,
-      buttonanime: true,
-      overlay: false,
       columns: [
         { key: 'index', title: 'Index' },
         { key: 'Msisdn', title: 'SIS' },
@@ -69,6 +61,7 @@ export default {
         { key: 'ExpiryTime', title: 'Expiry Time' },
         { key: 'Oder_Ref', title: 'Oder Ref' },
         { key: 'ResultDesc', title: 'Result Desc' },
+        { key: 'Chanel', title: 'Chanel' },  // Update here
       ],
       headers: [
         { text: 'Index', value: 'index' },
@@ -82,6 +75,7 @@ export default {
         { text: 'Expiry Time', value: 'ExpiryTime' },
         { text: 'Oder Ref', value: 'Oder_Ref' },
         { text: 'Result Desc', value: 'ResultDesc' },
+        { text: 'Chanel', value: 'Chanel' },  // Update here
       ],
     }
   },
@@ -100,6 +94,7 @@ export default {
         : 10
     },
     transformedDataHPackage() {
+      console.log('l', this.dataHPackage)
       return this.dataHPackage.map((item, index) => {
         return {
           ...item,
@@ -129,61 +124,6 @@ export default {
         .replace(',', '') // remove comma from the formatted string
       return formattedDate
     },
-    // setSheetHeight() {
-    //   // Get the height of the computer screen
-    //   this.heightPx = window.innerHeight - 190
-    // },
   },
 }
 </script>
-
-<style>
-.color_CL {
-  color: #ffff;
-}
-.custom-font {
-  font-family: 'Noto Sans Lao', sans-serif;
-}
-.font_size_12 {
-  font-size: 11px;
-}
-.font_size_14 {
-  font-size: 14px;
-}
-.title_color {
-  color: #ffff00;
-}
-.text_color {
-  color: rgb(89, 89, 89);
-}
-.table-container ::-webkit-scrollbar {
-  width: 8px;
-  height: 4px;
-}
-
-.table-container ::-webkit-scrollbar-thumb {
-  background-color: #ffff00;
-  border-radius: 4px;
-}
-
-.table-container ::-webkit-scrollbar-corner {
-  background-color: #ffff00;
-  border-radius: 4px;
-}
-.scrollbar {
-  overflow-x: hidden;
-  /* Prevent horizontal overflow */
-}
-
-.scrollbar::-webkit-scrollbar {
-  width: 8px;
-  /* Set the width of the scrollbar */
-  height: 2px;
-}
-
-/* Increase specificity of thumb styles */
-.scrollbar::-webkit-scrollbar-thumb {
-  background-color: yellow;
-  /* Set the color of the thumb */
-}
-</style>

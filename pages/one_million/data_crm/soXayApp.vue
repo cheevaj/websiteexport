@@ -2,18 +2,15 @@
   <div class="background_color">
     <v-card
       v-if="transformedDataHPackage.length > 0"
-      outlined
       class="rounded-0 scrollbar"
       style="
         overflow-y: auto;
         left: 0;
-        height: calc(100vh - 19vh) - 4px;
-        overflow: y;
+        height: calc(100vh - 19vh);
         background-color: #f2f2f2;
       "
     >
       <v-data-table
-        v-if="!overlay"
         height="calc(100vh - 27vh)"
         fixed-header
         dense
@@ -21,7 +18,7 @@
         :items="transformedDataHPackage"
         :items-per-page="itemsPerPage"
         item-key="ProductNumber"
-        class="elevation-1 custom-font table-container scrollbar"
+        class="elevation-1 custom-font table-container"
       >
         <template v-slot:item="{ item }">
           <tr
@@ -46,31 +43,28 @@
 <script>
 export default {
   middleware: 'auth',
-  Currency: 'index',
   props: {
-    dataCCare: Array,
+    dataSoXay: Array,
   },
   data() {
     return {
-      outlined: false,
-      loading: false,
-      numberPhon: '',
-      data_num: false,
-      buttonanime: true,
-      overlay: false,
       columns: [
-        { key: 'index', title: 'Index' },
-        { key: 'QTY', title: 'QTY' },
-        { key: 'Packagecode', title: 'Package Code' },
-        { key: 'Staff_Name', title: 'Staff Name' },
-        { key: 'Month', title: 'Month' },
+        { key: 'index', title: 'INDEX' },
+        { key: 'RECEIVER_ISDN', title: 'SIS' },
+        { key: 'RECEIVER_AMOUNT_F', title: 'RECEIVER AMOUNT' },
+        { key: 'TRANSFER_AMOUNT', title: 'TRANSFER AMOUNT' },
+        { key: 'RESULT_DESC', title: 'RESULT DESC' },
+        { key: 'DATE', title: 'DATE' },
+        { key: 'USER_ID', title: 'USER_ID' }, // Corrected key
       ],
       headers: [
-        { text: 'Index', value: 'index' },
-        { text: 'QTY', value: 'QTY' },
-        { text: 'Package Code', value: 'Packagecode' },
-        { text: 'Staff Name', value: 'Staff_Name' },
-        { text: 'Month', value: 'Month' },
+        { text: 'INDEX', value: 'index' },
+        { text: 'SIS', value: 'RECEIVER_ISDN' },
+        { text: 'RECEIVER AMOUNT', value: 'RECEIVER_AMOUNT_F' },
+        { text: 'TRANSFER AMOUNT', value: 'TRANSFER_AMOUNT' },
+        { text: 'RESULT DESC', value: 'RESULT_DESC' },
+        { text: 'DATE', value: 'DATE' },
+        { text: 'USER_ID', value: 'USER_ID' }, // Corrected key
       ],
     }
   },
@@ -83,27 +77,22 @@ export default {
       )
     },
     itemsPerPage() {
-        return this.transformedDataHPackage.length > 0
+      return this.transformedDataHPackage.length > 0
         ? this.transformedDataHPackage[this.transformedDataHPackage.length - 1]
-        .index
+            .index
         : 10
     },
     transformedDataHPackage() {
-        console.log(this.dataCCare)
-      return this.dataCCare.map((item, index) => {
+      return this.dataSoXay.map((item, index) => {
         return {
           ...item,
           index: index + 1,
-          Month: item.Month.substring(0, 4) + '\u00A0/\u00A0' + item.Month.substring(4),
-          StartTime: this.formatAdjustDate(item.StartTime),
-          ExpiryTime: this.formatAdjustDate(item.ExpiryTime),
+          DATE: this.formatAdjustDate(item.CDATE),
+          RECEIVER_AMOUNT_F: this.formatResultDesc(item.RECEIVER_AMOUNT_F), // Corrected method call
+          TRANSFER_AMOUNT: this.formatResultDesc(item.TRANSFER_AMOUNT), // Corrected method call
         }
       })
     },
-  },
-  mounted() {
-    // this.setSheetHeight();
-    // window.addEventListener('resize', this.setSheetHeight);
   },
   methods: {
     formatAdjustDate(dateString) {
@@ -120,10 +109,18 @@ export default {
         .replace(',', '') // remove comma from the formatted string
       return formattedDate
     },
-    // setSheetHeight() {
-    //   // Get the height of the computer screen
-    //   this.heightPx = window.innerHeight - 190
-    // },
+    formatResultDesc(value) {
+      // Check if value is a valid number
+      const num = Number(value)
+      if (!isNaN(num)) {
+        return new Intl.NumberFormat().format(num)
+      }
+      return value // Return the original value if it's not a valid number
+    },
+  },
+  mounted() {
+    // this.setSheetHeight();
+    // window.addEventListener('resize', this.setSheetHeight);
   },
 }
 </script>
@@ -153,13 +150,13 @@ export default {
 }
 
 .table-container ::-webkit-scrollbar-thumb {
-  background-color: rgb(179, 179, 0);
-  border-radius: 2px;
+  background-color: #ffff00;
+  border-radius: 4px;
 }
 
 .table-container ::-webkit-scrollbar-corner {
-  background-color: rgb(179, 179, 0);
-  border-radius: 1px;
+  background-color: #ffff00;
+  border-radius: 4px;
 }
 .scrollbar {
   overflow-x: hidden;
@@ -167,14 +164,14 @@ export default {
 }
 
 .scrollbar::-webkit-scrollbar {
-  width: 4px;
+  width: 8px;
   /* Set the width of the scrollbar */
   height: 2px;
 }
 
 /* Increase specificity of thumb styles */
 .scrollbar::-webkit-scrollbar-thumb {
-  background-color: rgb(179, 179, 0);
+  background-color: yellow;
   /* Set the color of the thumb */
 }
 </style>

@@ -382,7 +382,7 @@
           width="300"
           @mouseleave="openMenuItem('menu')"
         >
-          <v-card-title class="py-2"> Menu </v-card-title>
+          <v-card-title class="py-2 custom-font">{{en ? 'ເມນູ' : 'Menu'}} </v-card-title>
           <v-divider></v-divider>
           <div v-for="(item, index) in pageMenu" :key="index">
             <v-btn
@@ -407,7 +407,7 @@
                 <v-card-actions class="pa-0 ma-0" width="100%">
                   <v-icon style="bottom: 2px" size="20">{{ item.icon }}</v-icon
                   >&nbsp;
-                  <span>{{ item.name }}</span>
+                  <span class="custom-font">{{ en ? item.nameLa : item.nameEn }}</span>
                 </v-card-actions>
               </v-card-text>
             </v-btn>
@@ -416,6 +416,14 @@
         </v-card>
       </div>
       <v-divider style="background-color: #ffff00"></v-divider>
+      <v-card-text class="text-right pa-2" style="position: fixed; z-index: 150; bottom: 1px; right: 1px;">
+        <Tooltip v-if="!en" placement="top" content="English to Lao" :delay="600">
+          <Button class="language-button" @click="toggleLanguage">English</Button>
+        </Tooltip>
+        <Tooltip v-else placement="top" content="Lao to English" :delay="600">
+          <Button class="language-button custom-font" @click="toggleLanguage">ລາວ</Button>
+        </Tooltip>
+        </v-card-text>
       <Nuxt />
     </v-main>
     <v-footer
@@ -466,6 +474,7 @@ export default {
   name: 'DefaultLayout',
   data() {
     return {
+      en: this.$store.state.en,
       selectedItem: 1,
       show: true,
       dialog: false,
@@ -473,17 +482,20 @@ export default {
       imenu: false,
       pageMenu: [
         {
-          name: 'One Screen',
+          nameEn: 'One Screen',
+          nameLa: 'ໜ້າຫຼອມ',
           icon: 'mdi-monitor-screenshot',
           path: '../one_million',
         },
         {
-          name: 'Check Number phone',
+          nameEn: 'Check The Number.',
+          nameLa: 'ກອດຂໍ້ມູນເບີໂທ.',
           icon: 'mdi-card-account-phone-outline',
           path: '../money3K',
         },
         {
-          name: 'Welcome Leasing',
+          nameEn: 'Export File',
+          nameLa: 'ດາວໂຫຼດ ໄຟຮ',
           icon: 'mdi-file-move',
           path: '../exportExcelfile',
         },
@@ -564,12 +576,18 @@ export default {
     window.addEventListener('resize', this.updateShowProperty)
   },
   methods: {
+    toggleLanguage() {
+      // Update the 'en' variable when the button is clicked
+      this.en = !this.en;
+      // Also, commit the mutation to update the language state in the store if needed
+      this.$store.commit('setLanguage', this.en);
+    },
     openMenuItem(item) {
       if (item === 'menu') {
-        this.website = false;
-        this.imenu = !this.imenu;
+        this.website = false
+        this.imenu = !this.imenu
       } else {
-        this.imenu = false;
+        this.imenu = false
         this.website = !this.website
       }
     },
@@ -579,8 +597,8 @@ export default {
         path: ToPath,
         // query: { menuItem: false }, // Pass the menuItem parameter as false
       })
-      this.website = false;
-      this.imenu = false;
+      this.website = false
+      this.imenu = false
     },
     logOut() {
       this.dialog = false
@@ -644,5 +662,13 @@ export default {
 .custom-font {
   font-family: 'Noto Sans Lao', sans-serif;
   /* You can specify additional styles here */
+}
+.language-button {
+  color: none; /* Default state */
+}
+
+.language-button:hover {
+  background-color: #ffff00;
+  color: #333333; /* Hover state */
 }
 </style>

@@ -169,7 +169,7 @@ export default {
     return {
       outlined: false,
       loading: false,
-      numberPhon: '',
+      numberPhon: '2076044976',
       data_num: false,
       buttonanime: true,
       dataResponse: [],
@@ -178,16 +178,20 @@ export default {
       columns: [
         { key: 'index', title: 'N' },
         { key: 'SIS', title: 'SIS' },
-        { key: 'NEW_PATTERN', title: 'New Pattern' },
-        { key: 'Postpaid_price', title: 'Postpaid price' },
-        { key: 'Prepaid_price', title: 'Prepaid price' },
+        { key: 'RECEIVER_AMOUNT_F', title: 'RECEIVER AMOUNT' },
+        { key: 'TRANSFER_AMOUNT', title: 'TRANSFER AMOUNT' },
+        { key: 'USER_ID', title: 'USER-ID' },
+        { key: 'RESULT_DESC', title: 'RESULT-DESC' },
+        { key: 'DATE', title: 'DATE' },
       ],
       headers: [
         { text: 'N', value: 'index' },
         { text: 'SIS', value: 'SIS' },
-        { text: 'New Pattern', value: 'NEW_PATTERN' },
-        { text: 'Postpaid price', value: 'Postpaid_price' },
-        { text: 'Prepaid price', value: 'Prepaid_price' },
+        { text: 'RECEIVER AMOUNT', value: 'RECEIVER_AMOUNT_F' },
+        { text: 'TRANSFER AMOUNT', value: 'TRANSFER_AMOUNT' },
+        { text: 'USER-ID', value: 'USER_ID' },
+        { text: 'RESULT-DESC', value: 'RESULT_DESC' },
+        { text: 'DATE', value: 'DATE' },
       ],
     }
   },
@@ -211,20 +215,21 @@ export default {
       const Num = this.numberPhon // .split(',').map((num) => num.trim())
       try {
         const response = await this.$axios.post(
-          'http://172.28.26.23:3400/showdetail/nicenumberdetaill',
+          'http://172.28.17.102:9970/data/findnumbersoxay',
           {
             telephone: Num,
           }
         )
-        console.log(response)
+        console.log(response.data)
         if (response.data) {
           this.dataResponse = response.data.map((detail, index) => ({
             index: index + 1,
-            SIS: detail.MSISDN,
-            NEW_PATTERN: detail.NEW_PATTERN,
-            // ADJUSTDATE: this.formatAdjustDate(detail.RESPON_DATE),
-            Postpaid_price: detail.Postpaid_price,
-            Prepaid_price: detail.Prepaid_price,
+            SIS: detail.RECEIVER_ISDN,
+            RECEIVER_AMOUNT_F: this.formatResultDesc(detail.RECEIVER_AMOUNT_F),
+            TRANSFER_AMOUNT: this.formatResultDesc(detail.TRANSFER_AMOUNT),
+            DATE: this.formatAdjustDate(detail.CDATE),
+            USER_ID: detail.USER_ID,
+            RESULT_DESC: detail.RESULT_DESC,
           }))
         } else {
           this.dataResponse = []
@@ -237,23 +242,31 @@ export default {
         this.loading = false
       }
     },
-    // formatAdjustDate(dateString) {
-    //   const date = new Date(dateString)
-    //   const formattedDate = date
-    //     .toLocaleString('en-US', {
-    //       year: 'numeric',
-    //       month: '2-digit',
-    //       day: '2-digit',
-    //       hour: '2-digit',
-    //       minute: '2-digit',
-    //       second: '2-digit',
-    //     })
-    //     .replace(',', '') // remove comma from the formatted string
-    //   return formattedDate
-    // },
+    formatAdjustDate(dateString) {
+      const date = new Date(dateString)
+      const formattedDate = date
+        .toLocaleString('en-US', {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+        })
+        .replace(',', '') // remove comma from the formatted string
+      return formattedDate
+    },
     setSheetHeight() {
       // Get the height of the computer screen
       this.heightPx = window.innerHeight - 190
+    },
+    formatResultDesc(value) {
+      // Check if value is a valid number
+      const num = Number(value)
+      if (!isNaN(num)) {
+        return new Intl.NumberFormat().format(num)
+      }
+      return value // Return the original value if it's not a valid number
     },
   },
   beforeDestroy() {

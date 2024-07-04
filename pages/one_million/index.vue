@@ -21,8 +21,9 @@
                 <div style="display: flex">
                   <form @submit.prevent="handleSearch">
                     <Input
+                      class="custom-font"
                       v-model="numberPhon"
-                      placeholder="Serial number is ( 20789... )"
+                      :placeholder="en ? 'Enter number ( 20789... )' : 'ກະລຸນາປ້ອມເບີໂທລະສັບ (20789... )' "
                       clearable
                       style="width: 200px; height: 34px"
                       @keydown.enter="handleSearch"
@@ -147,8 +148,13 @@
                   :dataPoint="dataPoint"
                   :numberNull="numberNull"
                   :dataHPackage="dataHPackage"
-                  @switch="receiveSwitchData"
+                  :dataB_celOne="dataB_celOne"
+                  :dataSoXay="dataSoXay"
+                  :cutMoney3K="cutMoney3K"
+                  :uRegister="uRegister"
+                  :debtMoney="debtMoney"
                 />
+                <!--@switch="receiveSwitchData"-->
               </div>
               <div v-if="colorMenu === 2">
                 <Card :dataCard="dataCard" :numberNull="numberNull" />
@@ -180,12 +186,17 @@ export default {
   data() {
     return {
       dataPoint: {},
-      dataCard: {},
+      dataCard: [],
       dataHPackage: [],
-      dataUser: {},
+      dataB_celOne: [],
+      dataSoXay: [],
+      dataUser: [],
+      uRegister: [],
+      debtMoney: {},
       loading: false,
       numberPhon: '',
       numberPhonSend: '',
+      cutMoney3K: '',
       numberNull: false,
       mouseHover: 0,
       buttonanime: true,
@@ -194,7 +205,7 @@ export default {
       minSplit: 0, // Minimum split ratio
       maxSplit: 0.1, // Maximum split ratio
       theme: 'light', // Assuming you have defined theme data
-      activeMenuItem: '1', // Initial active menu item
+      // activeMenuItem: '1', // Initial active menu item
       menuItems: [
         { name: 'Home', iconType: 'mdi-home-outline' },
         { name: 'CRM', iconType: 'mdi-monitor-screenshot' },
@@ -212,29 +223,29 @@ export default {
     window.removeEventListener('resize', this.setSheetHeight)
   },
   methods: {
-    receiveSwitchData(
-      valueSwitch5G,
-      valueSwitch4G,
-      valueSwitch3G,
-      valueSwitchRBT,
-      valueSwitchVoiceIR,
-      valueSwitchDataIR,
-      valueSwitchSMS
-    ) {
-      // Execute only if less than 2 times
-      setTimeout(() => {
-        console.log(
-          'switch',
-          valueSwitch5G,
-          valueSwitch4G,
-          valueSwitch3G,
-          valueSwitchRBT,
-          valueSwitchVoiceIR,
-          valueSwitchDataIR,
-          valueSwitchSMS
-        )
-      }, 500) // Delay of 3 seconds
-    },
+    // receiveSwitchData(
+    //   valueSwitch5G,
+    //   valueSwitch4G,
+    //   valueSwitch3G,
+    //   valueSwitchRBT,
+    //   valueSwitchVoiceIR,
+    //   valueSwitchDataIR,
+    //   valueSwitchSMS
+    // ) {
+    //   // Execute only if less than 2 times
+    //   // setTimeout(() => {
+    //   //   console.log(
+    //   //     'switch',
+    //   //     valueSwitch5G,
+    //   //     valueSwitch4G,
+    //   //     valueSwitch3G,
+    //   //     valueSwitchRBT,
+    //   //     valueSwitchVoiceIR,
+    //   //     valueSwitchDataIR,
+    //   //     valueSwitchSMS
+    //   //   )
+    //   // }, 500) // Delay of 3 seconds
+    // },
     slipMenu(index) {
       if (index === 4) {
         this.$router.go(-1) // Navigate back one step
@@ -249,37 +260,24 @@ export default {
         screen.style.height = screenHeight + 'px'
       }
     },
-    handleMenuItemClick(item) {
-      this.activeMenuItem = item.name
-    },
+    // handleMenuItemClick(item) {
+    //   this.activeMenuItem = item.name
+    // },
     handleSearch() {
       this.loading = true
       const Num = this.numberPhon
-      this.numberPhonSend = Num;
-      this.dataOfPoint(Num)
-      this.dataOfHQRPackage(Num)
-      this.loading = false
-    },
-    async dataOfPoint(Num) {
-      try {
-        const response = await this.$axios.post(
-          'http://172.28.26.23:3400/ltc-smart-reward/ReadPointDetail',
-          {
-            userIdData: Num,
-          }
-        )
-        const responseData = response.data.data
-        // responseData.number = this.numberPhon // Assuming this.numberPhon holds the phone number
-        this.dataPoint = responseData
-        if (response) {
-          this.colorMenu = 1
-          this.mouseHover = 1
-        }
-      } catch (error) {
-        console.error('Error fetching data:', error)
-      } finally {
-        // console.log(this.numberPhon, this.numberNull)
-        this.numberNull = this.numberPhon !== ''
+      if (Num.length === 10) {
+        this.dataResponseAll(Num)
+        this.dataOfHQRPackage(Num)
+        this.dataOfBcelone(Num);
+        this.numberPhonSend = Num
+      } else {
+        this.colorMenu = 0
+        this.mouseHover = 0
+        this.$Notice.error({
+          title: 'Check Phone Number',
+          desc: 'Check your phone number your number Phone must be at least 10 characters long.',
+        })
         this.loading = false
       }
     },
@@ -307,15 +305,95 @@ export default {
         )
         if (response.data && response.data.Detail) {
           this.dataHPackage = response.data.Detail
-          // console.log('dataP:', this.dataHPackage)
         } else {
-          // console.log('data:No')
-          this.dataHPackage = [];
+          this.dataHPackage = []
         }
         this.data_num = true
       } catch (error) {
         console.error('Error fetching data:', error)
+      }
+    },
+    async dataOfBcelone(Num) {
+      const num = Number(Num)
+      try {
+        const response = await this.$axios.post(
+          'http://172.28.17.102:8100/show/justbceldata',
+          {
+            telephone: num,
+          }
+        )
+        this.dataB_celOne = response.data && response.data !== 'request is so stupid' ? response.data : [];
+      } catch (error) {
+        console.error('Error fetching data:', error)
+      }
+    },
+    async dataResponseAll(Num) {
+      // if API get Number is Number type use ' num ', if API get Number is Number type is String use ' Num ' 
+      const num = Number(Num)
+
+      // Define all the API calls
+      const apiCalls = [
+        this.$axios.post(
+          'http://172.28.26.23:3400/ltc-smart-reward/ReadPointDetail',
+          { userIdData: Num }
+        ),
+        this.$axios.post('http://172.28.17.102:9970/data/findnumbersoxay', {
+          telephone: num,
+        }),
+        this.$axios.post('http://172.28.17.102:9980/adjust/getadjustment', {
+          telephone: Num,
+        }),
+        this.$axios.post('http://172.28.26.23:3200/checksim/register', {
+          msisdn: num,
+        }),
+        this.$axios.post('http://172.28.26.23:3100/debit/getdetailforbank', {
+          tel: Num,
+        }),
+      ]
+
+      try {
+        // Make all API calls concurrently
+        const responses = await Promise.all(apiCalls)
+
+        // Process each response
+        const [
+          pointDetailResponse,
+          soXayResponse,
+          adjustResponse,
+          userRegisterResponse,
+          debtMoneyResponse
+        ] = responses
+
+        // Update dataPoint
+        this.dataPoint = pointDetailResponse.data.data
+        // Update dataSoXay
+        this.dataSoXay = soXayResponse ? soXayResponse.data : {}
+
+        // Update cutMoney3K
+        if (
+          Array.isArray(adjustResponse.data) &&
+          adjustResponse.data.length > 0
+        ) {
+          const adjustDate = adjustResponse.data[0].ADJUSTDATE
+          this.cutMoney3K = this.formatAdjustDate(adjustDate)
+        } else {
+          this.cutMoney3K = ''
+          // console.error('Unexpected response format:', adjustResponse.data)
+        }
+
+        // Update uRegister
+        this.uRegister = userRegisterResponse ? userRegisterResponse.data : {}
+        // Update debtMoney
+        this.debtMoney = debtMoneyResponse ? debtMoneyResponse.data : {};
+        console.log('ki',this.debtMoney);
+      } catch (error) {
+        // Handle errors for each API call separately if needed
+        console.error('Error fetching data:', error)
       } finally {
+        // Set flags or perform any final operations here
+        this.numberNull = this.numberPhon !== ''
+        this.colorMenu = 1
+        this.mouseHover = 1
         this.loading = false
       }
     },
@@ -357,5 +435,8 @@ export default {
 .demo-split {
   /* height: 400px; */
   border: 1px solid #dcdee2;
+}
+.custom-font {
+  font-family: 'Noto Sans Lao', sans-serif;
 }
 </style>

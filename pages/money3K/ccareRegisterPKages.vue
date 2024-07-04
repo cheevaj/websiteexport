@@ -5,36 +5,14 @@
         <transition name="move-right">
           <div v-show="buttonanime" class="transition-box">
             <v-card-actions class="pa-0">
-              <Tooltip
-                content="Import file Excel."
-                placement="bottom"
-                :delay="800"
-              >
-                <input
-                  type="file"
-                  ref="fileInput"
-                  style="display: none"
-                  @change="handleFileUpload"
-                />
-                <v-btn
-                  text
-                  x-small
-                  fab
-                  class="px-0 ml-1 mr-0 BK_colorBT"
-                  @click="$refs.fileInput.click()"
-                >
-                  <v-icon size="25" style="color: rgb(41, 163, 41)">
-                    mdi-file-excel-outline
-                  </v-icon>
-                </v-btn>
-              </Tooltip>
               <div style="display: flex">
                 <form @submit.prevent="handleSearch">
                   <Input
+                    class="custom-font"
                     v-model="numberPhon"
-                    placeholder="Serial Year and Month is 20789...,20788..."
+                    :placeholder=" en ? 'ກະລຸນາປ້ອມ ປີ ແລະ ເດືອນ ( 202403 )' : 'Enter New year and month ( 202403 )'"
                     clearable
-                    style="width: 350px; height: 34px; margin-top: 1px"
+                    style="width: 250px; height: 34px; margin-top: 1px"
                     @keydown.enter="handleSearch"
                   />
                 </form>
@@ -53,7 +31,7 @@
                     padding-right: 4px;
                   "
                 >
-                  Search
+                  <h4 class="custom-font">{{en ? 'ຄົ້ນຫາ' : 'Search'}}</h4>
                 </v-btn>
                 <v-btn
                   text
@@ -93,9 +71,7 @@
         <v-icon color="#ffff00" size="25">mdi-arrow-left</v-icon>
       </v-btn>
       <v-card-text class="pa-0">
-        <h2 class="text-center color_CL">
-          Check the latest cut of money 3000 kip of the SIS.
-        </h2>
+        <h2 class="text-center color_CL custom-font" style="color: #ffff00;">{{en ? "ປະຫວັດການລົງທະບຽນແພັກເກັດຂອງ CCare ຜ່ານ Bcel-One." : "CCare's Register Package via Bcel-One Channel History."}}</h2>
       </v-card-text>
       <div></div>
     </v-card-actions>
@@ -121,7 +97,7 @@
         dense
         :headers="visibleHeaders"
         :items="dataResponse"
-        :items-per-page="itemsPerPage"
+        :items-per-page="150"
         item-key="ProductNumber"
         class="elevation-1 pt-4 custom-font table-container"
       >
@@ -158,15 +134,16 @@
         class="text-center"
         style="display: flex; flex-direction: column; justify-content: center"
       >
-        <h3>Enter New number phone.</h3>
+        <h3 class="custom-font">{{ en ? 'ກະລຸນາປ້ອມ ປີ ແລະ ເດືອນ' : 'Enter New year and month.'}}</h3>
         <br />
         <div class="mouse_senter" @click="buttonanime = !buttonanime">
           <v-icon size="85" color="rgb(128, 128, 0)">mdi-database-alert</v-icon>
         </div>
         <br />
-        <h2>
-          <span style="color: rgb(255, 255, 0)">SIS's&nbsp;</span>data is not
-          found
+        <h2 v-if="en" class="custom-font">ບໍ່ພົບຂໍ້ມູນການເຕີມເເພັກເກັດຂອງ c-care</h2>
+        <h2 v-else>
+          <span style="color: rgb(255, 255, 0)">C-Care's top-up&nbsp;</span>data
+          history is not found
         </h2>
       </v-card>
       <v-card
@@ -176,21 +153,21 @@
         class="text-center"
         style="display: flex; flex-direction: column; justify-content: center"
       >
-        <h3>Enter your number phone.</h3>
+        <h3 class="custom-font">{{ en ? 'ກະລຸນາປ້ອມ ປີ ແລະ ເດືອນ' : 'Enter New year and month.'}}</h3>
         <br />
         <div class="mouse_senter" @click="buttonanime = !buttonanime">
           <v-icon size="85" color="rgb(128, 128, 0)">mdi-phone-classic</v-icon>
         </div>
         <br />
-        <h2><span style="color: rgb(255, 255, 0)">Data</span> not found</h2>
+        <h2 class="custom-font"><span style="color: rgb(255, 255, 0)">{{en ? '' : 'Data'}}</span> {{en ? 'ຍັງບໍ່ມີຂໍ້ມູນ' : "not found"}}</h2>
       </v-card>
     </v-card-text>
   </div>
 </template>
 
 <script>
-import * as XLSX from 'xlsx'
 export default {
+  middleware: 'auth',
   data() {
     return {
       outlined: false,
@@ -199,27 +176,21 @@ export default {
       data_num: false,
       buttonanime: true,
       dataResponse: [],
-      overlay: false, // Add this line
-      heightPx: 0,
+      overlay: false,
+      heightPx: 0, // Add this line
       columns: [
-        { key: 'index', title: 'N' },
-        { key: 'SIS', title: 'MSISDN' },
-        { key: 'ADJUSTDATE', title: 'Adjust Date' },
-        { key: 'BBF', title: 'BBF' },
-        { key: 'BFT', title: 'BFT' },
-        { key: 'CODE', title: 'Code' },
-        { key: 'MONTHLY', title: 'Monthly' },
-        { key: 'RESULTDESC', title: 'Result Description' },
+        { key: 'index', title: 'INDEX' },
+        { key: 'MSISDN', title: 'MSISDN' },
+        { key: 'AMOUNT', title: 'AMOUNT' },
+        { key: 'USER_ID', title: 'USER_ID' },
+        { key: 'DATE', title: 'DATE' },
       ],
       headers: [
-        { text: 'N', value: 'index' },
-        { text: 'MSISDN', value: 'SIS' },
-        { text: 'Adjust Date', value: 'ADJUSTDATE' },
-        { text: 'BBF', value: 'BBF' },
-        { text: 'BFT', value: 'BFT' },
-        { text: 'Code', value: 'CODE' },
-        { text: 'Monthly', value: 'MONTHLY' },
-        { text: 'Result Description', value: 'RESULTDESC' },
+        { text: 'INDEX', value: 'index' },
+        { text: 'MSISDN', value: 'MSISDN' },
+        { text: 'AMOUNT', value: 'AMOUNT' },
+        { text: 'USER_ID', value: 'USER_ID' },
+        { text: 'DATE', value: 'DATE' },
       ],
     }
   },
@@ -231,11 +202,14 @@ export default {
         )
       )
     },
-    itemsPerPage() {
-      return this.dataResponse.length > 0
-        ? this.dataResponse[this.dataResponse.length - 1].index
-        : 10
+    en() {
+      return this.$store.state.en;
     },
+    // itemsPerPage() {
+    //   return this.dataResponse.length > 0
+    //     ? this.dataResponse[this.dataResponse.length - 1].index
+    //     : 10
+    // },
   },
   mounted() {
     this.setSheetHeight()
@@ -245,25 +219,23 @@ export default {
     async handleSearch() {
       this.dataResponse = []
       this.loading = true
-      const Num = this.numberPhon.split(',').map((num) => num.trim())
+      const Num = Number(this.numberPhon);
       try {
         const response = await this.$axios.post(
-          'http://172.28.17.102:9980/adjust/getadjustment',
+          'http://172.28.17.102:8100/incoming/TOPUPV_INCOMMING',
           {
-            telephone: Num,
+            datetime: Num,
           }
         )
-        console.log(response)
+        // console.log('data:', response.data)
         if (response.data) {
           this.dataResponse = response.data.map((detail, index) => ({
             index: index + 1,
-            SIS: detail.MSISDN,
-            ADJUSTDATE: this.formatAdjustDate(detail.ADJUSTDATE),
-            BBF: detail.BBF,
-            BFT: detail.BFT,
-            CODE: detail.CODE ? 'OK' : 'NO',
-            MONTHLY: detail.MONTHLY,
-            RESULTDESC: detail.RESULTDESC,
+            MSISDN: detail.MSISDN,
+            AMOUNT: this.formatResultDesc(detail.AMOUNT),
+            USER_ID: detail.USER_ID,
+            DATE: detail.CDATE.substring(0, 4) + '\u00A0/\u00A0' + detail.CDATE.substring(4, 6) + '\u00A0/\u00A0' + detail.CDATE.substring(6),
+
           }))
         } else {
           this.dataResponse = []
@@ -276,76 +248,30 @@ export default {
         this.loading = false
       }
     },
-    formatAdjustDate(dateString) {
-      const date = new Date(dateString)
-      const formattedDate = date
-        .toLocaleString('en-US', {
-          year: 'numeric',
-          month: '2-digit',
-          day: '2-digit',
-          hour: '2-digit',
-          minute: '2-digit',
-          second: '2-digit',
-        })
-        .replace(',', '') // remove comma from the formatted string
-      return formattedDate
+    formatResultDesc(value) {
+      // Check if value is a valid number
+      const num = Number(value)
+      if (!isNaN(num)) {
+        return new Intl.NumberFormat().format(num)
+      }
+      return value // Return the original value if it's not a valid number
     },
     setSheetHeight() {
       // Get the height of the computer screen
       this.heightPx = window.innerHeight - 190
     },
-    handleFileUpload(event) {
-      if (event.target.files.length > 0) {
-        const file = event.target.files[0]
-        this.readFile(file)
-      } else {
-        console.log('No file selected')
-      }
-    },
-    readFile(file) {
-      const reader = new FileReader()
-      reader.onload = (e) => {
-        const data = e.target.result
-        const workbook = XLSX.read(data, { type: 'binary' })
-        const sheetName = workbook.SheetNames[0]
-        const sheet = workbook.Sheets[sheetName]
-
-        // -------------- Assuming phone numbers are in the specified column (colNum)
-        const jsonData = XLSX.utils.sheet_to_json(sheet, {
-          header: 1,
-          range: -1,
-        })
-
-        // ---------------- Extract data from the specified column and row
-        const extractedData = jsonData.map((row) => row[0])
-
-        // ---------------- Remove the header (assuming the header is in the first row)
-        extractedData.shift()
-
-        // --------------- Set this.numsend to the extracted phone numbers
-        this.numberPhon = extractedData.join(',')
-      }
-      reader.readAsBinaryString(file)
-    },
-  },
-  beforeDestroy() {
-    window.removeEventListener('resize', this.setSheetHeight)
   },
 }
 </script>
-
 <style>
 .color_CL {
   color: #ffff;
-}
-.BK_colorBT {
-  background-color: rgb(255, 255, 153);
 }
 .custom-font {
   font-family: 'Noto Sans Lao', sans-serif;
 }
 .font_size_12 {
-  font-size: 12px;
+  font-size: 11px;
 }
 .font_size_14 {
   font-size: 14px;

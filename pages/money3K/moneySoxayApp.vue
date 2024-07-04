@@ -9,7 +9,8 @@
                 <form @submit.prevent="handleSearch">
                   <Input
                     v-model="numberPhon"
-                    placeholder="Serial Year and Month is 202402"
+                    class="custom-font"
+                    :placeholder=" en ? 'ກະລຸນາປ້ອມເບີໂທລະສັບ ( 20789... )' : 'Enter phone number ( 20788... )'"
                     clearable
                     style="width: 250px; height: 34px; margin-top: 1px"
                     @keydown.enter="handleSearch"
@@ -30,7 +31,7 @@
                     padding-right: 4px;
                   "
                 >
-                  Search
+                  <h4 class="custom-font">{{en ? 'ຄົ້ນຫາ' : 'Search'}}</h4>
                 </v-btn>
                 <v-btn
                   text
@@ -70,7 +71,7 @@
         <v-icon color="#ffff00" size="25">mdi-arrow-left</v-icon>
       </v-btn>
       <v-card-text class="pa-0">
-        <h2 class="text-center color_CL">History Nice Number Details.</h2>
+        <h2 class="text-center color_CL custom-font " style="color: #ffff00;">{{ en ? "ປະຫວັດການຕັດເງີນຂອງແອບ Soxay" : "History of Money cut by Soxay App."}}</h2>
       </v-card-text>
       <div></div>
     </v-card-actions>
@@ -133,15 +134,14 @@
         class="text-center"
         style="display: flex; flex-direction: column; justify-content: center"
       >
-        <h3>Enter New number phone.</h3>
+      <h3 class="custom-font">{{ en ? 'ກະລຸນາປ້ອມເບີໂທລະສັບ' : 'Enter New number phone.' }}</h3>
         <br />
         <div class="mouse_senter" @click="buttonanime = !buttonanime">
           <v-icon size="85" color="rgb(128, 128, 0)">mdi-database-alert</v-icon>
         </div>
         <br />
-        <h2>
-          <span style="color: rgb(255, 255, 0)">CCare's top-up&nbsp;</span>data
-          history is not found
+        <h2 class="custom-font">
+          <span class="custom-font" style="color: rgb(255, 255, 0)">{{en ? '' : 'Data'}}&nbsp;</span>{{en ? 'ຍັງບໍ່ມີຂໍ້ມູນ' : 'is not found'}}
         </h2>
       </v-card>
       <v-card
@@ -151,13 +151,13 @@
         class="text-center"
         style="display: flex; flex-direction: column; justify-content: center"
       >
-        <h3>Enter your number phone.</h3>
+        <h3 class="custom-font">{{en ? 'ກະລຸນາປ້ອມເບີໂທລະສັບ.' : 'Enter your number phone.'}}</h3>
         <br />
         <div class="mouse_senter" @click="buttonanime = !buttonanime">
           <v-icon size="85" color="rgb(128, 128, 0)">mdi-phone-classic</v-icon>
         </div>
         <br />
-        <h2><span style="color: rgb(255, 255, 0)">Data</span> not found</h2>
+        <h2 class="custom-font" ><span class="custom-font" style="color: rgb(255, 255, 0)">{{en ? '' :'Data'}}</span>{{ en ? 'ຍັງບໍ່ມີຂໍ້ມູນ' : 'not found' }}</h2>
       </v-card>
     </v-card-text>
   </div>
@@ -165,6 +165,7 @@
 
 <script>
 export default {
+  middleware: 'auth',
   data() {
     return {
       outlined: false,
@@ -178,16 +179,20 @@ export default {
       columns: [
         { key: 'index', title: 'N' },
         { key: 'SIS', title: 'SIS' },
-        { key: 'NEW_PATTERN', title: 'New Pattern' },
-        { key: 'Postpaid_price', title: 'Postpaid price' },
-        { key: 'Prepaid_price', title: 'Prepaid price' },
+        { key: 'RECEIVER_AMOUNT_F', title: 'RECEIVER AMOUNT' },
+        { key: 'TRANSFER_AMOUNT', title: 'TRANSFER AMOUNT' },
+        { key: 'USER_ID', title: 'USER-ID' },
+        { key: 'RESULT_DESC', title: 'RESULT-DESC' },
+        { key: 'DATE', title: 'DATE' },
       ],
       headers: [
         { text: 'N', value: 'index' },
         { text: 'SIS', value: 'SIS' },
-        { text: 'New Pattern', value: 'NEW_PATTERN' },
-        { text: 'Postpaid price', value: 'Postpaid_price' },
-        { text: 'Prepaid price', value: 'Prepaid_price' },
+        { text: 'RECEIVER AMOUNT', value: 'RECEIVER_AMOUNT_F' },
+        { text: 'TRANSFER AMOUNT', value: 'TRANSFER_AMOUNT' },
+        { text: 'USER-ID', value: 'USER_ID' },
+        { text: 'RESULT-DESC', value: 'RESULT_DESC' },
+        { text: 'DATE', value: 'DATE' },
       ],
     }
   },
@@ -198,6 +203,9 @@ export default {
           (col) => col.key === header.value && col.active !== false
         )
       )
+    },
+    en() {
+      return this.$store.state.en;
     },
   },
   mounted() {
@@ -211,20 +219,21 @@ export default {
       const Num = this.numberPhon // .split(',').map((num) => num.trim())
       try {
         const response = await this.$axios.post(
-          'http://172.28.26.23:3400/showdetail/nicenumberdetaill',
+          'http://172.28.17.102:9970/data/findnumbersoxay',
           {
             telephone: Num,
           }
         )
-        // console.log(response)
+        // console.log(response.data)
         if (response.data) {
           this.dataResponse = response.data.map((detail, index) => ({
             index: index + 1,
-            SIS: detail.MSISDN,
-            NEW_PATTERN: detail.NEW_PATTERN,
-            // ADJUSTDATE: this.formatAdjustDate(detail.RESPON_DATE),
-            Postpaid_price: detail.Postpaid_price,
-            Prepaid_price: detail.Prepaid_price,
+            SIS: detail.RECEIVER_ISDN,
+            RECEIVER_AMOUNT_F: this.formatResultDesc(detail.RECEIVER_AMOUNT_F),
+            TRANSFER_AMOUNT: this.formatResultDesc(detail.TRANSFER_AMOUNT),
+            DATE: this.formatAdjustDate(detail.CDATE),
+            USER_ID: detail.USER_ID,
+            RESULT_DESC: detail.RESULT_DESC,
           }))
         } else {
           this.dataResponse = []
@@ -237,23 +246,31 @@ export default {
         this.loading = false
       }
     },
-    // formatAdjustDate(dateString) {
-    //   const date = new Date(dateString)
-    //   const formattedDate = date
-    //     .toLocaleString('en-US', {
-    //       year: 'numeric',
-    //       month: '2-digit',
-    //       day: '2-digit',
-    //       hour: '2-digit',
-    //       minute: '2-digit',
-    //       second: '2-digit',
-    //     })
-    //     .replace(',', '') // remove comma from the formatted string
-    //   return formattedDate
-    // },
+    formatAdjustDate(dateString) {
+      const date = new Date(dateString)
+      const formattedDate = date
+        .toLocaleString('en-US', {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+        })
+        .replace(',', '') // remove comma from the formatted string
+      return formattedDate
+    },
     setSheetHeight() {
       // Get the height of the computer screen
       this.heightPx = window.innerHeight - 190
+    },
+    formatResultDesc(value) {
+      // Check if value is a valid number
+      const num = Number(value)
+      if (!isNaN(num)) {
+        return new Intl.NumberFormat().format(num)
+      }
+      return value // Return the original value if it's not a valid number
     },
   },
   beforeDestroy() {

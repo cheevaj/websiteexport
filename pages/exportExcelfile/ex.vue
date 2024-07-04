@@ -90,12 +90,12 @@
               height="135px"
               style="bottom: 25px; background-color: rgb(255, 255, 230)"
             >
-              <h3 class="custom-font" style="color: rgb(102, 102, 0)">
-                {{ en ? item.titleLa : item.titleEn }}
+              <h3 style="color: rgb(102, 102, 0)">
+                {{ item.title }}
               </h3>
               <v-divider />
-              <p class="text-color custom-font">
-                {{ en ? truncateText(item.textLa, 85) : truncateText(item.textEn, 85) }}
+              <p class="text-color">
+                {{ truncateText(item.text, 85) }}
               </p>
             </v-card>
             <v-card
@@ -104,7 +104,7 @@
             >
               <v-btn
                 :outlined="button === index ? false : true"
-                class="language-button"
+                style="border: 2px solid #ffff00; background-color: #ffff"
                 @click="openLinkInNewTab(item.path)"
                 @mouseenter="button = index"
                 @mouseleave="button = false">
@@ -128,28 +128,19 @@ export default {
       // Add new menu download
       items_menu: [
         {
-          titleEn: "History of CCare's register package for customer",
-          titleLa: "ປະຫວັດ C'Care ລົງທະບຽນເເພັກເກັດໃຫ້ລູກຄ້າ.",
+          title: "C'Care Register Customer",
           path: '../exportExcelfile/ccareHistoryRegister',
-          textEn: "Download report registration TelMonth of C'Care.",
-          textLa: "ດາວໂຫຼດລາຍການ ການລົງທະບຽນເບີລາຍເດືອນຂອງ C'Care.",
+          text: "Sleep report registration TelMonth of C'Care.",
           icon: 'mdi-file-excel-outline',
         },
         {
-          titleEn: 'Monthly Number Top-up History',
-          titleLa: 'ປະຫວັດການຕື່ມເງິນຂອງເບີລາຍເດືອນ',
+          title: 'Monthly Number Top-up History',
           path: '../exportExcelfile/Top_upNumber',
-          textEn: "Download history of C'Care through Bcel-One.",
-          textLa: "ດາວໂຫຼດຂໍ້ມູນ ປະຫວັດການເຕີມເງືນຂອງ C'Care ຜ່ານ Bcel-One.",
+          text: "Fill history of C'Care through Bcel-One.",
           icon: 'mdi-microsoft-excel',
         },
       ],
     }
-  },
-  computed: {
-    en() {
-      return this.$store.state.en;
-    },
   },
   methods: {
     openLinkInNewTab(path) {
@@ -164,16 +155,27 @@ export default {
   },
 }
 </script>
-<style scoped>
-.language-button {
-  background-color: #fff; /* Default state */
-  border: 2px solid #ffff00;
-  color: inherit;
-  transition: background-color 0.3s ease;
-}
 
-.language-button:hover {
-  background-color: #ffff00 !important; /* Hover state with !important to override Vuetify styles */
-  color: inherit !important; /* Ensure text color remains unchanged */
+<style>
+/* .col-custom {
+    flex-basis: calc(20% - 0px); 
+    max-width: calc(20% - 0px);
+  }  */
+.colorBK {
+  background-color: #ffff00;
+}
+.text-color {
+  color: rgb(102, 102, 102);
+}
+.mouse_senter {
+  cursor: pointer;
+}
+.font_size_12 {
+  font-size: 12px;
+  /* Adjust the font size as needed */
+}
+.font_size_18 {
+  font-size: 18px;
+  /* Adjust the font size as needed */
 }
 </style>

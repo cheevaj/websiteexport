@@ -1,5 +1,5 @@
 <template>
-  <div class="background_color">
+  <div>
     <div style="position: fixed; z-index: 100; right: 1px">
       <v-card-actions class="pa-0">
         <transition name="move-right">
@@ -9,7 +9,8 @@
                 <form @submit.prevent="handleSearch">
                   <Input
                     v-model="numberPhon"
-                    placeholder="Serial Year and Month is 202402"
+                    class="no-spinner custom-font"
+                    :placeholder=" en ? 'ກະລຸນາປ້ອມເບີໂທລະສັບ ( 20789... )' : 'Enter phone number ( 20788... )'"
                     clearable
                     style="width: 250px; height: 34px; margin-top: 1px"
                     @keydown.enter="handleSearch"
@@ -30,7 +31,7 @@
                     padding-right: 4px;
                   "
                 >
-                  Search
+                  <h4 class="custom-font">{{en ? 'ຄົ້ນຫາ' : 'Search'}}</h4>
                 </v-btn>
                 <v-btn
                   text
@@ -70,12 +71,12 @@
         <v-icon color="#ffff00" size="25">mdi-arrow-left</v-icon>
       </v-btn>
       <v-card-text class="pa-0">
-        <h2 class="text-center color_CL">Bcel-One's Data History.</h2>
+        <h2 class="text-center color_CL custom-font" style="color: #ffff00;">{{ dataResponseBcelOne.length === 0 ? (en ? 'ຂໍ້ມູນ Bcel-One.' : 'Data Bcel-One.') : (en ? 'ຊໍາລະຜ່ານ Bcel-One.' : 'Pay through Bcel-One.') }}</h2>
       </v-card-text>
       <div></div>
     </v-card-actions>
     <v-card
-      v-if="dataResponse.length > 0"
+      v-if="dataResponseBcelOne.length > 0"
       outlined
       class="rounded-0 scrollbar"
       style="
@@ -91,11 +92,11 @@
     >
       <v-data-table
         v-if="!overlay"
-        :height="heightPx + 'px'"
+        :height="heightPx - 260 + 'px'"
         fixed-header
         dense
         :headers="visibleHeaders"
-        :items="dataResponse"
+        :items="dataResponseBcelOne"
         :items-per-page="itemsPerPage"
         item-key="ProductNumber"
         class="elevation-1 pt-4 custom-font table-container"
@@ -116,6 +117,74 @@
           </tr>
         </template>
       </v-data-table>
+      <v-card-text style="padding: 12px; padding-top: 0px; padding-bottom: 0px;">
+        <v-row class="px-0">
+        <v-col cols="6" class="px-0">
+          <v-card-text class="pa-0 text-center custom-font" width="100%" height="30px" style="background-color: #000; color: #ffff00;">
+            {{ en ? 'ຊໍາລະຜ່ານ USSD' : 'Pay through USSD' }}
+          </v-card-text>
+          <v-data-table
+            v-if="!overlay"
+            :height="heightPx - heightPx + 162 + 'px'"
+            fixed-header
+            dense
+            :headers="visibleHeaders2"
+            :items="dataResponsePayment"
+            :items-per-page="10"
+            item-key="ProductNumber"
+            class="elevation-1 pt-4 custom-font table-container"
+          >
+            <template v-slot:item="{ item }">
+              <tr
+                class="text_color"
+                :style="{
+                  backgroundColor:
+                    item.index % 2 !== 0
+                      ? 'rgb(255, 255, 230)'
+                      : 'rgb(255, 255, 255)',
+                }"
+              >
+                <td v-for="header in visibleHeaders2" :key="header.text">
+                  <span class="font_size_12">{{ item[header.value] }}</span>
+                </td>
+              </tr>
+            </template>
+          </v-data-table>
+        </v-col>
+        <v-col cols="6" class="px-0">
+          <v-card-text class="pa-0 text-center custom-font" width="100%" height="30px" style="background-color: #000; color: #ffff00;">
+            {{ en ? 'ຊໍາລະຜ່ານ Ezload' : 'Pay through Ezload' }}
+          </v-card-text>
+          <v-data-table
+            v-if="!overlay"
+            :height="heightPx - heightPx + 162 + 'px'"
+            fixed-header
+            dense
+            :headers="visibleHeaders3"
+            :items="dataResponseLogonecreen"
+            :items-per-page="10"
+            item-key="ProductNumber"
+            class="elevation-1 pt-4 custom-font table-container"
+          >
+            <template v-slot:item="{ item }">
+              <tr
+                class="text_color"
+                :style="{
+                  backgroundColor:
+                    item.index % 2 !== 0
+                      ? 'rgb(255, 255, 230)'
+                      : 'rgb(255, 255, 255)',
+                }"
+              >
+                <td v-for="header in visibleHeaders3" :key="header.text">
+                  <span class="font_size_12">{{ item[header.value] }}</span>
+                </td>
+              </tr>
+            </template>
+          </v-data-table>
+        </v-col>
+      </v-row>
+    </v-card-text>
     </v-card>
     <v-card-text
       v-else
@@ -133,38 +202,37 @@
         class="text-center"
         style="display: flex; flex-direction: column; justify-content: center"
       >
-        <h3>Enter New number phone.</h3>
+        <h3 class="custom-font">{{ en ? 'ກະລຸນາປ້ອມເບີໂທລະສັບ' : 'Enter New number phone.' }}</h3>
         <br />
         <div class="mouse_senter" @click="buttonanime = !buttonanime">
           <v-icon size="85" color="rgb(128, 128, 0)">mdi-database-alert</v-icon>
         </div>
         <br />
         <h2>
-          <span style="color: rgb(255, 255, 0)">Bcel-One's&nbsp;</span>data
-          history is not found
+          <span style="color: rgb(255, 255, 0)">{{en ? '' :"Bcel-One's"}}&nbsp;</span>{{ en ? 'ຍັງບໍ່ມີຂໍ້ມູນ' : "data history is not found" }}
         </h2>
       </v-card>
       <v-card
         v-else
         min-width="450"
         min-height="300"
-        class="text-center"
-        style="display: flex; flex-direction: column; justify-content: center"
+        class="text-center" style="display: flex; flex-direction: column; justify-content: center"
       >
-        <h3>Enter your number phone.</h3>
+        <h3 class="custom-font">{{ en ? 'ກະລຸນາປ້ອມເບີໂທລະສັບ' : 'Enter New number phone.' }}</h3>
         <br />
         <div class="mouse_senter" @click="buttonanime = !buttonanime">
           <v-icon size="85" color="rgb(128, 128, 0)">mdi-phone-classic</v-icon>
         </div>
         <br />
-        <h2><span style="color: rgb(255, 255, 0)">Data</span> not found</h2>
+        <h2 class="custom-font" ><span class="custom-font" style="color: rgb(255, 255, 0)">{{en ? '' :'Data'}}</span>{{ en ? 'ຍັງບໍ່ມີຂໍ້ມູນ' : 'not found' }}</h2>
       </v-card>
     </v-card-text>
   </div>
 </template>
-
 <script>
 export default {
+  middleware: 'auth',
+  Currency: 'index',
   data() {
     return {
       outlined: false,
@@ -172,32 +240,67 @@ export default {
       numberPhon: '',
       data_num: false,
       buttonanime: true,
-      dataResponse: [],
-      overlay: false, // Add this line
+      dataResponseBcelOne: [],
+      dataResponsePayment: [],
+      dataResponseLogonecreen: [],
+      overlay: false,
       heightPx: 0,
       columns: [
-        { key: 'index', title: 'N' },
-        { key: 'SIS', title: 'SIS' },
+        { key: 'index', title: 'Index' },
+        { key: 'SIS', title: 'MSISDN' },
         { key: 'AMOUNT', title: 'Amount' },
+        { key: 'SEQ_NUMBER', title: 'SEQ Number' },
+        { key: 'Provider', title: 'Provider' },
+        { key: 'TYPE', title: 'Type' },
         { key: 'ADJUSTDATE', title: 'Adjust Date' },
         { key: 'DATE', title: 'Date' },
-        { key: 'Provider', title: 'Provider' },
-        { key: 'SEQ_NUMBER', title: 'SEQ Number' },
-        { key: 'TYPE', title: 'Type' },
       ],
       headers: [
-        { text: 'N', value: 'index' },
-        { text: 'SIS', value: 'SIS' },
+        { text: 'Index', value: 'index' },
+        { text: 'MSISDN', value: 'SIS' },
         { text: 'Amount', value: 'AMOUNT' },
+        { text: 'SEQ Number', value: 'SEQ_NUMBER' },
+        { text: 'Provider', value: 'Provider' },
+        { text: 'Type', value: 'TYPE' },
         { text: 'Adjust Date', value: 'ADJUSTDATE' },
         { text: 'Date', value: 'DATE' },
-        { text: 'Provider', value: 'Provider' },
-        { text: 'SEQ Number', value: 'SEQ_NUMBER' },
-        { text: 'Type', value: 'TYPE' },
+      ],
+      columns2: [
+        { key: 'index', title: 'Index' },
+        { key: 'SIS', title: 'ISDN' },
+        { key: 'Pinno', title: 'Pin-no' },
+        { key: 'AMOUNT', title: 'Amount' },
+        { key: 'ResultDesc', title: 'Result Desc' },
+        { key: 'DATE', title: 'Date' },
+      ],
+      headers2: [
+        { text: 'Index', value: 'index' },
+        { text: 'ISDN', value: 'SIS' },
+        { text: 'Pin-no', value: 'Pinno' },
+        { text: 'Amount', value: 'AMOUNT' },
+        { text: 'Result Desc', value: 'ResultDesc' },
+        { text: 'Date', value: 'DATE' },
+      ],
+      columns3: [
+        { key: 'index', title: 'Index' },
+        { key: 'SIS', title: 'msisdn' },
+        { key: 'AMOUNT', title: 'Amount' },
+        { key: 'ResultDesc', title: 'Result Desc' },
+        { key: 'DATE', title: 'Date' },
+      ],
+      headers3: [
+        { text: 'Index', value: 'index' },
+        { text: 'msisdn', value: 'SIS' },
+        { text: 'Amount', value: 'AMOUNT' },
+        { text: 'Result Desc', value: 'ResultDesc' },
+        { text: 'Date', value: 'DATE' },
       ],
     }
   },
   computed: {
+    en() {
+      return this.$store.state.en;
+    },
     visibleHeaders() {
       return this.headers.filter((header) =>
         this.columns.some(
@@ -205,10 +308,24 @@ export default {
         )
       )
     },
+    visibleHeaders2() {
+      return this.headers2.filter((header) =>
+        this.columns2.some(
+          (col) => col.key === header.value && col.active !== false
+        )
+      )
+    },
+    visibleHeaders3() {
+      return this.headers3.filter((header) =>
+        this.columns3.some(
+          (col) => col.key === header.value && col.active !== false
+        )
+      )
+    },
     itemsPerPage() {
-      return this.dataResponse.length > 0
-        ? this.dataResponse[this.dataResponse.length - 1].index
-        : 10;
+      return this.dataResponseBcelOne.length > 0
+        ? this.dataResponseBcelOne[this.dataResponseBcelOne.length - 1].index
+        : 10
     },
   },
   mounted() {
@@ -216,35 +333,65 @@ export default {
     window.addEventListener('resize', this.setSheetHeight)
   },
   methods: {
-    async handleSearch() {
-      this.dataResponse = []
+    handleSearch() {
+      const Num = Number(this.numberPhon)
+      this.dataResponseAll(Num)
+    },
+    async dataResponseAll(Num) {
+      this.dataResponseBcelOne = []
+      this.dataResponsePayment = []
       this.loading = true
-      const Num = this.numberPhon // .split(',').map((num) => num.trim())
       try {
-        const response = await this.$axios.post(
-          'http://172.28.17.102:8100/show/bceldata',
-          {
-            telephone: Num,
-          }
+        const bcelOneResponse = await this.$axios.post(
+          'http://172.28.17.102:8100/show/justbceldata',
+          { telephone: Num }
         )
-        console.log(response) 
-        if (response.data) {
-          this.dataResponse = response.data.map((detail, index) => ({
+        const paymentResponse = await this.$axios.post(
+          'http://172.28.17.102:8100/show/postpaidpaymentussd',
+          { telephone: Num }
+        )
+        const logOneScreenResponse = await this.$axios.post(
+          'http://172.28.17.102:8100/show/logstoshowinonescreem',
+          { telephone: Num }
+        )
+        if (bcelOneResponse.data) {
+          this.dataResponseBcelOne = bcelOneResponse.data.map((detail, index) => ({
             index: index + 1,
             SIS: detail.MSISDN,
-            AMOUNT: detail.AMOUNT,
+            AMOUNT: this.formatResultDesc(detail.AMOUNT),
+            SEQ_NUMBER: detail.SEQ_NUMBER,
+            Provider: detail.Provider,
+            TYPE: detail.TYPE,
             ADJUSTDATE: this.formatAdjustDate(detail.RESPON_DATE),
             DATE: detail.DATED,
-            Provider: detail.Provider,
-            SEQ_NUMBER: detail.SEQ_NUMBER,
-            TYPE: detail.TYPE,
           }))
-        } else {
-          this.dataResponse = []
+        }
+        // console.log(this.dataResponseBcelOne)
+
+        if (paymentResponse.data) {
+          this.dataResponsePayment = paymentResponse.data.map((detail, index) => ({
+            index: index + 1,
+            SIS: detail.ISDN,
+            Pinno: detail.Pinno,
+            AMOUNT: this.formatResultDesc(detail.Amount),
+            ResultDesc: detail.ResultDesc,
+            DATE: detail.DATE.substring(0, 4) + '\u00A0/\u00A0' + detail.DATE.substring(4,6)+ '\u00A0/\u00A0' + detail.DATE.substring(6),
+          }))
+          // console.log(this.dataResponsePayment)
+        }
+        if (logOneScreenResponse.data.Data) {
+          this.dataResponseLogonecreen = logOneScreenResponse.data.Data.map((detail, index) => ({
+            index: index + 1,
+            SIS: detail.msisdn,
+            AMOUNT: this.formatResultDesc(detail.amount),
+            DATE: detail.cdate,
+            resultdesc: detail.resultdesc,
+          }))
+          // console.log('d',this.dataResponseLogonecreen)
         }
         this.data_num = true
       } catch (error) {
-        this.dataResponse = []
+        this.dataResponseBcelOne = []
         console.error('Error fetching data:', error)
       } finally {
         this.loading = false
@@ -261,11 +408,17 @@ export default {
           minute: '2-digit',
           second: '2-digit',
         })
-        .replace(',', '') // remove comma from the formatted string
+        .replace(',', '')
       return formattedDate
     },
+    formatResultDesc(value) {
+      const num = Number(value)
+      if (!isNaN(num)) {
+        return new Intl.NumberFormat().format(num)
+      }
+      return value
+    },
     setSheetHeight() {
-      // Get the height of the computer screen
       this.heightPx = window.innerHeight - 190
     },
   },
@@ -274,7 +427,6 @@ export default {
   },
 }
 </script>
-
 <style>
 .color_CL {
   color: #ffff;
@@ -287,9 +439,6 @@ export default {
 }
 .font_size_14 {
   font-size: 14px;
-}
-.title_color {
-  color: #ffff00;
 }
 .text_color {
   color: rgb(115, 115, 115);

@@ -28,6 +28,7 @@
 </template>
 <script>
 export default {
+  middleware: 'auth',
   Currency: 'index',
   props: {
     dataUser: Object,

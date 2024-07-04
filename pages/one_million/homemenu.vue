@@ -11,10 +11,10 @@
           style="margin-top: 10%"
         >
           <h3 v-if="numberNull === 'Null'" class="text-center">
-            Enter Number phone.
+            <span class="custom-font" >{{ en ? 'ກະລຸນາປ້ອມເບີໂທລະສັບ.' : 'Enter Number phone.' }}</span>
           </h3>
           <h3 v-else class="text-center">
-            Your Number Phone
+            <span class="custom-font" >{{ en ? 'ເບີໂທລະສັບແມ່ນ' : 'Your Number Phone' }}</span>
             <v-card-text>
             <h4>
               <v-icon color="rgb(128, 128, 128)">mdi-card-account-phone-outline</v-icon>
@@ -29,12 +29,18 @@
 </template>
 <script>
 export default {
+  middleware: 'auth',
   Currency: 'index',
   props: {
     numberNull: String,
   },
   data() {
     return {}
+  },
+  computed: {
+    en() {
+      return this.$store.state.en;
+    },
   },
 }
 </script>
@@ -49,5 +55,8 @@ export default {
 
 .align-center {
   align-content: center;
+}
+.custom-font {
+  font-family: 'Noto Sans Lao', sans-serif;
 }
 </style>

@@ -115,14 +115,15 @@
             <v-col cols="12" sm="6" class="py-0">
               <div v-if="dateshow">
                 <v-card outlined class="my-3 px-0" flat style="background-color: #ffffbc">
-                  <v-card-text class="pa-0 text-right" style="background-color: #ffff00">
-                    <v-btn text x-small @click="dateshow = false">
+                  <v-card-text class="pa-0 text-center" style="background-color: #ffff00">
+                    <!-- <v-btn text x-small @click="dateshow = false">
                       <v-icon size="20">mdi-close</v-icon>
-                    </v-btn>
+                    </v-btn> -->
+                    <h5>Search date</h5>
                   </v-card-text>
                   <v-row>
                     <!--Sta date Start-------------------------------------------------------------------------------->
-                    <v-col cols="12" sm="4" md="4" class="pl-4">
+                    <v-col cols="12" sm="4" md="4" class="pl-4" style="z-index: 11;">
                       <v-menu ref="menu" v-model="menu" :close-on-content-click="false" :return-value.sync="date"
                         transition="scale-transition" offset-y min-width="auto">
 
@@ -148,7 +149,7 @@
                       </v-card-text>
                     </v-col>
                     <!--Sta Date stop------------------------------------------------------------------------------------------------->
-                    <v-col cols="12" sm="4" md="4">
+                    <v-col cols="12" sm="4" md="4" style="z-index: 11;">
                       <v-menu ref="menus" v-model="menus" :close-on-content-click="false" :return-value.sync="dates"
                         transition="scale-transition" offset-y min-width="auto">
 
@@ -232,9 +233,14 @@
         </v-card-text>
         <!--Sto title page-->
         <!--Sta table---------------------------------------------------------------------------------------------------------------------->
-        <v-card-actions v-if="!showgraph" class="expandable-row py-0">
-          <div ref="resizableCol2" class="my-4 " @mousedown="startResize">
-            <v-card class="rounded-0 " width="100%" height="80%" :style="{ width: col1Width + 'px' }" color="#ffff00"
+        <v-card-actions v-if="!showgraph" class="expandable-row pt-0 px-0" style="width: 100%;
+          position: fixed;
+          height: calc(100vh - 30vh);
+          left: 0;
+          overflow: y;
+          z-index: 10;">
+          <div ref="resizableCol2" @mousedown="startResize">
+            <v-card class="rounded-0" width="100%" :height="heightPx + 'px'" :style="{ width: col1Width + 'px' }" color="#ffff00"
               outlined>
               <v-toolbar color="#000" dark>
                 <v-toolbar-title style="color: #ffff00">
@@ -243,10 +249,9 @@
                     :max="maxCol1Width" />
                 </v-toolbar-title>
               </v-toolbar>
-              <v-list subheader two-line flat>
-                <v-list-item-group class="table-title-hiegth">
+              <v-list class="table-container" subheader two-line flat :height="heightPx + 'px'">
+                <v-list-item-group class="table-title-hiegth table-container">
                   <v-list-item v-for="item in columns" :key="item.key">
-
                     <template #default="{ active }">
                       <v-list-item-action>
                         <v-checkbox v-model="item.active" :input-value="active"></v-checkbox>
@@ -260,20 +265,22 @@
               </v-list>
             </v-card>
           </div>
-          <v-col class="py-0 pl-1" :style="{ 'max-width': 'calc(100% - ' + col1Width + 'px)' }">
-            <v-card outlined style="background-color: #ffff00;" height="474" class=" table-container text-center">
+          <v-col class="py-0 pl-0 pr-0 pt-6">
+            <v-card outlined style="background-color: #ffff00;" :height="heightPx + 'px'" class=" table-container text-center" :style="{ 'max-width': 'calc(100% - ' + col1Width + 'px)' }">
               <v-card-text v-if="loading" class="pa-0">
                 <v-progress-linear indeterminate color="#4d3d00"></v-progress-linear>
               </v-card-text>
-              <v-data-table v-if="!overlay" height="397px" fixed-header dense :headers="visibleHeaders"
-                :items="visibleItems" :items-per-page="10" item-key="TICKETID" class="elevation-1 pt-4 custom-font">
-                <!-- <template v-slot:header="{ header }">
-                  <th v-if="header">
-                    <div style="background-color: #000; color: #ffff00; padding: 12px;">
-                      {{ header.text }}j
-                    </div>
-                  </th>
-                </template> -->
+              <v-data-table v-if="!overlay" width="100%" :height="heightPx + 'px'" fixed-header dense :headers="visibleHeaders"
+                :items="desserts" :items-per-page="50" item-key="TICKETID" class="elevation-1 custom-font font_size_12">
+                <template v-slot:item="{ item }">
+                  <tr
+                    class="text_color custom-font"
+                  >
+                    <td v-for="header in visibleHeaders" :key="header.text">
+                      <span class="font_size_12 custom-font">{{ item[header.value] }}</span>
+                    </td>
+                  </tr>
+                </template>
               </v-data-table>
               <v-card-text v-else class="pa-1">
                 <v-card flat min-height="470px" class="text-h5">
@@ -325,6 +332,7 @@ export default {
   },
   data() {
     return {
+      heightPx:0,
       showgraph: false,
       alert: false,
       absolute: true,
@@ -470,8 +478,14 @@ export default {
   mounted() {
     this.getData()
     this.coloricon()
+    this.setSheetHeight()
+      window.addEventListener('resize', this.setSheetHeight)
   },
   methods: {
+    setSheetHeight() {
+        // Get the height of the computer screen
+        this.heightPx = window.innerHeight - 230
+      },
     setOutlined(value) {
       this.show = value
     },
@@ -688,6 +702,7 @@ export default {
           const tier = this.changeNameroot(this.adjustName(firstItem.FIRST_WORKLOG_DESCRIPTION), 'Ti');
           const solution = this.changeNameroot(this.adjustName(firstItem.FIRST_WORKLOG_DESCRIPTION), 'SOLU');
           const rootCause = this.changeNameroot(this.adjustName(firstItem.FIRST_WORKLOG_DESCRIPTION), 'ROOT');
+          const descrpitions = this.changeNameroot(this.adjustName(firstItem.FIRST_WORKLOG_DESCRIPTION), 'Des');
           //  data in desertes
           return {
             TICKETID: firstItem.TICKETID,
@@ -714,7 +729,7 @@ export default {
             RESOLVE_CHANGBY: inprogressItemINPROGRESSCHANGEBY,
             TIME_CARE_TPLUS: timecaretplus,
             TIME_DO_TPLUS: timedotplus,
-            WORKLONG_DESCRIPTOIN: firstItem.FIRST_WORKLOG_DESCRIPTION,
+            WORKLONG_DESCRIPTOIN: (descrpitions==='PT31_' || descrpitions==='PT37_') ? firstItem.FIRST_WORKLOG_DESCRIPTION : descrpitions,
             MODIFY_DATE: resolveItem ? resolveItem.QUEUED_DATE : null,
             MODIFYBY: firstItem.FIRST_WORKLOG_MODIFYBY,
             PROVINCE: firstItem.PROVINCE,
@@ -752,71 +767,71 @@ export default {
     changeNameroot(ID, status) {
       if (ID !== undefined && ID !== null && ID.indexOf('_') > 0 && ID.startsWith('TP')) {
         const idToNameMap = {
-          'TP01_': status === 'DP' ? 'MB' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Unber In System' : (status === 'ROOT' ? 'Number Was Barring in HSS' : 'Tier_2(SOC)'))),
-          'TP02_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Number Was Operational' : 'Tier_2(SOC)'))),
-          'TP03_': status === 'DP' ? 'IT' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Unblickilist In System' : (status === 'ROOT' ? 'Number was Blacklist in OCS' : 'Tier_2(SOC)'))),
-          'TP04_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Usage Up Package Already' : 'Tier_2(SOC)'))),
-          'TP05_': status === 'DP' ? 'MB' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Update Location' : (status === 'ROOT' ? 'High PRB' : 'Tier_2(SOC)'))),
-          'TP06_': status === 'DP' ? 'MB' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'Add 3G/4G Profile' : (status === 'ROOT' ? 'No Have 3G/4G Profile' : 'Tier_2(SOC)'))),
-          'TP07_': status === 'DP' ? 'IT' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Modifi Profile SPNV' : (status === 'ROOT' ? 'Wrong Profile in SPNV' : 'Tier_2(SOC)'))),
-          'TP08_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'No Package' : 'Tier_2(SOC)'))),
-          'TP09_': status === 'DP' ? 'IT' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Exended lifecycle' : (status === 'ROOT' ? 'Number was suspended in OCS' : 'Tier_2(SOC)'))),
-          'TP10_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Money Was Deducted by Voice' : 'Tier_2(SOC)'))),
-          'TP11_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Money Was Deducted by SMS' : 'Tier_2(SOC)'))),
-          'TP12_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Money Was Deducted by Games' : 'Tier_2(SOC)'))),
-          'TP13_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Money Was Deducted by Loan Money' : 'Tier_2(SOC)'))),
-          'TP14_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Money Was Deducted by Transfer to Others' : 'Tier_2(SOC)'))),
-          'TP15_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'No Balance' : 'Tier_2(SOC)'))),
-          'TP16_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Usage Old Beeline SIM' : 'Tier_2(SOC)'))),
-          'TP17_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'Provided PIN & PUK' : (status === 'ROOT' ? 'SIM WASLOCKED PROVIDED PIN&PUK' : 'Tier_2(SOC)'))),
-          'TP18_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Received Package Normal(They did not check SMS)' : 'Tier_2(SOC)'))),
-          'TP19_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Received Balance Normal(They did not check SMS)' : 'Tier_2(SOC)'))),
-          'TP20_': status === 'DP' ? 'MB' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'Cancel RPT' : (status === 'ROOT' ? 'Customer Need to Cancel RBT' : 'Tier_2(SOC)'))),
-          'TP21_': status === 'DP' ? 'IT' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Cooperate With Tier 3' : (status === 'ROOT' ? 'System Problem' : 'Tier_3(IT)'))),
-          'TP22_': status === 'DP' ? 'MB' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'Cancel Call Forward' : (status === 'ROOT' ? 'Cancle Call Forward' : 'Tier_2(SOC)'))),
-          'TP23_': status === 'DP' ? 'ISD' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Cooperate with Owner App to Sollved for Customers' : (status === 'ROOT' ? 'Scratch Card Was not Activate with Bonus' : 'Tier_3(ISD)'))),
-          'TP24_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Scratch Card was used up' : 'Tier_2(SOC)'))),
-          'TP25_': status === 'DP' ? 'IT' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Cooperate With Tier 3' : (status === 'ROOT' ? 'More checking with Owner Apps' : 'Tier_3(IT)'))),
-          'TP26_': status === 'DP' ? 'USER' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Wrong Default PW' : 'Tier_2(SOC)'))),
-          'TP27_': status === 'DP' ? 'MB' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Cooperate With Tier 3' : (status === 'ROOT' ? 'Sites were down in that area' : 'Tier_3(MB)'))),
-          'TP28_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Activated by *503#Call' : 'Tier_2(SOC)'))),
-          'TP29_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Activated by *121/122#Call' : 'Tier_2(SOC)'))),
-          'TP30_': status === 'DP' ? 'IT' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Cooperate With Tier 3' : (status === 'ROOT' ? 'System Problem' : 'Tier_3(IT)'))),
-          'TP31_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'TP031_' : 'Tier_2(SOC)'))), // -------------test 031 not
-          'TP32_': status === 'DP' ? 'USER' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Update Location' : (status === 'ROOT' ? 'Weak Coverage Signal' : 'Tier_2(SOC)'))),
-          'TP33_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Received SMS(They did not check SMS)' : 'Tier_2(SOC)'))),
-          'TP34_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Number Was Operational(Sugestion to Setting SMS Center)' : 'Tier_2(SOC)'))),
-          'TP35_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Money Was Deducted by Lottery Service' : 'Tier_2(SOC)'))),
-          'TP36_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Customer Capture 2G signal)' : 'Tier_2(SOC)'))),
-          'TP37_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'PT037_' : 'Tier_2(SOC)'))), // -------------test 037 not
-          'TP38_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Transfer Money Incorrect way' : 'Tier_2(SOC)'))),
-          'TP39_': status === 'DP' ? 'IT' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'IR Service is Not avalable ' : 'Tier_2(SOC)'))),
-          'TP40_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Call to Invalid Number' : 'Tier_2(SOC)'))),
-          'TP41_': status === 'DP' ? 'IT' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Cooperate With Tier 3' : (status === 'ROOT' ? 'No Offerring In CBS' : 'Tier_3(IT)'))),
-          'TP42_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Money Was Deducted by Rentle Package Service' : 'Tier_2(SOC)'))),
-          'TP43_': status === 'DP' ? 'USER' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Money Was Deducted by Package Service' : 'Tier_3(IT)'))),
-          'TP44_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'PIN Code of Scrath Card In Correct' : 'Tier_2(SOC)'))),
-          'TP45_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Life Cycle Was Expired' : 'Tier_2(SOC)'))),
-          'TP46_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Activate Sim Failure' : 'Tier_2(SOC)'))),
-          'TP47_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Mismatch Condition to Loan Money' : 'Tier_2(SOC)'))),
-          'TP48_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Sim Type Mismatch Condition' : 'Tier_2(SOC)'))),
-          'TP49_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'Cancel Game' : (status === 'ROOT' ? 'Customer Need to Cancle Game Service' : 'Tier_2(SOC)'))),
-          'TP50_': status === 'DP' ? 'MB' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'System' : (status === 'ROOT' ? 'In Corrected UCSI Template' : 'Tier_2(SOC)'))),
-          'TP51_': status === 'DP' ? 'IT' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'Remove Counter' : (status === 'ROOT' ? 'Full Counter (Package) in Supernova' : 'Tier_2(SOC)'))),
-          'TP52_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Received Promotion Normal(They did not check SMS)' : 'Tier_2(SOC)'))),
-          'TP53_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Blocking on their Mobile' : 'Tier_2(SOC)'))),
-          'TP54_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'In Corrected USSD Code' : 'Tier_2(SOC)'))),
-          'TP55_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Customer not Receice Balance' : 'Tier_2(SOC)'))),
-          'TP56_': status === 'DP' ? 'USER' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Customer turn off Mobile' : 'Tier_2(SOC)'))),
-          'TP57_': status === 'DP' ? 'IT' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Exanded PIN & PUK' : (status === 'ROOT' ? 'Extended Lifecycle of Package Expire' : 'Tier_2(SOC)'))),
-          'TP58_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Number was Pool in OCS' : 'Tier_2(SOC)'))),
-          'TP59_': status === 'DP' ? 'IT' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'Remove Counter' : (status === 'ROOT' ? 'Customer Need to Cancel Package( It Usage Up)' : 'Tier_2(SOC)'))),
-          'TP60_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Data Package is avaliable' : 'Tier_2(SOC)'))),
-          'TP61_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Money Was Deducted by RBT Service' : 'Tier_2(SOC)'))),
-          'TP62_': status === 'DP' ? 'IT' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Cooperate With Tier 3' : (status === 'ROOT' ? 'Scratch Card Was not Activate with Bonus' : 'Tier_3(IT)'))),
-          'TP63_': status === 'DP' ? 'IT' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Cooperate With Tier 3' : (status === 'ROOT' ? 'Number Was IDLE Status in OCS' : 'Tier_3(IT)'))),
-          'TP64_': status === 'DP' ? 'MB' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Add SMS MT' : (status === 'ROOT' ? 'UNo SMSMT in HSS' : 'Tier_2(SOC)'))),
-          'TP65_': status === 'DP' ? 'MB' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'No register 3Grap/One grap' : 'Tier_2(SOC)'))), // ----65 not data
+          'TP01_': status === 'DP' ? 'MB' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Unber In System' : (status === 'ROOT' ? 'Number Was Barring in HSS' : (status === 'Des' ? 'TP001_ເບີຖືກບາໃນລະບົບ HSS. ທິມງານແກ້ໄຂໃຫ້ແລ້ວ' : 'Tier_2(SOC)')))),
+          'TP02_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Number Was Operational' : (status === 'Des' ? 'TP002_ເບີນີ້ໃຊ້ງານໄດ້ປົກກະຕິແນະນໍາລູກຄ້າຣີເຊັດມືຖືແລ້ວລອງໃໝ່' : 'Tier_2(SOC)')))),
+          'TP03_': status === 'DP' ? 'IT' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Unblickilist In System' : (status === 'ROOT' ? 'Number was Blacklist in OCS' : (status === 'Des' ? 'TP003_ເບີຖືກແບັກລີດໃນລະບົບ CBS.ທິມງານແກ້ໄຂใຫ້ແລ້ວ' : 'Tier_2(SOC)')))),
+          'TP04_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Usage Up Package Already' : (status === 'Des' ? 'TP004_ລູກຄ້າใຊ້ງານແພັກເກັດໝົດແລ້ວ. ແນະນໍາລູກຄ້າສະໝັກແພັກເກັດໃໝ່' : 'Tier_2(SOC)')))),
+          'TP05_': status === 'DP' ? 'MB' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Update Location' : (status === 'ROOT' ? 'High PRB' : (status === 'Des' ? 'TP005_ລູກຄ້າຢູ່ໃນເຂດການໃຊ້ງານສູງຫຼືຊ່ອງສັນຍານເຕັມ.ແນະນໍາລູກຄ້າຣີເຊັດມືຖືແລ້ວລອງໃໝ່' : 'Tier_2(SOC)')))),
+          'TP06_': status === 'DP' ? 'MB' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'Add 3G/4G Profile' : (status === 'ROOT' ? 'No Have 3G/4G Profile' : (status === 'Des' ? 'TP006_ບໍ່ໄດ້ເປີດ3G/4G ໃນລະບົບ HSS. ແນະນໍາລູກຄ້າກົດເປີດ Data ດ້ວຍວິທີ *777*3# &*777*4#' : 'Tier_2(SOC)')))),
+          'TP07_': status === 'DP' ? 'IT' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Modifi Profile SPNV' : (status === 'ROOT' ? 'Wrong Profile in SPNV' : (status === 'Des' ? 'TP007_ໂພຟາຍໄນລະບົບ ຊຸບເປີໂນວ່າບໍ່ຖືກ.ທິມງານແກ້ໄຂໄຫ້ແລ້ວ' : 'Tier_2(SOC)')))),
+          'TP08_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'No Package' : (status === 'Des' ? 'TP008_ເບີບໍ່ມີແພັກເກັດ! ແນະນໍາລູກຄ້າສະໝັກແພັກເກັດໃໝ່' : 'Tier_2(SOC)')))),
+          'TP09_': status === 'DP' ? 'IT' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Exended lifecycle' : (status === 'ROOT' ? 'Number was suspended in OCS' : (status === 'Des' ? 'TP009_ເບີຖືກງົດໃຊ້ບໍລິການໃນລະບົບ CBS ຊົ່ວຄາວ! ແນະນໍາລູກຄ້າຕື່ມເງີນແລະລອງເຂົ້າໃຊ້ງານອີກຄັ້ງ' : 'Tier_2(SOC)')))),
+          'TP10_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Money Was Deducted by Voice' : (status === 'Des' ? 'TP010_ເງີນຖືກຕັດດ້ວຍການໂທອອກເບີອື່ນ.' : 'Tier_2(SOC)')))),
+          'TP11_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Money Was Deducted by SMS' : (status === 'Des' ? 'TP011_ເງີນຖືກຕັດດ້ວຍການສົ່ງຂໍ້ຄວາມຫາເບີອື່ນ.' : 'Tier_2(SOC)')))),
+          'TP12_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Money Was Deducted by Games' : (status === 'Des' ? 'TP012_ເງີນຖືກຕັດດ້ວຍການຊື້ເກມ.' : 'Tier_2(SOC)')))),
+          'TP13_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Money Was Deducted by Loan Money' : (status === 'Des' ? 'TP013_ເງີນຖືກຕັດດ້ວຍການຢືມເງີນ.' : 'Tier_2(SOC)')))),
+          'TP14_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Money Was Deducted by Transfer to Others' : (status === 'Des' ? 'TP014_ເງີນຖືກຕັດດ້ວຍການໂອນເງີນຫາເບີອື່ນ.' : 'Tier_2(SOC)')))),
+          'TP15_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'No Balance'  : (status === 'Des' ? 'TP015_ເບີບໍ່ມີເງີນ.ແນະນໍາລູກຄ້າຕື່ມເງີນແລະລອງເຂົ້າໃຊ້ງານ' : 'Tier_2(SOC)')))), 
+          'TP16_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Usage Old Beeline SIM'  : (status === 'Des' ? 'TP016_ລູກຄ້າໃຊ້ຊີມເກົ່າຢູ່.ແນະນໍາລູກຄ້າເຂົ້າມາສູນບໍລິການເພື່ອປ່ຽນແຜ່ນຊິມເພື່ອຮອງຮັບບໍລິການທີດີກ່ວາ.' : 'Tier_2(SOC)')))), 
+          'TP17_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'Provided PIN & PUK' : (status === 'ROOT' ? 'SIM WASLOCKED PROVIDED PIN&PUK'  : (status === 'Des' ? 'TP017_ຂໍ້ມູນເລກ PIN&PUK ຕາມແອັດແທັກຟ່າຍເດີ' : 'Tier_2(SOC)')))), 
+          'TP18_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Received Package Normal(They did not check SMS)'  : (status === 'Des' ? 'TP018_ລູກຄ້າໄດ້ຮັບແພັກເກັດປົກກະຕິ.ແນະນໍາລູກຄ້າກວດສອບຂໍ້ຄວາມໃນໂທລະສັບ' : 'Tier_2(SOC)')))),
+          'TP19_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Received Balance Normal(They did not check SMS)'  : (status === 'Des' ? 'TP019_ລູກຄ້າໄດ້ຮັບເງິນໂທປົກກະຕິ.ແນະນໍາລູກຄ້າກວດສອບຂໍ້ຄວາມໃນໂທລະສັບ' : 'Tier_2(SOC)')))),
+          'TP20_': status === 'DP' ? 'MB' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'Cancel RPT' : (status === 'ROOT' ? 'Customer Need to Cancel RBT' : (status === 'Des' ? 'TP020_ຍົກເລິກບໍລິການເພງລໍສາຍສໍາເລັດ' : 'Tier_2(SOC)')))),
+          'TP21_': status === 'DP' ? 'IT' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Cooperate With Tier 3' : (status === 'ROOT' ? 'Customer Need to Cancel RBT'  : (status === 'Des' ? 'TP021_ລະບົບມີບັນຫາຫຼືຂັດຂ້ອງ.ທິມງານກຳລັງແກ້ໄຂ' : 'Tier_3(IT)')))),
+          'TP22_': status === 'DP' ? 'MB' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'Cancel Call Forward' : (status === 'ROOT' ? 'Cancle Call Forward' : (status === 'Des' ? 'TP022_ຍົກເລິກບໍລິການໂອນສາຍສໍາເລັດ' : 'Tier_2(SOC)')))),
+          'TP23_': status === 'DP' ? 'ISD' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Cooperate with Owner App to Sollved for Customers' : (status === 'ROOT' ? 'Scratch Card Was not Activate with Bonus' : (status === 'Des' ? 'TP023_ບັດນີ້ຍັງບໍ່ໄດ້ແອັກຕິບ' : 'Tier_3(ISD)')))),
+          'TP24_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Scratch Card was used up' : (status === 'Des' ? 'TP024_ບັດນີ້ຖືກນໍາໃຊ້ແລ້ວ' : 'Tier_2(SOC)')))),
+          'TP25_': status === 'DP' ? 'IT' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Cooperate With Tier 3' : (status === 'ROOT' ? 'More checking with Owner Apps' : (status === 'Des' ? 'TP025_ບັນຫານີ້ຜິດພາດຍ້ອນລະບົບກະລຸນາສົ່ງອີເມວຫາພາກສ່ວນກ່ຽວຂ້ອງໃຫ້ກວດສອບຄືນ' : 'Tier_3(IT)')))),
+          'TP26_': status === 'DP' ? 'USER' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Wrong Default PW' : (status === 'Des' ? 'TP026_ພາສເວີດບໍ່ຖືກຕ້ອງ.ທິມງານຣີເຊັດພາສເວີດໃນລະບົບເປັນຄ່າເລີ່ມຕົ້ນ (0000)' : 'Tier_2(SOC)')))),
+          'TP27_': status === 'DP' ? 'MB' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Cooperate With Tier 3' : (status === 'ROOT' ? 'Sites were down in that area' : (status === 'Des' ? 'TP027_ສະຖານີມີບັນຫາ.ທິມງານກຳລັງແກ້ໄຂ' : 'Tier_3(MB)')))),
+          'TP28_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Activated by *503#Call' : (status === 'Des' ? 'TP028_ເງິນຖືກຕັດດ້ວຍບໍລິການເສຍຄ່າຮັກສາຄວາມປອດໄພຂອງກະຊວງເຕັກໂນໂລຊືແລະການສື່ສານ' : 'Tier_2(SOC)')))),
+          'TP29_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Activated by *121/122#Call' : (status === 'Des' ? 'TP029_ລູກຄ້າໄຊ້ງານເກີນວົງເງິນຂອບເຂດງົບປະມານຂອງໂຕເອງ ກະລຸນາກວດສອບຄືນ' : 'Tier_2(SOC)')))),
+          'TP30_': status === 'DP' ? 'IT' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Cooperate With Tier 3' : (status === 'ROOT' ? 'System Problem' : (status === 'Des' ? 'TP030_ກະລຸນາຕິດຕໍ່ຫາທີມງານບໍລິການເສີມ ສໍາລັບເພີ່ມແພັກເກັດ' : 'Tier_3(IT)')))),
+          'TP31_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'TP031_' : (status === 'Des' ? 'TP31_' : 'Tier_2(SOC)')))), // -------------test 031 not
+          'TP32_': status === 'DP' ? 'USER' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Update Location' : (status === 'ROOT' ? 'Weak Coverage Signal' : (status === 'Des' ? 'TP032_ເຂດລູກຄ້າຢູ່ຈັບສັນຍານຄວບຄຸມອ່ອນ' : 'Tier_2(SOC)')))),
+          'TP33_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Received SMS(They did not check SMS)' : (status === 'Des' ? 'TP033_ລູກຄ້າໄດ້ຮັບ OTP ແລ້ວແນະນໍາລູກຄ້າກວດສອບຂໍ້ຄວາມໃນໂທລະສັບຄືນ' : 'Tier_2(SOC)')))),
+          'TP34_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Number Was Operational(Sugestion to Setting SMS Center)' : (status === 'Des' ? 'TP034_ລູກຄ້າບໍ່ໄດ້ຮັບ OTP ແທ້! ແນະນໍາເພີ່ນກວດສູນຂໍ້ຄວາມໄນເຄື່ອງລູກຄ້າ' : 'Tier_2(SOC)')))),
+          'TP35_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Money Was Deducted by Lottery Service' : (status === 'Des' ? 'TP035_ເງີນຖືກຕັດດ້ວຍການຊື້ຫວຍ' : 'Tier_2(SOC)')))),
+          'TP36_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Customer Capture 2G signal)' : (status === 'Des' ? 'TP036_ລູກຄ້າຈັບສັນຍານ 2G ແນະນໍາລູກຄ້າຣີເຊັດມືຖືແລ້ວລອງໃໝ່' : 'Tier_2(SOC)')))),
+          'TP37_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'PT037_' : (status === 'Des' ? 'TP37_' : 'Tier_2(SOC)')))), // -------------test 037 not
+          'TP38_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Transfer Money Incorrect way' : (status === 'Des' ? 'TP038_ລູກຄ້າໂອນເງີນບໍ່ຖືກວິທີ ແນະນໍາລູກຄ້າກວດສອບຄືນແລ້ວລອງໃໝ່' : 'Tier_2(SOC)')))),
+          'TP39_': status === 'DP' ? 'IT' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'IR Service is Not avalable ' : (status === 'Des' ? 'TP039_ບໍລິການໂຣມມີ່ງ ຍັງບໍ່ໄດ້ເປີດໃຫ້ບໍລິການ' : 'Tier_2(SOC)')))),
+          'TP40_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Call to Invalid Number' : (status === 'Des' ? 'TP040_ເບີໂທປາຍທາງບໍ່ຖືກຕ້ອງ ແນະນຳລູກຄ້າກວດສອບເບີປາຍທາງແລ້ວລອງໃໝ່' : 'Tier_2(SOC)')))),
+          'TP41_': status === 'DP' ? 'IT' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Cooperate With Tier 3' : (status === 'ROOT' ? 'No Offerring In CBS' : (status === 'Des' ? 'TP041_ເບີນີ້ຍັງບໍ່ສົມບູນໃນລະບົບບີິວລີ້ງ_CBS(ບໍ່ມີອ໋ອບເຟີ້ລີ້ງ)' : 'Tier_3(IT)')))),
+          'TP42_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Money Was Deducted by Rentle Package Service' : (status === 'Des' ? 'TP042_ເງີນຖືກຕັດດ້ວຍບໍລິການຝາກເບີ' : 'Tier_2(SOC)')))),
+          'TP43_': status === 'DP' ? 'USER' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Money Was Deducted by Package Service' : (status === 'Des' ? 'TP042_ເງີນຖືກຕັດດ້ວຍການສະໝັກເເພັກເກັດ' : 'Tier_3(IT)')))),
+          'TP44_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'PIN Code of Scrath Card In Correct' : (status === 'Des' ? 'TP044_ລູກຄ້າກົດລະຫັດບັດບໍ່ຖືກຕ້ອງແນະນໍາລູກຄ້າກວດລະຫັດຄືນ' : 'Tier_2(SOC)')))),
+          'TP45_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Life Cycle Was Expired' : (status === 'Des' ? 'TP045_ທ່ານໄດ້ສໍາເລັດຍົກເລີກບໍລິການຝາກເບີ ກະລຸນາກວດສອບແລະນໍາໄຊ້ໄໝ່' : 'Tier_2(SOC)')))),
+          'TP46_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Activate Sim Failure' : (status === 'Des' ? 'TP046_ບໍ່ສາມາດເປີດເບີໃໝ່ໄດ້ຜ່ານເວັບຊີແຄໄດ້ ແນະນໍາໃຫ້ພົວພັນຫາທີມງານ CBS ເພີ່ມເຕີມຜ່ານຊ່ອງທາງອີເມວອີກຄັ້ງ' : 'Tier_2(SOC)')))),
+          'TP47_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Mismatch Condition to Loan Money' : (status === 'Des' ? 'TP047_ເບີຂອງລູກຄ້າຍັງບໍ່ຄົບເງື່ອນໄຂໃນການຢືມເງີນ' : 'Tier_2(SOC)')))),
+          'TP48_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Sim Type Mismatch Condition' : (status === 'Des' ? 'TP048_ຊະນິດຂອງຊີມບໍ່ຖືກເງື່ອນໄຂໄນການໄຊ້ບໍລິການນີ້' : 'Tier_2(SOC)')))),
+          'TP49_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'Cancel Game' : (status === 'ROOT' ? 'Customer Need to Cancle Game Service' : (status === 'Des' ? 'TP049_ທ່ານໄດ້ສໍາເລັດຍົກເລີກບໍລິການເກມ' : 'Tier_2(SOC)')))),
+          'TP50_': status === 'DP' ? 'MB' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'System' : (status === 'ROOT' ? 'In Corrected UCSI Template' : (status === 'Des' ? 'TP050_ໂພຟ່າຍບໍ່ຖືກໃນລະບົບ HSS/HLR(UCSI ບໍ່ຖືກຕ້ອງ)' : 'Tier_2(SOC)')))),
+          'TP51_': status === 'DP' ? 'IT' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'Remove Counter' : (status === 'ROOT' ? 'Full Counter (Package) in Supernova' : (status === 'Des' ? 'TP051_ເຄົ່າເຕີ້ເຕັມໄນລະບົບ Supernova ທິມງານແກ້ໄຂໄຫ້ແລ້ວແນນໍາລູກຄ້າລອງໄໝ່' : 'Tier_2(SOC)')))),
+          'TP52_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Received Promotion Normal(They did not check SMS)' : (status === 'Des' ? 'TP052_ລູກຄ້າໄດ້ຮັບໂປໂມເຊີ້ນປົກກະຕິ ແນະນໍາລູກຄ້າກວດສອບຄືນ' : 'Tier_2(SOC)')))),
+          'TP53_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Blocking on their Mobile' : (status === 'Des' ? 'TP053_ລູກຄ້າຫຼົງກົດຖືກໂໝດຫ້າມລົບກວນຢູ່ໜ່ວຍລູກຄ້າເອງແນະນໍາລູກຄ້າກວດສອບຄືນ' : 'Tier_2(SOC)')))),
+          'TP54_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'In Corrected USSD Code' : (status === 'Des' ? 'TP054_ລູກຄ້າກົດລະຫັດບໍ່ຖືກໃນ USSD ແນະນໍາລູກຄ້າກວດສອບຄືນ' : 'Tier_2(SOC)')))),
+          'TP55_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Customer not Receice Balance' : (status === 'Des' ? 'TP055_ລູກຄ້າບໍທັນໄດ້ຮັບເງິນ ທິມງານກໍ່າລັງແກ້ໄຂໃຫ້' : 'Tier_2(SOC)')))),
+          'TP56_': status === 'DP' ? 'USER' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Customer turn off Mobile' : (status === 'Des' ? 'TP056_ລູກຄ້າປິດໂທລະສັບແນະນໍາລູກຄ້າກວດສອບຄືນ' : 'Tier_2(SOC)')))),
+          'TP57_': status === 'DP' ? 'IT' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Exanded PIN & PUK' : (status === 'ROOT' ? 'Extended Lifecycle of Package Expire' : (status === 'Des' ? 'TP057ສໍາເລັດການຕໍ່ເເພັກເກັດໄຫ້ລູກຄ້າສໍາເລັດແນະນໍາລູກຄ້າກວດສອບຄືນແລ້ວລອງໃໝ່ອີກຄັ້ງ' : 'Tier_2(SOC)')))),
+          'TP58_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Number was Pool in OCS' : (status === 'Des' ? 'TP058_ເບີຖືກຕັດອອກຈາກລະບົບCBSແລ້ວ! ' : 'Tier_2(SOC)')))),
+          'TP59_': status === 'DP' ? 'IT' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'Remove Counter' : (status === 'ROOT' ? 'Customer Need to Cancel Package( It Usage Up)' : (status === 'Des' ? 'TP059_ສໍາເລັດການຍົກເລີກແພັກເກັດແນະນໍາລູກຄ້າກວດສອບຄືນ' : 'Tier_2(SOC)')))),
+          'TP60_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Data Package is avaliable' : (status === 'Des' ? 'TP060_ແພັກເກັດດາຕ້າຂອງລູກຄ້າຍັງສາມາດນໍາໄຊ້ໄດ້ ແນະນໍາລູກຄ້າກວດສອບຄືນແລ້ວລອງໃໝ່ອີກຄັ້ງ' : 'Tier_2(SOC)')))),
+          'TP61_': status === 'DP' ? 'USER' : (status === 'ON' ? 'USER' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'Money Was Deducted by RBT Service' : (status === 'Des' ? 'TP061_ເງີນຖືກຕັດດ້ວຍການສຽງເພງລໍສາຍແນະນໍາລູກຄ້າກວດສອບຄືນ' : 'Tier_2(SOC)')))),
+          'TP62_': status === 'DP' ? 'IT' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Cooperate With Tier 3' : (status === 'ROOT' ? 'Scratch Card Was not Activate with Bonus' : (status === 'Des' ? 'TP062_ບັດບໍ່ໄດ້ແອັດໂບນັດເຂົ້າທິມງານກໍ່າລັງແກ້ໄຂໄຫ້' : 'Tier_3(IT)')))),
+          'TP63_': status === 'DP' ? 'IT' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Cooperate With Tier 3' : (status === 'ROOT' ? 'Number Was IDLE Status in OCS' : (status === 'Des' ? 'TP063_ເບີບໍທັນເປີດນຳໃຊ້ໄນCBSແນະນໍາລູກຄ້າກວດສອບຄືນ' : 'Tier_3(IT)')))),
+          'TP64_': status === 'DP' ? 'MB' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'Add SMS MT' : (status === 'ROOT' ? 'UNo SMSMT in HSS' : (status === 'Des' ? 'TP064_ເບີນີ້ບໍ່ທັນມີຂໍ້ຄວາມຂາເຂົ້າທີມງານແກ້ໄຂໄຫ້ແລ້ວແນະນໍາລູກຄ້າລອງໃໝ່ອີກຄັ້ງ' : 'Tier_2(SOC)')))),
+          'TP65_': status === 'DP' ? 'MB' : (status === 'ON' ? 'SYSTEM' : (status === 'SOLU' ? 'PR' : (status === 'ROOT' ? 'No register 3Grap/One grap' : (status === 'Des' ? 'TP065_ເບີຍັງບໍ່ທັນລົງທະບຽນ ວັນແກຼັບ/3 ແກຼັບ' : 'Tier_2(SOC)')))), // ----65 not data
         };
         const name = idToNameMap[ID] || ID; // use the mapped name or the original ID if not found
         return name;
@@ -896,5 +911,8 @@ export default {
 .custom-font {
   font-family: 'Noto Sans Lao', sans-serif;
   /* You can specify additional styles here */
+}
+.font_size_12 {
+  font-size: 14px;
 }
 </style>
