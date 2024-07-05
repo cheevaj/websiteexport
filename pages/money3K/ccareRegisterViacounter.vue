@@ -71,7 +71,7 @@
         <v-icon color="#ffff00" size="25">mdi-arrow-left</v-icon>
       </v-btn>
       <v-card-text class="pa-0">
-        <h2 class="text-center color_CL custom-font" style="color: #ffff00;">{{en ? "ລົງທະບຽນແພັກເກດຂອງ C-Care ຜ່ານທາງເຄົາເຕີ." : "C-Care's Register Package via Counter."}}</h2>
+        <h2 class="text-center color_CL custom-font" style="color: #ffff00;">{{en ? "ລົງທະບຽນແພັກເກັດຂອງ C-Care ຜ່ານທາງເຄົາເຕີ." : "C-Care's Register Package via Counter."}}</h2>
       </v-card-text>
       <div></div>
     </v-card-actions>

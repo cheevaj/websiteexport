@@ -416,14 +416,14 @@
         </v-card>
       </div>
       <v-divider style="background-color: #ffff00"></v-divider>
-      <v-card-text class="text-right pa-2" style="position: fixed; z-index: 150; bottom: 1px; right: 1px;">
-        <Tooltip v-if="!en" placement="top" content="English to Lao" :delay="600">
-          <Button class="language-button" @click="toggleLanguage">English</Button>
+      <v-card-text class="text-left pa-2" style="position: fixed; z-index: 150; bottom: 0px; left: 0px;">
+        <Tooltip placement="top" :content=" en ? 'Lao to English' : 'English to Lao'" :delay="600">
+          <Button class="language-button custom-font" @click="toggleLanguage">{{en ? 'ລາວ' : 'English'}}</Button>
         </Tooltip>
-        <Tooltip v-else placement="top" content="Lao to English" :delay="600">
-          <Button class="language-button custom-font" @click="toggleLanguage">ລາວ</Button>
-        </Tooltip>
-        </v-card-text>
+        <!-- <Tooltip v-else placement="top" content="Lao to English" :delay="600">
+          <Button class="language-button " @click="toggleLanguage"></Button>
+        </Tooltip> -->
+      </v-card-text>
       <Nuxt />
     </v-main>
     <v-footer
