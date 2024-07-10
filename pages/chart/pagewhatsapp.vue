@@ -4,7 +4,7 @@
             <v-row>
                 <v-col cols="12" md="4" sm="4" class="pr-0">
                     <v-card-title>
-                        <h2>Phone number</h2>
+                        <h2 class="custom-font">{{ en ? 'ເບີໂທລະສັບ' : 'Phone number'}}</h2>
                     </v-card-title>
                     <v-card-text>
                         <v-dialog v-model="dialog" persistent max-width="290">
@@ -17,8 +17,8 @@
                             </template>
                             <v-card>
                                 <v-card-actions class="yellow pa-0">
-                                    <v-card-text class="text-h6 py-0 pl-2 pr-0">
-                                        Connect Whatsapp QR
+                                    <v-card-text class="text-h6 py-0 pl-2 pr-0 custom-font">
+                                        {{ en ? 'ເຊື່ອມຕໍ່ Whatsapp QR' : 'Connect Whatsapp QR'}}
                                     </v-card-text>
                                     <v-spacer></v-spacer>
                                     <v-btn fab small color=" darken" text @click="dialog = false">
@@ -26,16 +26,16 @@
                                     </v-btn>
                                 </v-card-actions>
                                 <v-divider></v-divider>
-                                <v-card-text>
-                                    Sorry, Can not connected
+                                <v-card-text class="custom-font">
+                                    {{ en ? 'ຍັງບໍ່ສາມາດ ເປີດເຊືອມໄດ້' : 'Sorry, Can not connected'}}
                                 </v-card-text>
                             </v-card>
                         </v-dialog>
                     </v-card-text>
                     <v-card-text class="pr-0 ">
-                        <h4>Send to</h4>
+                        <h4 class="custom-font">{{ en ? 'ສົ່ງໃຫ້ເບີ' : 'Send to'}}</h4>
                         <v-card-actions class="pr-0">
-                            <v-text-field v-model="numberphone" label="207xxx, 207xx" :rules="rules"
+                            <v-text-field v-model="numberphone" type="number" label="207xxx, 207xx" :rules="rules"
                                 hide-details="auto" />
                             <v-divider class="ml-1 pr-0 my-2" vertical style="background-color: #009242;" />
                             <Tooltip content="Import file Excel." placement="bottom" :delay="800">
@@ -53,7 +53,7 @@
                 <v-col cols="12" md="8" sm="8" class="pl-1">
                     <v-card-actions>
                         <v-card-title>
-                            <h2>Message</h2>
+                            <h2 class="custom-font">{{ en ? 'ຂໍ້ຄວາມ' : 'Message'}}</h2>
                         </v-card-title>
                         <v-spacer></v-spacer>
                         <Tooltip content="Edit file import." placement="bottom" :delay="800">
@@ -66,28 +66,28 @@
                         </Tooltip>
                         <v-dialog v-model="dialogseting" persistent max-width="300">
                             <v-card>
-                                <v-card-title style="color: rgb(115, 115, 115);">
-                                    Excel table
+                                <v-card-title class="custom-font" style="color: rgb(115, 115, 115);">
+                                    {{ en ? 'ຕາຕະລາງ Excel ເບີໂທ' : 'Excel table'}}
                                 </v-card-title>
                                 <v-divider style="background-color: #ffff00;"></v-divider>
                                 <v-card-actions>
                                     <div>
-                                        <p>Row</p>
+                                        <p class="custom-font">{{ en ? 'ເລີ່ມຈາກແຖວທີ່' : 'Start Row'}}</p>
                                         <InputNumber :min="1" v-model="rowNum" />
                                     </div>
                                     <div>
-                                        <p>Column</p>
+                                        <p class="custom-font">{{ en ? 'ເລີ່ມຈາກຖັງທີ່' : 'Start Column'}}</p>
                                         <InputNumber :min="0" v-model="colNum" />
                                     </div>
                                 </v-card-actions>
                                 <v-card-actions>
                                     <v-spacer></v-spacer>
-                                    <v-btn color="error darken-1" text @click="changeRow(false)">
-                                        Resat
+                                    <v-btn class="custom-font" color="error darken-1" text @click="changeRow(false)">
+                                        {{ en ? 'ຍົກເລີກ' : 'Cancel'}}
                                     </v-btn>
-                                    <v-btn color="#ffff" style="background-color: #ffff00;" text
+                                    <v-btn class="custom-font" color="#ffff" style="background-color: #ffff00;" text
                                         @click="changeRow(true)">
-                                        save
+                                        {{ en ? 'ບັນທືກ' : 'save'}}
                                     </v-btn>
                                 </v-card-actions>
                             </v-card>
@@ -98,46 +98,39 @@
                             <v-textarea class="custom-font" outlined name="input-7-4" v-model="text"></v-textarea>
                             <v-dialog v-model="dialog2" persistent max-width="650px">
                                 <template v-slot:activator="{ on, attrs }">
-                                    <div @mouseenter="show = 'color'" @mouseleave="show = 'notcolor'">
-                                        <Button text fab class="ml-4" ghost
+                                    <div class="ml-4" @mouseenter="show = 'color'" @mouseleave="show = 'notcolor'">
+                                        <Button text fab ghost :disabled="text !== '' ? false : true " class="pa-0"
                                             :style="{ backgroundColor: text !== '' ? '#000' : 'rgb(242, 242, 242)' }"
-                                            style="height: 50px;" v-bind="attrs" v-on="on" @click="changeNameber()">
-                                            <v-icon :color="show === 'color' ? '#ffff00' : 'rgb(191, 191, 191)'"
-                                                size="34">mdi-send</v-icon>
+                                            style="height: 50px; width: 50px; border-radius: 50%;" v-bind="attrs" v-on="on" @click="changeNameber()">
+                                            <v-icon :color="show === 'color' ? '#00cc00' : 'rgb(191, 191, 191)'"
+                                                size="34">mdi-whatsapp</v-icon>
                                         </Button>
                                     </div>
                                 </template>
                                 <v-card>
                                     <v-toolbar color="yellow" dark flat class="pb-0 mb-0">
-                                        <h1 style="color: #000;">Check Number phone</h1>
+                                        <h1 class="custom-font" style="color: #000;">{{ en ? 'ກວດເບິ່ງເບີໂທລະສັບ ແລະ ຂໍ້ຄວາມ' : 'Check Number phone and Message'}}</h1>
                                     </v-toolbar>
                                     <v-card-text>
                                         <v-card-actions>
-                                            <h2>Messages</h2>
+                                            <h2 class="custom-font">{{ en ? 'ຂໍ້ຄວາມ' : 'Messages' }}</h2>
                                             <v-spacer></v-spacer>
-                                            <v-text-field v-model="pasend" maxlength="25"
-                                                :append-icon="show === 'eye' ? 'mdi-eye' : 'mdi-eye-off'"
-                                                :rules="[rules_pas.required, rules_pas.min]"
-                                                :type="show === 'eye' ? 'text' : 'password'" name="input-10-1"
-                                                label="Enter your password:" hint="password least 8 characters" counter
-                                                @click:append="show = show === 'eye' ? 'noteye' : 'eye'">
-                                            </v-text-field>
                                         </v-card-actions>
                                         <v-card class="d-flex align-center justify-center mx-auto overflow-auto"
                                             min-width="450" max-height="100px" min-height="76" outlined>
-                                            <div v-if="numsend !== null && numsend !== undefined && numsend.length > 0">
+                                            <div class="custom-font">
                                                 {{ text }}
                                             </div>
                                         </v-card>
                                         <v-row>
                                             <v-col cols="12" sm="5" md="5" class="pr-0">
                                                 <v-card-text class="pb-0 pl-0">
-                                                    <div style="color: #000;">
-                                                        Number phone is
+                                                    <div class="custom-font" style="color: #000;">
+                                                        {{ en ? 'ເບີໂທລະສັບທີ່ສົ່ງ' : 'Number phone is' }}
                                                     </div>
                                                 </v-card-text>
                                                 <v-card class="rounded-0" min-height="76" outlined>
-                                                    <v-card-text>
+                                                    <v-card-text >
                                                         +856 2078929363
                                                     </v-card-text>
                                                 </v-card>
@@ -152,8 +145,8 @@
                                             </v-col>
                                             <v-col cols="12" md="6" sm="6" class="pr-0">
                                                 <v-card-text class="pb-0 pl-0">
-                                                    <div style="color: #000;">
-                                                        Tplus number.
+                                                    <div class="custom-font" style="color: #000;">
+                                                        {{ en ? 'ເບີທີ່ຈະສົ່ງ' : 'The number phone to be sent.' }}
                                                     </div>
                                                 </v-card-text>
                                                 <v-card class="rounded-0 overflow-auto" min-height="76"
@@ -171,10 +164,10 @@
                                         </v-row>
                                     </v-card-text>
                                     <v-card-actions class="justify-end">
-                                        <v-btn text color="error" @click="dialog2 = false">
-                                            Cancel
+                                        <v-btn class="custom-font " text color="error" @click="dialog2 = false">
+                                            {{ en ? 'ຍົກເລີກ' : 'Cancel'}}
                                         </v-btn>
-                                        <v-btn outlined color="yellow" @click="changePassword()">
+                                        <v-btn outlined color="yellow" @click="sedQrchart()">
                                             <v-icon>mdi-send</v-icon>
                                         </v-btn>
                                     </v-card-actions>
@@ -185,20 +178,20 @@
                 </v-col>
             </v-row>
             <v-card-title class="pb-0">
-                <h3>
-                    Add number phone to Database
+                <h3 class="custom-font">
+                    {{ en ? 'ເພີ່ມເລກໂທລະສັບໄປທີ່ຫໍຖານຂໍ້ມູນ' : 'Add number phone to Database' }}
                 </h3>
             </v-card-title>
             <v-divider style="background-color: #ffff00;" />
             <v-card-text>
                 <v-row>
                     <v-col cols="12" md="4" sm="4">
-                        <p>
-                            Import your phone number file by clicking <span><v-icon
+                        <p class="custom-font">
+                            {{ en ? 'ນໍາເຂົ້າໄຟລ໌ໝາຍເລກໂທລະສັບຂອງທ່ານໂດຍການຄລິກປຸ່ມ' : 'Import your phone number file by clicking' }} <span><v-icon
                                     style="color:rgb(41,163,41)">mdi-microsoft-excel</v-icon></span>
                         </p>
-                        <p>
-                            Click Save in bock Pop Up to add number phone to database
+                        <p class="custom-font">
+                            {{ en ? 'ກົດ ບັນທືກ ຢູ່ເທີງໃນບອດທີ່ເດັ່ນຂື້ນມາ ເພື່ອເພີ່ມເບີໂທລະສັບໃສ່ຖານຂໍ້ມູນ' : 'Click Save in bock Pop Up to add number phone to database' }}
                         </p>
                     </v-col>
                     <v-col cols="12" md="3" sm="3">
@@ -218,9 +211,9 @@
                             <v-card max-height="100%">
                                 <v-row class="yellow pa-0 ma-0">
                                     <v-col cols="8" md="9" sm="9" class="pa-0 ma-0">
-                                        <v-card-text class="yellow pa-0">
-                                            <v-card-text class="text-h6 pa-4">
-                                                Number phone Upload
+                                        <v-card-text class="yellow pa-0 ">
+                                            <v-card-text class="pa-4 custom-font">
+                                                <h3 class="custom-font">{{ en ? 'ເພີ່ມເບີໂທລະສັບ' : 'Upload  Number phone' }}</h3> 
                                             </v-card-text>
                                             <v-spacer></v-spacer>
                                         </v-card-text>
@@ -228,13 +221,13 @@
                                     <v-col cols="4" md="3" sm="3" class="pa-0 ma-0">
                                         <v-card-actions class="mr-12 pt-3">
                                             <v-spacer></v-spacer>
-                                            <v-btn class="mr-4" color="error" text @click="deleteNum()">
-                                                cancel
+                                            <v-btn class="mr-4 custom-font" color="error" text @click="deleteNum()">
+                                                {{ en ? 'ຍົກເລີກ' : 'cancel' }}
                                             </v-btn>
-                                            <v-btn class="mx-2" @click="addNumber_database()"
+                                            <v-btn class="mx-2 custom-font" @click="addNumber_database()"
                                                 style="background-color: #000; color: #ffff00;">
                                                 <v-icon>mdi-content-save-move-outline</v-icon>
-                                                Add
+                                                {{ en ? 'ເພີ່ມ' : 'Add' }}
                                             </v-btn>
                                         </v-card-actions>
                                     </v-col>
@@ -245,16 +238,16 @@
                                         <template v-slot:default>
                                             <thead>
                                                 <tr>
-                                                    <th class="text-left"
+                                                    <th class="text-left custom-font"
                                                         style="background-color: #000;color: #ffff00;">
-                                                        Index
+                                                        {{ en ? 'ລໍາດັບ' : 'Index'}}
                                                     </th>
-                                                    <th class="text-left"
+                                                    <th class="text-left custom-font"
                                                         style="background-color: #000;color: #ffff00;">
-                                                        Numbers
+                                                        {{ en ? 'ເລກໂທລະສັບ' : 'Numbers'}}
                                                     </th>
-                                                    <th class="text-left" style="background-color:#000;color: #ffff00;">
-                                                        Whatsapp
+                                                    <th class="text-left custom-font" style="background-color:#000;color: #ffff00;">
+                                                        {{ en ? 'ເລກ WhatsApp' : 'WhatsApp'}}
                                                     </th>
                                                 </tr>
                                             </thead>
@@ -279,9 +272,11 @@
 <script>
 import * as XLSX from 'xlsx';
 export default {
+  middleware: 'auth',
     data() {
         return {
             dialogseting: false,
+            sendMessage:false,
             show: false,
             dialog: false,
             dialog2: false,
@@ -306,21 +301,33 @@ export default {
             },
         };
     },
+    computed: {
+    en() {
+      return this.$store.state.en;
+    },
+    },
     methods: {
         async sedQrchart() {
-            try {                                                                                   // saveandalerttouser
-                const response = await this.$axios.post('http://172.28.26.23:3335/sendtouser/alerttouser', {
+            if(this.sendMessage){
+                try {                                                                                  
+                    const response = await this.$axios.post('http://172.28.26.23:3335/sendtouser/alerttouser', {
                     numeros: this.numsend,
                     mensaje: this.text,
-                });
-                this.resultados = response.data.resultados;
-            } catch (error) {
-                console.error('Error al enviar el mensaje:', error);
+                    });
+                    this.resultados = response.data.resultados;
+                    this.renderFunc( this.en ? 'ສົ່ງຂໍ້ຄວາມສຳເລັດແລ້ວ.' : 'Messages sent successfully.', this.en ? 'ທ່ານໄດ້ສົ່ງຂໍ້ຄວາມສໍາເລັດເເລ້ວ.' : 'You sent messages submitted successfully.');
+                } catch (error) {
+                    console.error('Error al enviar el mensaje:', error);
+                }
+                this.dialog2 = false;
+                this.numsend = [];
+                this.numberphone = "";
+            } else {
+                // Handle the case where numeber is not a string or has length <= 0
+                const title =`<span class="custom-font">${this.en ? 'ປ້ອນຂໍ້ມູນບໍ່ຖືກຕ້ອງ' : 'Invalid input'}</span>`;
+                const desc =`<span class="custom-font">${this.en ? 'ການປ້ອນຂໍ້ມູນຂອງທ່ານອາດບໍ່ມີເບີ ຫຼື ຂໍ້ຄວາມ.' : 'Your input may not contain numbers or Message.'}</span>`
+                this.error(false, title, desc);
             }
-            this.dialog2 = false;
-            this.numsend = [];
-            this.numberphone = "";
-            this.renderFunc('Messages sent successfully.', ' You sent messages submitted successfully.');
         },
         async addNumber_database() {
             try {
@@ -384,8 +391,7 @@ export default {
         },
         changeNameber() {
             const numeber = this.numberphone;
-            // Check if numeber is a string
-            if (typeof numeber === 'string' && numeber.length > 0) {
+            if (typeof numeber === 'string' && ( numeber.length === 8 || numeber.length >= 10)) {
                 const numeros = numeber.split(',').map(numero => numero.trim());
                 this.numsend = numeros.map((n) => {
                     if (n.substring(n.length - 8)) {
@@ -394,25 +400,25 @@ export default {
                         return '';
                     }
                 }).filter(n => n !== '');
-                // console.log('p', this.numsend);
+                this.show = true;
+                this.sendMessage = true;
             } else {
                 // Handle the case where numeber is not a string or has length <= 0
-                const title = 'Invalid input';
-                const desc = 'The input should be a non-empty string.';
-                this.error(false, title, desc);
-            }
-
-            this.show = true;
-        },
-        changePassword() {
-            if (this.pasend === ('1' || 1) && this.numsend.length > 0) {
-                this.sedQrchart();
-            } else {
-                const title = 'The password ro number is incorrect.';
-                const desc = 'check your password ro namber phone and Try again.';
+                const title =`<span class="custom-font">${this.en ? 'ປ້ອນຂໍ້ມູນບໍ່ຖືກຕ້ອງ' : 'Invalid input'}</span>`;
+                const desc =`<span class="custom-font">${this.en ? 'ການປ້ອນຂໍ້ມູນຂອງທ່ານອາດບໍ່ມີເບີ ຫຼື ຂໍ້ຄວາມ.' : 'Your input may not contain numbers or Message.'}</span>`
+                this.sendMessage = false;
                 this.error(false, title, desc);
             }
         },
+        // changePassword() {
+        //     if (this.pasend === ('1' || 1) && this.numsend.length > 0) {
+        //         this.sedQrchart();
+        //     } else {
+        //         const title = 'The password ro number is incorrect.';
+        //         const desc = 'check your password ro namber phone and Try again.';
+        //         this.error(false, title, desc);
+        //     }
+        // },
         changeRow(status) {
             if (status) {
                 this.dialogseting = false;
@@ -473,4 +479,7 @@ export default {
     font-family: 'Noto Sans Lao', sans-serif;
     /* You can specify additional styles here */
 }
+/* .send-button {
+    background-color: ;
+} */
 </style>

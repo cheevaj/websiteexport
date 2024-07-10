@@ -8,14 +8,14 @@
                     <!-- Card for menu and subheader -->
                     <v-card class="mx-auto pb-4" max-width="300" tile>
                         <!-- Subheader with TABLE | GRAPH text -->
-                        <v-subheader style="color: #ffff00;">TABLE | GRAPH</v-subheader>
+                        <v-subheader :class="{ 'custom-font': en }" style="color: #ffff00;">{{ en ? 'ຕາຕະລາງ | ກຣາຟ' : 'TABLE | GRAPH' }}</v-subheader>
                         <!-- Dropdown menu for table selection -->
                         <v-menu flat transition="slide-x-transition" bottom right>
                             <template v-slot:activator="{ on, attrs }">
                                 <!-- Button to activate the menu -->
-                                <v-btn style=" width: 99%; border-radius: 0%; background-color: #ffff00; color: #000;"
+                                <v-btn :class="{ 'custom-font': en }" style=" width: 99%; border-radius: 0%; background-color: #ffff00; color: #000;"
                                     dark v-bind="attrs" v-on="on">
-                                    MENU TABLES
+                                    {{ en ? 'ຕາຕະລາງເມນູ' : 'MENU TABLES' }}
                                     <v-icon>mdi-table-sync</v-icon>
                                 </v-btn>
                             </template>
@@ -23,7 +23,7 @@
                             <v-list flat class="pt-0" style="background-color: #ffffe6;">
                                 <!-- ... (List items for different tables) -->
                                 <v-card-text class="text-center" style="background-color:#000; color: #ffff00;">
-                                    <h3>TABLE</h3>
+                                    <h3 :class="{ 'custom-font': en }">{{ en ? 'ຕາຕະລາງ' : 'TABLE' }}</h3>
                                 </v-card-text>
                                 <v-divider style="background-color: #000;" />
                                 <v-list-item v-for="(item, index) in menuItems" :key="index" class="ma-0 py-0 pl-0 pr-2"
@@ -94,7 +94,7 @@
                         <!-- Section for styling the graph -->
                         <!-- ... (Buttons for styling the graph) -->
                         <v-card-text class="mt-2" style="color: #000;">
-                            <h4>STYLE GRAPH</h4>
+                            <h4 :class="{ 'custom-font': en }">{{ en ? 'ຮູບເເບບກຣາຟ' : 'STYLE GRAPH' }}</h4>
                         </v-card-text>
                         <v-divider style="background-color: #000;" />
                         <v-col cols="12" sm="12" md="12" class="mt-4 by-4 px-2">
@@ -106,14 +106,12 @@
                                                 style="background-color: transparent; color: transparent;"
                                                 @click="showgraph(item.name)">
                                                 <v-card flat :style="{
-                                background: graphstyle[0],
-                                border: '2px solid',
-                                borderColor: active ? '#000' : 'white'
-                            }" class="text-center pa-1" @click="toggle">
+                                                        background: graphstyle[0],
+                                                        border: '2px solid',
+                                                        borderColor: active ? '#000' : 'white'}" class="text-center pa-1" @click="toggle">
                                                     <v-icon size="35"
-                                                        :style="{ color: graphform === item.name ? '#000' : '#fff' }">{{
-                                item.icon
-                            }}</v-icon>
+                                                        :style="{ color: graphform === item.name ? '#000' : '#fff' }">{{ item.icon}}
+                                                    </v-icon>
                                                 </v-card>
                                             </v-btn>
                                         </v-item>
@@ -130,10 +128,10 @@
                                         <v-card-text class="pa-0 mb-1"
                                             style="color: #000; background-color: #ffff00; border-radius: 20px;"
                                             :style="{ backgroundColor: targetDate === 'date' ? '#b3b300' : '#ffff00' }">
-                                            <v-btn class="py-2 rounded-0" text
+                                            <v-btn class="py-2 rounded-0" text :class="{ 'custom-font': en }"
                                                 style="width: 100%; height: 100%; color: #000;"
                                                 @click="targetDate = 'date'">
-                                                dates
+                                                {{ en ? 'ວັນທີ່' : 'date' }}
                                             </v-btn>
                                         </v-card-text>
                                     </v-col>
@@ -760,6 +758,11 @@ export default {
             width: 1.5,
             i: true,
         };
+    },
+    computed: {
+        en() {
+            return this.$store.state.en;
+        },
     },
     methods: {
         receiveChartData(data, allData) {

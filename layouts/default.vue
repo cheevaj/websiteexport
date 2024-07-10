@@ -15,20 +15,19 @@
               >mdi-alert-circle-outline</v-icon
             >
             <v-card-text class="text-h8 a text-center">
-              <h4>Are you leaving?</h4>
-              <p>
-                Are you sure want to log out ? All your unsaved data will bet
-                lost.
+              <h4 class="custom-font">{{ en ? 'ທ່ານຕ້ອງການອອກຈາກລະບົບບໍ?' : 'Are you leaving?'}}</h4>
+              <p class="custom-font">
+                {{ en ? 'ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການອອກຈາກລະບົບ? ຂໍ້ມູນທັງຫມົດທີ່ບໍ່ໄດ້ບັນທຶກໄວ້ຂອງທ່ານຈະສູນເສຍ.' : 'Are you sure want to log out ? All your unsaved data will bet lost.'}}
               </p>
             </v-card-text>
             <v-divider></v-divider>
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-card-actions>
-                <v-btn color="error" text @click="dialog = false">
-                  cancel
+                <v-btn class="custom-font" color="error" text @click="dialog = false">
+                  {{ en ? 'ຍົກເລີກ' : 'cancel'}}
                 </v-btn>
-                <v-btn color="yellow" @click="logOut"> Getout </v-btn>
+                <v-btn class="custom-font" color="yellow" @click="logOut"> {{ en ? 'ອອກຈາກລະບົບ' : 'Getout'}} </v-btn>
               </v-card-actions>
             </v-card-actions>
           </v-card>
@@ -95,11 +94,11 @@
               @click="openMenuItem('website')"
             >
               <v-card-actions class="pa-0">
-                <v-card-text
+                <v-card-text class="custom-font"
                   :style="{ color: colortext === 'web' ? '#ffff00' : '#000' }"
                 >
                   <v-icon style="bottom: 2px"> mdi-web-sync </v-icon>
-                  Web
+                  {{ en ? 'ເວັບໄຊທ໌' : 'Web'}}
                 </v-card-text>
               </v-card-actions>
             </v-btn>
@@ -120,12 +119,13 @@
             >
               <v-card-actions class="pa-0">
                 <v-card-text
+                  class="custom-font"
                   :style="{
                     color: colortext === 'MenuAll' ? '#ffff00' : '#000',
                   }"
                 >
                   <v-icon style="bottom: 2px"> mdi-layers-triple</v-icon>
-                  Menu
+                  {{ en ? 'ເມນູ' : 'Menu'}}
                 </v-card-text>
               </v-card-actions>
             </v-btn>
@@ -152,17 +152,18 @@
                   >
                     <v-card-actions class="pa-0">
                       <v-card-text
+                        class="custom-font"
                         :style="{
                           color: colortext === 'number' ? '#ffff00' : '#000',
                         }"
                       >
-                        view TICKET
+                        {{ en ? 'ເບີ່ງ TICKET' : 'view TICKET'}}
                       </v-card-text>
                     </v-card-actions>
                   </v-btn>
                 </template>
-                <span class="tooltip" ref="tooltip"
-                  >View or Download TICKET File</span
+                <span class="tooltip custom-font" ref="tooltip"
+                  >{{en ? 'ເບີ່ງ ຫຼື ດາວໂຫຼດໄຟລ໌ TICKET' : 'View or Download TICKET File'}}</span
                 >
               </v-tooltip>
               <v-btn
@@ -175,11 +176,12 @@
               >
                 <v-card-actions class="pa-0">
                   <v-card-text
+                    class="custom-font"
                     :style="{
                       color: colortext === 'about' ? '#ffff00' : '#000',
                     }"
                   >
-                    about us
+                    {{ en ? 'ກ່ຽວກັບພອກເຮົາ' : 'about us' }}
                   </v-card-text>
                 </v-card-actions>
               </v-btn>
@@ -194,11 +196,12 @@
               >
                 <v-card-actions class="pa-0">
                   <v-card-text
+                    class="custom-font"
                     :style="{
                       color: colortext === 'message' ? '#ffff00' : '#000',
                     }"
                   >
-                    messages
+                    {{en ? 'ສົ່ງຂໍ້ຄວາມ' : 'messages'}}
                   </v-card-text>
                 </v-card-actions>
               </v-btn>
@@ -212,11 +215,12 @@
               >
                 <v-card-actions class="pa-0">
                   <v-card-text
+                    class="custom-font"
                     :style="{
                       color: colortext === 'product' ? '#ffff00' : '#000',
                     }"
                   >
-                    Products
+                    {{ en ? 'ສີນຄ້າ' : 'Products' }}
                   </v-card-text>
                 </v-card-actions>
               </v-btn>
@@ -230,11 +234,12 @@
               >
                 <v-card-actions class="pa-0">
                   <v-card-text
+                    class="custom-font"
                     :style="{
                       color: colortext === 'services' ? '#ffff00' : '#000',
                     }"
                   >
-                    Contact us
+                    {{ en ? 'ຕິດຕໍ່ພອກເຮົາ' :'Contact us'}}
                   </v-card-text>
                 </v-card-actions>
               </v-btn>
@@ -251,7 +256,7 @@
                     color: colortext === 'logout' ? '#ffff00' : '#000',
                   }"
                 >
-                  <span>Getout</span><v-icon>mdi-exit-to-app</v-icon>
+                  <span class="custom-font">{{ en ? 'ອອກຈາກລະບົບ' : 'Getout'}}</span><v-icon>mdi-exit-to-app</v-icon>
                 </v-card-text>
               </v-btn>
             </v-card-text>
@@ -328,7 +333,7 @@
                           color: colortext === 'logout' ? '#ffff00' : '#000',
                         }"
                       >
-                        <span>Getout</span><v-icon>mdi-exit-to-app</v-icon>
+                      <span class="custom-font">{{ en ? 'ອອກຈາກລະບົບ' : 'Getout'}}</span><v-icon>mdi-exit-to-app</v-icon>
                       </v-list-item-title>
                     </v-btn>
                   </v-list-item>
@@ -382,7 +387,7 @@
           width="300"
           @mouseleave="openMenuItem('menu')"
         >
-          <v-card-title class="py-2 custom-font">{{en ? 'ເມນູ' : 'Menu'}} </v-card-title>
+          <v-card-title class="py-2 custom-font">{{ en ? 'ເມນູ' : 'Menu'}} </v-card-title>
           <v-divider></v-divider>
           <div v-for="(item, index) in pageMenu" :key="index">
             <v-btn
@@ -418,7 +423,7 @@
       <v-divider style="background-color: #ffff00"></v-divider>
       <v-card-text class="text-left pa-2" style="position: fixed; z-index: 150; bottom: 0px; left: 0px;">
         <Tooltip placement="top" :content=" en ? 'Lao to English' : 'English to Lao'" :delay="600">
-          <Button class="language-button custom-font" @click="toggleLanguage">{{en ? 'ລາວ' : 'English'}}</Button>
+          <Button class="language-button custom-font" @click="toggleLanguage">{{ en ? 'ລາວ' : 'English'}}</Button>
         </Tooltip>
         <!-- <Tooltip v-else placement="top" content="Lao to English" :delay="600">
           <Button class="language-button " @click="toggleLanguage"></Button>

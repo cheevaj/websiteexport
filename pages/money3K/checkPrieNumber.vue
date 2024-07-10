@@ -1,5 +1,5 @@
 <template>
-    <div class="background_color">
+    <div>
       <div style="position: fixed; z-index: 100; right: 1px">
         <v-card-actions class="pa-0">
           <transition name="move-right">
@@ -235,10 +235,10 @@
             this.dataResponse = response.data.map((detail, index) => ({
               index: index + 1,
               MSISDN: detail.MSISDN,
-              Active_Date: detail.Active_Date.substring(0, 4) + '\u00A0/\u00A0' + detail.Active_Date.substring(4,6)+ '\u00A0/\u00A0' + detail.Active_Date.substring(6),
+              Active_Date: detail.Active_Date ? detail.Active_Date.substring(0, 4) + '\u00A0/\u00A0' + detail.Active_Date.substring(4,6)+ '\u00A0/\u00A0' + detail.Active_Date.substring(6) : '',
               Book_detail:detail.Book_detail,
               Date_Booking:detail.Date_Booking,
-              Date_delete_pool:detail.Date_delete_pool,
+              Date_delete_pool:this.formatAdjustDate(detail.Date_delete_pool),
               Sub_status:detail.Sub_status,
               Class:detail.Class,
               // ADJUSTDATE: this.formatAdjustDate(detail.RESPON_DATE),
@@ -256,20 +256,20 @@
           this.loading = false
         }
       },
-      // formatAdjustDate(dateString) {
-      //   const date = new Date(dateString)
-      //   const formattedDate = date
-      //     .toLocaleString('en-US', {
-      //       year: 'numeric',
-      //       month: '2-digit',
-      //       day: '2-digit',
-      //       hour: '2-digit',
-      //       minute: '2-digit',
-      //       second: '2-digit',
-      //     })
-      //     .replace(',', '') // remove comma from the formatted string
-      //   return formattedDate
-      // },
+      formatAdjustDate(dateString) {
+        const date = new Date(dateString)
+        const formattedDate = date
+          .toLocaleString('en-US', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+          })
+          .replace(',', '') // remove comma from the formatted string
+        return formattedDate
+      },
       setSheetHeight() {
         // Get the height of the computer screen
         this.heightPx = window.innerHeight - 190

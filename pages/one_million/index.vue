@@ -23,7 +23,8 @@
                     <Input
                       class="custom-font"
                       v-model="numberPhon"
-                      :placeholder="en ? 'Enter number ( 20789... )' : 'ກະລຸນາປ້ອມເບີໂທລະສັບ (20789... )' "
+                      :placeholder="en ? 'ກະລຸນາປ້ອມເບີໂທລະສັບ (20789... )' : 'Enter number ( 20789... )' "
+                      type="number"
                       clearable
                       style="width: 200px; height: 34px"
                       @keydown.enter="handleSearch"
@@ -44,7 +45,7 @@
                       padding-right: 4px;
                     "
                   >
-                    Search
+                    <h4 class="custom-font">{{en ? 'ຄົ້ນຫາ' : 'Search'}}</h4>
                   </v-btn>
                   <v-btn
                     text
@@ -148,7 +149,6 @@
                   :dataPoint="dataPoint"
                   :numberNull="numberNull"
                   :dataHPackage="dataHPackage"
-                  :dataB_celOne="dataB_celOne"
                   :dataSoXay="dataSoXay"
                   :cutMoney3K="cutMoney3K"
                   :uRegister="uRegister"
@@ -188,7 +188,7 @@ export default {
       dataPoint: {},
       dataCard: [],
       dataHPackage: [],
-      dataB_celOne: [],
+      // dataB_celOne: [], 
       dataSoXay: [],
       dataUser: [],
       uRegister: [],
@@ -221,6 +221,11 @@ export default {
   },
   beforeDestroy() {
     window.removeEventListener('resize', this.setSheetHeight)
+  },
+  computed: {
+    en() {
+      return this.$store.state.en;
+    },
   },
   methods: {
     // receiveSwitchData(
@@ -269,7 +274,7 @@ export default {
       if (Num.length === 10) {
         this.dataResponseAll(Num)
         this.dataOfHQRPackage(Num)
-        this.dataOfBcelone(Num);
+        // this.dataOfBcelone(Num);
         this.numberPhonSend = Num
       } else {
         this.colorMenu = 0
@@ -313,20 +318,20 @@ export default {
         console.error('Error fetching data:', error)
       }
     },
-    async dataOfBcelone(Num) {
-      const num = Number(Num)
-      try {
-        const response = await this.$axios.post(
-          'http://172.28.17.102:8100/show/justbceldata',
-          {
-            telephone: num,
-          }
-        )
-        this.dataB_celOne = response.data && response.data !== 'request is so stupid' ? response.data : [];
-      } catch (error) {
-        console.error('Error fetching data:', error)
-      }
-    },
+    // async dataOfBcelone(Num) {
+    //   const num = Number(Num)
+    //   try {
+    //     const response = await this.$axios.post(
+    //       'http://172.28.17.102:8100/show/justbceldata',
+    //       {
+    //         telephone: num,
+    //       }
+    //     )
+    //     this.dataB_celOne = response.data && response.data !== 'request is so stupid' ? response.data : [];
+    //   } catch (error) {
+    //     console.error('Error fetching data:', error)
+    //   }
+    // },
     async dataResponseAll(Num) {
       // if API get Number is Number type use ' num ', if API get Number is Number type is String use ' Num ' 
       const num = Number(Num)
@@ -383,9 +388,10 @@ export default {
 
         // Update uRegister
         this.uRegister = userRegisterResponse ? userRegisterResponse.data : {}
+        // console.log('user',this.uRegister)
         // Update debtMoney
         this.debtMoney = debtMoneyResponse ? debtMoneyResponse.data : {};
-        console.log('ki',this.debtMoney);
+        // console.log('ki',this.debtMoney);
       } catch (error) {
         // Handle errors for each API call separately if needed
         console.error('Error fetching data:', error)

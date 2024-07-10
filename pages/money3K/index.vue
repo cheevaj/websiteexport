@@ -171,7 +171,7 @@ export default {
           avatar:
             'http://172.28.17.137:7789/Services/asset/images//logo-round.png',
           titleEn:"C'Care Register Package via counter",
-          titleLao:"ສະໝັກແພັກເກັດຜ່ານ C'Care",
+          titleLao:"ລົງທະບຽນແພັກເກັດຂອງ C-Care ຜ່ານທາງເຄົາເຕີ.",
           path: '../money3K/ccareRegisterViacounter',
         },
       ],

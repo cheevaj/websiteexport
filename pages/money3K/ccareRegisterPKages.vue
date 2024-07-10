@@ -1,5 +1,5 @@
 <template>
-  <div class="background_color">
+  <div>
     <div style="position: fixed; z-index: 100; right: 1px">
       <v-card-actions class="pa-0">
         <transition name="move-right">

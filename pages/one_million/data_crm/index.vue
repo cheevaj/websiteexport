@@ -25,7 +25,8 @@
                 </v-card-title>
                 <v-card-text class="pa-0 pt-2 text-h12">
                   <v-card-actions
-                    class="pa-1"
+                    class="pa-1" 
+                    :class="{ 'custom-font': en }"
                     style="
                       color: #ffff;
                       background-color: rgb(0, 230, 0);
@@ -35,36 +36,36 @@
                     <v-icon size="20" color="#ffff" class="pr-2"
                       >mdi-eye</v-icon
                     >
-                    BSS Status:
+                    {{ en ? 'ສະຖານະຂອງ BSS' : 'BSS Status:' }}
                     <v-spacer />
-                    Un know&nbsp;
+                    {{ en ? 'ບໍ່ຮູ້' : 'Un know' }}&nbsp;
                     <v-icon color="#ffff" size="20">mdi-check-circle</v-icon>
                   </v-card-actions>
                   <div v-if="uRegister.length > 0">
                     <div v-for="(item, index) in uRegister" :key="index">
                       <v-card-actions class="pa-1">
                         <v-icon>mdi-cellphone-sound</v-icon>&nbsp;&nbsp;
-                        <span class="text-color custom-font">{{ en ? 'ເບີໂທ' : 'Number' }}</span>:
+                        <span class="text-color custom-font" :class="[{ 'custom-font': en }]" >{{ en ? 'ເບີໂທ' : 'Number' }}</span>:
                         <v-spacer />
                         <h6 class="font_size_14">{{ numberPhonSend }}</h6>
                       </v-card-actions>
                       <v-divider></v-divider>
                       <v-card-actions class="pa-1">
-                        <v-icon>mdi-account</v-icon>&nbsp;&nbsp;<span class="text-color custom-font">{{ en ? 'ຊື່ ແລະ ນາມສະກຸນ' : 'Name' }}</span>:
+                        <v-icon>mdi-account</v-icon>&nbsp;&nbsp;<span class="text-color custom-font" :class="[{ 'custom-font': en }]" >{{ en ? 'ຊື່ ແລະ ນາມສະກຸນ' : 'Name' }}</span>:
                         <v-spacer />
                         <span class="custom-font" >{{ item.Name }}&nbsp;{{ item.Surname }}</span>
                       </v-card-actions>
                       <v-divider></v-divider>
                       <v-card-actions class="pa-1">
-                        <v-icon>mdi-human-male-female</v-icon>&nbsp;&nbsp;<span class="text-color custom-font">{{ en ? 'ເພດ' : 'Gender' }}</span>:
+                        <v-icon>mdi-human-male-female</v-icon>&nbsp;&nbsp;<span class="text-color " :class="{ 'custom-font': en }">{{ en ? 'ເພດ' : 'Gender' }}</span>:
                         <v-spacer />
-                        <span class="custom-font">{{ en ? item.Gender === 'M' ? 'ຊາຍ' : 'ຍີງ' : item.Gender === 'M' ? 'Male' : 'Female' }}</span>
+                        <span :class="{ 'custom-font': en }">{{ en ? item.Gender === 'M' ? 'ຊາຍ' : 'ຍີງ' : item.Gender === 'M' ? 'Male' : 'Female' }}</span>
                       </v-card-actions>
                       <v-divider></v-divider>
                       <v-card-actions class="pa-1">
-                        <v-icon>mdi-image</v-icon>&nbsp;&nbsp;<span class="text-color custom-font">{{ en ? 'ຮູບພາບ' : 'Image' }}</span>:&nbsp;&nbsp;
+                        <v-icon>mdi-image</v-icon>&nbsp;&nbsp;<span class="text-color" :class="{ 'custom-font': en }">{{ en ? 'ຮູບພາບ' : 'Image' }}</span>:&nbsp;&nbsp;
                         <span v-if="!showImage">
-                          {{ truncateText(item.Photo, 25) }}</span
+                          {{ truncateText(item.Photo, 20) }}</span
                         >
                         <v-spacer />
                         <v-icon
@@ -90,7 +91,8 @@
                         @click="showData('image')"
                       >
                         <v-card
-                          v-if="showImage"
+                        v-if="showImage"
+                          outlined
                           class="pa-0"
                           style="height: 300px; width: 270px"
                         >
@@ -103,22 +105,21 @@
                   <div v-else class="pa-0">
                     <v-card-actions class="pa-1">
                       <v-icon>mdi-cellphone-sound</v-icon>&nbsp;&nbsp;<span
-                        class="text-color"
-                        >Number</span
-                      >:
+                        class="text-color" :class="{ 'custom-font': en }"
+                        >{{ en ? 'ເລກເບີ:' : 'Number:' }}</span>
                       <v-spacer />
                       <h6 class="font_size_14">{{ numberPhonSend }}</h6>
                     </v-card-actions>
-                    <v-card-text class="pt-2 text-center" style="color:rgb(166, 166, 166);" >
-                      <h5>
-                        Number is not register 
+                    <v-card-text class="pt-2 text-center" :class="{ 'custom-font': en }" style="color:rgb(166, 166, 166);" >
+                      <h5 :class="{ 'custom-font': en }" >
+                        {{ en ? 'ເບີນີ້ຍັງບໍ່ໄດ້ລົງທະບຽນ' : 'Number is not register' }} 
                       </h5> 
                     </v-card-text>
                     <v-divider></v-divider>
                   </div>
                   <v-card-actions class="pa-1">
                     <v-icon>mdi-cash-multiple</v-icon>&nbsp;&nbsp;
-                    <span class="text-color">Credit limit:</span>
+                    <span class="text-color" :class="{ 'custom-font': en }"> {{ en ? 'Credit limit:' : 'Credit limit:' }} </span>
                     <v-spacer />
                     <span>{{ formatResultDesc(debtMoney.Credit_limit) }}</span>
                   </v-card-actions>
@@ -139,14 +140,14 @@
                   <v-divider></v-divider>
                   <v-card-actions class="pa-1">
                     <v-icon>mdi-network-strength-2</v-icon>&nbsp;&nbsp;
-                    <span class="text-color custom-font">{{ en ? 'ຊື່ອິນເຕີເນັດ:' : 'Network name:' }}</span>
+                    <span class="text-color" :class="{ 'custom-font': en }">{{ en ? 'ຊື່ອິນເຕີເນັດ:' : 'Network name:' }}</span>
                     <v-spacer />
                     Null
                   </v-card-actions>
                   <v-divider></v-divider>
                   <v-card-actions class="pa-1">
                     <v-icon>mdi-network-pos</v-icon>&nbsp;&nbsp;
-                    <span class="text-color custom-font">{{ en ? 'ປະເພດເນັດ:' : 'Product Type:' }}</span>
+                    <span class="text-color" :class="{ 'custom-font': en }">{{ en ? 'ປະເພດເນັດ:' : 'Product Type:' }}</span>
                     <v-spacer />
                     Null
                   </v-card-actions>
@@ -155,6 +156,7 @@
                 <v-card-text class="pa-0 pt-2 text-h12">
                   <v-card-actions
                     class="pa-1"
+                    :class="{ 'custom-font': en }"
                     style="
                       color: #ffff;
                       background-color: red;
@@ -162,21 +164,20 @@
                     "
                   >
                     <v-icon size="20" color="#ffff" class="pr-2"
-                      >mdi-eye</v-icon
-                    >
-                    CSB Status:
+                      >mdi-eye</v-icon>
+                    {{ en ? 'ສະຖານະຂອງ CSB:' : 'CSB Status:' }}
                     <v-spacer />
-                    Idle&nbsp;
+                    {{ en ? 'ບໍ່ເຮັດວຽກ' : 'Idle' }}&nbsp;
                     <v-icon color="#ffff" size="20">mdi-close-circle</v-icon>
                   </v-card-actions>
                   <v-card-actions class="pa-1 mt-1">
-                    <span class="text-color"> Offering ID: </span>
+                    <span class="text-color" :class="{ 'custom-font': en }"> {{ en ? 'ລະຫັດ Offering:' : 'Offering ID:' }} </span>
                     <v-spacer />
                     Null
                   </v-card-actions>
                   <v-divider></v-divider>
                   <v-card-actions class="pa-1">
-                    <span class="text-color"> Offering Name: </span>
+                    <span class="text-color" :class="{ 'custom-font': en }"> {{ en ? 'ຊື່ Offering:' : 'Offering Name:' }} </span>
                     <v-spacer />
                     Null
                   </v-card-actions>
@@ -185,6 +186,7 @@
                 <v-card-text class="pa-0 pt-2 text-h12">
                   <v-card-actions
                     class="pa-1"
+                    :class="{ 'custom-font': en }"
                     style="
                       color: #ffff;
                       background-color: rgb(0, 230, 0);
@@ -192,22 +194,21 @@
                     "
                   >
                     <v-icon size="20" color="#ffff" class="pr-2"
-                      >mdi-eye</v-icon
-                    >
-                    BlackList Status:
+                      >mdi-eye</v-icon>
+                    {{ en ? 'ສະຖານະຂອງບັນຊີດໍາ: ' : 'BlackList Status:' }}
                     <v-spacer />
                     No&nbsp;
                     <v-icon color="#ffff" size="20">mdi-close-circle</v-icon>
                   </v-card-actions>
                   <v-card-actions class="pa-1">
-                    <span class="text-color"> Main Point: </span>
+                    <span class="text-color" :class="{ 'custom-font': en }"> {{ en ? 'ຄະແນນຫຼັກ:' : 'Main Point:' }} </span>
                     <v-spacer />
                     <!-- {{ (this.dataPoint.MainPoint) !== "" ? this.dataPoint.MainPoint : 0 }} -->
                     0
                   </v-card-actions>
                   <v-divider></v-divider>
                   <v-card-actions class="pa-1">
-                    <span class="text-color"> Bonus Point: </span>
+                    <span class="text-color" :class="{ 'custom-font': en }"> {{ en ? 'ຄະແນນໂບນັດ:' : 'Bonus Point:' }} </span>
                     <v-spacer />
                     <!-- {{ this.dataPoint.BonusPoint !== "" ? this.dataPoint.BonusPoint : 0  }} -->
                     0
@@ -223,10 +224,10 @@
                     border-radius: 5px;
                   "
                 >
-                  <h5>Value Add Service</h5>
+                  <h5 :class="{ 'custom-font': en }">{{ en ? 'ການບໍລິການເພີ່ມມູນຄ່າ' : 'Value Add Service' }}</h5>
                 </v-card-title>
                 <v-card-actions class="pa-1">
-                  <span class="text-color"> Main Point: </span>
+                  <span class="text-color" :class="{ 'custom-font': en }"> {{ en ? 'ຄະແນນຫຼັກ:' : 'Main Point:' }} </span>
                   <v-spacer />
                   {{
                     this.dataPoint.MainPoint !== ''
@@ -236,7 +237,7 @@
                 </v-card-actions>
                 <v-divider></v-divider>
                 <v-card-actions class="pa-1">
-                  <span class="text-color"> Bonus Point: </span>
+                  <span class="text-color" :class="{ 'custom-font': en }"> {{ en ? 'ຄະແນນໂບນັດ:' : 'Bonus Point:' }} </span>
                   <v-spacer />
                   {{
                     this.dataPoint.BonusPoint !== ''
@@ -246,7 +247,7 @@
                 </v-card-actions>
                 <v-divider></v-divider>
                 <v-card-actions class="pa-1">
-                  <span class="text-color"> Total Point: </span>
+                  <span class="text-color" :class="{ 'custom-font': en }"> {{ en ? 'ຄະແນນທັງໝົດ:' : 'Total Point:' }} </span>
                   <v-spacer />
                   {{ this.dataPoint.Total !== '' ? this.dataPoint.Total : 0 }}
                 </v-card-actions>
@@ -256,23 +257,24 @@
                 class="mt-2 px-2 py-0"
                 style="background-color: rgb(255, 255, 179); border-radius: 5px"
               >
-                <h5>Cuts Money 3000 kip</h5>
+                <h5 :class="{ 'custom-font': en }">{{ en ? 'ການຕັດເງີນ 3000 ກິບ' : 'Cut Money 3000 kip' }}</h5>
               </v-card-title>
               <v-card-text class="pa-0 pt-2 text-h12">
                 <v-card-actions class="rounded-0 px-1 py-0" width="100%">
                   <span
                     ><v-icon color="#737373">mdi-calendar-check</v-icon></span
-                  >&nbsp;&nbsp;<span class="text-color"> Latest Cut: </span>
+                  >&nbsp;&nbsp;<span class="text-color" :class="{ 'custom-font': en }"> {{ en ?'ຕັດເງີນຫຼ້າສຸດ:' : 'Latest Cut:' }} </span>
                   <v-spacer />
                   <h6
-                    class="font_size_12"
+                    class="font_size_12" 
+                    :class="{ 'custom-font': en }"
                     :style="{
                       color: cutMoney3K
                         ? 'rgb(38, 38, 38)'
                         : 'rgb(115, 115, 115)',
                     }"
                   >
-                    {{ cutMoney3K ? cutMoney3K : 'Not data' }}
+                    {{ cutMoney3K ? cutMoney3K : `${ en ? 'ຍັງບໍ່ມີຂໍ້ມູນ' : 'Not data'}` }}
                   </h6>
                 </v-card-actions>
                 <v-divider></v-divider>
@@ -283,33 +285,33 @@
                 class="px-2 py-0"
                 style="background-color: rgb(255, 255, 179); border-radius: 5px"
               >
-                <h5>Life Cycle</h5>
+                <h5 :class="{ 'custom-font': en }">{{ en ? 'ວົງຈອນຊີວິດ' : 'Life Cycle' }}</h5>
               </v-card-title>
               <v-card outlined class="my-2 rounded-0">
                 <v-card-actions class="pa-1">
-                  <span class="text-color"> First Active: </span>
+                  <span class="text-color" :class="{ 'custom-font': en }"> {{ en ? 'ເປີດໃຊ້ງານທໍາອິດ:' : 'First Active:' }} </span>
                   <v-spacer />
                   20/03/2023 23:24:34
                 </v-card-actions>
                 <v-divider></v-divider>
                 <v-card-actions class="pa-1">
-                  <span class="text-color"> Register Date: </span>
+                  <span class="text-color" :class="{ 'custom-font': en }"> {{ en ? 'ວັນທີ່ສະໝັກ:' : 'Register Date:' }} </span>
                   <v-spacer />
                   24/04/2037 00:00:00
                 </v-card-actions>
                 <v-divider></v-divider>
                 <v-card-actions class="pa-1">
-                  <span class="text-color"> Active Stop: </span>
+                  <span class="text-color" :class="{ 'custom-font': en }"> {{ en ? 'ປິດໃຊ້ງານ:' : 'Active Stop:' }} </span>
                   <v-spacer />
                 </v-card-actions>
                 <v-divider></v-divider>
                 <v-card-actions class="pa-1">
-                  <span class="text-color"> Suspend Stop: </span>
+                  <span class="text-color" :class="{ 'custom-font': en }"> {{ en ? 'ຢຸດການໂຈະໃຊ້ງານ:' : 'Suspend Stop:' }} </span>
                   <v-spacer />
                 </v-card-actions>
                 <v-divider></v-divider>
                 <v-card-actions class="pa-1">
-                  <span class="text-color"> Disable Stop: </span>
+                  <span class="text-color" :class="{ 'custom-font': en }"> {{ en ? 'ຢຸດການປິດໃຊ້ງານ:' : 'Disable Stop:' }} </span>
                   <v-spacer />
                 </v-card-actions>
                 <v-divider></v-divider>
@@ -318,18 +320,18 @@
                 class="px-2 py-0"
                 style="background-color: rgb(255, 255, 179); border-radius: 5px"
               >
-                <h5>Mobile Service Data</h5>
+                <h5 :class="{ 'custom-font': en }">{{ en ? 'ຂໍ້ມູນການບໍລິການມືຖື' : 'Mobile Service Data' }}</h5>
               </v-card-title>
               <v-card outlined class="mt-2 rounded-0">
                 <v-card-actions class="pa-1">
                   <span class="text-color"> 5G: </span>
                   <v-spacer />
                   <v-card-actions class="pa-0">
-                    <span v-if="valueSwitch5G" class="text-color">Off</span>
-                    <span v-else>On</span>
+                    <span v-if="valueSwitch5G" class="text-color" :class="{ 'custom-font': en }">{{ en ? 'ເປີດ' : 'Off' }}</span>
+                    <span v-else :class="{ 'custom-font': en }">{{ en ? 'ປິດ' : 'On '}}</span>
                     &nbsp;&nbsp;
+                    <!-- disabled -->
                     <i-Switch
-                      disabled
                       v-model="valueSwitch5G"
                       size="small"
                       :before-change="
@@ -369,11 +371,10 @@
                   <span class="text-color"> 4G: </span>
                   <v-spacer />
                   <v-card-actions class="pa-0">
-                    <span v-if="valueSwitch4G" class="text-color">Off</span>
-                    <span v-else>On</span>
+                    <span v-if="valueSwitch4G" class="text-color" :class="{ 'custom-font': en }">{{ en ? 'ເປີດ' : 'Off' }}</span>
+                    <span v-else :class="{ 'custom-font': en }">{{ en ? 'ປິດ' : 'On' }}</span>
                     &nbsp;&nbsp;
                     <i-Switch
-                      disabled
                       v-model="valueSwitch4G"
                       size="small"
                       :before-change="
@@ -393,11 +394,10 @@
                   <span class="text-color"> 3G: </span>
                   <v-spacer />
                   <v-card-actions class="pa-0">
-                    <span v-if="valueSwitch4G" class="text-color">Off</span>
-                    <span v-else>On</span>
+                    <span v-if="valueSwitch3G" class="text-color" :class="{ 'custom-font': en }">{{ en ? 'ເປີດ' : 'Off' }}</span>
+                    <span v-else :class="{ 'custom-font': en }">{{ en ? 'ປິດ' : 'On '}}</span>
                     &nbsp;&nbsp;
                     <i-Switch
-                      disabled
                       v-model="valueSwitch3G"
                       size="small"
                       :before-change="
@@ -417,11 +417,10 @@
                   <span class="text-color"> RBT: </span>
                   <v-spacer />
                   <v-card-actions class="pa-0">
-                    <span v-if="valueSwitch4G" class="text-color">Off</span>
-                    <span v-else>On</span>
+                    <span v-if="valueSwitchRBT" class="text-color" :class="{ 'custom-font': en }">{{ en ? 'ເປີດ' : 'Off' }}</span>
+                    <span v-else :class="{ 'custom-font': en }">{{ en ? 'ປິດ' : 'On' }}</span>
                     &nbsp;&nbsp;
                     <i-Switch
-                      disabled
                       v-model="valueSwitchRBT"
                       size="small"
                       :before-change="
@@ -436,11 +435,10 @@
                   <span class="text-color"> Voice IR: </span>
                   <v-spacer />
                   <v-card-actions class="pa-0">
-                    <span v-if="valueSwitch4G" class="text-color">Off</span>
-                    <span v-else>On</span>
+                    <span v-if="valueSwitchVoiceIR" class="text-color" :class="{ 'custom-font': en }">{{ en ? 'ເປີດ' : 'Off' }}</span>
+                    <span v-else :class="{ 'custom-font': en }">{{ en ? 'ປິດ' : 'On '}}</span>
                     &nbsp;&nbsp;
                     <i-Switch
-                      disabled
                       v-model="valueSwitchVoiceIR"
                       size="small"
                       :before-change="
@@ -460,11 +458,10 @@
                   <span class="text-color"> Data IR: </span>
                   <v-spacer />
                   <v-card-actions class="pa-0">
-                    <span v-if="valueSwitch4G" class="text-color">Off</span>
-                    <span v-else>On</span>
+                    <span v-if="valueSwitchDataIR" class="text-color" :class="{ 'custom-font': en }">{{ en ? 'ເປີດ' : 'Off' }}</span>
+                    <span v-else :class="{ 'custom-font': en }">{{ en ? 'ປິດ' : 'On '}}</span>
                     &nbsp;&nbsp;
                     <i-Switch
-                      disabled
                       v-model="valueSwitchDataIR"
                       size="small"
                       :before-change="
@@ -484,18 +481,17 @@
                   <span class="text-color"> SMS: </span>
                   <v-spacer />
                   <v-card-actions class="pa-0">
-                    <span v-if="valueSwitch4G" class="text-color">Off</span>
-                    <span v-else>On</span>
+                    <span v-if="valueSwitchSMS" class="text-color" :class="{ 'custom-font': en }">{{ en ? 'ເປີດ' : 'Off' }}</span>
+                    <span v-else :class="{ 'custom-font': en }">{{ en ? 'ປິດ' : 'On '}}</span>
                     &nbsp;&nbsp;
                     <i-Switch
-                      disabled
                       v-model="valueSwitchSMS"
                       size="small"
                       :before-change="
                         () =>
                           handleBeforeChange(
                             'System SMS',
-                            'MSM',
+                            'SMS',
                             valueSwitchSMS
                           )
                       "
@@ -512,7 +508,7 @@
                     border-radius: 5px;
                   "
                 >
-                  <h5>Applications</h5>
+                  <h5 :class="{ 'custom-font': en }">{{ en ? 'ແອັບ' : 'Applications' }}</h5>
                 </v-card-title>
                 <v-card outlined class="my-2 rounded-0">
                   <v-card-actions class="pa-1">
@@ -568,7 +564,7 @@
             class="px-2 py-0"
             style="background-color: rgb(255, 255, 179); border-radius: 5px"
           >
-            <h5>Bill Query</h5>
+            <h5 :class="{ 'custom-font': en }">{{ en ? 'ຂໍ້ມູນຂອງໃບບີນ' : 'Bill Query' }}</h5>
           </v-card-title>
           <div class="text-center mt-2" width="100%">
             <!-- <span style="color: #737373" class="material-icons"
@@ -588,7 +584,7 @@
                 >
                   <v-icon style="color: rgb(102, 102, 102)"
                     >mdi-signal-cellular-3</v-icon
-                  >&nbsp;<span class="text-color">Packages:</span>
+                  >&nbsp;<span class="text-color" :class="[{ 'custom-font': en }, { 'font_size_14': en }]">{{ en ? 'ຂໍ້ມູນແພັກເກັດ:' : 'Data Packages:' }}</span>
                   <v-spacer />
                   <span class="font_size_12">
                     <div
@@ -609,8 +605,8 @@
                 <v-divider></v-divider>
                 <v-card-actions class="pa-1">
                   <v-icon>mdi-currency-usd</v-icon>&nbsp;&nbsp;<span
-                    class="text-color"
-                    >Transfer:</span
+                    class="text-color" :class="{ 'custom-font': en }"
+                    >{{ en ? 'ການໂອນ:' : 'Transfer:' }}</span
                   >
                   <v-spacer />
                   0
@@ -618,8 +614,8 @@
                 <v-divider></v-divider>
                 <v-card-actions class="pa-1">
                   <v-icon>mdi-controller</v-icon>&nbsp;&nbsp;<span
-                    class="text-color"
-                    >Game:
+                    class="text-color" :class="{ 'custom-font': en }"
+                    >{{ en ? 'ເກມ:' : 'Game:' }}
                   </span>
                   <v-spacer />
                   0
@@ -627,8 +623,8 @@
                 <v-divider></v-divider>
                 <v-card-actions class="pa-1">
                   <v-icon>mdi-thumbs-up-down</v-icon>&nbsp;&nbsp;<span
-                    class="text-color"
-                    >Vote:</span
+                    class="text-color" :class="{ 'custom-font': en }"
+                    >{{ en ? 'ລົງຄະແນນສຽງ:' : 'Vote:' }}</span
                   >
                   <v-spacer />
                   0
@@ -640,8 +636,8 @@
               <v-card outlined class="my-2 rounded-0">
                 <v-card-actions class="pa-1">
                   <v-icon>mdi-phone-in-talk</v-icon>&nbsp;&nbsp;<span
-                    class="text-color"
-                    >Call:</span
+                    class="text-color" :class="{ 'custom-font': en }"
+                    >{{ en ? 'ໂທ:' : 'Call:' }}</span
                   >
                   <v-spacer />
                   0
@@ -658,9 +654,8 @@
                 <v-divider></v-divider>
                 <v-card-actions class="pa-1">
                   <v-icon>mdi-credit-card-plus-outline</v-icon>&nbsp;&nbsp;<span
-                    class="text-color"
-                    >Up money:</span
-                  >
+                    class="text-color" :class="{ 'custom-font': en }"
+                    >{{ en ? 'ຂື້ນເງີນ:' : 'Up money:'}}</span>
                   <v-spacer />
                   0
                 </v-card-actions>
@@ -704,9 +699,8 @@
                 <v-divider></v-divider>
                 <v-card-actions class="pa-1">
                   <v-icon>mdi-devices</v-icon>&nbsp;&nbsp;<span
-                    class="text-color"
-                    >Other:</span
-                  >
+                    class="text-color" :class="{ 'custom-font': en }"
+                    >{{ en ? 'ອື່ນໆ:' : 'Other:' }}</span>
                   <v-spacer />
                   0
                 </v-card-actions>
@@ -719,7 +713,7 @@
               class="pt-0 pb-0 px-12 mb-2 mt-1 text-center"
               style="background-color: #ffff00"
             >
-              <h4>Data of 3 Month</h4>
+              <h4 :class="{ 'custom-font': en }">{{ en ? 'ຂໍ້ມູນໄລຍະ 3 ເດືອນ' : 'Data of 3 Month' }}</h4>
             </v-card-text>
             <v-row>
               <v-col cols="6" class="pr-0 py-1">
@@ -730,7 +724,7 @@
                     border-radius: 5px;
                   "
                 >
-                  <h5>Data Package</h5>
+                  <h5 :class="{ 'custom-font': en }">{{ en ? 'ຂໍ້ມູນແພັກເກັດ' : 'Data Package' }}</h5>
                 </v-card-title>
                 <v-card-text class="pa-0 pt-2 text-h12">
                   <v-btn
@@ -741,7 +735,7 @@
                     @click="showData('Data Package')"
                   >
                     <v-icon color="#737373">mdi-network-strength-3</v-icon
-                    >&nbsp;&nbsp;<span class="text-color">Data Package:</span>
+                    >&nbsp;&nbsp;<span class="text-color" :class="[{ 'custom-font': en }, { 'font_size_14': en }]">{{ en ? 'ຂໍ້ມູນແພັກເກັດ:' : 'Data Package:' }}</span>
                     <v-spacer />
                     <div
                       class="px-2 py-1"
@@ -767,8 +761,8 @@
                   >
                     <span style="color: #737373" class="material-icons-sharp"
                       >account_tree</span
-                    >&nbsp;&nbsp;<span class="text-color">
-                      Package History:
+                    >&nbsp;&nbsp;<span class="text-color" :class="[{ 'custom-font': en }, { 'font_size_14': en }]">
+                      {{ en ? 'ປະຫວັດແພັກເກັດ:' : 'Package History:' }}
                     </span>
                     <v-spacer />
                     <div
@@ -794,9 +788,8 @@
                     @click="showData('Buy Data Package')"
                   >
                     <v-icon color="#737373">mdi-store</v-icon>&nbsp;&nbsp;<span
-                      class="text-color"
-                      >Buy Data Package:</span
-                    >
+                      class="text-color" :class="[{ 'custom-font': en }, { 'font_size_14': en }]"
+                      >{{ en ? 'ຂໍ້ມູນຊື້ເເພັກເກັດ:' : 'Buy Data Package:' }}</span>
                     <v-spacer />
                     <div
                       class="px-2 py-1"
@@ -820,9 +813,8 @@
                     @click="showData('Special Package')"
                   >
                     <v-icon color="#737373">mdi-text-box-check-outline</v-icon
-                    >&nbsp;&nbsp;<span class="text-color"
-                      >Special Package:</span
-                    >
+                    >&nbsp;&nbsp;<span class="text-color" :class="[{ 'custom-font': en }, { 'font_size_14': en }]"
+                      >{{ en ? 'ເເພັກເກັດພີເສດ:' : 'Special Package:' }}</span>
                     <v-spacer />
                     <div
                       class="px-2 py-1"
@@ -846,7 +838,7 @@
                     border-radius: 5px;
                   "
                 >
-                  <h5>Banking</h5>
+                  <h5 :class="{ 'custom-font': en }">{{ en ? 'ທະນາຄານ' : 'Banking' }}</h5>
                 </v-card-title>
                 <v-card-text class="pa-0 pt-2 text-h12">
                   <v-btn
@@ -857,9 +849,8 @@
                     @click="showData('Borrow and cut Money')"
                   >
                     <v-icon color="#737373">mdi-currency-usd</v-icon
-                    >&nbsp;&nbsp;<span class="text-color"
-                      >Borrow and cut Money:</span
-                    >
+                    >&nbsp;&nbsp;<span class="text-color" :class="[{ 'custom-font': en }, { 'font_size_14': en }]"
+                      >{{ en ? 'ຢືມ ແລະ ຕັດເງິນ:' : 'Borrow and cut Money:' }}</span>
                     <v-spacer />
                     <div
                       class="px-2 py-1"
@@ -883,9 +874,8 @@
                     @click="showData('Topup and M - Topup')"
                   >
                     <v-icon color="#737373">mdi-plus-box-multiple</v-icon
-                    >&nbsp;&nbsp;<span class="text-color"
-                      >Topup and M-Topup:</span
-                    >
+                    >&nbsp;&nbsp;<span class="text-color" :class="[{ 'custom-font': en }, { 'font_size_14': en }]"
+                      >{{ en ? 'ເຕີມເງິນ ເເລະ M-ເຕີມເງິນ:' : 'Topup and M-Topup:' }}</span>
                     <v-spacer />
                     <div
                       class="px-2 py-1"
@@ -910,7 +900,7 @@
                   >
                     <span style="color: #737373" class="material-icons-sharp"
                       >local_atm</span
-                    >&nbsp;&nbsp;<span class="text-color">Topup Banking:</span>
+                    >&nbsp;&nbsp;<span class="text-color" :class="[{ 'custom-font': en }, { 'font_size_14': en }]">{{ en ? 'ເຕີມເງິນຜ່ານທະນາຄານ:' : 'Topup Banking:'}}</span>
                     <v-spacer />
                     <div
                       class="px-2 py-1"
@@ -934,7 +924,7 @@
                     @click="showData('Payment')"
                   >
                     <v-icon color="#737373">mdi-currency-usd-off</v-icon
-                    >&nbsp;&nbsp;<span class="text-color">Payment:</span>
+                    >&nbsp;&nbsp;<span class="text-color" :class="[{ 'custom-font': en }, { 'font_size_14': en }]">{{ en ? 'ການຈ່າຍເງິນ:' : 'Payment:' }}</span>
                     <v-spacer />
                     <div
                       class="px-2 py-1"
@@ -950,7 +940,7 @@
                     </div>
                   </v-btn>
                   <v-divider></v-divider>
-                  <v-btn
+                  <!-- <v-btn
                     class="rounded-0 px-1 py-0"
                     width="100%"
                     small
@@ -964,7 +954,7 @@
                           src="~/static/bcelone.png"
                           alt="John"
                         /> </v-avatar></span
-                    >&nbsp;&nbsp;<span class="text-color"> BCel-One </span>
+                    >&nbsp;&nbsp;<span class="text-color"> BCel-One: </span>
                     <v-spacer />
                     <div
                       class="py-1"
@@ -980,7 +970,7 @@
                       {{ dataB_celOne.length }}
                     </div>
                   </v-btn>
-                  <v-divider></v-divider>
+                  <v-divider></v-divider> -->
                   <v-btn
                     class="rounded-0 px-1 py-0"
                     width="100%"
@@ -990,7 +980,7 @@
                     @click="showData('Soxay-App')"
                   >
                     <span><v-icon color="#737373">mdi-weight-gram</v-icon></span
-                    >&nbsp;&nbsp;<span class="text-color"> Soxay-App </span>
+                    >&nbsp;&nbsp;<span class="text-color"> Soxay-App: </span>
                     <v-spacer />
                     <div
                       class="py-1"
@@ -1028,8 +1018,8 @@
                   >
                     <span
                       ><v-icon color="#737373">mdi-text-box-plus</v-icon></span
-                    >&nbsp;&nbsp;<span class="text-color">
-                      History Top-up
+                    >&nbsp;&nbsp;<span class="text-color" :class="[{ 'custom-font': en }, { 'font_size_14': en }]">
+                      {{ en ? 'ປະຫວັດການເຕີມເງີນ' : 'History Top-up' }}
                       {{
                         '(' +
                         monthAndYear().substring(0, 4) +
@@ -1064,13 +1054,13 @@
                     border-radius: 5px;
                   "
                 >
-                  <h5>Game</h5>
+                  <h5 :class="{ 'custom-font': en }">{{ en ? 'ເກມ' : 'Game' }}</h5>
                 </v-card-title>
                 <v-card outlined class="pa-0 my-2 text-h12 rounded-0">
                   <v-card-actions class="pa-1">
                     <v-icon>mdi-controller</v-icon>&nbsp;&nbsp;<span
                       class="text-color"
-                      >UnSubscribe Game:</span
+                      >{{ en ? 'ເລີກຕິດຕາມເກມ:' : 'Unsubscribe Game:' }}</span
                     >
                     <v-spacer />
                   </v-card-actions>
@@ -1078,7 +1068,8 @@
                   <v-card-actions class="pa-1">
                     <v-icon>mdi-controller-off</v-icon>&nbsp;&nbsp;<span
                       class="text-color"
-                      >Cancel the Game Service:</span
+                      :class="{ 'custom-font': en }"
+                      >{{ en ? 'ຍົກເລີກການບໍລິການເກມ:' : 'Cancel the Game Service:' }}</span
                     >
                     <v-spacer />
                   </v-card-actions>
@@ -1091,7 +1082,7 @@
                     border-radius: 5px;
                   "
                 >
-                  <h5>Other</h5>
+                  <h5 :class="{ 'custom-font': en }">{{ en ? 'ອື່ນໆ' : 'Other' }}</h5>
                 </v-card-title>
                 <v-card outlined class="pa-0 my-2 text-h12 rounded-0">
                   <v-btn
@@ -1102,8 +1093,8 @@
                     @click="showData('History changes')"
                   >
                     <v-icon>mdi-notification-clear-all</v-icon>&nbsp;<span
-                      class="text-color"
-                      >History changes:</span
+                      class="text-color" :class="[{ 'custom-font': en }, { 'font_size_14': en }]"
+                      >{{ en ? 'ປະຫວັດການປ່ຽນແປງ:' : 'History changes:' }}</span
                     >
                     <v-spacer />
                     <div
@@ -1129,7 +1120,7 @@
                   >
                     <v-icon style="color: rgb(102, 102, 102)"
                       >mdi-message-processing</v-icon
-                    >&nbsp;<span class="text-color">SMS Ticket:</span>
+                    >&nbsp;<span class="text-color" :class="{ 'custom-font': en }">{{ en ? 'SMS Ticket:' : 'SMS Ticket:' }}</span>
                     <v-spacer />
                     <div
                       class="px-2 py-1"
@@ -1181,7 +1172,8 @@
                   <v-card-actions class="pa-1">
                     <v-icon>mdi-alert-circle</v-icon>&nbsp;&nbsp;<span
                       class="text-color"
-                      >Information:</span
+                      :class="{ 'custom-font': en }"
+                      >{{ en ? 'ຂໍ້ມູນ:' : 'Information:' }}</span
                     >
                     <v-spacer />
                   </v-card-actions>
@@ -1189,7 +1181,8 @@
                   <v-card-actions class="pa-1">
                     <v-icon>mdi-backup-restore</v-icon>&nbsp;&nbsp;<span
                       class="text-color"
-                      >Reset Sim:</span
+                      :class="{ 'custom-font': en }"
+                      >{{ en ? 'ຣີເຊັດຊີນ:' : 'Reset Sim:' }}</span
                     >
                     <v-spacer />
                   </v-card-actions>
@@ -1233,8 +1226,8 @@
                   v-if="text !== 'image'"
                   class="pa-0 BK_color_YL color_Iconclose scrollbar"
                 >
-                  <v-card-title class="text-h6 py-1">
-                    Privacy Policy
+                  <v-card-title class="py-1" :class="{ 'custom-font': en }">
+                    {{ en ? 'ຂໍ້ມູນທັງໝົດ' : 'All information' }}
                   </v-card-title>
                   <v-spacer />
                   <v-btn
@@ -1265,10 +1258,10 @@
                     v-else-if="text === 'History Top-up'"
                     :dataCCare="dataCCare"
                   />
-                  <BCelOne
+                  <!-- <BCelOne
                     v-else-if="text === 'BCel-One'"
                     :dataB_celOne="dataB_celOne"
-                  />
+                  /> -->
                   <SoXayApp
                     v-else-if="text === 'Soxay-App'"
                     :dataSoXay="dataSoXay"
@@ -1311,13 +1304,13 @@
         class="text-center"
         style="display: flex; flex-direction: column; justify-content: center"
       >
-        <h3>Enter your number phone.</h3>
+        <h3 :class="{ 'custom-font': en }">{{ en ? 'ກະລຸນາປ້ອມເບີໂທລະສັບ' : 'Enter your number phone.' }}</h3>
         <br />
         <v-icon size="85" color="rgb(128, 128, 0)"
           >mdi-monitor-dashboard</v-icon
         >
         <br />
-        <h2><span style="color: rgb(255, 255, 0)">CRM</span> data not found</h2>
+        <h2><span :class="{ 'custom-font': en }" style="color: rgb(255, 255, 0)">CRM</span> {{ en ? 'ບໍ່ມີຂໍ້ມູນ' : 'data not found' }}</h2>
       </v-card>
     </v-card-text>
   </div>
@@ -1325,7 +1318,7 @@
 <script>
 import DataSet from '../data_crm/dataSet'
 import CCareTopUp from '../data_crm/ccaretopup'
-import BCelOne from '../data_crm/bCelone'
+// import BCelOne from '../data_crm/bCelone'
 import SoXayApp from '../data_crm/soXayApp'
 export default {
   middleware: 'auth',
@@ -1334,7 +1327,7 @@ export default {
     numberPhonSend: String,
     dataPoint: Object,
     dataHPackage: Array,
-    dataB_celOne: Array,
+    // dataB_celOne: Array,
     numberNull: Boolean,
     dataSoXay: Array,
     cutMoney3K: String,
@@ -1344,7 +1337,7 @@ export default {
   components: {
     DataSet,
     CCareTopUp,
-    BCelOne,
+    // BCelOne,
     SoXayApp,
   },
   data() {
@@ -1401,7 +1394,7 @@ export default {
       return new Promise((resolve) => {
         this.$Modal.confirm({
           title,
-          content: status ? 'Unable ' + content : 'Enable ' + content,
+          content: status ? `<span class="custom-font">${ this.en ? 'ປິດໃຊ້ງານ' : 'Deactivate'}</span>` + '\u00A0' + content : `<span class="custom-font">${ this.en ? 'ເປິດໃຊ້ງານ' : 'Enable'}</span>` + '\u00A0' + content,
           onOk: resolve,
         })
       })

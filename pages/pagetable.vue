@@ -30,7 +30,7 @@
               <div style="display: fixed; align-items: start" @click="expand = false">
                 <v-icon style="color: #ffff00">mdi-tray-arrow-up</v-icon>
               </div>
-              <div style="color: #ffff00" @click="expand = false">Download</div>
+              <div :class="{ 'custom-font': en }" style="color: #ffff00" @click="expand = false">{{ en ? 'ດາວໂຫຼດ' : 'Download' }}</div>
             </v-btn>
           </v-card>
         </v-expand-x-transition>
@@ -70,7 +70,7 @@
                       PDF</v-card-text>
                   </v-btn>
                 </template>
-                <span>PDF can not download</span>
+                <span :class="{ 'custom-font': en }">{{ en ? 'PDF ຍັງບໍ່ສາມາດດາວໂຫລດໄດ້' : 'PDF can not download' }}</span>
               </v-tooltip>
             </v-col>
           </v-card>
@@ -94,8 +94,8 @@
                   </v-btn>
                   <v-card-title>
                     <v-spacer></v-spacer>
-                    <h3 style="color: #595959">
-                      <span style="color: #ffff00">P</span>age Title
+                    <h3 :class="{ 'custom-font': en }" style="color: #595959">
+                      <span :class="{ 'custom-font': en }" style="color: #ffff00">{{ en ? '' : 'P' }}</span>{{ en ? 'ໜ້າ Ticket' : 'age Ticket' }}
                     </h3>
                   </v-card-title>
                   <div class="mt-4">
@@ -119,7 +119,7 @@
                     <!-- <v-btn text x-small @click="dateshow = false">
                       <v-icon size="20">mdi-close</v-icon>
                     </v-btn> -->
-                    <h5>Search date</h5>
+                    <h5 :class="{ 'custom-font': en }">{{ en ? 'ວັນທີ່ໃຊ້ຄົ້ນຫາ' : 'Search date' }}</h5>
                   </v-card-text>
                   <v-row>
                     <!--Sta date Start-------------------------------------------------------------------------------->
@@ -128,16 +128,16 @@
                         transition="scale-transition" offset-y min-width="auto">
 
                         <template #activator="{ on, attrs }">
-                          <v-text-field v-model="date" label="Start Date" prepend-icon="mdi-calendar" readonly
+                          <v-text-field :class="{ 'custom-font': en }" v-model="date" :label=" en ? 'ວັນທີ່ເລີ່ມຕົ້ນ' : 'Start Date'" prepend-icon="mdi-calendar" readonly
                             v-bind="attrs" v-on="on"></v-text-field>
                         </template>
                         <v-date-picker v-model="date" no-title scrollable color="yellow ">
                           <v-spacer></v-spacer>
-                          <v-btn text style="color: #ff4d4d" @click="menu = false">
-                            Cancel
+                          <v-btn text :class="{ 'custom-font': en }" style="color: #ff4d4d" @click="menu = false">
+                            {{ en ? 'ຍົກເລີກ' : 'Cancel' }}
                           </v-btn>
-                          <v-btn outlined color="primary" @click="$refs.menu.save(date)">
-                            save
+                          <v-btn outlined :class="{ 'custom-font': en }" color="primary" @click="$refs.menu.save(date)">
+                            {{ en ? 'ບັນທືກ' : 'save' }}
                           </v-btn>
                         </v-date-picker>
                       </v-menu>
@@ -145,7 +145,7 @@
                     <!--Sto Date start-->
                     <v-col cols="12" sm="1" md="1">
                       <v-card-text style="color: #404040" class="px-0 mt-2">
-                        <h2>To</h2>
+                        <h2 :class="{ 'custom-font': en }" >{{ en ? 'ຫາ' : 'To' }}</h2>
                       </v-card-text>
                     </v-col>
                     <!--Sta Date stop------------------------------------------------------------------------------------------------->
@@ -154,41 +154,41 @@
                         transition="scale-transition" offset-y min-width="auto">
 
                         <template #activator="{ on, attrs }">
-                          <v-text-field v-model="dates" label="End Date" prepend-icon="mdi-calendar" readonly
+                          <v-text-field v-model="dates" :class="{ 'custom-font': en }" :label=" en ? 'ວັນທີ່ສີນສຸດ' : 'End Date' " prepend-icon="mdi-calendar" readonly
                             v-bind="attrs" v-on="on"></v-text-field>
                         </template>
                         <v-date-picker v-model="dates" no-title scrollable color="yellow ">
                           <v-spacer></v-spacer>
-                          <v-btn text style="color: #ff4d4d" @click="menus = false">
-                            Cancel
+                          <v-btn text :class="{ 'custom-font': en }" style="color: #ff4d4d" @click="menus = false">
+                            {{ en ? 'ຍົກເລີກ' : 'Cancel' }}
                           </v-btn>
-                          <v-btn outlined color="primary" @click="$refs.menus.save(dates)">
-                            save
+                          <v-btn outlined :class="{ 'custom-font': en }" color="primary" @click="$refs.menus.save(dates)">
+                            {{ en ? 'ບັນທືກ' : 'save' }}
                           </v-btn>
                         </v-date-picker>
                       </v-menu>
                     </v-col>
                     <!--Sto Date stop-->
                     <!-- Sta baton search date------------------------------------------------------------------------------------>
-                    <v-col cols="12" sm="4" md="3">
-                      <v-overlay class="text-center" :absolute="absolute" :value="overlay">
-                        <p>Date start should lower than Date stop.
+                    <v-col cols="12" sm="4" md="3" style="z-index: 11;">
+                      <v-overlay class="text-center" :class="{ 'custom-font': en }" :absolute="absolute" :value="overlay">
+                        <p :class="{ 'custom-font': en }">{{ en ? 'ວັນທີເລີ່ມຕົ້ນຄວນຈະນ້ອຍກວ່າວັນທີ່ສີນສຸດ.' : 'Date start should lower than Date stop.' }}
                           <span style="background-color: #ffff00; color: #000;">
                             {{ date }}
                           </span><span class="text-h5"> |</span><span style="background-color: #ffff00; color: #000;">
                             {{ dates }}
                           </span>
                         </p>
-                        <v-btn style="background-color: #ffff00; color: #000; " @click="overlay = false">
-                          Ok, I see
+                        <v-btn :class="{ 'custom-font': en }" style="background-color: #ffff00; color: #000; margin-top: 20px; z-index: 11;" @click="overlay = false">
+                          {{ en ? 'ເເກ້ໄຂ້ວັນທີ່' : 'Edit date' }}
                         </v-btn>
                       </v-overlay>
                       <v-card-text class="text-right">
                         <v-btn fab small color="#000" @mouseenter="datelang()" @click="getData()">
                           <v-icon :color="iconColor"> mdi-magnify </v-icon>
                         </v-btn>
-                        <span @click="getData()">
-                          Search
+                        <span class="hover-pointer" :class="{ 'custom-font': en }" @click="getData()">
+                          {{ en ? 'ຄົ້ນຫາ' : 'Search' }}
                         </span>
                       </v-card-text>
                     </v-col>
@@ -213,7 +213,7 @@
                       <v-progress-circular :size="35" color="yellow" indeterminate></v-progress-circular>
                     </v-btn>
                   </template>
-                  <span class="tooltip" ref="tooltip">Loading Graph</span>
+                  <span class="tooltip" :class="{ 'custom-font': en }" ref="tooltip">{{ en ? 'ກຳລັງໂຫຼດກຣາຟ' : 'Loading Graph' }}</span>
                 </v-tooltip>
                 <v-tooltip v-else bottom class="px-4">
 
@@ -224,8 +224,8 @@
                       <v-icon v-else size="45" :color="colWidth ? '#ffff00' : '#000'">mdi-table-large</v-icon>
                     </v-btn>
                   </template>
-                  <span v-if="!showgraph" class="tooltip" ref="tooltip">Display Graph</span>
-                  <span v-else class="tooltip" ref="tooltip">Display Table Data</span>
+                  <span v-if="!showgraph" class="tooltip" :class="{ 'custom-font': en }" ref="tooltip">{{ en ? 'ສະເເດງກຣາຟ' : 'Display Graph' }}</span>
+                  <span v-else class="tooltip" :class="{ 'custom-font': en }" ref="tooltip">{{ en ? 'ສະແດງຂໍ້ມູນຕາຕະລາງ' : 'Display Table Data' }}</span>
                 </v-tooltip>
               </v-card-text>
             </v-col>
@@ -244,7 +244,7 @@
               outlined>
               <v-toolbar color="#000" dark>
                 <v-toolbar-title style="color: #ffff00">
-                  <div>Table display</div>
+                  <div :class="{ 'custom-font': en }">{{ en ? 'ສະແດງຕາຕະລາງ' : 'Table display' }}</div>
                   <input v-model="col1Width" class="resizable" type="range" color="#ffff00" :min="minCol1Width"
                     :max="maxCol1Width" />
                 </v-toolbar-title>
@@ -270,7 +270,7 @@
               <v-card-text v-if="loading" class="pa-0">
                 <v-progress-linear indeterminate color="#4d3d00"></v-progress-linear>
               </v-card-text>
-              <v-data-table v-if="!overlay" width="100%" :height="heightPx + 'px'" fixed-header dense :headers="visibleHeaders"
+              <v-data-table width="100%" :height="heightPx + 'px'" fixed-header dense :headers="visibleHeaders"
                 :items="desserts" :items-per-page="50" item-key="TICKETID" class="elevation-1 custom-font font_size_12">
                 <template v-slot:item="{ item }">
                   <tr
@@ -282,30 +282,6 @@
                   </tr>
                 </template>
               </v-data-table>
-              <v-card-text v-else class="pa-1">
-                <v-card flat min-height="470px" class="text-h5">
-                  <span style="color: #cccccc;">
-                    Data Not found
-                  </span>
-                  <v-divider></v-divider>
-                  <br>
-                  <br>
-                  <br>
-                  <br>
-                  <br>
-                  <span>
-                    <v-card-text>
-                      <span style="color: #595959;">
-                        Check date again Date start should lower than Date stop.
-                      </span>
-                      <br>
-                      <span style="color: #595959;">
-                        Data Not found because : The Date stop is less than Date start or Net word Error.
-                      </span>
-                    </v-card-text>
-                  </span>
-                </v-card>
-              </v-card-text>
             </v-card>
           </v-col>
         </v-card-actions>
@@ -455,6 +431,9 @@ export default {
     }
   },
   computed: {
+    en() {
+      return this.$store.state.en;
+    },
     // -- header table 
     visibleHeaders() {
       return this.headers.filter((header) => {
@@ -914,5 +893,8 @@ export default {
 }
 .font_size_12 {
   font-size: 14px;
+}
+.hover-pointer {
+  cursor: pointer;
 }
 </style>
