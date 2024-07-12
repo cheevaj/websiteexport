@@ -128,7 +128,7 @@
         "
       >
         <v-card
-          v-if="data_num"
+          v-if="data_num && !loading"
           min-width="450"
           min-height="300"
           class="text-center"
@@ -222,7 +222,8 @@
       async handleSearch() {
         this.dataResponse = []
         this.loading = true
-        const Num = this.numberPhon // .split(',').map((num) => num.trim())
+        const Num = this.numberPhon.split(',').map((num) => num.trim())
+        console.log(Num)
         try {
           const response = await this.$axios.post(
             'http://172.28.26.23:3400/showdetail/nicenumberdetaill',

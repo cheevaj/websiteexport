@@ -4,7 +4,7 @@
             <v-row>
                 <v-col cols="12" md="4" sm="4" class="pr-0">
                     <v-card-title>
-                        <h2 class="custom-font">{{ en ? 'ເບີໂທລະສັບ' : 'Phone number'}}</h2>
+                        <h2 :class="{'custom-font' : en}">{{ en ? 'ເບີໂທລະສັບ' : 'Phone number'}}</h2>
                     </v-card-title>
                     <v-card-text>
                         <v-dialog v-model="dialog" persistent max-width="290">
@@ -17,7 +17,7 @@
                             </template>
                             <v-card>
                                 <v-card-actions class="yellow pa-0">
-                                    <v-card-text class="text-h6 py-0 pl-2 pr-0 custom-font">
+                                    <v-card-text class="text-h6 py-0 pl-2 pr-0" :class="{'custom-font' : en}">
                                         {{ en ? 'ເຊື່ອມຕໍ່ Whatsapp QR' : 'Connect Whatsapp QR'}}
                                     </v-card-text>
                                     <v-spacer></v-spacer>
@@ -26,16 +26,16 @@
                                     </v-btn>
                                 </v-card-actions>
                                 <v-divider></v-divider>
-                                <v-card-text class="custom-font">
+                                <v-card-text :class="{'custom-font' : en}">
                                     {{ en ? 'ຍັງບໍ່ສາມາດ ເປີດເຊືອມໄດ້' : 'Sorry, Can not connected'}}
                                 </v-card-text>
                             </v-card>
                         </v-dialog>
                     </v-card-text>
                     <v-card-text class="pr-0 ">
-                        <h4 class="custom-font">{{ en ? 'ສົ່ງໃຫ້ເບີ' : 'Send to'}}</h4>
+                        <h4 :class="{'custom-font' : en}">{{ en ? 'ສົ່ງໃຫ້ເບີ' : 'Send to'}}</h4>
                         <v-card-actions class="pr-0">
-                            <v-text-field v-model="numberphone" type="number" label="207xxx, 207xx" :rules="rules"
+                            <v-text-field :class="{'custom-font' : en}" v-model="numberphone" type="number" label="207xxx, 207xx" :rules="rules"
                                 hide-details="auto" />
                             <v-divider class="ml-1 pr-0 my-2" vertical style="background-color: #009242;" />
                             <Tooltip content="Import file Excel." placement="bottom" :delay="800">
@@ -53,7 +53,7 @@
                 <v-col cols="12" md="8" sm="8" class="pl-1">
                     <v-card-actions>
                         <v-card-title>
-                            <h2 class="custom-font">{{ en ? 'ຂໍ້ຄວາມ' : 'Message'}}</h2>
+                            <h2 :class="{'custom-font' : en}">{{ en ? 'ຂໍ້ຄວາມ' : 'Message'}}</h2>
                         </v-card-title>
                         <v-spacer></v-spacer>
                         <Tooltip content="Edit file import." placement="bottom" :delay="800">
@@ -66,26 +66,26 @@
                         </Tooltip>
                         <v-dialog v-model="dialogseting" persistent max-width="300">
                             <v-card>
-                                <v-card-title class="custom-font" style="color: rgb(115, 115, 115);">
+                                <v-card-title :class="{'custom-font' : en}" style="color: rgb(115, 115, 115);">
                                     {{ en ? 'ຕາຕະລາງ Excel ເບີໂທ' : 'Excel table'}}
                                 </v-card-title>
                                 <v-divider style="background-color: #ffff00;"></v-divider>
                                 <v-card-actions>
                                     <div>
-                                        <p class="custom-font">{{ en ? 'ເລີ່ມຈາກແຖວທີ່' : 'Start Row'}}</p>
+                                        <p :class="{'custom-font' : en}" >{{ en ? 'ເລີ່ມຈາກແຖວທີ່' : 'Start Row'}}</p>
                                         <InputNumber :min="1" v-model="rowNum" />
                                     </div>
                                     <div>
-                                        <p class="custom-font">{{ en ? 'ເລີ່ມຈາກຖັງທີ່' : 'Start Column'}}</p>
+                                        <p :class="{'custom-font' : en}" >{{ en ? 'ເລີ່ມຈາກຖັງທີ່' : 'Start Column'}}</p>
                                         <InputNumber :min="0" v-model="colNum" />
                                     </div>
                                 </v-card-actions>
                                 <v-card-actions>
                                     <v-spacer></v-spacer>
-                                    <v-btn class="custom-font" color="error darken-1" text @click="changeRow(false)">
+                                    <v-btn :class="{'custom-font' : en}" color="error darken-1" text @click="changeRow(false)">
                                         {{ en ? 'ຍົກເລີກ' : 'Cancel'}}
                                     </v-btn>
-                                    <v-btn class="custom-font" color="#ffff" style="background-color: #ffff00;" text
+                                    <v-btn :class="{'custom-font' : en}" color="#ffff" style="background-color: #ffff00;" text
                                         @click="changeRow(true)">
                                         {{ en ? 'ບັນທືກ' : 'save'}}
                                     </v-btn>
@@ -95,7 +95,7 @@
                     </v-card-actions>
                     <v-container fluid>
                         <v-card-actions>
-                            <v-textarea class="custom-font" outlined name="input-7-4" v-model="text"></v-textarea>
+                            <v-textarea :class="{'custom-font' : en}" outlined name="input-7-4" v-model="text"></v-textarea>
                             <v-dialog v-model="dialog2" persistent max-width="650px">
                                 <template v-slot:activator="{ on, attrs }">
                                     <div class="ml-4" @mouseenter="show = 'color'" @mouseleave="show = 'notcolor'">
@@ -109,23 +109,23 @@
                                 </template>
                                 <v-card>
                                     <v-toolbar color="yellow" dark flat class="pb-0 mb-0">
-                                        <h1 class="custom-font" style="color: #000;">{{ en ? 'ກວດເບິ່ງເບີໂທລະສັບ ແລະ ຂໍ້ຄວາມ' : 'Check Number phone and Message'}}</h1>
+                                        <h1 :class="{'custom-font' : en}" style="color: #000;">{{ en ? 'ກວດເບິ່ງເບີໂທລະສັບ ແລະ ຂໍ້ຄວາມ' : 'Check Number phone and Message'}}</h1>
                                     </v-toolbar>
                                     <v-card-text>
                                         <v-card-actions>
-                                            <h2 class="custom-font">{{ en ? 'ຂໍ້ຄວາມ' : 'Messages' }}</h2>
+                                            <h2 :class="{'custom-font' : en}">{{ en ? 'ຂໍ້ຄວາມ' : 'Messages' }}</h2>
                                             <v-spacer></v-spacer>
                                         </v-card-actions>
                                         <v-card class="d-flex align-center justify-center mx-auto overflow-auto"
                                             min-width="450" max-height="100px" min-height="76" outlined>
-                                            <div class="custom-font">
+                                            <div :class="{'custom-font' : en}">
                                                 {{ text }}
                                             </div>
                                         </v-card>
                                         <v-row>
                                             <v-col cols="12" sm="5" md="5" class="pr-0">
                                                 <v-card-text class="pb-0 pl-0">
-                                                    <div class="custom-font" style="color: #000;">
+                                                    <div :class="{'custom-font' : en}" style="color: #000;">
                                                         {{ en ? 'ເບີໂທລະສັບທີ່ສົ່ງ' : 'Number phone is' }}
                                                     </div>
                                                 </v-card-text>
@@ -145,7 +145,7 @@
                                             </v-col>
                                             <v-col cols="12" md="6" sm="6" class="pr-0">
                                                 <v-card-text class="pb-0 pl-0">
-                                                    <div class="custom-font" style="color: #000;">
+                                                    <div :class="{'custom-font' : en}" style="color: #000;">
                                                         {{ en ? 'ເບີທີ່ຈະສົ່ງ' : 'The number phone to be sent.' }}
                                                     </div>
                                                 </v-card-text>
@@ -164,7 +164,7 @@
                                         </v-row>
                                     </v-card-text>
                                     <v-card-actions class="justify-end">
-                                        <v-btn class="custom-font " text color="error" @click="dialog2 = false">
+                                        <v-btn :class="{'custom-font' : en}" text color="error" @click="dialog2 = false">
                                             {{ en ? 'ຍົກເລີກ' : 'Cancel'}}
                                         </v-btn>
                                         <v-btn outlined color="yellow" @click="sedQrchart()">
@@ -178,7 +178,7 @@
                 </v-col>
             </v-row>
             <v-card-title class="pb-0">
-                <h3 class="custom-font">
+                <h3 :class="{'custom-font' : en}">
                     {{ en ? 'ເພີ່ມເລກໂທລະສັບໄປທີ່ຫໍຖານຂໍ້ມູນ' : 'Add number phone to Database' }}
                 </h3>
             </v-card-title>
@@ -186,11 +186,11 @@
             <v-card-text>
                 <v-row>
                     <v-col cols="12" md="4" sm="4">
-                        <p class="custom-font">
+                        <p :class="{'custom-font' : en}">
                             {{ en ? 'ນໍາເຂົ້າໄຟລ໌ໝາຍເລກໂທລະສັບຂອງທ່ານໂດຍການຄລິກປຸ່ມ' : 'Import your phone number file by clicking' }} <span><v-icon
                                     style="color:rgb(41,163,41)">mdi-microsoft-excel</v-icon></span>
                         </p>
-                        <p class="custom-font">
+                        <p :class="{'custom-font' : en}">
                             {{ en ? 'ກົດ ບັນທືກ ຢູ່ເທີງໃນບອດທີ່ເດັ່ນຂື້ນມາ ເພື່ອເພີ່ມເບີໂທລະສັບໃສ່ຖານຂໍ້ມູນ' : 'Click Save in bock Pop Up to add number phone to database' }}
                         </p>
                     </v-col>
@@ -213,7 +213,7 @@
                                     <v-col cols="8" md="9" sm="9" class="pa-0 ma-0">
                                         <v-card-text class="yellow pa-0 ">
                                             <v-card-text class="pa-4 custom-font">
-                                                <h3 class="custom-font">{{ en ? 'ເພີ່ມເບີໂທລະສັບ' : 'Upload  Number phone' }}</h3> 
+                                                <h3 :class="{'custom-font' : en}">{{ en ? 'ເພີ່ມເບີໂທລະສັບ' : 'Upload  Number phone' }}</h3> 
                                             </v-card-text>
                                             <v-spacer></v-spacer>
                                         </v-card-text>
@@ -292,7 +292,7 @@ export default {
             text: '',
             model: '',
             rules: [
-                value => !!value || 'No, phone number',
+                value => !!value || `${ this.en ? 'ບໍ່ມີເບີໂທລະສັບ' : 'No, phone number'}`,
             ],
             rules_pas: {
                 required: value => !!value || 'Required.',
@@ -305,6 +305,9 @@ export default {
     en() {
       return this.$store.state.en;
     },
+    token(){
+        return this.$store.state.tokenShow;
+    }
     },
     methods: {
         async sedQrchart() {
@@ -324,8 +327,8 @@ export default {
                 this.numberphone = "";
             } else {
                 // Handle the case where numeber is not a string or has length <= 0
-                const title =`<span class="custom-font">${this.en ? 'ປ້ອນຂໍ້ມູນບໍ່ຖືກຕ້ອງ' : 'Invalid input'}</span>`;
-                const desc =`<span class="custom-font">${this.en ? 'ການປ້ອນຂໍ້ມູນຂອງທ່ານອາດບໍ່ມີເບີ ຫຼື ຂໍ້ຄວາມ.' : 'Your input may not contain numbers or Message.'}</span>`
+                const title =`<span :class="{'custom-font' : en}">${this.en ? 'ປ້ອນຂໍ້ມູນບໍ່ຖືກຕ້ອງ' : 'Invalid input'}</span>`;
+                const desc =`<span :class="{'custom-font' : en}">${this.en ? 'ການປ້ອນຂໍ້ມູນຂອງທ່ານອາດບໍ່ມີເບີ ຫຼື ຂໍ້ຄວາມ.' : 'Your input may not contain numbers or Message.'}</span>`
                 this.error(false, title, desc);
             }
         },
@@ -404,8 +407,8 @@ export default {
                 this.sendMessage = true;
             } else {
                 // Handle the case where numeber is not a string or has length <= 0
-                const title =`<span class="custom-font">${this.en ? 'ປ້ອນຂໍ້ມູນບໍ່ຖືກຕ້ອງ' : 'Invalid input'}</span>`;
-                const desc =`<span class="custom-font">${this.en ? 'ການປ້ອນຂໍ້ມູນຂອງທ່ານອາດບໍ່ມີເບີ ຫຼື ຂໍ້ຄວາມ.' : 'Your input may not contain numbers or Message.'}</span>`
+                const title =`<span :class="{'custom-font' : en}">${this.en ? 'ປ້ອນຂໍ້ມູນບໍ່ຖືກຕ້ອງ' : 'Invalid input'}</span>`;
+                const desc =`<span :class="{'custom-font' : en}">${this.en ? 'ການປ້ອນຂໍ້ມູນຂອງທ່ານອາດບໍ່ມີເບີ ຫຼື ຂໍ້ຄວາມ.' : 'Your input may not contain numbers or Message.'}</span>`
                 this.sendMessage = false;
                 this.error(false, title, desc);
             }

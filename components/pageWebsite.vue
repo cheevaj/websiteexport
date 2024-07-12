@@ -51,7 +51,7 @@
                 border-bottom-right-radius: 0px;
               "
             >
-              <v-card-text class="pb-0 pl-0 text-center">
+              <v-card-text class="pb-0 pl-0 text-center" :class=" { 'custom-font' : en } ">
                 <h2 style="color: rgb(102, 102, 0)">
                   {{ item.title }}
                 </h2>
@@ -61,11 +61,12 @@
                 style="background-color: rgb(102, 102, 0)"
               />
             </div>
-            <v-card-text class="py-1" style="height: 100px">
-              {{ truncateText(item.subtitle, 75) }}
+            <v-card-text class="pt-1pb-2" :class=" { 'custom-font' : en } " style="height: 100px">
+              {{ truncateText(item.subtitle, 60) }}
             </v-card-text>
             <v-btn
               class="mt-2"
+              :class=" { 'custom-font' : en } "
               :outlined="buttonWeb === index ? false : true"
               style="color: rgb(230, 230, 0)"
               :style="{
@@ -73,7 +74,7 @@
               }"
               @click="openLinkInNewTab(item.link)"
             >
-              Login
+              {{ en ? 'ເຂົ້າລະບົບ' : 'Login' }}
             </v-btn>
           </v-card>
         </v-slide-item>
@@ -81,58 +82,68 @@
     </v-sheet>
   </div>
 </template>
+
 <script>
 export default {
-  data: () => ({
-    buttonWeb: false,
-    // All website
-    itemsss: [
-      {
-        avatar: 'https://tplus.la/Black-Tplus-logo.png',
-        title: 'MyCCare Web',
-        subtitle:
-          'TPLUS has been developed and remains an important part of VimpelCom.',
-        link: 'http://10.30.6.94:7878/Replaceisdn/index.php',
-      },
-      {
-        avatar:
-          'https://tse4.mm.bing.net/th?id=OIP.Es4Sc4gJqjV7Lh9BDs21WwHaEK&pid=Api&P=0&h=220',
-        title: 'Vas Service',
-        subtitle:
-          'TPLUS has been developed and remains an important part of VimpelCom.',
-        link: 'http://10.30.6.94:9999/Hlred.php',
-      },
-      {
-        avatar:
-          'http://172.28.17.137:7789/Services/asset/images//logo-round.png',
-        title: 'TPLUS',
-        subtitle:
-          'TPLUS has been developed and remains an important part of VimpelCom.standing of various commercial stamps',
-        link: 'http://172.28.17.137:7789/Services/?mode=login',
-      },
-      {
-        avatar:
-          'http://172.28.17.137:7789/Services/asset/images//logo-round.png',
-        title: 'Check Bills',
-        subtitle: 'Checking the standing of various commercial stamps.',
-        link: 'http://172.28.17.102:5555/cbs',
-      },
-    ],
-  }),
-  methods: {
-    openLinkInNewTab(link) {
-      window.open(link, '_blank')
+  data() {
+    return {
+      buttonWeb: false,
+    };
+  },
+  computed: {
+    en() {
+      return this.$store.state.en;
     },
-    truncateText(text, maxLength) {
-      if (text.length <= maxLength) return text
-      return text.substring(0, maxLength) + '...'
+    itemsss() {
+      return [
+        {
+          avatar: 'https://tplus.la/Black-Tplus-logo.png',
+          title: 'MyCCare Web',
+          subtitle: this.en
+            ? 'TPLUS ໄດ້ຮັບການພັດທະນາແລະຍັງຄົງເປັນສ່ວນຫນຶ່ງທີ່ສໍາຄັນຂອງ VimpelCom.'
+            : 'TPLUS has been developed and remains an important part of VimpelCom.',
+          link: 'http://10.30.6.94:7878/Replaceisdn/index.php',
+        },
+        {
+          avatar:
+            'https://tse4.mm.bing.net/th?id=OIP.Es4Sc4gJqjV7Lh9BDs21WwHaEK&pid=Api&P=0&h=220',
+          title: 'Vas Service',
+          subtitle:this.en ? 'TPLUS has been developed and remains an important part of VimpelCom.' : 'TPLUS has been developed and remains an important part of VimpelCom.',
+          link: 'http://10.30.6.94:9999/Hlred.php',
+        },
+        {
+          avatar:
+            'http://172.28.17.137:7789/Services/asset/images//logo-round.png',
+          title: 'TPLUS',
+          subtitle:
+            'TPLUS has been developed and remains an important part of VimpelCom.standing of various commercial stamps',
+          link: 'http://172.28.17.137:7789/Services/?mode=login',
+        },
+        {
+          avatar:
+            'http://172.28.17.137:7789/Services/asset/images//logo-round.png',
+          title: 'Check Bills',
+          subtitle: this.en ? 'ການກວດສອບການຢືນຂອງສະແຕມການຄ້າຕ່າງໆ.' : 'Checking the standing of various commercial stamps.',
+          link: 'http://172.28.17.102:5555/cbs',
+        },
+      ];
     },
   },
-}
+  methods: {
+    openLinkInNewTab(link) {
+      window.open(link, '_blank');
+    },
+    truncateText(text, maxLength) {
+      if (text.length <= maxLength) return text;
+      return text.substring(0, maxLength) + '...';
+    },
+  },
+};
 </script>
-<!-- <style>
+
+<style>
 .custom-font {
   font-family: 'Noto Sans Lao', sans-serif;
   /* You can specify additional styles here if needed */
 }
-</style> -->
+</style>

@@ -224,6 +224,9 @@ export default {
       ],
     }
   },
+  // beforeMount() {
+  //       this.logout();
+  //   },
   computed: {
     length() {
       return this.image.length
@@ -233,6 +236,11 @@ export default {
     },
   },
   methods: {
+    // logout(){
+    //   if (!this.$store.state.token){
+    //     this.$router.push('/login/login');
+    //   }
+    // },
     next() {
       this.onboarding =
         this.onboarding + 1 === this.length ? 0 : this.onboarding + 1

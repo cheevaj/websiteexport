@@ -15,11 +15,11 @@
         class="text-center"
         style="display: flex; flex-direction: column; justify-content: center"
       >
-        <h3>Enter your number phone.</h3>
+        <h3 :class="{ 'custom-font' : en }" >{{ en ? 'ກະລຸນາປ້ອມເບີໂທລະສັບ.' : 'Enter Number phone.' }}</h3>
         <br>
         <v-icon size="85" color="rgb(153, 153, 0)">mdi-smart-card</v-icon>
         <br>
-        <h2><span style="color: rgb(255, 255, 0);">CARD</span> not found</h2>
+        <h2 :class="{ 'custom-font' : en }"><span style="color: rgb(255, 255, 0);">{{ en ?'' : 'CARD' }}</span> {{ en ? 'ບໍ່ມີຂໍ້ມູນ' : 'not found' }}</h2>
       </v-card>
     </v-card-text>
   </div>
@@ -37,6 +37,11 @@ export default {
   },
   mounted() {
     // console.log(this.dataCard)
+  },
+  computed: {
+    en() {
+      return this.$store.state.en;
+    },
   },
 }
 </script>

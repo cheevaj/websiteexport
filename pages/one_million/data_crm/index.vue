@@ -1060,6 +1060,7 @@
                   <v-card-actions class="pa-1">
                     <v-icon>mdi-controller</v-icon>&nbsp;&nbsp;<span
                       class="text-color"
+                      :class="{ 'custom-font': en }"
                       >{{ en ? 'ເລີກຕິດຕາມເກມ:' : 'Unsubscribe Game:' }}</span
                     >
                     <v-spacer />
@@ -1310,7 +1311,7 @@
           >mdi-monitor-dashboard</v-icon
         >
         <br />
-        <h2><span :class="{ 'custom-font': en }" style="color: rgb(255, 255, 0)">CRM</span> {{ en ? 'ບໍ່ມີຂໍ້ມູນ' : 'data not found' }}</h2>
+        <h2 :class="{ 'custom-font': en }"><span :class="{ 'custom-font': en }" style="color: rgb(255, 255, 0)">CRM</span> {{ en ? 'ບໍ່ມີຂໍ້ມູນ' : 'data not found' }}</h2>
       </v-card>
     </v-card-text>
   </div>

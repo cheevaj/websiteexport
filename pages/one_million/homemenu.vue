@@ -11,10 +11,10 @@
           style="margin-top: 10%"
         >
           <h3 v-if="numberNull === 'Null'" class="text-center">
-            <span class="custom-font" >{{ en ? 'ກະລຸນາປ້ອມເບີໂທລະສັບ.' : 'Enter Number phone.' }}</span>
+            <span :class="{ 'custom-font' : en }" >{{ en ? 'ກະລຸນາປ້ອມເບີໂທລະສັບ.' : 'Enter Number phone.' }}</span>
           </h3>
           <h3 v-else class="text-center">
-            <span class="custom-font" >{{ en ? 'ເບີໂທລະສັບແມ່ນ' : 'Your Number Phone' }}</span>
+            <span :class="{'custom-font' : en }" >{{ en ? 'ເບີໂທລະສັບແມ່ນ' : 'Your Number Phone' }}</span>
             <v-card-text>
             <h4>
               <v-icon color="rgb(128, 128, 128)">mdi-card-account-phone-outline</v-icon>

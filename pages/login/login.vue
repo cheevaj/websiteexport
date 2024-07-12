@@ -91,6 +91,9 @@ export default {
             },
         }
     },
+    // beforeMount() {
+    //     this.logout();
+    // },
     mounted() {
         this.setSheetHeight();
         window.addEventListener('resize', this.setSheetHeight);
@@ -104,6 +107,12 @@ export default {
         },
     },
     methods: {
+        // logout(){
+        //     if (this.$store.state.token){
+        //         this.$auth.strategy.token.reset()
+        //         this.$store.commit('setToken', false)
+        //     }
+        // },
         setSheetHeight() {
             const screen = document.querySelector('.screen');
             if (screen) {
@@ -127,23 +136,9 @@ export default {
                         password: this.password,
                     },
                 });
-
-                // if (response.data && response.data.encryptedData) {
-                //     const key = response.data.encryptedData.key.data;
-                //     const decryptedData = this.decryptResponse(
-                //         response.data.encryptedData,
-                //         key
-                //     );
-                //     const encryptedToken = this.encryptToken(decryptedData.user.token);
-
-                //     this.dataresponse = decryptedData;
-
-                //     // Set the encrypted token as the user token
-                //     this.$auth.setUserToken(encryptedToken);
-
-                //     this.$store.commit('setToken', decryptedData.user.token);
+                // console.log(response)
                 if(response){
-                    this.$router.push('/');
+                    this.$router.push('../');
                 }    
                 // } else {
                         // console.error('Invalid response data');
