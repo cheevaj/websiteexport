@@ -306,6 +306,7 @@ export default {
       const stopdate = currentDate.toISOString().slice(0, 16);
       const firstDayNextMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1);
       const startdate = new Date(firstDayNextMonth.setMonth(firstDayNextMonth.getMonth() - 2)).toISOString().slice(0, 16);
+      // console.log(startdate);
       const apiCalls = [
         this.$axios.post('http://172.28.26.23:3400/ltc-smart-reward/ReadPointDetail', { userIdData: Num }),
         this.$axios.post('http://172.28.17.102:9970/data/findnumbersoxay', { telephone: num }),
@@ -325,7 +326,7 @@ export default {
             console.log('Not Response');
           }
         }),
-        this.$axios.post('/api/tplushlr/StatusIR-Service', {ISDN: Num,}),
+        this.$axios.$post('http://172.28.26.23:3200/Ir/checkstatus', { ISDN: Num }),
       ];
       try {
         const responses = await Promise.all(apiCalls);

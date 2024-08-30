@@ -82,12 +82,12 @@ export default {
     },
   },
   proxy: {
-    '/api/': {
-      target: 'https://172.28.26.72:9443',
-      pathRewrite: { '^/api/': '' },
-      changeOrigin: true,
-      secure: false,
-    },
+    // '/api/': {
+    //   target: 'https://172.28.26.72:9443',
+    //   pathRewrite: { '^/api/': '' },
+    //   changeOrigin: true,
+    //   secure: false,
+    // },
     '/users/': {
       target: 'http://172.28.26.23:3100',
       pathRewrite: { '^/users/': '/users/' },
