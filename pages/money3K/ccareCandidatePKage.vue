@@ -176,7 +176,7 @@
         data_num: false,
         buttonanime: true,
         dataResponse: [],
-        overlay: false, // Add this line
+        overlay: false,
         columns: [
           { key: 'index', title: 'N' },
           { key: 'Staff_Name', title: 'Staff Name' },
@@ -248,7 +248,6 @@
         }
       },
       setSheetHeight() {
-        // Get the height of the computer screen
         this.heightPx = window.innerHeight - 190
       },
     },

@@ -1,5 +1,5 @@
 export const state = () => ({
-  tokenShow: null, // Initialize tokenShow to null initially
+  tokenShow: null,
   en: true,
 })
 

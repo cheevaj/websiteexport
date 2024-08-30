@@ -366,8 +366,6 @@ export default {
             DATE: detail.DATED,
           }))
         }
-        // console.log(this.dataResponseBcelOne)
-
         if (paymentResponse.data) {
           this.dataResponsePayment = paymentResponse.data.map((detail, index) => ({
             index: index + 1,
@@ -377,7 +375,6 @@ export default {
             ResultDesc: detail.ResultDesc,
             DATE: detail.DATE.substring(0, 4) + '\u00A0/\u00A0' + detail.DATE.substring(4,6)+ '\u00A0/\u00A0' + detail.DATE.substring(6),
           }))
-          // console.log(this.dataResponsePayment)
         }
         if (logOneScreenResponse.data.Data) {
           this.dataResponseLogonecreen = logOneScreenResponse.data.Data.map((detail, index) => ({
@@ -387,7 +384,6 @@ export default {
             DATE: detail.cdate,
             resultdesc: detail.resultdesc,
           }))
-          // console.log('d',this.dataResponseLogonecreen)
         }
         this.data_num = true
       } catch (error) {

@@ -1,12 +1,13 @@
 <template>
   <div class="background_color">
     <v-card
-      v-if="transformedDataHPackage.length > 0"
+      outlined
       class="rounded-0 scrollbar"
       style="
         overflow-y: auto;
         left: 0;
-        height: calc(100vh - 19vh);
+        height: calc(100vh - 19vh) - 4px;
+        overflow: y;
         background-color: #f2f2f2;
       "
     >
@@ -18,7 +19,7 @@
         :items="transformedDataHPackage"
         :items-per-page="itemsPerPage"
         item-key="ProductNumber"
-        class="elevation-1 custom-font table-container"
+        class="elevation-1 custom-font table-container scrollbar"
       >
         <template v-slot:item="{ item }">
           <tr
@@ -43,28 +44,34 @@
 <script>
 export default {
   middleware: 'auth',
+  Currency: 'index',
   props: {
-    dataSoXay: Array,
+      SMS:Array,
   },
   data() {
     return {
+      outlined: false,
+      loading: false,
+      numberPhon: '',
+      data_num: false,
+      buttonanime: true,
       columns: [
-        { key: 'index', title: 'INDEX' },
-        { key: 'RECEIVER_ISDN', title: 'SIS' },
-        { key: 'RECEIVER_AMOUNT_F', title: 'RECEIVER AMOUNT' },
-        { key: 'TRANSFER_AMOUNT', title: 'TRANSFER AMOUNT' },
-        { key: 'RESULT_DESC', title: 'RESULT DESC' },
-        { key: 'DATE', title: 'DATE' },
-        { key: 'USER_ID', title: 'USER_ID' }, 
+        { key: 'index', title: 'Index' },
+        { key: 'DestinationNum', title: 'SIM' },
+        { key: 'SMID', title: 'SMID' },
+        { key: 'OriginalNum', title: 'OriginalNum' },
+        { key: 'Result', title: 'Result' },
+        { key: 'datetime', title: 'Date' },
+        { key: 'content', title: 'Content' },
       ],
       headers: [
-        { text: 'INDEX', value: 'index' },
-        { text: 'SIS', value: 'RECEIVER_ISDN' },
-        { text: 'RECEIVER AMOUNT', value: 'RECEIVER_AMOUNT_F' },
-        { text: 'TRANSFER AMOUNT', value: 'TRANSFER_AMOUNT' },
-        { text: 'RESULT DESC', value: 'RESULT_DESC' },
-        { text: 'DATE', value: 'DATE' },
-        { text: 'USER_ID', value: 'USER_ID' }, 
+        { text: 'Index', value: 'index' },
+        { text: 'SIM', value: 'DestinationNum' },
+        { text: 'SMID', value: 'SMID' },
+        { text: 'OriginalNum', value: 'OriginalNum' },
+        { text: 'Result', value: 'Result' },
+        { text: 'Date', value: 'datetime' },
+        { text: 'Content', value: 'content' },
       ],
     }
   },
@@ -83,44 +90,25 @@ export default {
         : 10
     },
     transformedDataHPackage() {
-      return this.dataSoXay.map((item, index) => {
+      if (!this.SMS || !Array.isArray(this.SMS)) {
+        return [];
+      }
+      return this.SMS.map((item, index) => {
         return {
           ...item,
           index: index + 1,
-          DATE: this.formatAdjustDate(item.CDATE),
-          RECEIVER_AMOUNT_F: this.formatResultDesc(item.RECEIVER_AMOUNT_F), 
-          TRANSFER_AMOUNT: this.formatResultDesc(item.TRANSFER_AMOUNT),
+          DestinationNum: item.DestinationNum,
+          SMID: item.SMID,
+          OriginalNum: item.OriginalNum,
+          Result: item.Result,
+          content: item.content,
+          datetime: item.datetime,
         }
-      })
+      });
     },
   },
-  methods: {
-    formatAdjustDate(dateString) {
-      const date = new Date(dateString)
-      const formattedDate = date
-        .toLocaleString('en-US', {
-          year: 'numeric',
-          month: '2-digit',
-          day: '2-digit',
-          hour: '2-digit',
-          minute: '2-digit',
-          second: '2-digit',
-        })
-        .replace(',', '')
-      return formattedDate
-    },
-    formatResultDesc(value) {
-      const num = Number(value)
-      if (!isNaN(num)) {
-        return new Intl.NumberFormat().format(num)
-      }
-      return value;
-    },
-  },
-  mounted() {
-    // this.setSheetHeight();
-    // window.addEventListener('resize', this.setSheetHeight);
-  },
+  mounted() {},
+  methods: {},
 }
 </script>
 
@@ -150,19 +138,19 @@ export default {
 
 .table-container ::-webkit-scrollbar-thumb {
   background-color: rgb(255, 204, 0);
-  border-radius: 4px;
+  border-radius: 2px;
 }
 
 .table-container ::-webkit-scrollbar-corner {
   background-color: rgb(255, 204, 0);
-  border-radius: 4px;
+  border-radius: 1px;
 }
 .scrollbar {
   overflow-x: hidden;
 }
 
 .scrollbar::-webkit-scrollbar {
-  width: 8px;
+  width: 4px;
   height: 2px;
 }
 

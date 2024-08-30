@@ -94,7 +94,6 @@ export default {
         : 10
     },
     transformedDataHPackage() {
-      console.log('l', this.dataHPackage)
       return this.dataHPackage.map((item, index) => {
         return {
           ...item,

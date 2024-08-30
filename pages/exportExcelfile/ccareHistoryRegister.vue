@@ -322,7 +322,7 @@ export default {
       data_num: false,
       buttonanime: true,
       dataResponse: [],
-      overlay: false, // Add this line
+      overlay: false,
       columns: [
         { key: 'index', title: 'INDEX' },
         { key: 'Name', title: 'Name' },
@@ -356,10 +356,8 @@ export default {
         dataResponseLength > 0 &&
         typeof this.dataResponse[dataResponseLength - 1].index === 'number'
       ) {
-        // If dataResponse has items and the last index is a number, return it
         return this.dataResponse[dataResponseLength - 1].index
       } else {
-        // If dataResponse is empty or the last index is not a number, return a default value (e.g., 10)
         return 10
       }
     },
@@ -404,10 +402,8 @@ export default {
         console.log('data date', response.data)
         if (response.data) {
           let totalQty = 0
-          // let totalPackagecode = 0
           this.dataResponse = response.data.map((detail, index) => {
             totalQty += detail.QTY
-            // totalPackagecode += detail.Packagecode
             return {
               index: index + 1,
               Name: detail.Name,
@@ -419,7 +415,6 @@ export default {
                 detail.Month.substring(4),
             }
           })
-          // Add the new column with aggregated values
           this.dataResponse.push({
             index: this.dataResponse.length + 1,
             Name: 'All',
@@ -440,14 +435,11 @@ export default {
         this.loading = false
       }
     },
-    //  function export file excel
     exportToExcel() {
       const workbook = XLSX.utils.book_new()
       const worksheet = XLSX.utils.json_to_sheet(this.dataResponse)
       XLSX.utils.book_append_sheet(workbook, worksheet, 'Currency Data')
-      // Generate a unique filename or use a timestamp for the file
       const filename = `CCare register ${Date.now()}.xlsx`
-      // Wrap the writeFile function in a Promise
       return new Promise((resolve, reject) => {
         try {
           XLSX.writeFile(workbook, filename)
@@ -459,16 +451,14 @@ export default {
       })
     },
     setSheetHeight() {
-      // Get the height of the computer screen
       this.heightPx = window.innerHeight - 190
     },
     formatResultDesc(value) {
-      // Check if value is a valid number
       const num = Number(value)
       if (!isNaN(num)) {
         return new Intl.NumberFormat().format(num)
       }
-      return value // Return the original value if it's not a valid number
+      return value;
     },
     errorMessage() {
       this.$Notice.error({

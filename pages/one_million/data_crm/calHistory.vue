@@ -1,12 +1,13 @@
-<template>
+<!-- <template>
     <div class="background_color">
       <v-card
-        v-if="transformedDataHPackage.length > 0"
+        outlined
         class="rounded-0 scrollbar"
         style="
           overflow-y: auto;
           left: 0;
-          height: calc(100vh - 19vh);
+          height: calc(100vh - 19vh) - 4px;
+          overflow: y;
           background-color: #f2f2f2;
         "
       >
@@ -18,7 +19,7 @@
           :items="transformedDataHPackage"
           :items-per-page="itemsPerPage"
           item-key="ProductNumber"
-          class="elevation-1 custom-font table-container"
+          class="elevation-1 custom-font table-container scrollbar"
         >
           <template v-slot:item="{ item }">
             <tr
@@ -45,29 +46,32 @@
     middleware: 'auth',
     Currency: 'index',
     props: {
-      dataB_celOne: Array,
+        // SMS:Array,
     },
     data() {
       return {
+        outlined: false,
+        loading: false,
+        numberPhon: '',
+        data_num: false,
+        buttonanime: true,
         columns: [
-          { key: 'index', title: 'INDEX' },
-          { key: 'MSISDN', title: 'MSISDN' },
-          { key: 'AMOUNT', title: 'AMOUNT' },
-          { key: 'SEQ_NUMBER', title: 'SEQ_NUMBER' },
-          { key: 'Provider', title: 'Provider' },
-        //   { key: 'DATED', title: 'DATE' },
-        { key: 'TYPE', title: 'TYPE' },
-          { key: 'RESPON_DATE', title: 'RESPON DATE' }, // Corrected key
+          { key: 'index', title: 'Index' },
+          { key: 'DestinationNum', title: 'SIM' },
+          { key: 'SMID', title: 'SMID' },
+          { key: 'OriginalNum', title: 'OriginalNum' },
+          { key: 'Result', title: 'Result' },
+          { key: 'datetime', title: 'Date' },
+          { key: 'content', title: 'Content' },
         ],
         headers: [
-          { text: 'INDEX', value: 'index' },
-          { text: 'MSISDN', value: 'MSISDN' },
-          { text: 'AMOUNT', value: 'AMOUNT' },
-          { text: 'SEQ_NUMBER', value: 'SEQ_NUMBER' },
-          { text: 'PROVIDER', value: 'Provider' },
-        //   { text: 'DATE', value: 'DATED' },
-        { text: 'TYPE', value: 'TYPE' },
-          { text: 'RESPON DATE', value: 'RESPON_DATE' }, // Corrected key
+          { text: 'Index', value: 'index' },
+          { text: 'SIM', value: 'DestinationNum' },
+          { text: 'SMID', value: 'SMID' },
+          { text: 'OriginalNum', value: 'OriginalNum' },
+          { text: 'Result', value: 'Result' },
+          { text: 'Date', value: 'datetime' },
+          { text: 'Content', value: 'content' },
         ],
       }
     },
@@ -86,44 +90,25 @@
           : 10
       },
       transformedDataHPackage() {
-        return this.dataB_celOne.map((item, index) => {
+        if (!this.SMS || !Array.isArray(this.SMS)) {
+          return [];
+        }
+        return this.SMS.map((item, index) => {
           return {
             ...item,
             index: index + 1,
-            RESPON_DATE: this.formatAdjustDate(item.RESPON_DATE),
-            AMOUNT: this.formatResultDesc(item.AMOUNT), // Corrected method call
+            DestinationNum: item.DestinationNum,
+            SMID: item.SMID,
+            OriginalNum: item.OriginalNum,
+            Result: item.Result,
+            content: item.content,
+            datetime: item.datetime,
           }
-        })
+        });
       },
     },
-    mounted() {
-      // this.setSheetHeight();
-      // window.addEventListener('resize', this.setSheetHeight);
-    },
-    methods: {
-      formatAdjustDate(dateString) {
-        const date = new Date(dateString)
-        const formattedDate = date
-          .toLocaleString('en-US', {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-          })
-          .replace(',', '') // remove comma from the formatted string
-        return formattedDate
-      },
-      formatResultDesc(value) {
-      // Check if value is a valid number
-      const num = Number(value)
-      if (!isNaN(num)) {
-        return new Intl.NumberFormat().format(num)
-      }
-      return value // Return the original value if it's not a valid number
-    },
-    },
+    mounted() {},
+    methods: {},
   }
   </script>
   
@@ -152,29 +137,25 @@
   }
   
   .table-container ::-webkit-scrollbar-thumb {
-    background-color: rgb(255, 204, 0);
-    border-radius: 4px;
+    background-color: rgb(179, 179, 0);
+    border-radius: 2px;
   }
   
   .table-container ::-webkit-scrollbar-corner {
-    background-color:rgb(255, 204, 0);
-    border-radius: 4px;
+    background-color: rgb(179, 179, 0);
+    border-radius: 1px;
   }
   .scrollbar {
     overflow-x: hidden;
-    /* Prevent horizontal overflow */
   }
   
   .scrollbar::-webkit-scrollbar {
-    width: 8px;
-    /* Set the width of the scrollbar */
+    width: 4px;
     height: 2px;
   }
   
-  /* Increase specificity of thumb styles */
   .scrollbar::-webkit-scrollbar-thumb {
-    background-color: rgb(255, 204, 0);
-    /* Set the color of the thumb */
+    background-color: rgb(179, 179, 0);
   }
   </style>
-  
+   -->

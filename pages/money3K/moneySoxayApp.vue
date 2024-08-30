@@ -71,7 +71,7 @@
         <v-icon color="#ffff00" size="25">mdi-arrow-left</v-icon>
       </v-btn>
       <v-card-text class="pa-0">
-        <h2 class="text-center color_CL custom-font " style="color: #ffff00;">{{ en ? "ປະຫວັດການຕັດເງີນຂອງແອບ Soxay" : "History of Money cut by Soxay App."}}</h2>
+        <h2 class="text-center color_CL custom-font " style="color: #ffff00;">{{ en ? "ປະຫວັດການຕັດເງີນຂອງແອບ Soxay" : "Soxay App's cut-Money history."}}</h2>
       </v-card-text>
       <div></div>
     </v-card-actions>
@@ -174,7 +174,7 @@ export default {
       data_num: false,
       buttonanime: true,
       dataResponse: [],
-      overlay: false, // Add this line
+      overlay: false,
       heightPx: 0,
       columns: [
         { key: 'index', title: 'N' },
@@ -224,7 +224,6 @@ export default {
             telephone: Num,
           }
         )
-        // console.log(response.data)
         if (response.data) {
           this.dataResponse = response.data.map((detail, index) => ({
             index: index + 1,
@@ -257,20 +256,18 @@ export default {
           minute: '2-digit',
           second: '2-digit',
         })
-        .replace(',', '') // remove comma from the formatted string
+        .replace(',', '');
       return formattedDate
     },
     setSheetHeight() {
-      // Get the height of the computer screen
       this.heightPx = window.innerHeight - 190
     },
     formatResultDesc(value) {
-      // Check if value is a valid number
       const num = Number(value)
       if (!isNaN(num)) {
         return new Intl.NumberFormat().format(num)
       }
-      return value // Return the original value if it's not a valid number
+      return value;
     },
   },
   beforeDestroy() {

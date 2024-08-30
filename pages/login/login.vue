@@ -91,9 +91,6 @@ export default {
             },
         }
     },
-    // beforeMount() {
-    //     this.logout();
-    // },
     mounted() {
         this.setSheetHeight();
         window.addEventListener('resize', this.setSheetHeight);
@@ -107,12 +104,6 @@ export default {
         },
     },
     methods: {
-        // logout(){
-        //     if (this.$store.state.token){
-        //         this.$auth.strategy.token.reset()
-        //         this.$store.commit('setToken', false)
-        //     }
-        // },
         setSheetHeight() {
             const screen = document.querySelector('.screen');
             if (screen) {
@@ -125,7 +116,7 @@ export default {
             if (!this.active) {
                 setTimeout(() => {
                     this.active = true;
-                }, 500); // Change back to true after 1 second
+                }, 500);
             }
         },
         async checkrequired() {
@@ -136,26 +127,21 @@ export default {
                         password: this.password,
                     },
                 });
-                // console.log(response)
                 if(response){
                     this.$router.push('../');
                 }    
-                // } else {
-                        // console.error('Invalid response data');
-                    // }
+                else { console.error('Invalid response data'); }
             } catch (err) {
                 this.errorMessage();
             }
         },
-        //   iview ui code
         errorMessage() {
             this.$Notice.error({
                 title: `<span class="custom-font">${this.en ? 'ບໍ່ພົບຜູ້ໃຊ້ນີ້' : 'User Not Found'}</span>`,
-                desc: `<span class="custom-font">${this.en ? 'ກະລຸນາກວດເບິ່ງລະຫັດຜ່ານ ຫຼື ອີເມວຂອງທ່ານ ແລະ ລອງໃໝ່ອີກ.' : 'Check your Gmail or Password and try again.'}</span>`,
+                desc: `<span class="custom-font">${this.en ? 'ກະລຸນາກວດເບິ່ງຊື່,ອີເມວ ຫຼື ລະຫັດຜ່ານຂອງທ່ານ ແລະ ລອງໃໝ່ອີກ.' : 'Check your User Name, Gmail or Password and try again.'}</span>`,
             });
             this.toggleActive();
         },
-        //   iview ui code
         decryptResponse(encryptedData, key) {
             const crypto = require('crypto');
             const algorithm = 'aes-256-cbc';
@@ -165,14 +151,12 @@ export default {
                 Buffer.from(key, 'hex'),
                 iv
             );
-
             let decryptedData = decipher.update(
                 encryptedData.data,
                 'hex',
                 'utf-8'
             );
             decryptedData += decipher.final('utf-8');
-
             try {
                 return JSON.parse(decryptedData);
             } catch (e) {
@@ -181,16 +165,9 @@ export default {
             }
         },
         encryptToken(token) {
-            // Implement your token encryption logic here
-            // Example: Use a cryptographic library like crypto-js
             const CryptoJS = require('crypto-js');
-
-            // Replace 'yourSecretKey' with your actual secret key
             const secretKey = 'yourSecretKey';
-
-            // Encrypt the token using AES encryption
             const encryptedToken = CryptoJS.AES.encrypt(token, secretKey).toString();
-
             return encryptedToken;
         },
     },
@@ -201,16 +178,13 @@ export default {
 #screen::-webkit-scrollbar {
     display: none;
 }
-
 .hovered {
     background-color: rgba(255, 255, 255, 0.8);
     border-color: rgb(255, 255, 0);
 }
-
 .shaking {
     animation: shake 0.1s ease-in-out infinite alternate;
 }
-
 @keyframes shake {
     0% {
         transform: translateX(-3px);

@@ -249,7 +249,6 @@ export default {
       }
     },
     setSheetHeight() {
-      // Get the height of the computer screen
       this.heightPx = window.innerHeight - 190
     },
     formatAdjustDate(dateString) {
@@ -263,7 +262,7 @@ export default {
           minute: '2-digit',
           second: '2-digit',
         })
-        .replace(',', '') // remove comma from the formatted string
+        .replace(',', '');
       return formattedDate
     },
   },

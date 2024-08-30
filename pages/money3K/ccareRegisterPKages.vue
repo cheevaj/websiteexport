@@ -177,7 +177,7 @@ export default {
       buttonanime: true,
       dataResponse: [],
       overlay: false,
-      heightPx: 0, // Add this line
+      heightPx: 0,
       columns: [
         { key: 'index', title: 'INDEX' },
         { key: 'MSISDN', title: 'MSISDN' },
@@ -227,7 +227,6 @@ export default {
             datetime: Num,
           }
         )
-        // console.log('data:', response.data)
         if (response.data) {
           this.dataResponse = response.data.map((detail, index) => ({
             index: index + 1,
@@ -249,15 +248,13 @@ export default {
       }
     },
     formatResultDesc(value) {
-      // Check if value is a valid number
       const num = Number(value)
       if (!isNaN(num)) {
         return new Intl.NumberFormat().format(num)
       }
-      return value // Return the original value if it's not a valid number
+      return value;
     },
     setSheetHeight() {
-      // Get the height of the computer screen
       this.heightPx = window.innerHeight - 190
     },
   },

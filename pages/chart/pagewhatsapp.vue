@@ -1,5 +1,6 @@
 <template>
     <div>
+        <v-overlay :value="modelSend"></v-overlay>
         <v-card-text>
             <v-row>
                 <v-col cols="12" md="4" sm="4" class="pr-0">
@@ -11,7 +12,7 @@
                             <template v-slot:activator="{ on, attrs }">
                                 <v-btn color="yellow" dark v-bind="attrs" v-on="on" outlined>
                                     <h4 style="color: #000;">
-                                        +856 2078929363
+                                        +856 2078927154
                                     </h4>
                                 </v-btn>
                             </template>
@@ -35,13 +36,13 @@
                     <v-card-text class="pr-0 ">
                         <h4 :class="{'custom-font' : en}">{{ en ? 'ສົ່ງໃຫ້ເບີ' : 'Send to'}}</h4>
                         <v-card-actions class="pr-0">
-                            <v-text-field :class="{'custom-font' : en}" v-model="numberphone" type="number" label="207xxx, 207xx" :rules="rules"
+                            <v-text-field :class="{'custom-font' : en}" v-model="numberphone" label="207xxx" :rules="rules"
                                 hide-details="auto" />
                             <v-divider class="ml-1 pr-0 my-2" vertical style="background-color: #009242;" />
                             <Tooltip content="Import file Excel." placement="bottom" :delay="800">
                                 <input type="file" ref="fileInput" style="display: none"
                                     @change="handleFileUpload('send_num', $event)" />
-                                <v-btn text fab class="px-0 ml-1 mr-0" @click="$refs.fileInput.click()">
+                                <v-btn text fab :disabled="!sendAuto" class="px-0 ml-1 mr-0" @click="$refs.fileInput.click()">
                                     <v-icon size="35" style="color: rgb(41, 163, 41);">
                                         mdi-file-excel-outline
                                     </v-icon>
@@ -56,7 +57,104 @@
                             <h2 :class="{'custom-font' : en}">{{ en ? 'ຂໍ້ຄວາມ' : 'Message'}}</h2>
                         </v-card-title>
                         <v-spacer></v-spacer>
-                        <Tooltip content="Edit file import." placement="bottom" :delay="800">
+                        <Tooltip v-if="select" :content="tooltipContent" placement="bottom" :delay="800" :class="{'custom-font' : en}">
+                            <v-btn fab text style="background-color: #ffff00; color: #000;" @click="modelSend = !modelSend">
+                                <v-icon size="35">
+                                    mdi-send-clock
+                                </v-icon>
+                            </v-btn>
+                        </Tooltip>
+                        <v-dialog
+                          v-model="select"
+                          fullscreen
+                          hide-overlay
+                          transition="dialog-bottom-transition"
+                          scrollable
+                        >
+                        <v-card class="rounded-0">
+                            <v-card-actions class="py-1 pl-1 pr-2" style="background-color: #ffff00">
+                            <v-btn
+                                text
+                                x-small
+                                style="background-color: transparent; color: transparent"
+                                @click="select = !select"
+                                ><v-icon size="30" color="#ffff">mdi-arrow-left-bold</v-icon></v-btn
+                            >
+                            <v-spacer></v-spacer>
+                            <h2 class="custom-font">ລາຍລະອຽດວີດີໂອ</h2>
+                            <v-spacer></v-spacer>
+                            <v-btn fab outlined x-small @click="select = !select"
+                                ><v-icon>mdi-close</v-icon></v-btn
+                            >
+                            </v-card-actions>
+                            <v-card-text class="px-0" style="padding-top: 3px; padding-bottom: 4px">
+                            
+                            </v-card-text>
+                        </v-card>
+                        </v-dialog>
+                        <Modal
+                            v-model="modelSend"
+                            draggable
+                            scrollable
+                            :mask="false"
+                            width="340"
+                            style="padding: 0px"
+                        >
+                            <template #header>
+                            <div style="color: rgb(255, 215, 0); text-align: center">
+                                <v-icon color="rgb(255, 215, 0)"
+                                >mdi-send-variant-clock-outline</v-icon
+                                >
+                                <span class="custom-font">ສົ່ງຂໍ້ຄວາມອັດຕະໂນມັດ</span>
+                            </div>
+                            </template>
+                            <div>
+                            <div style="text-align: center">
+                                <v-card
+                                outlined
+                                class="table-container"
+                                style="
+                                    max-height: 240px;
+                                    z-index: 100;
+                                    margin-top: 2px;
+                                    overflow-y: auto;
+                                "
+                                >
+                                
+                                </v-card>
+                            </div>
+                            </div>
+                            <template #footer>
+                                <v-card-actions>
+
+                                    <Button
+                                    size="large"
+                                    long
+                                    style="background-color: rgb(230, 230, 0); color: #ffff"
+                                    @click="openBook"
+                                    >
+                                    <v-icon color="#ffff">mdi-book-open-page-variant</v-icon>&nbsp;<span
+                                    class="custom-font"
+                                    >ຄູ່ມື</span
+                                    >
+                                </Button>
+                                <Button
+                                    size="large"
+                                    long
+                                    style=" color: #ffff"
+                                    :style="{ backgroundColor: !sendAuto ? '#ff9900' : '#333300' }"
+                                    @click="openAutosend"
+                                    >
+                                    <v-icon color="#ffff">mdi-repeat-variant</v-icon>&nbsp;<span
+                                    class="custom-font"
+                                    >{{ !sendAuto ? 'ເປີດໃຊ້ງານ' : 'ປີດໃຊ້ງານ'}}</span
+                                    >
+                                </Button>
+                            </v-card-actions>
+                            </template>
+                        </Modal>
+                        <v-spacer></v-spacer>
+                        <Tooltip :content="tooltipEditFile" placement="bottom" :delay="800" :class="{'custom-font' : en}">
                             <v-btn fab text style="background-color: #ffff00; color: #000;"
                                 @click="dialogseting = true">
                                 <v-icon size="35">
@@ -101,10 +199,16 @@
                                     <div class="ml-4" @mouseenter="show = 'color'" @mouseleave="show = 'notcolor'">
                                         <Button text fab ghost :disabled="text !== '' ? false : true " class="pa-0"
                                             :style="{ backgroundColor: text !== '' ? '#000' : 'rgb(242, 242, 242)' }"
-                                            style="height: 50px; width: 50px; border-radius: 50%;" v-bind="attrs" v-on="on" @click="changeNameber()">
+                                            style="height: 50px; width: 50px; border-radius: 50%;" v-bind="attrs" v-on="on" @click="changeNameber(sendAuto)">
                                             <v-icon :color="show === 'color' ? '#00cc00' : 'rgb(191, 191, 191)'"
-                                                size="34">mdi-whatsapp</v-icon>
+                                                size="34">{{ sendAuto ? 'mdi-send-clock-outline' : 'mdi-whatsapp' }}</v-icon>
                                         </Button>
+                                        <!-- <Button text fab ghost :disabled="text !== '' ? false : true " class="pa-0"
+                                            :style="{ backgroundColor: text !== '' ? '#000' : 'rgb(242, 242, 242)' }"
+                                            style="height: 50px; width: 50px; border-radius: 50%;" v-bind="attrs" v-on="on" @click="changeNameber(sendAuto)">
+                                            <v-icon :color="show === 'color' ? '#00cc00' : 'rgb(191, 191, 191)'"
+                                                size="34">mdi-email-arrow-right</v-icon>
+                                        </Button> -->
                                     </div>
                                 </template>
                                 <v-card>
@@ -124,14 +228,14 @@
                                         </v-card>
                                         <v-row>
                                             <v-col cols="12" sm="5" md="5" class="pr-0">
-                                                <v-card-text class="pb-0 pl-0">
+                                                <v-card-text class="pb-0 pl-0 text-center">
                                                     <div :class="{'custom-font' : en}" style="color: #000;">
                                                         {{ en ? 'ເບີໂທລະສັບທີ່ສົ່ງ' : 'Number phone is' }}
                                                     </div>
                                                 </v-card-text>
-                                                <v-card class="rounded-0" min-height="76" outlined>
-                                                    <v-card-text >
-                                                        +856 2078929363
+                                                <v-card class="rounded-0 text-center" min-height="76" outlined>
+                                                    <v-card-text class="text-center">
+                                                        +856 2078927154
                                                     </v-card-text>
                                                 </v-card>
                                             </v-col>
@@ -139,36 +243,40 @@
                                                 <v-card-text class="px-0" min-height="76" align="center"
                                                     justify="center">
                                                     <v-icon>
-                                                        mdi-send
+                                                        mdi-transfer-right
                                                     </v-icon>
                                                 </v-card-text>
                                             </v-col>
-                                            <v-col cols="12" md="6" sm="6" class="pr-0">
-                                                <v-card-text class="pb-0 pl-0">
+                                            <v-col cols="12" md="6" sm="6" class="pl-0 pr-3">
+                                                <v-card-text class="pb-0 pl-0 text-center">
                                                     <div :class="{'custom-font' : en}" style="color: #000;">
                                                         {{ en ? 'ເບີທີ່ຈະສົ່ງ' : 'The number phone to be sent.' }}
                                                     </div>
                                                 </v-card-text>
-                                                <v-card class="rounded-0 overflow-auto" min-height="76"
+                                                <v-card class="rounded-0 overflow-auto text-center" min-height="76"
                                                     max-height="200px" outlined>
-                                                    <v-card-text>
                                                         <div v-for="(element, index) in numsend" :key="index">
-                                                            <div
+                                                            <div class="py-1" :style="{ backgroundColor:index%2 === 0 ? '#ffffe6' : '#f2f2f2' }"
                                                                 v-if="numsend !== null && numsend !== undefined && numsend.length > 0">
                                                                 {{ element }}
                                                             </div>
                                                         </div>
-                                                    </v-card-text>
                                                 </v-card>
                                             </v-col>
                                         </v-row>
                                     </v-card-text>
-                                    <v-card-actions class="justify-end">
+                                    <v-card-actions class="justify-end mx-3">
+                                        <v-card-actions v-if="sendAuto" >
+                                            <div>{{ numsend.length }}</div>
+                                            <v-icon>mdi-arrow-right-thin</v-icon>
+                                            <div>{{ formatTime(numsend.length * 5) }} </div>
+                                        </v-card-actions>
+                                        <v-spacer></v-spacer>
                                         <v-btn :class="{'custom-font' : en}" text color="error" @click="dialog2 = false">
                                             {{ en ? 'ຍົກເລີກ' : 'Cancel'}}
                                         </v-btn>
-                                        <v-btn outlined color="yellow" @click="sedQrchart()">
-                                            <v-icon>mdi-send</v-icon>
+                                        <v-btn outlined color="yellow" @click="sendMessageToWhatApp()">
+                                            <v-icon>{{ sendAuto ? 'mdi-send-variant-clock' : 'mdi-send' }}</v-icon>
                                         </v-btn>
                                     </v-card-actions>
                                 </v-card>
@@ -275,6 +383,9 @@ export default {
   middleware: 'auth',
     data() {
         return {
+            modelSend:false,
+            select:false,
+            sendAuto:false,
             dialogseting: false,
             sendMessage:false,
             show: false,
@@ -307,10 +418,34 @@ export default {
     },
     token(){
         return this.$store.state.tokenShow;
+    },
+    tooltipContent() {
+      return this.en ? 'ສົ່ງຂໍ້ຄວາມອັດຕະໂນມັດ.' : 'Send Message auto.';
+    },
+    tooltipEditFile(){
+      return this.en ? 'ເເກ້ໄຂໄຟຣຈະນໍາເຂົ້າ.' : 'Edit file import.';
     }
     },
     methods: {
-        async sedQrchart() {
+        formatTime(seconds) {
+            if (seconds < 60) {
+                return `${seconds}s`;
+            } else if (seconds === 60) {
+                return `1n`;
+            } else if (seconds < 3600) {
+                const minutes = Math.floor(seconds / 60);
+                const remainingSeconds = seconds % 60;
+                return remainingSeconds > 0 
+                    ? `${minutes}:${remainingSeconds.toString().padStart(2, '0')}s`
+                    : `${minutes}n`;
+            } else {
+                const hours = Math.floor(seconds / 3600);
+                const minutes = Math.floor((seconds % 3600) / 60);
+                const remainingSeconds = seconds % 60;
+                return `${hours}:${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}s`;
+            }
+        },
+        async sendMessageToWhatApp() {
             if(this.sendMessage){
                 try {                                                                                  
                     const response = await this.$axios.post('http://172.28.26.23:3335/sendtouser/alerttouser', {
@@ -326,12 +461,41 @@ export default {
                 this.numsend = [];
                 this.numberphone = "";
             } else {
-                // Handle the case where numeber is not a string or has length <= 0
                 const title =`<span :class="{'custom-font' : en}">${this.en ? 'ປ້ອນຂໍ້ມູນບໍ່ຖືກຕ້ອງ' : 'Invalid input'}</span>`;
                 const desc =`<span :class="{'custom-font' : en}">${this.en ? 'ການປ້ອນຂໍ້ມູນຂອງທ່ານອາດບໍ່ມີເບີ ຫຼື ຂໍ້ຄວາມ.' : 'Your input may not contain numbers or Message.'}</span>`
                 this.error(false, title, desc);
             }
         },
+        // async sendMessageAuto() {
+        //     if (this.sendMessage && this.numsend.length > 0) {
+        //         for (const [index, numero] of this.numsend.entries()) {
+        //             try {
+        //                 const response = await this.$axios.post('http://172.28.26.23:3335/sendtouser/alerttouser', {
+        //                     numeros: numero,
+        //                     mensaje: this.text,
+        //                 });
+        //                 this.resultados = response.data.resultados;
+
+        //                 this.renderFunc(this.en ? 'ສົ່ງຂໍ້ຄວາມສຳເລັດແລ້ວ.' : 'Messages sent successfully.', 
+        //                                 this.en ? 'ທ່ານໄດ້ສົ່ງຂໍ້ຄວາມສໍາເລັດເເລ້ວ.' : 'You sent messages submitted successfully.');
+        //                 if (index < this.numsend.length - 1) {
+        //                     await new Promise(resolve => setTimeout(resolve, 5000));
+        //                 }
+        //             } catch (error) {
+        //                 console.error('Error sending message to:', numero, error);
+        //                 break;
+        //             }
+        //         }
+        //         this.dialog2 = false;
+        //         this.numsend = [];
+        //         this.numberphone = "";
+        //     } else {
+        //         const title = `<span :class="{'custom-font' : en}">${this.en ? 'ປ້ອນຂໍ້ມູນບໍ່ຖືກຕ້ອງ' : 'Invalid input'}</span>`;
+        //         const desc = `<span :class="{'custom-font' : en}">${this.en ? 'ການປ້ອນຂໍ້ມູນຂອງທ່ານອາດບໍ່ມີເບີ ຫຼື ຂໍ້ຄວາມ.' : 'Your input may not contain numbers or Message.'}</span>`;
+        //         this.error(false, title, desc);
+        //     }
+        // },
+
         async addNumber_database() {
             try {
                 const response = await this.$axios.post('http://172.28.26.23:3335/sendtouser/insertnumbers', {
@@ -345,9 +509,8 @@ export default {
             this.dialog3 = false;
             this.renderFunc('Add number phone success.', ' You can add number to database successfully.');
         },
-        // -------------------------------------------------------------------
         handleFileUpload(tyNum, event) {
-            const fileInput = tyNum === 'send_num' ? this.$refs.fileInput : this.$refs.fileAdd; // ---- undefined
+            const fileInput = tyNum === 'send_num' ? this.$refs.fileInput : this.$refs.fileAdd;
             if (event.target.files.length > 0) {
                 const file = event.target.files[0];
                 fileInput.value = '';
@@ -363,18 +526,9 @@ export default {
                 const workbook = XLSX.read(data, { type: 'binary' });
                 const sheetName = workbook.SheetNames[0];
                 const sheet = workbook.Sheets[sheetName];
-
-                // -------------- Assuming phone numbers are in the specified column (colNum)
                 const jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1, range: this.colNum - 1 });
-                // console.log(jsonData)
-
-                // ---------------- Extract data from the specified column and row
                 const extractedData = jsonData.map(row => row[this.rowNum - 1]);
-
-                // ---------------- Remove the header (assuming the header is in the first row)
                 extractedData.shift();
-
-                // --------------- Set this.numsend to the extracted phone numbers
                 if (tyNum === 'send_num') {
                     this.numsend = extractedData.map(cell => String(cell));
                     this.numberphone = this.numsend;
@@ -405,23 +559,22 @@ export default {
                 }).filter(n => n !== '');
                 this.show = true;
                 this.sendMessage = true;
+                // console.log('Num:',this.numsend);
             } else {
-                // Handle the case where numeber is not a string or has length <= 0
-                const title =`<span :class="{'custom-font' : en}">${this.en ? 'ປ້ອນຂໍ້ມູນບໍ່ຖືກຕ້ອງ' : 'Invalid input'}</span>`;
-                const desc =`<span :class="{'custom-font' : en}">${this.en ? 'ການປ້ອນຂໍ້ມູນຂອງທ່ານອາດບໍ່ມີເບີ ຫຼື ຂໍ້ຄວາມ.' : 'Your input may not contain numbers or Message.'}</span>`
+                const title =`<span :class="{'custom-font' : en}">${this.en ? 'ປ້ອນຂໍ້ມູນເບີບໍ່ຖືກຕ້ອງ' : 'Invalid number input'}</span>`;
+                const desc =`<span :class="{'custom-font' : en}">${this.en ? 'ປ້ອນເບີໂທຂອງທ່ານບໍ່ຖືກ.' : 'check your home number.'}</span>`
                 this.sendMessage = false;
                 this.error(false, title, desc);
             }
         },
-        // changePassword() {
-        //     if (this.pasend === ('1' || 1) && this.numsend.length > 0) {
-        //         this.sedQrchart();
-        //     } else {
-        //         const title = 'The password ro number is incorrect.';
-        //         const desc = 'check your password ro namber phone and Try again.';
-        //         this.error(false, title, desc);
-        //     }
-        // },
+        openAutosend(){
+            this.sendAuto = !this.sendAuto;
+            this.modelSend = !this.modelSend;
+        },
+        openBook(){
+            this.select = !this.select;
+            this.modelSend = !this.modelSend;
+        },
         changeRow(status) {
             if (status) {
                 this.dialogseting = false;
@@ -431,21 +584,20 @@ export default {
                 this.rowNum = 1;
                 this.dialogseting = false;
             }
-            // console.log('ll', this.colNum, this.rowNum)
         },
         renderFunc(smsTitle, smsText) {
             this.text = '';
             this.pasend = ''
             this.$Notice.success({
-                title: smsTitle,
-                desc: smsText,
+                title: `<span class="${this.en ? 'custom-font' : ''}">${smsTitle}</span>`,
+                desc: `<span class="${this.en ? 'custom-font' : ''}">${smsText}</span>`,
             });
 
         },
         error(nodesc, title, desc) {
             this.$Notice.error({
-                title,
-                desc: nodesc ? '' : desc,
+                title: `<span class="${this.en ? 'custom-font' : ''}">${title}</span>`,
+                desc: nodesc ? '' : `<span class="${this.en ? 'custom-font' : ''}">${desc}</span>`,
             });
         },
 
@@ -480,9 +632,5 @@ export default {
 
 .custom-font {
     font-family: 'Noto Sans Lao', sans-serif;
-    /* You can specify additional styles here */
 }
-/* .send-button {
-    background-color: ;
-} */
 </style>

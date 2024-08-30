@@ -116,7 +116,6 @@ export default {
   data() {
     return {
       buttonWeb: false,
-      // All website
       items_menu: [
         {
           avatar:
@@ -201,11 +200,9 @@ export default {
 }
 .font_size_12 {
   font-size: 12px;
-  /* Adjust the font size as needed */
 }
 .font_size_18 {
   font-size: 18px;
-  /* Adjust the font size as needed */
 }
 .custom-font {
   font-family: 'Noto Sans Lao', sans-serif;

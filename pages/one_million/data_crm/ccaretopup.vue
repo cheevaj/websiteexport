@@ -89,7 +89,6 @@ export default {
         : 10
     },
     transformedDataHPackage() {
-        console.log(this.dataCCare)
       return this.dataCCare.map((item, index) => {
         return {
           ...item,
@@ -117,13 +116,9 @@ export default {
           minute: '2-digit',
           second: '2-digit',
         })
-        .replace(',', '') // remove comma from the formatted string
+        .replace(',', '')
       return formattedDate
     },
-    // setSheetHeight() {
-    //   // Get the height of the computer screen
-    //   this.heightPx = window.innerHeight - 190
-    // },
   },
 }
 </script>
@@ -153,28 +148,24 @@ export default {
 }
 
 .table-container ::-webkit-scrollbar-thumb {
-  background-color: rgb(179, 179, 0);
+  background-color: rgb(255, 204, 0);
   border-radius: 2px;
 }
 
 .table-container ::-webkit-scrollbar-corner {
-  background-color: rgb(179, 179, 0);
+  background-color: rgb(255, 204, 0);
   border-radius: 1px;
 }
 .scrollbar {
   overflow-x: hidden;
-  /* Prevent horizontal overflow */
 }
 
 .scrollbar::-webkit-scrollbar {
   width: 4px;
-  /* Set the width of the scrollbar */
   height: 2px;
 }
 
-/* Increase specificity of thumb styles */
 .scrollbar::-webkit-scrollbar-thumb {
-  background-color: rgb(179, 179, 0);
-  /* Set the color of the thumb */
+  background-color: rgb(255, 204, 0);
 }
 </style>

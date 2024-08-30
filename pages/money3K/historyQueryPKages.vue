@@ -296,16 +296,14 @@ export default {
       }
     },
     setSheetHeight() {
-      // Get the height of the computer screen
       this.heightPx = window.innerHeight - 190
     },
     formatResultDesc(value) {
-      // Check if value is a valid number
       const num = Number(value)
       if (!isNaN(num)) {
         return new Intl.NumberFormat().format(num)
       }
-      return value // Return the original value if it's not a valid number
+      return value;
     },
   },
 }
@@ -336,12 +334,12 @@ export default {
 }
 
 .table-container ::-webkit-scrollbar-thumb {
-  background-color: #ffff00;
+  background-color: rgb(255, 204, 0);
   border-radius: 4px;
 }
 
 .table-container ::-webkit-scrollbar-corner {
-  background-color: #ffff00;
+  background-color: rgb(255, 204, 0);
   border-radius: 4px;
 }
 </style>

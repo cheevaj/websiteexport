@@ -212,7 +212,6 @@
           { key: 'RESULTDESC', title: 'Result Description' },
           { key: 'CODE', title: 'Code' },
           { key: 'ADJUSTDATE', title: 'Adjust Date' },
-          // { key: 'MONTHLY', title: 'Monthly' },
         ],
         headers: [
           { text: 'N', value: 'index' },
@@ -222,7 +221,6 @@
           { text: 'Result Description', value: 'RESULTDESC' },
           { text: 'Code', value: 'CODE' },
           { text: 'Adjust Date', value: 'ADJUSTDATE' },
-          // { text: 'Monthly', value: 'MONTHLY' },
         ],
       }
     },
@@ -259,7 +257,6 @@
               telephone: Num,
             }
           )
-          // console.log(response)
           if (response.data) {
             this.dataResponse = response.data.map((detail, index) => ({
               index: index + 1,
@@ -293,19 +290,17 @@
             minute: '2-digit',
             second: '2-digit',
           })
-          .replace(',', '') // remove comma from the formatted string
+          .replace(',', '');
         return formattedDate
       },
       formatResultDesc(value) {
-      // Check if value is a valid number
       const num = Number(value)
       if (!isNaN(num)) {
         return new Intl.NumberFormat().format(num)
       }
-      return value // Return the original value if it's not a valid number
+      return value;
     },
       setSheetHeight() {
-        // Get the height of the computer screen
         this.heightPx = window.innerHeight - 190
       },
       handleFileUpload(event) {
@@ -323,20 +318,12 @@
           const workbook = XLSX.read(data, { type: 'binary' })
           const sheetName = workbook.SheetNames[0]
           const sheet = workbook.Sheets[sheetName]
-  
-          // -------------- Assuming phone numbers are in the specified column (colNum)
           const jsonData = XLSX.utils.sheet_to_json(sheet, {
             header: 1,
             range: -1,
           })
-  
-          // ---------------- Extract data from the specified column and row
           const extractedData = jsonData.map((row) => row[0])
-  
-          // ---------------- Remove the header (assuming the header is in the first row)
           extractedData.shift()
-  
-          // --------------- Set this.numsend to the extracted phone numbers
           this.numberPhon = extractedData.join(',')
         }
         reader.readAsBinaryString(file)

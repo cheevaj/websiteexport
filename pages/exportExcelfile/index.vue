@@ -125,7 +125,6 @@ export default {
     return {
       button: false,
       buttonWeb: false,
-      // Add new menu download
       items_menu: [
         {
           titleEn: "History of CCare's register package for customer",
@@ -166,14 +165,14 @@ export default {
 </script>
 <style scoped>
 .language-button {
-  background-color: #fff; /* Default state */
+  background-color: #fff;
   border: 2px solid #ffff00;
   color: inherit;
   transition: background-color 0.3s ease;
 }
 
 .language-button:hover {
-  background-color: #ffff00 !important; /* Hover state with !important to override Vuetify styles */
-  color: inherit !important; /* Ensure text color remains unchanged */
+  background-color: #ffff00 !important;
+  color: inherit !important;
 }
 </style>

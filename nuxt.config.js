@@ -6,10 +6,7 @@ export default {
   //   host: '172.28.17.102', // default: localhost
   // },
 
-  // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
   ssr: false,
-
-  // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     titleTemplate: '%s - TICKET',
     title: 'TPLUS',
@@ -38,40 +35,22 @@ export default {
       },
     ],
   },
-
-  // Global CSS: https://go.nuxtjs.dev/config-css
   css: ['iview/dist/styles/iview.css'],
-
-  // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: ['~/plugins/chartjs.js', '@/plugins/iview'],
-  // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
 
-  // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
-    // https://go.nuxtjs.dev/eslint
     '@nuxtjs/eslint-module',
     '@nuxtjs/google-fonts',
-    // https://go.nuxtjs.dev/vuetify
     '@nuxtjs/vuetify',
   ],
-
   eslint: {},
-
-  // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
-    // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
     '@nuxtjs/google-fonts',
     '@nuxtjs/auth-next',
+    '@nuxtjs/proxy',
   ],
-  modules: [
-    // https://go.nuxtjs.dev/axios
-    '@nuxtjs/axios',
-    '@nuxtjs/auth-next',
-  ],
-  // nuxt.config.js
-
   auth: {
     store: '~/store',
     redirect: {
@@ -90,30 +69,32 @@ export default {
           property: 'user',
         },
         endpoints: {
-          login: { url: '/users/login', method: 'post' },
-          logout: { url: '/users/logout', method: 'delete' },
-          user: { url: '/users/me', method: 'get' },
+          login: { url: 'http://172.28.26.23:3100/users/login', method: 'post' },
+          logout: { url: 'http://172.28.26.23:3100/users/logout', method: 'delete' },
+          user: { url: 'http://172.28.26.23:3100/users/me', method: 'get' },
         },
       },
     },
   },
   googleFonts: {
     families: {
-      // Specify the fonts you want to use
-      // Example: 'Roboto:400,700', 'Open+Sans:400,700'
-      // You can also specify font styles and weights
-      // Example: 'Roboto:ital,wght@0,400;0,700,1;1,400&display=swap'
-      'Noto+Sans+Lao': true, // Include Noto Sans Lao font,
-      // 'Roboto': 'Roboto:400,700',
+      'Noto+Sans+Lao': true,
     },
   },
-  // Axios module configuration: https://go.nuxtjs.dev/config-axios
-  axios: {
-    // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
-    baseURL: 'http://172.28.26.23:3100',
+  proxy: {
+    '/api/': {
+      target: 'https://172.28.26.72:9443',
+      pathRewrite: { '^/api/': '' },
+      changeOrigin: true,
+      secure: false,
+    },
+    '/users/': {
+      target: 'http://172.28.26.23:3100',
+      pathRewrite: { '^/users/': '/users/' },
+      changeOrigin: true,
+      secure: false,
+    },
   },
-
-  // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
     theme: {
@@ -131,6 +112,11 @@ export default {
       },
     },
   },
-  // Build Configuration: https://go.nuxtjs.dev/config-build
-  build: {},
+  build: {
+    hotMiddleware: {
+      client: {
+        timeout: 60000,
+      },
+    },
+  },
 }

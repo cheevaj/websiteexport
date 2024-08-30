@@ -10,9 +10,9 @@
                     <Input
                       v-model="numberPhon"
                       class="custom-font"
-                      :placeholder=" en ? 'ກະລຸນາປ້ອມເບີໂທລະສັບ ( 20789... )' : 'Enter phone number ( 20788... )'"
+                      :placeholder=" en ? 'ກະລຸນາປ້ອມເບີໂທລະສັບ ( 20789...,20778... )' : 'Enter phone number ( 20788... )'"
                       clearable
-                      style="width: 250px; height: 34px; margin-top: 1px"
+                      style="width: 300px; height: 34px; margin-top: 1px"
                       @keydown.enter="handleSearch"
                     />
                   </form>
@@ -222,8 +222,7 @@
       async handleSearch() {
         this.dataResponse = []
         this.loading = true
-        const Num = this.numberPhon.split(',').map((num) => num.trim())
-        console.log(Num)
+        const Num = this.numberPhon.split(',').map((num) => num.trim()).reverse();
         try {
           const response = await this.$axios.post(
             'http://172.28.26.23:3400/showdetail/nicenumberdetaill',
@@ -231,36 +230,33 @@
               telephone: Num,
             }
           )
-          console.log(response.data)
           if (response.data) {
             this.dataResponse = response.data.map((detail, index) => ({
               index: index + 1,
               MSISDN: detail.MSISDN,
-              Active_Date: detail.Active_Date ? detail.Active_Date.substring(0, 4) + '\u00A0/\u00A0' + detail.Active_Date.substring(4,6)+ '\u00A0/\u00A0' + detail.Active_Date.substring(6) : '',
+              Active_Date: (detail.Active_Date && detail.Active_Date !=='0' ) ? detail.Active_Date.substring(0, 4) + '\u00A0/\u00A0' + detail.Active_Date.substring(4,6)+ '\u00A0/\u00A0' + detail.Active_Date.substring(6) : '',
               Book_detail:detail.Book_detail,
-              Date_Booking:detail.Date_Booking,
-              Date_delete_pool:this.formatAdjustDate(detail.Date_delete_pool),
+              Date_Booking:detail.Date_Booking ? detail.Date_Booking.substring(0, 4) + '\u00A0/\u00A0' + detail.Date_Booking.substring(4,6)+ '\u00A0/\u00A0' + detail.Date_Booking.substring(6) : '',
+              Date_delete_pool:detail.Date_delete_pool ? detail.Date_delete_pool.substring(0, 4) + '\u00A0/\u00A0' + detail.Date_delete_pool.substring(4,6)+ '\u00A0/\u00A0' + detail.Date_delete_pool.substring(6) : '',
               Sub_status:detail.Sub_status,
               Class:detail.Class,
-              // ADJUSTDATE: this.formatAdjustDate(detail.RESPON_DATE),
               Prepaid_price: this.formatResultDesc(detail.Prepaid_price),
               Postpaid_price: this.formatResultDesc(detail.Postpaid_Price),
             }))
           } else {
             this.dataResponse = []
           }
-          this.data_num = true
+          this.data_num = true;
         } catch (error) {
           this.dataResponse = []
           console.error('Error fetching data:', error)
         } finally {
-          this.loading = false
+          this.loading = false;
         }
       },
       formatAdjustDate(dateString) {
         const date = new Date(dateString)
-        const formattedDate = date
-          .toLocaleString('en-US', {
+        const formattedDate = date.toLocaleString('en-US', {
             year: 'numeric',
             month: '2-digit',
             day: '2-digit',
@@ -268,24 +264,22 @@
             minute: '2-digit',
             second: '2-digit',
           })
-          .replace(',', '') // remove comma from the formatted string
-        return formattedDate
+          .replace(',', '');
+        return formattedDate;
       },
       setSheetHeight() {
-        // Get the height of the computer screen
-        this.heightPx = window.innerHeight - 190
+        this.heightPx = window.innerHeight - 190;
       },
       formatResultDesc(value) {
-      // Check if value is a valid number
-      const num = Number(value)
+      const num = Number(value);
       if (!isNaN(num)) {
-        return new Intl.NumberFormat().format(num)
+        return new Intl.NumberFormat().format(num);
       }
-      return value // Return the original value if it's not a valid number
+      return value;
     },
     },
     beforeDestroy() {
-      window.removeEventListener('resize', this.setSheetHeight)
+      window.removeEventListener('resize', this.setSheetHeight);
     },
   }
   </script>

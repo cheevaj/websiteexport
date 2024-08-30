@@ -270,18 +270,25 @@
               <v-card-text v-if="loading" class="pa-0">
                 <v-progress-linear indeterminate color="#4d3d00"></v-progress-linear>
               </v-card-text>
-              <v-data-table width="100%" :height="heightPx + 'px'" fixed-header dense :headers="visibleHeaders"
-                :items="desserts" :items-per-page="50" item-key="TICKETID" class="elevation-1 custom-font font_size_12">
-                <template v-slot:item="{ item }">
-                  <tr
-                    class="text_color custom-font"
-                  >
-                    <td v-for="header in visibleHeaders" :key="header.text">
-                      <span class="font_size_12 custom-font">{{ item[header.value] }}</span>
-                    </td>
-                  </tr>
-                </template>
-              </v-data-table>
+              <v-data-table
+  width="100%"
+  :height="heightPx + 'px'"
+  fixed-header
+  dense
+  :headers="visibleHeaders"
+  :items="desserts"
+  :items-per-page="computedItemsPerPage"
+  item-key="TICKETID"
+  class="elevation-1 custom-font font_size_12"
+>
+  <template v-slot:item="{ item }">
+    <tr class="text_color custom-font">
+      <td v-for="header in visibleHeaders" :key="header.text">
+        <span class="font_size_12 custom-font">{{ item[header.value] }}</span>
+      </td>
+    </tr>
+  </template>
+</v-data-table>
             </v-card>
           </v-col>
         </v-card-actions>
@@ -434,6 +441,9 @@ export default {
     en() {
       return this.$store.state.en;
     },
+    computedItemsPerPage() {
+      return this.desserts.length > 0 ? this.desserts.length : 50;
+    },
     // -- header table 
     visibleHeaders() {
       return this.headers.filter((header) => {
@@ -537,6 +547,7 @@ export default {
     },
     // ------------- function Get data in api
     async getData() {
+      // console.log('date::',this.date)
       this.showgraph = false;
       this.loading = true
       try {
