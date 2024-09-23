@@ -110,6 +110,7 @@
                           display: flex;
                           flex-direction: column;
                           justify-content: center;
+                          background-color: #ffff;
                         "
                         @click="showData('image')"
                       >
@@ -340,9 +341,7 @@
                       {{ en ? 'ຊື່ Offering:' : 'Offering Name:' }}
                     </span>
                     <v-spacer />
-                    {{
-                      selectInform.formattedResult.postpaidNumber.subNames[0]
-                    }}
+                    {{ selectInform.formattedResult.postpaidNumber.subNames[0] }}
                   </v-card-actions>
                   <v-divider />
                 </v-card-text>
@@ -1175,13 +1174,14 @@
                             : 'rgb(0, 230, 0)',
                       }"
                     >
-                      2
+                      1
                     </div>
                   </v-btn>
                   <v-divider />
                   <v-btn
                     class="rounded-0 px-1 py-0"
                     width="100%"
+                    disabled
                     small
                     text
                     @click="showData('Topup')"
@@ -1194,16 +1194,10 @@
                     >
                     <v-spacer />
                     <div
-                      class="px-2 py-1"
-                      style="border-radius: 2px; color: #ffff"
-                      :style="{
-                        backgroundColor:
-                          number === 0
-                            ? 'rgb(179, 179, 179)'
-                            : 'rgb(0, 230, 0)',
-                      }"
+                      class="px-1 py-1"
+                      style="border-radius: 2px; color: rgb(89, 89, 89)"
                     >
-                      2
+                      <h4 class="custom-font">ປິດ</h4>
                     </div>
                   </v-btn>
                   <v-divider />
@@ -1592,6 +1586,7 @@
                     :data="checkData"
                   />
                   <smsOneScreen v-else-if="text === 'History-SMS'" :SMS="SMS" />
+                  <borrowMoney v-else-if="text === 'Borrow-and-cut-Money'" :SMS="SMS" />
                 </v-card-text>
                 <v-card
                   v-if="text === 'image'"
@@ -1657,6 +1652,7 @@ import TPlusApp from '../data_crm/TPlusApp'
 import MMoneyx from '../data_crm/MMoneyx'
 import DataPackage from '../data_crm/dataPackage'
 import smsOneScreen from '../data_crm/smsOneScreen'
+import borrowMoney from '../data_crm/borrowMoney'
 export default {
   middleware: 'auth',
   Currency: 'index',
@@ -1684,6 +1680,7 @@ export default {
     MMoneyx,
     DataPackage,
     smsOneScreen,
+    borrowMoney
   },
   data() {
     return {
@@ -1855,21 +1852,21 @@ export default {
       try {
         const responses = await Promise.all(apiCalls)
         const [ccareDetailResponse] = responses
-        this.dataCCare = ccareDetailResponse ? ccareDetailResponse.data : []
+        this.dataCCare = ccareDetailResponse ? ccareDetailResponse.data : [];
       } catch (error) {
         console.error('Error fetching data:', error)
       }
     },
     showData(textValue) {
       if (textValue === 'image') {
-        this.uRegister.forEach((item) => this.computeImageStyle(item))
+        this.uRegister.forEach((item) => this.computeImageStyle(item));
       }
-      this.text = textValue
-      this.dialog = true
+      this.text = textValue;
+      this.dialog = true;
     },
     truncateText(text, maxLength) {
       if (text.length <= maxLength) return text
-      return text.substring(0, maxLength) + '...'
+      return text.substring(0, maxLength) + '...';
     },
     computeImageStyle(item) {
       const img = new Image()

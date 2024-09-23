@@ -1,89 +1,13 @@
 <template>
     <div>
-      <div style="position: fixed; z-index: 100; right: 1px">
-        <v-card-actions class="pa-0">
-          <transition name="move-right">
-            <div v-show="buttonanime" class="transition-box">
-              <v-card-actions class="pa-0">
-                <div style="display: flex">
-                  <form @submit.prevent="handleSearch">
-                    <Input
-                      class="custom-font"
-                      v-model="numberPhon"
-                      :placeholder=" en ? 'ກະລຸນາປ້ອມ ປີ ແລະ ເດືອນ ( 202402 )' : 'Enter New year and month ( 202403 )'"
-                      clearable
-                      style="width: 250px; height: 34px; margin-top: 1px"
-                      @keydown.enter="handleSearch"
-                    />
-                  </form>
-                  <v-btn
-                    :loading="loading"
-                    small
-                    text
-                    @click="handleSearch"
-                    style="
-                      height: 31px;
-                      background-color: rgb(230, 230, 0);
-                      color: #000;
-                      margin-top: 1px;
-                      margin-left: 1px;
-                      padding-left: 4px;
-                      padding-right: 4px;
-                    "
-                  >
-                    <h4 class="custom-font">{{en ? 'ຄົ້ນຫາ' : 'Search'}}</h4>
-                  </v-btn>
-                  <v-btn
-                    text
-                    x-small
-                    height="32px"
-                    @click="buttonanime = !buttonanime"
-                    style="
-                      padding: 0;
-                      margin-top: 1px;
-                      background-color: transparent;
-                      color: transparent;
-                    "
-                  >
-                    <v-icon color="rgb(204, 204, 204)"
-                      >mdi-chevron-double-right</v-icon
-                    >
-                  </v-btn>
-                </div>
-              </v-card-actions>
-            </div>
-          </transition>
-          <v-btn
-            v-if="!buttonanime"
-            fab
-            text
-            x-small
-            height="32px"
-            @click="buttonanime = !buttonanime"
-            style="padding: 0; background-color: #000"
-          >
-            <v-icon color="#ffff">mdi-chevron-double-left</v-icon>
-          </v-btn>
-        </v-card-actions>
-      </div>
-      <v-card-actions class="pa-2" style="background-color: rgb(26, 26, 0)">
-        <v-btn fab x-small text @click="$router.go(-1)">
-          <v-icon color="#ffff00" size="25">mdi-arrow-left</v-icon>
-        </v-btn>
-        <v-card-text class="pa-0">
-          <h2 class="text-center color_CL custom-font" style="color: #ffff00;">{{en ? "ປະຫວັດການເຕີມແພັກເກດຂອງ C-Care." : "C-Care's Top-Up Package History."}}</h2>
-        </v-card-text>
-        <div></div>
-      </v-card-actions>
       <v-card
-        v-if="dataResponse.length > 0"
+        v-if="(dataCandidatePKage.length > 0) && (pageItem === 3)"
         outlined
         class="rounded-0 scrollbar"
         style="
           overflow-y: auto;
           width: 100%;
-          position: fixed;
-          height: calc(100vh - 14vh);
+          height: calc(100vh - 17vh);
           left: 0;
           overflow: y;
           z-index: 10;
@@ -96,7 +20,7 @@
           fixed-header
           dense
           :headers="visibleHeaders"
-          :items="dataResponse"
+          :items="dataCandidatePKage"
           :items-per-page="itemsPerPage"
           item-key="ProductNumber"
           class="elevation-1 pt-4 custom-font table-container"
@@ -128,13 +52,13 @@
         "
       >
         <v-card
-          v-if="data_num"
+          v-if="pageItem === 3"
           min-width="450"
           min-height="300"
           class="text-center"
           style="display: flex; flex-direction: column; justify-content: center"
         >
-          <h3 class="custom-font">{{ en ? 'ກະລຸນາປ້ອມ ປີ ແລະ ເດືອນ.' : 'Enter New year and month.' }}</h3>
+          <h3 class="custom-font">{{ en ? 'ກະລຸນາປ້ອມ ປີ ແລະ ເດືອນໃໝ່.' : 'Enter New year and month.' }}</h3>
           <br />
           <div class="mouse_senter" @click="buttonanime = !buttonanime">
             <v-icon size="85" color="rgb(128, 128, 0)">mdi-database-alert</v-icon>
@@ -168,14 +92,16 @@
   <script>
   export default {
     middleware: 'auth',
+    props: {
+    dataCandidatePKage: Array,
+    pageItem:Number,
+  },
     data() {
       return {
         outlined: false,
-        loading: false,
+        heightPx:0,
         numberPhon: '',
-        data_num: false,
         buttonanime: true,
-        dataResponse: [],
         overlay: false,
         columns: [
           { key: 'index', title: 'N' },
@@ -206,8 +132,8 @@
         )
       },
       itemsPerPage() {
-        return this.dataResponse.length > 0
-          ? this.dataResponse[this.dataResponse.length - 1].index
+        return this.dataCandidatePKage.length > 0
+          ? this.dataCandidatePKage[this.dataCandidatePKage.length - 1].index
           : 10;
       },
     },
@@ -216,39 +142,8 @@
       window.addEventListener('resize', this.setSheetHeight)
     },
     methods: {
-      async handleSearch() {
-        this.dataResponse = {}
-        this.loading = true
-        const Num = Number(this.numberPhon);
-        try {
-          const response = await this.$axios.post(
-            'http://172.28.17.102:9960/finddate/findcareregister',
-            {
-              datetime: Num,
-            }
-          )
-          if (response.data) {
-            this.dataResponse = response.data.map((detail, index) => ({
-              index: index + 1,
-              Month:
-                detail.Month.substring(0, 4) + '\u00A0/\u00A0' + detail.Month.substring(4),
-              Packagecode: detail.Packagecode,
-              QTY: detail.QTY,
-              Staff_Name: detail.Staff_Name,
-            }))
-          } else {
-            this.dataResponse = []
-          }
-          this.data_num = true
-        } catch (error) {
-          this.dataResponse = []
-          console.error('Error fetching data:', error)
-        } finally {
-          this.loading = false
-        }
-      },
       setSheetHeight() {
-        this.heightPx = window.innerHeight - 190
+        this.heightPx = window.innerHeight - 205
       },
     },
   }
@@ -279,12 +174,12 @@
   }
   
   .table-container ::-webkit-scrollbar-thumb {
-    background-color: #ffff00;
+    background-color: rgb(255, 204, 0);
     border-radius: 4px;
   }
   
   .table-container ::-webkit-scrollbar-corner {
-    background-color: #ffff00;
+    background-color: rgb(255, 204, 0);
     border-radius: 4px;
   }
   </style>

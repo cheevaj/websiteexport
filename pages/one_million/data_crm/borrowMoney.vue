@@ -1,55 +1,84 @@
 <template>
-  <div class="background_color">
-    <v-card
-      outlined
-      class="rounded-0 scrollbar"
-      style="
-        overflow-y: auto;
-        left: 0;
-        height: calc(100vh - 19vh) - 4px;
-        overflow: y;
-        background-color: #f2f2f2;
-      "
-    >
-      <v-data-table
-        height="calc(100vh - 27vh)"
-        fixed-header
-        dense
-        :headers="visibleHeaders"
-        :items="transformedDataHPackage"
-        :items-per-page="itemsPerPage"
-        item-key="ProductNumber"
-        class="elevation-1 custom-font table-container scrollbar"
+  <div>
+    <v-card flat height="calc(100vh - 19vh)" style="border-radius: 3px">
+      <Tabs
+        type="card"
+        v-model="tabItem"
+        class="custom-font"
+        style="padding: 0px"
       >
-        <template v-slot:item="{ item }">
-          <tr
-            class="text_color"
-            :style="{
-              backgroundColor:
-                item.index % 2 !== 0
-                  ? 'rgb(255, 255, 230)'
-                  : 'rgb(255, 255, 255)',
-            }"
-          >
-            <td v-for="header in visibleHeaders" :key="header.text">
-              <span class="font_size_12">{{ item[header.value] }}</span>
-            </td>
-          </tr>
-        </template>
-      </v-data-table>
+        <TabPane
+          v-for="(itemType, id) in tabs"
+          :key="id"
+          :label="itemType.title"
+          class="custom-font"
+        >
+          <div v-if="tabItem === 0">
+            <v-card
+              outlined
+              class="rounded-0 scrollbar"
+              style="
+                overflow-y: auto;
+                left: 0;
+                height: calc(100vh - 25vh) - 4px;
+                overflow: y;
+                background-color: #f2f2f2;
+              "
+            >
+              <v-data-table
+                height="calc(100vh - 34vh)"
+                fixed-header
+                dense
+                :headers="visibleHeaders"
+                :items="transformedDataHPackage"
+                :items-per-page="itemsPerPage"
+                item-key="ProductNumber"
+                class="elevation-1 custom-font table-container scrollbar"
+              >
+                <template v-slot:item="{ item }">
+                  <tr
+                    class="text_color"
+                    :style="{
+                      backgroundColor:
+                        item.index % 2 !== 0
+                          ? 'rgb(255, 255, 230)'
+                          : 'rgb(255, 255, 255)',
+                    }"
+                  >
+                    <td v-for="header in visibleHeaders" :key="header.text">
+                      <span class="font_size_12">{{ item[header.value] }}</span>
+                    </td>
+                  </tr>
+                </template>
+              </v-data-table>
+            </v-card>
+          </div>
+          <div v-else>
+            <v-card-actions class="custom-font">
+              ເບີໂທ:
+              <Input
+              v-model="value"
+              placeholder="Enter Number..."
+              style="width: 300px"
+              />
+            </v-card-actions>
+
+          </div>
+        </TabPane>
+      </Tabs>
     </v-card>
   </div>
 </template>
-
 <script>
 export default {
-  middleware: 'auth',
-  Currency: 'index',
   props: {
     SMS: Array,
   },
   data() {
     return {
+      value: '',
+      tabItem: 0,
+      tabs: [{ title: 'ປະຫວັດຕັດເງີນ' }, { title: 'ຢືມເງີນ' }],
       columns: [
         { key: 'index', title: 'Index' },
         { key: 'DestinationNum', title: 'SIM' },
@@ -113,7 +142,6 @@ export default {
   },
 }
 </script>
-
 <style>
 .color_CL {
   color: #ffff;

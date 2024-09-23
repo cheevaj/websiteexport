@@ -112,7 +112,7 @@
             minute: '2-digit',
             second: '2-digit',
           })
-          .replace(',', '') // remove comma from the formatted string
+          .replace(',', '');
         return formattedDate
       },
       formatResultDesc(value) {

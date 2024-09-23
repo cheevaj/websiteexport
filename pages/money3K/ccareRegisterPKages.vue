@@ -1,89 +1,13 @@
 <template>
   <div>
-    <div style="position: fixed; z-index: 100; right: 1px">
-      <v-card-actions class="pa-0">
-        <transition name="move-right">
-          <div v-show="buttonanime" class="transition-box">
-            <v-card-actions class="pa-0">
-              <div style="display: flex">
-                <form @submit.prevent="handleSearch">
-                  <Input
-                    class="custom-font"
-                    v-model="numberPhon"
-                    :placeholder=" en ? 'ກະລຸນາປ້ອມ ປີ ແລະ ເດືອນ ( 202403 )' : 'Enter New year and month ( 202403 )'"
-                    clearable
-                    style="width: 250px; height: 34px; margin-top: 1px"
-                    @keydown.enter="handleSearch"
-                  />
-                </form>
-                <v-btn
-                  :loading="loading"
-                  small
-                  text
-                  @click="handleSearch"
-                  style="
-                    height: 31px;
-                    background-color: rgb(230, 230, 0);
-                    color: #000;
-                    margin-top: 1px;
-                    margin-left: 1px;
-                    padding-left: 4px;
-                    padding-right: 4px;
-                  "
-                >
-                  <h4 class="custom-font">{{en ? 'ຄົ້ນຫາ' : 'Search'}}</h4>
-                </v-btn>
-                <v-btn
-                  text
-                  x-small
-                  height="32px"
-                  @click="buttonanime = !buttonanime"
-                  style="
-                    padding: 0;
-                    margin-top: 1px;
-                    background-color: transparent;
-                    color: transparent;
-                  "
-                >
-                  <v-icon color="rgb(204, 204, 204)"
-                    >mdi-chevron-double-right</v-icon
-                  >
-                </v-btn>
-              </div>
-            </v-card-actions>
-          </div>
-        </transition>
-        <v-btn
-          v-if="!buttonanime"
-          fab
-          text
-          x-small
-          height="32px"
-          @click="buttonanime = !buttonanime"
-          style="padding: 0; background-color: #000"
-        >
-          <v-icon color="#ffff">mdi-chevron-double-left</v-icon>
-        </v-btn>
-      </v-card-actions>
-    </div>
-    <v-card-actions class="pa-2" style="background-color: rgb(26, 26, 0)">
-      <v-btn fab x-small text @click="$router.go(-1)">
-        <v-icon color="#ffff00" size="25">mdi-arrow-left</v-icon>
-      </v-btn>
-      <v-card-text class="pa-0">
-        <h2 class="text-center color_CL custom-font" style="color: #ffff00;">{{en ? "ປະຫວັດການລົງທະບຽນແພັກເກັດຂອງ CCare ຜ່ານ Bcel-One." : "CCare's Register Package via Bcel-One Channel History."}}</h2>
-      </v-card-text>
-      <div></div>
-    </v-card-actions>
     <v-card
-      v-if="dataResponse.length > 0"
+      v-if="(dataCRegisterPKages.length > 0) && (pageItem === 4)"
       outlined
       class="rounded-0 scrollbar"
       style="
         overflow-y: auto;
         width: 100%;
-        position: fixed;
-        height: calc(100vh - 14vh);
+        height: calc(100vh - 17vh);
         left: 0;
         overflow: y;
         z-index: 10;
@@ -96,7 +20,7 @@
         fixed-header
         dense
         :headers="visibleHeaders"
-        :items="dataResponse"
+        :items="dataCRegisterPKages"
         :items-per-page="150"
         item-key="ProductNumber"
         class="elevation-1 pt-4 custom-font table-container"
@@ -128,7 +52,7 @@
       "
     >
       <v-card
-        v-if="data_num"
+        v-if="pageItem === 4"
         min-width="450"
         min-height="300"
         class="text-center"
@@ -168,14 +92,14 @@
 <script>
 export default {
   middleware: 'auth',
+  props: {
+    dataCRegisterPKages: Array,
+    pageItem:Number,
+  },
   data() {
     return {
       outlined: false,
-      loading: false,
-      numberPhon: '',
-      data_num: false,
       buttonanime: true,
-      dataResponse: [],
       overlay: false,
       heightPx: 0,
       columns: [
@@ -205,48 +129,12 @@ export default {
     en() {
       return this.$store.state.en;
     },
-    // itemsPerPage() {
-    //   return this.dataResponse.length > 0
-    //     ? this.dataResponse[this.dataResponse.length - 1].index
-    //     : 10
-    // },
   },
   mounted() {
     this.setSheetHeight()
     window.addEventListener('resize', this.setSheetHeight)
   },
   methods: {
-    async handleSearch() {
-      this.dataResponse = []
-      this.loading = true
-      const Num = Number(this.numberPhon);
-      try {
-        const response = await this.$axios.post(
-          'http://172.28.17.102:8100/incoming/TOPUPV_INCOMMING',
-          {
-            datetime: Num,
-          }
-        )
-        if (response.data) {
-          this.dataResponse = response.data.map((detail, index) => ({
-            index: index + 1,
-            MSISDN: detail.MSISDN,
-            AMOUNT: this.formatResultDesc(detail.AMOUNT),
-            USER_ID: detail.USER_ID,
-            DATE: detail.CDATE.substring(0, 4) + '\u00A0/\u00A0' + detail.CDATE.substring(4, 6) + '\u00A0/\u00A0' + detail.CDATE.substring(6),
-
-          }))
-        } else {
-          this.dataResponse = []
-        }
-        this.data_num = true
-      } catch (error) {
-        this.dataResponse = []
-        console.error('Error fetching data:', error)
-      } finally {
-        this.loading = false
-      }
-    },
     formatResultDesc(value) {
       const num = Number(value)
       if (!isNaN(num)) {
@@ -255,7 +143,7 @@ export default {
       return value;
     },
     setSheetHeight() {
-      this.heightPx = window.innerHeight - 190
+      this.heightPx = window.innerHeight - 205;
     },
   },
 }
@@ -285,12 +173,12 @@ export default {
 }
 
 .table-container ::-webkit-scrollbar-thumb {
-  background-color: #ffff00;
+  background-color: rgb(255, 204, 0);
   border-radius: 4px;
 }
 
 .table-container ::-webkit-scrollbar-corner {
-  background-color: #ffff00;
+  background-color: rgb(255, 204, 0);
   border-radius: 4px;
 }
 </style>

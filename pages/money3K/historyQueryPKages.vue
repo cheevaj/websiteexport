@@ -1,89 +1,13 @@
 <template>
   <div>
-    <div style="position: fixed; z-index: 100; right: 1px">
-      <v-card-actions class="pa-0">
-        <transition name="move-right">
-          <div v-show="buttonanime" class="transition-box">
-            <v-card-actions class="pa-0">
-              <div style="display: flex">
-                <form @submit.prevent="handleSearch">
-                  <Input
-                  class="custom-font"
-                    v-model="numberPhon"
-                    :placeholder="en ? 'ກະລຸນາປ້ອມເບີໂທລະສັບ ( 20789... )' : 'Enter number is ( 20789... )'"
-                    clearable
-                    style="width: 250px; height: 34px; margin-top: 1px"
-                    @keydown.enter="handleSearch"
-                  />
-                </form>
-                <v-btn
-                  :loading="loading"
-                  small
-                  text
-                  @click="handleSearch"
-                  style="
-                    height: 31px;
-                    background-color: rgb(230, 230, 0);
-                    color: #000;
-                    margin-top: 1px;
-                    margin-left: 1px;
-                    padding-left: 4px;
-                    padding-right: 4px;
-                  "
-                >
-                  <h4 class="custom-font">{{en ? 'ຄົ້ນຫາ' : 'Search'}}</h4>
-                </v-btn>
-                <v-btn
-                  text
-                  x-small
-                  height="32px"
-                  @click="buttonanime = !buttonanime"
-                  style="
-                    padding: 0;
-                    margin-top: 1px;
-                    background-color: transparent;
-                    color: transparent;
-                  "
-                >
-                  <v-icon color="rgb(204, 204, 204)"
-                    >mdi-chevron-double-right</v-icon
-                  >
-                </v-btn>
-              </div>
-            </v-card-actions>
-          </div>
-        </transition>
-        <v-btn
-          v-if="!buttonanime"
-          fab
-          text
-          x-small
-          height="32px"
-          @click="buttonanime = !buttonanime"
-          style="padding: 0; background-color: #000"
-        >
-          <v-icon color="#ffff">mdi-chevron-double-left</v-icon>
-        </v-btn>
-      </v-card-actions>
-    </div>
-    <v-card-actions class="pa-2" style="background-color: rgb(26, 26, 0)">
-      <v-btn fab x-small text @click="$router.go(-1)">
-        <v-icon color="#ffff00" size="25">mdi-arrow-left</v-icon>
-      </v-btn>
-      <v-card-text class="pa-0">
-        <h2 class="text-center color_CL custom-font" style="color: #ffff00;">{{en ? 'ປະຫວັດການເຕີມແພັກເກັດ.' : 'History Query Data Packages'}}</h2>
-      </v-card-text>
-      <div></div>
-    </v-card-actions>
     <v-card
-      v-if="dataResponse.length > 0"
+      v-if="(dataHistoryPK.length > 0) && (pageItem === 2)"
       outlined
       class="rounded-0 scrollbar"
       style="
         overflow-y: auto;
         width: 100%;
-        position: fixed;
-        height: calc(100vh - 14vh);
+        height: calc(100vh - 17vh);
         left: 0;
         overflow: y;
         z-index: 10;
@@ -96,7 +20,7 @@
         fixed-header
         dense
         :headers="visibleHeaders"
-        :items="dataResponse"
+        :items="dataHistoryPK"
         :items-per-page="itemsPerPage"
         item-key="ProductNumber"
         class="elevation-1 pt-4 custom-font table-container"
@@ -128,7 +52,7 @@
       "
     >
       <v-card
-        v-if="data_num"
+        v-if="pageItem === 2"
         min-width="450"
         min-height="300"
         class="text-center"
@@ -168,15 +92,16 @@
 <script>
 export default {
   middleware: 'auth',
+  props: {
+    dataHistoryPK: Array,
+    pageItem:Number,
+  },
   data() {
     return {
       outlined: false,
       loading: false,
-      numberPhon: '',
       heightPx: 0,
-      data_num: false,
       buttonanime: true,
-      dataResponse: [],
       overlay: false,
       columns: [
         { key: 'index', title: 'N' },
@@ -220,8 +145,8 @@ export default {
       )
     },
     itemsPerPage() {
-      return this.dataResponse.length > 0
-        ? this.dataResponse[this.dataResponse.length - 1].index
+      return this.dataHistoryPK.length > 0
+        ? this.dataHistoryPK[this.dataHistoryPK.length - 1].index
         : 10
     },
   },
@@ -230,80 +155,8 @@ export default {
     window.addEventListener('resize', this.setSheetHeight)
   },
   methods: {
-    formatAdjustDate(dateString) {
-      const date = new Date(dateString)
-      const formattedDate = date
-        .toLocaleString('en-US', {
-          year: 'numeric',
-          month: '2-digit',
-          day: '2-digit',
-          hour: '2-digit',
-          minute: '2-digit',
-          second: '2-digit',
-        })
-        .replace(',', '')
-      return formattedDate
-    },
-    async handleSearch() {
-      this.loading = true
-      const Num = this.numberPhon
-      const Number = [
-        '2076616633',
-        '2078378917',
-        '2078663685',
-        '2076616633,2078378917',
-      ].includes(Num)
-        ? '200'
-        : Num
-      try {
-        const response = await this.$axios.post(
-          'http://172.28.26.23:9085/api/spnv/query-register-history',
-          {
-            ClientIP: '1.1.1.1',
-            UserId: 'APITPLUS',
-            Chanel: 'TPLUS',
-            Msisdn: Number,
-            PageNo: 1,
-            PageSize: 10,
-          }
-        )
-        console.log(response.data.Detail)
-        if (response.data && response.data.Detail) {
-          this.dataResponse = response.data.Detail.map((detail, index) => ({
-            index: index + 1,
-            SIS: detail.Msisdn,
-            Duration: detail.Duration,
-            Start_Time: this.formatAdjustDate(detail.StartTime),
-            ExpiryTime: this.formatAdjustDate(detail.ExpiryTime),
-            Net: this.formatResultDesc(detail.Net),
-            Oder_Ref: detail.Oder_Ref,
-            Package_Code: detail.PackageCode,
-            Package_Name: detail.PackageName,
-            Price: this.formatResultDesc(detail.Price),
-            Product_Number: detail.ProductNumber,
-            Result_Desc: detail.ResultDesc,
-            Chanel: detail.Chanel,
-          }))
-        } else {
-          this.dataResponse = []
-        }
-        this.data_num = true
-      } catch (error) {
-        this.dataResponse = []
-        console.error('Error fetching data:', error)
-      } finally {
-        this.loading = false
-      }
-    },
     setSheetHeight() {
-      this.heightPx = window.innerHeight - 190
-    },
-    formatResultDesc(value) {
-      const num = Number(value)
-      if (!isNaN(num)) {
-        return new Intl.NumberFormat().format(num)
-      }
-      return value;
+      this.heightPx = window.innerHeight - 205;
     },
   },
 }
