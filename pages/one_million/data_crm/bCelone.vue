@@ -6,12 +6,12 @@
         style="
           overflow-y: auto;
           left: 0;
-          height: calc(100vh - 19vh);
+          height: 548px;
           background-color: #f2f2f2;
         "
       >
         <v-data-table
-          height="calc(100vh - 27vh)"
+          height="488px"
           fixed-header
           dense
           :headers="visibleHeaders"

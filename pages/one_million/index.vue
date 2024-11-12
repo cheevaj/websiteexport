@@ -23,8 +23,8 @@
                     <Input
                       class="custom-font"
                       v-model="numberPhon"
-                      :placeholder="en ? 'ກະລຸນາປ້ອມເບີໂທລະສັບ (20789... )' : 'Enter number ( 20789... )' "
                       type="number"
+                      :placeholder="en ? 'ກະລຸນາປ້ອມເບີໂທລະສັບ (20789... )' : 'Enter number ( 20789... )'"
                       clearable
                       style="width: 300px; height: 34px; margin-top: 1px;"
                       @keydown.enter="handleSearch"
@@ -38,7 +38,7 @@
                     style="
                       height: 31px;
                       background-color: #000;
-                      color: #ffff00;
+                      color: #ffd633;
                       margin-top: 1px;
                       margin-left: 1px;
                       padding-left: 4px;
@@ -107,7 +107,7 @@
                   />
                   <v-card-text
                     class="pa-0"
-                    style="background-color: #000; color: #ffff00"
+                    style="background-color: #000; color: #ffd633"
                     >Menu</v-card-text
                   >
                   <v-btn
@@ -119,10 +119,10 @@
                     class="rounded-0"
                     :style="{
                       backgroundColor:
-                        mouseHover === index ? '#ffff00' : '#ffff',
+                        mouseHover === index ? '#ffd633' : '#ffff',
                       color:
                         mouseHover !== index && colorMenu === index
-                          ? '#ffff00'
+                          ? '#ffd633'
                           : '#000',
                     }"
                     @mouseenter="mouseHover = index"
@@ -287,9 +287,10 @@ export default {
             Chanel: 'TPLUS',
             Msisdn: Number,
             PageNo: 1,
-            PageSize: 10,
+            PageSize: 200,
           }
         )
+        // console.log(response)
         if (response.data && response.data.Detail) {
           this.dataHPackage = response.data.Detail
         } else {
@@ -358,6 +359,7 @@ export default {
         this.checkData = checkData ? checkData.data : {};
         this.SMS = smsDetailResponse && smsDetailResponse.data !== 'Not found data!' ? smsDetailResponse.data : [];
         this.statusIR = statusIR ? statusIR.data : {};
+        console.log(this.vasSerVices)
       } catch (error) {
         console.error('Error fetching data:', error);
       } finally {
@@ -397,7 +399,6 @@ export default {
 #screen::-webkit-scrollbar {
   display: none;
 }
-
 .layout {
   border: 1px solid #d7dde4;
   background: #f5f7f9;

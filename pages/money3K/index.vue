@@ -61,12 +61,12 @@
               backgroundColor: selectedItem === i ? '#ffcc00' : 'transparent',
               color: selectedItem === i ? '#ffff' : '#000',
             }"
-            @click="selectItem(i, item.title)"
+            @click="selectItem(i, (en ? item.titleLao : item.titleEn))"
           >
             <v-list-item-content>
-              <v-list-item-title class="custom-font">{{
-                item.title
-              }}</v-list-item-title>
+              <v-list-item-title class="custom-font">
+                {{ en ? item.titleLao : item.titleEn }}
+              </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
         </v-list>
@@ -88,6 +88,7 @@
             :content="en ? 'ນໍາເຂົ້າໄຟລ໌ Excel.' : 'Import file Excel.'"
             placement="bottom"
             :delay="800"
+            class="custom-font"
           >
             <input
               type="file"
@@ -202,7 +203,7 @@
   </div>
 </template>
 <script>
-  import * as XLSX from 'xlsx'
+import * as XLSX from 'xlsx'
 import checkPrieNumber from './checkPrieNumber.vue';
 import moneySoxayApp from './moneySoxayApp.vue';
 import historyQueryPKages from './historyQueryPKages.vue';
@@ -245,14 +246,14 @@ export default {
       buttonanime: true,
       buttonWeb: false,
       items: [
-        { title: 'ກອດເບີ່ງຂໍ້ມູນ ແລະ ລາຄາເບີ', titleEn: 'Check The Price SIS.',},
-        { title: 'ເງີນຖືກຕັດໂດຍແອບ Soxay', titleEn: 'Money Cuts Bye Soxay App',},
-        { title: 'History Query Packages', titleEn:'History Query Packages' },
-        { title: "ປະຫວັດການເຕີມເງີນຂອງ C'Care", titleEn: "CCare's Top-up History",},
-        { title: "ສະໝັກແພັກເກັດຜ່ານ C'Care", titleEn:"C'Care Register Package", },
-        { title: 'ລົງທະບຽນແພັກເກັດຜ່ານທາງເຄົາເຕີ.', titleEn:"C'Care Register Package via counter", },
-        { title: 'ກອດລາຍການຕັດເງີນ 3000 ກີບ', titleEn: 'Cuts Money 3000 kip', },
-        { title: 'Data BCEL ONE', titleEn:'Data BCEL ONE' },
+        { titleLao: 'ກອດເບີ່ງຂໍ້ມູນ ແລະ ລາຄາເບີ', titleEn: 'Check The Price SIS.',},
+        { titleLao: 'ເງີນຖືກຕັດໂດຍແອບ Soxay', titleEn: 'Money Cuts Bye Soxay App',},
+        { titleLao: 'History Query Packages', titleEn:'History Query Packages' },
+        { titleLao: "ປະຫວັດການເຕີມເງີນຂອງ C'Care", titleEn: "CCare's Top-up History",},
+        { titleLao: "ສະໝັກແພັກເກັດຜ່ານ C'Care", titleEn:"C'Care Register Package", },
+        { titleLao: 'ລົງທະບຽນແພັກເກັດຜ່ານທາງເຄົາເຕີ.', titleEn:"C'Care Register Package via counter", },
+        { titleLao: 'ກອດລາຍການຕັດເງີນ 3000 ກີບ', titleEn: 'Cuts Money 3000 kip', },
+        { titleLao: 'Data BCEL ONE', titleEn:'Data BCEL ONE' },
       ],
     }
   },
@@ -264,7 +265,7 @@ export default {
   methods: {
     selectItem(index, title) {
       this.selectedItem = index
-      this.title = title
+      this.title = title;
     },
     async handleSearch() {
       this.loading = true;
@@ -298,7 +299,7 @@ export default {
             Chanel: 'TPLUS',
             Msisdn: Num,
             PageNo: 1,
-            PageSize: 10,
+            PageSize: 200,
           }
         : (this.selectedItem === 3 || this.selectedItem === 4)
         ? { datetime: number } 

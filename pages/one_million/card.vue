@@ -5,7 +5,7 @@
         mode="horizontal"
         :active-name="selectedMenuItem"
         @on-select="handleMenuSelect"
-        style="color: #ffff00"
+        style="color: #804d00"
       >
         <!-- Menu Items without indicators -->
         <MenuItem name="1" class="language-button">
@@ -57,7 +57,7 @@
             style="
               height: 31px;
               background-color: #000;
-              color: #ffff00;
+              color:  #804d00;
               margin-top: 0px;
               margin-left: 1px;
               padding-left: 4px;
@@ -93,7 +93,7 @@
               >
               <br />
               <h2 :class="{ 'custom-font': en }">
-                <span style="color: rgb(255, 255, 0)">{{
+                <span style="color:  #804d00">{{
                   en ? '' : 'USER '
                 }}</span
                 >{{ en ? 'ບໍ່ມີຂໍ້ມູນ' : 'data not found' }}
@@ -124,7 +124,7 @@
               >
               <br />
               <h2 :class="{ 'custom-font': en }">
-                <span style="color: rgb(255, 255, 0)">{{
+                <span style="color:  #804d00">{{
                   en ? '' : 'USER '
                 }}</span
                 >{{ en ? 'ບໍ່ມີຂໍ້ມູນ' : 'data not found' }}
@@ -160,7 +160,7 @@
               >
               <br />
               <h2 :class="{ 'custom-font': en }">
-                <span style="color: rgb(255, 255, 0)">{{
+                <span style="color:  #804d00">{{
                   en ? '' : 'USER '
                 }}</span
                 >{{ en ? 'ບໍ່ມີຂໍ້ມູນ' : 'data not found' }}
@@ -204,16 +204,16 @@ export default {
   font-family: 'Noto Sans Lao', sans-serif;
 }
 .language-button:hover {
-  color: rgb(230, 230, 0) !important;
+  color:  #804d00 !important;
 }
 .language-button:hover .v-icon {
-  color: rgb(230, 230, 0) !important;
+  color:  #804d00 !important;
 }
 .ivu-menu-item-active.language-button {
-  color: rgb(230, 230, 0) !important;
+  color:  #804d00 !important;
 }
 .ivu-menu-item-active.language-button .v-icon {
-  color: rgb(230, 230, 0) !important;
+  color:  #804d00 !important;
 }
 
 .ivu-menu-item-indicator {

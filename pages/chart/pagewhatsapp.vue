@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div style="background-color: rgb(242, 242, 242); height: 91vh;">
         <v-overlay :value="modelSend"></v-overlay>
         <v-card-text>
             <v-row>
@@ -36,9 +36,7 @@
                     <v-card-text class="pr-0 ">
                         <h4 :class="{'custom-font' : en}">{{ en ? 'ສົ່ງໃຫ້ເບີ' : 'Send to'}}</h4>
                         <v-card-actions class="pr-0">
-                            <v-text-field :class="{'custom-font' : en}" v-model="numberphone" label="207xxx" :rules="rules"
-                                hide-details="auto" />
-                            <v-divider class="ml-1 pr-0 my-2" vertical style="background-color: #009242;" />
+                            <Input v-model="numberphone" size="large" :maxlength="sendAuto ? false :10" :placeholder="sendAuto ? 'ປ້ອມຈໍານອນເບີ: 207xxx...,207xxx...' : 'ປ້ອມເບີ: 207xxx...'" class="custom-input custom-font"/>
                             <Tooltip content="Import file Excel." placement="bottom" :delay="800">
                                 <input type="file" ref="fileInput" style="display: none"
                                     @change="handleFileUpload('send_num', $event)" />
@@ -57,14 +55,16 @@
                             <h2 :class="{'custom-font' : en}">{{ en ? 'ຂໍ້ຄວາມ' : 'Message'}}</h2>
                         </v-card-title>
                         <v-spacer></v-spacer>
-                        <Tooltip v-if="select" :content="tooltipContent" placement="bottom" :delay="800" :class="{'custom-font' : en}">
-                            <v-btn fab text style="background-color: #ffff00; color: #000;" @click="modelSend = !modelSend">
-                                <v-icon size="35">
-                                    mdi-send-clock
-                                </v-icon>
-                            </v-btn>
+                        <h3 class="custom-font">{{ tooltipContent }}</h3>&nbsp;&nbsp;
+                        <Tooltip :content="tooltipContent" placement="bottom" :delay="800" :class="{'custom-font' : en}">
+                            <i-Switch
+                                v-model="sendAuto"
+                                size="small"
+                                true-color="#ffcc00"
+
+                            />
                         </Tooltip>
-                        <v-dialog
+                        <!-- <v-dialog
                           v-model="select"
                           fullscreen
                           hide-overlay
@@ -91,7 +91,7 @@
                             
                             </v-card-text>
                         </v-card>
-                        </v-dialog>
+                        </v-dialog> -->
                         <Modal
                             v-model="modelSend"
                             draggable
@@ -110,23 +110,15 @@
                             </template>
                             <div>
                             <div style="text-align: center">
-                                <v-card
-                                outlined
-                                class="table-container"
-                                style="
-                                    max-height: 240px;
-                                    z-index: 100;
-                                    margin-top: 2px;
-                                    overflow-y: auto;
-                                "
-                                >
-                                
+                                <v-card class="rounded-0 text-center table-container" height="200px" outlined>
+                                    <div class="scrollable-content" :class="{'custom-font' : en}">
+                                        
+                                    </div>
                                 </v-card>
                             </div>
                             </div>
                             <template #footer>
                                 <v-card-actions>
-
                                     <Button
                                     size="large"
                                     long
@@ -193,25 +185,19 @@
                     </v-card-actions>
                     <v-container fluid>
                         <v-card-actions>
-                            <v-textarea :class="{'custom-font' : en}" outlined name="input-7-4" v-model="text"></v-textarea>
+                            <Input v-model="text" type="textarea" :rows="8" placeholder="ຂໍ້ຄວາມ..." :class="{'custom-font' : en}" class="table-container" style="background-color: #ffff;" />    
                             <v-dialog v-model="dialog2" persistent max-width="650px">
                                 <template v-slot:activator="{ on, attrs }">
                                     <div class="ml-4" @mouseenter="show = 'color'" @mouseleave="show = 'notcolor'">
                                         <Button text fab ghost :disabled="text !== '' ? false : true " class="pa-0"
-                                            :style="{ backgroundColor: text !== '' ? '#000' : 'rgb(242, 242, 242)' }"
-                                            style="height: 50px; width: 50px; border-radius: 50%;" v-bind="attrs" v-on="on" @click="changeNameber(sendAuto)">
+                                            :style="{ backgroundColor: text !== '' ? '#000' : 'rgb(255, 255, 255)' }"
+                                            style="height: 50px; width: 50px; border-radius: 50%;" v-bind="attrs" v-on="on" @click=" changeNameber">
                                             <v-icon :color="show === 'color' ? '#00cc00' : 'rgb(191, 191, 191)'"
                                                 size="34">{{ sendAuto ? 'mdi-send-clock-outline' : 'mdi-whatsapp' }}</v-icon>
                                         </Button>
-                                        <!-- <Button text fab ghost :disabled="text !== '' ? false : true " class="pa-0"
-                                            :style="{ backgroundColor: text !== '' ? '#000' : 'rgb(242, 242, 242)' }"
-                                            style="height: 50px; width: 50px; border-radius: 50%;" v-bind="attrs" v-on="on" @click="changeNameber(sendAuto)">
-                                            <v-icon :color="show === 'color' ? '#00cc00' : 'rgb(191, 191, 191)'"
-                                                size="34">mdi-email-arrow-right</v-icon>
-                                        </Button> -->
                                     </div>
                                 </template>
-                                <v-card>
+                                <v-card style="background-color: #f2f2f2;">
                                     <v-toolbar color="yellow" dark flat class="pb-0 mb-0">
                                         <h1 :class="{'custom-font' : en}" style="color: #000;">{{ en ? 'ກວດເບິ່ງເບີໂທລະສັບ ແລະ ຂໍ້ຄວາມ' : 'Check Number phone and Message'}}</h1>
                                     </v-toolbar>
@@ -220,10 +206,32 @@
                                             <h2 :class="{'custom-font' : en}">{{ en ? 'ຂໍ້ຄວາມ' : 'Messages' }}</h2>
                                             <v-spacer></v-spacer>
                                         </v-card-actions>
-                                        <v-card class="d-flex align-center justify-center mx-auto overflow-auto"
-                                            min-width="450" max-height="100px" min-height="76" outlined>
-                                            <div :class="{'custom-font' : en}">
-                                                {{ text }}
+                                        <v-card v-if="(sendAuto && !text )" class="mx-auto table-container pa-4 text-center" min-width="450" height="145px" outlined style="display: flex; flex-direction: column; justify-content: center">
+                                            <v-card-actions class="pa-0">
+                                                <v-icon size="45px" color="#ffcc00" class="px-4">mdi-email-arrow-right</v-icon>
+                                                <v-spacer />
+                                                <v-progress-linear
+                                                  color="lighten-2"
+                                                  buffer-value="0"
+                                                  stream
+                                                  reverse
+                                                  style="color: #ffcc00;"
+                                                />
+                                                <v-spacer />
+                                              <v-progress-circular
+                                                :rotate="90"
+                                                :size="100"
+                                                :width="15"
+                                                :value="values"
+                                                color="#ffcc00"
+                                                class="px-0"
+                                            >
+                                                {{ values }}%
+                                              </v-progress-circular>
+                                          </v-card-actions>
+                                        </v-card>
+                                        <v-card v-else class="mx-auto table-container pa-0" min-width="450" height="145px" outlined>
+                                            <div class="scrollable-content pa-4" :class="{'custom-font' : en}" v-html="formatText(text)">
                                             </div>
                                         </v-card>
                                         <v-row>
@@ -233,34 +241,35 @@
                                                         {{ en ? 'ເບີໂທລະສັບທີ່ສົ່ງ' : 'Number phone is' }}
                                                     </div>
                                                 </v-card-text>
-                                                <v-card class="rounded-0 text-center" min-height="76" outlined>
+                                                <v-card class="rounded-0 text-center" height="154" outlined>
                                                     <v-card-text class="text-center">
                                                         +856 2078927154
                                                     </v-card-text>
                                                 </v-card>
                                             </v-col>
-                                            <v-col cols="1">
-                                                <v-card-text class="px-0" min-height="76" align="center"
+                                            <v-col cols="2" style="padding-top: 65px;">
+                                                <v-card-text class="px-0" height="100%" align="center"
                                                     justify="center">
-                                                    <v-icon>
+                                                    <v-icon color="#ffcc00">
                                                         mdi-transfer-right
                                                     </v-icon>
                                                 </v-card-text>
                                             </v-col>
-                                            <v-col cols="12" md="6" sm="6" class="pl-0 pr-3">
+                                            <v-col cols="12" md="5" sm="5" class="pl-0 pr-3">
                                                 <v-card-text class="pb-0 pl-0 text-center">
                                                     <div :class="{'custom-font' : en}" style="color: #000;">
                                                         {{ en ? 'ເບີທີ່ຈະສົ່ງ' : 'The number phone to be sent.' }}
                                                     </div>
                                                 </v-card-text>
-                                                <v-card class="rounded-0 overflow-auto text-center" min-height="76"
-                                                    max-height="200px" outlined>
+                                                <v-card class="rounded-0 text-center table-container" height="154px" outlined>
+                                                    <div class="scrollable-content" :class="{'custom-font' : en}">
                                                         <div v-for="(element, index) in numsend" :key="index">
-                                                            <div class="py-1" :style="{ backgroundColor:index%2 === 0 ? '#ffffe6' : '#f2f2f2' }"
-                                                                v-if="numsend !== null && numsend !== undefined && numsend.length > 0">
-                                                                {{ element }}
-                                                            </div>
+                                                        <div class="py-1"
+                                                            v-if="numsend !== null && numsend !== undefined && numsend.length > 0">
+                                                            {{ element }}
                                                         </div>
+                                                        </div>
+                                                    </div>
                                                 </v-card>
                                             </v-col>
                                         </v-row>
@@ -272,10 +281,10 @@
                                             <div>{{ formatTime(numsend.length * 5) }} </div>
                                         </v-card-actions>
                                         <v-spacer></v-spacer>
-                                        <v-btn :class="{'custom-font' : en}" text color="error" @click="dialog2 = false">
+                                        <v-btn :disabled="(sendAuto && !text )" :class="{ 'custom-font': en, 'cursor-btn': sendAuto && !text }" text color="error" @click="dialog2 = false">
                                             {{ en ? 'ຍົກເລີກ' : 'Cancel'}}
                                         </v-btn>
-                                        <v-btn outlined color="yellow" @click="sendMessageToWhatApp()">
+                                        <v-btn outlined :disabled="(sendAuto && !text )" :class="{'cursor-btn' :sendAuto && !text }" color="yellow" @click="sendMess">
                                             <v-icon>{{ sendAuto ? 'mdi-send-variant-clock' : 'mdi-send' }}</v-icon>
                                         </v-btn>
                                     </v-card-actions>
@@ -384,7 +393,7 @@ export default {
     data() {
         return {
             modelSend:false,
-            select:false,
+            select:true,
             sendAuto:false,
             dialogseting: false,
             sendMessage:false,
@@ -394,6 +403,7 @@ export default {
             dialog3: false,
             colNum: 1,
             rowNum: 1,
+            values:0,
             value: '',
             pasend: '',
             numsend: [],
@@ -427,6 +437,9 @@ export default {
     }
     },
     methods: {
+        formatText(text) {
+        return text.replace(/\n/g, '<br>');
+        },
         formatTime(seconds) {
             if (seconds < 60) {
                 return `${seconds}s`;
@@ -445,9 +458,34 @@ export default {
                 return `${hours}:${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}s`;
             }
         },
+        handleBeforeChange() {
+        return new Promise((resolve) => {
+            this.$Modal.confirm({
+            title: this.en ? `<span class="custom-font">${'ເປິດໃຊ້ງານ'}</span>` : "Open",
+            content: `<span class="custom-font">${ this.en ? 'ປິດໃຊ້ງານ' : 'Deactivate'}</span>`,
+            onOk: () => {
+                this.sendAuto = true;
+                resolve(true);
+            },
+            onCancel: () => {
+                this.sendAuto = false;
+                resolve(false)
+            },
+            })
+        })
+        },
+        sendMess(){
+            if(this.sendAuto){
+                this.sendMessageAuto();
+            }
+            else {
+                this.sendMessageToWhatApp()
+            }
+        },
         async sendMessageToWhatApp() {
             if(this.sendMessage){
-                try {                                                                                  
+                try {                                    
+                    console.log('Sending to API:', { numeros: this.numsend, mensaje: this.text });                                              
                     const response = await this.$axios.post('http://172.28.26.23:3335/sendtouser/alerttouser', {
                     numeros: this.numsend,
                     mensaje: this.text,
@@ -466,36 +504,41 @@ export default {
                 this.error(false, title, desc);
             }
         },
-        // async sendMessageAuto() {
-        //     if (this.sendMessage && this.numsend.length > 0) {
-        //         for (const [index, numero] of this.numsend.entries()) {
-        //             try {
-        //                 const response = await this.$axios.post('http://172.28.26.23:3335/sendtouser/alerttouser', {
-        //                     numeros: numero,
-        //                     mensaje: this.text,
-        //                 });
-        //                 this.resultados = response.data.resultados;
-
-        //                 this.renderFunc(this.en ? 'ສົ່ງຂໍ້ຄວາມສຳເລັດແລ້ວ.' : 'Messages sent successfully.', 
-        //                                 this.en ? 'ທ່ານໄດ້ສົ່ງຂໍ້ຄວາມສໍາເລັດເເລ້ວ.' : 'You sent messages submitted successfully.');
-        //                 if (index < this.numsend.length - 1) {
-        //                     await new Promise(resolve => setTimeout(resolve, 5000));
-        //                 }
-        //             } catch (error) {
-        //                 console.error('Error sending message to:', numero, error);
-        //                 break;
-        //             }
-        //         }
-        //         this.dialog2 = false;
-        //         this.numsend = [];
-        //         this.numberphone = "";
-        //     } else {
-        //         const title = `<span :class="{'custom-font' : en}">${this.en ? 'ປ້ອນຂໍ້ມູນບໍ່ຖືກຕ້ອງ' : 'Invalid input'}</span>`;
-        //         const desc = `<span :class="{'custom-font' : en}">${this.en ? 'ການປ້ອນຂໍ້ມູນຂອງທ່ານອາດບໍ່ມີເບີ ຫຼື ຂໍ້ຄວາມ.' : 'Your input may not contain numbers or Message.'}</span>`;
-        //         this.error(false, title, desc);
-        //     }
-        // },
-
+        async sendMessageAuto() {
+            if (this.sendMessage && this.numsend.length > 0) {
+                const originalMessage = this.text;
+                this.values = 0;
+                for (const [index, numero] of this.numsend.entries()) {
+                    try {
+                        const response = await this.$axios.post('http://172.28.26.23:3335/sendtouser/alerttouser', {
+                            numeros: [numero],
+                            mensaje: originalMessage,
+                        });
+                        this.resultados = response.data.resultados;
+                        this.renderFunc(
+                            this.en ? 'ສົ່ງຂໍ້ຄວາມສຳເລັດແລ້ວ.' : 'Messages sent successfully.',
+                            this.en ? 'ທ່ານໄດ້ສົ່ງຂໍ້ຄວາມສໍາເລັດເເລ້ວ.' : 'You sent messages submitted successfully.'
+                        );
+                        this.values = parseFloat((((index + 1) / this.numsend.length) * 100).toFixed(1));
+                        if (index < this.numsend.length - 1) {
+                            const randomDelay = Math.floor(Math.random() * (15000 - 11500)) + 11500;
+                            console.log(`Waiting for ${randomDelay / 1000} seconds before sending the next message to ${this.numsend[index + 1]}`);
+                            await new Promise(resolve => setTimeout(resolve, randomDelay));
+                        }
+                    } catch (error) {
+                        console.error('Error sending message to:', numero, error);
+                        break;
+                    }
+                }
+                this.dialog2 = false;
+                this.numsend = [];
+                this.numberphone = "";
+            } else {
+                const title = `<span :class="{'custom-font' : en}">${this.en ? 'ປ້ອນຂໍ້ມູນບໍ່ຖືກຕ້ອງ' : 'Invalid input'}</span>`;
+                const desc = `<span :class="{'custom-font' : en}">${this.en ? 'ການປ້ອນຂໍ້ມູນຂອງທ່ານອາດບໍ່ມີເບີ ຫຼື ຂໍ້ຄວາມ.' : 'Your input may not contain numbers or Message.'}</span>`;
+                this.error(false, title, desc);
+            }
+        },
         async addNumber_database() {
             try {
                 const response = await this.$axios.post('http://172.28.26.23:3335/sendtouser/insertnumbers', {
@@ -559,7 +602,7 @@ export default {
                 }).filter(n => n !== '');
                 this.show = true;
                 this.sendMessage = true;
-                // console.log('Num:',this.numsend);
+                console.log('Num:',this.numsend);
             } else {
                 const title =`<span :class="{'custom-font' : en}">${this.en ? 'ປ້ອນຂໍ້ມູນເບີບໍ່ຖືກຕ້ອງ' : 'Invalid number input'}</span>`;
                 const desc =`<span :class="{'custom-font' : en}">${this.en ? 'ປ້ອນເບີໂທຂອງທ່ານບໍ່ຖືກ.' : 'check your home number.'}</span>`
@@ -610,8 +653,10 @@ export default {
     background-color: #ffff00;
     color: #000;
 }
-
-.top,
+.custom-input {
+   border: 1px solid #a6a6a6;
+   border-radius: 5px;
+}
 .bottom {
     text-align: center;
 }
@@ -632,5 +677,31 @@ export default {
 
 .custom-font {
     font-family: 'Noto Sans Lao', sans-serif;
+}
+.scrollable-content {
+  height: 100%;
+  max-height: 100%;
+  overflow-y: auto;
+  padding-right: 10px;
+}
+.v-progress-circular {
+  margin: 1rem;
+}
+.table-container ::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+.table-container ::-webkit-scrollbar-thumb {
+  background-color: rgb(255, 204, 0);
+  border-radius: 4px;
+}
+
+.table-container ::-webkit-scrollbar-corner {
+  background-color: rgb(255, 204, 0);
+  border-radius: 4px;
+}
+.cursor-btn:hover {
+  cursor: not-allowed;
 }
 </style>

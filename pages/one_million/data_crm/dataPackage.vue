@@ -5,13 +5,13 @@
         style="
           overflow-y: auto;
           left: 0;
-          height: calc(100vh - 19vh) - 4px;
+          height: 548px;
           overflow: y;
           background-color: #f2f2f2;
         "
       >
         <v-card
-          height="calc(100vh - 19vh)"
+          height="488px"
           fixed-header
           class="elevation-1 custom-font table-container"
         >
@@ -46,13 +46,13 @@
               style="
                 overflow-y: auto;
                 left: 0;
-                height: calc(70vh) - 4px;
+                height: calc(65vh) - 4px;
                 overflow: y;
                 background-color: #f2f2f2;
               "
             >
               <v-data-table
-                height="calc(100vh - 31vh - 4px)"
+                height="calc(100vh - 35vh)"
                 fixed-header
                 dense
                 :headers="visibleHeaders"
@@ -119,33 +119,33 @@
         return this.$store.state.en
       },
       visibleHeaders() {
-      return this.headers.filter((header) =>
-        this.columns.some(
-          (col) => col.key === header.value && col.active !== false
+        return this.headers.filter((header) =>
+          this.columns.some(
+            (col) => col.key === header.value && col.active !== false
+          )
         )
-      )
-    },
-    itemsPerPage() {
-        return this.transformedDataHPackage.length > 0
-        ? this.transformedDataHPackage[this.transformedDataHPackage.length - 1]
-        .index
-        : 10
-    },
-    transformedDataHPackage() {
-      return this.data.query_pk_log.map((item, index) => {
-        return {
-          ...item,
-          index: index + 1,
-          Msisdn: item.Msisdn,
-          Charge: item.Charge,
-          PK_Code: item.PK_Code,
-          Chanel: item.Chanel,
-          Date: item.Date,
-          Description: item.Description,
-          SystemDesc: item.SystemDesc,
-        }
-      })
-    },
+      },
+      itemsPerPage() {
+          return this.transformedDataHPackage.length > 0
+          ? this.transformedDataHPackage[this.transformedDataHPackage.length - 1]
+          .index
+          : 10
+      },
+      transformedDataHPackage() {
+        return this.data.query_pk_log.map((item, index) => {
+          return {
+            ...item,
+            index: index + 1,
+            Msisdn: item.Msisdn,
+            Charge: item.Charge,
+            PK_Code: item.PK_Code,
+            Chanel: item.Chanel,
+            Date: item.Date,
+            Description: item.Description,
+            SystemDesc: item.SystemDesc,
+          }
+        })
+      },
     },
     methods: {
       formatResultDesc(value) {

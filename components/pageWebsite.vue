@@ -3,7 +3,7 @@
     <v-sheet
       flat
       class="mx-auto fill-height pt-0"
-      style="background-color: rgb(255, 255, 230); box-shadow: inset"
+      style="background-color: rgb(255, 255, 240); box-shadow: inset"
     >
       <v-slide-group
         class="pt-0 px-4 pb-4 text-center"

@@ -20,13 +20,13 @@
               style="
                 overflow-y: auto;
                 left: 0;
-                height: calc(100vh - 25vh) - 4px;
+                height: 548px;
                 overflow: y;
                 background-color: #f2f2f2;
               "
             >
               <v-data-table
-                height="calc(100vh - 34vh)"
+                height="488px"
                 fixed-header
                 dense
                 :headers="visibleHeaders"

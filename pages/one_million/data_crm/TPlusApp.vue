@@ -5,13 +5,13 @@
         style="
           overflow-y: auto;
           left: 0;
-          height: calc(100vh - 19vh) - 4px;
+          height: 548px;
           overflow: y;
           background-color: #f2f2f2;
         "
       >
         <v-card
-          height="calc(100vh - 19vh)"
+          height="489px"
           fixed-header
           class="elevation-1 custom-font table-container"
         >

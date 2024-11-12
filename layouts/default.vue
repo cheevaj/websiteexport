@@ -70,7 +70,7 @@
                   <v-card-text
                     class="px-0"
                     :style="{
-                      color: colortext === 'tplus' ? '#ffff00' : '#000',
+                      color: colortext === 'tplus' ? '#804d00' : '#000',
                     }"
                   >
                     TPLUS
@@ -95,7 +95,7 @@
             >
               <v-card-actions class="pa-0">
                 <v-card-text class="custom-font"
-                  :style="{ color: colortext === 'web' ? '#ffff00' : '#000' }"
+                  :style="{ color: colortext === 'web' ? '#804d00' : '#000' }"
                 >
                   <v-icon style="bottom: 2px"> mdi-web-sync </v-icon>
                   {{ en ? 'ເວັບໄຊທ໌' : 'Web'}}
@@ -121,7 +121,7 @@
                 <v-card-text
                   class="custom-font"
                   :style="{
-                    color: colortext === 'MenuAll' ? '#ffff00' : '#000',
+                    color: colortext === 'MenuAll' ? '#804d00' : '#000',
                   }"
                 >
                   <v-icon style="bottom: 2px"> mdi-layers-triple</v-icon>
@@ -154,7 +154,7 @@
                       <v-card-text
                         class="custom-font"
                         :style="{
-                          color: colortext === 'number' ? '#ffff00' : '#000',
+                          color: colortext === 'number' ? '#804d00' : '#000',
                         }"
                       >
                         {{ en ? 'ເບີ່ງ TICKET' : 'view TICKET'}}
@@ -178,7 +178,7 @@
                   <v-card-text
                     class="custom-font"
                     :style="{
-                      color: colortext === 'about' ? '#ffff00' : '#000',
+                      color: colortext === 'about' ? '#804d00' : '#000',
                     }"
                   >
                     {{ en ? 'ກ່ຽວກັບພອກເຮົາ' : 'about us' }}
@@ -198,7 +198,7 @@
                   <v-card-text
                     class="custom-font"
                     :style="{
-                      color: colortext === 'message' ? '#ffff00' : '#000',
+                      color: colortext === 'message' ? '#804d00' : '#000',
                     }"
                   >
                     {{en ? 'ສົ່ງຂໍ້ຄວາມ' : 'messages'}}
@@ -217,7 +217,7 @@
                   <v-card-text
                     class="custom-font"
                     :style="{
-                      color: colortext === 'product' ? '#ffff00' : '#000',
+                      color: colortext === 'product' ? '#804d00' : '#000',
                     }"
                   >
                     {{ en ? 'ສີນຄ້າ' : 'Products' }}
@@ -236,7 +236,7 @@
                   <v-card-text
                     class="custom-font"
                     :style="{
-                      color: colortext === 'services' ? '#ffff00' : '#000',
+                      color: colortext === 'services' ? '#804d00' : '#000',
                     }"
                   >
                     {{ en ? 'ຕິດຕໍ່ພອກເຮົາ' :'Contact us'}}
@@ -253,7 +253,7 @@
               >
                 <v-card-text
                   :style="{
-                    color: colortext === 'logout' ? '#ffff00' : '#000',
+                    color: colortext === 'logout' ? '#804d00' : '#000',
                   }"
                 >
                   <span class="custom-font">{{ en ? 'ອອກຈາກລະບົບ' : 'Getout'}}</span><v-icon>mdi-exit-to-app</v-icon>
@@ -278,7 +278,7 @@
                     <v-card-actions class="pa-0">
                       <v-card-text
                         :style="{
-                          color: colortext === 'menu' ? '#ffff00' : '#000',
+                          color: colortext === 'menu' ? '#804d00' : '#000',
                         }"
                       >
                         <v-icon>mdi-menu</v-icon>
@@ -307,12 +307,12 @@
                         style="color: #000"
                         :style="{
                           color:
-                            colortext === 'menu' + index ? '#ffff00' : '#000',
+                            colortext === 'menu' + index ? '#804d00' : '#000',
                         }"
                       >
                         {{ item.title }}
                         <v-divider
-                          style="background-color: #ffff00"
+                          style="background-color: #804d00"
                         ></v-divider>
                       </v-list-item-title>
                     </v-btn>
@@ -330,7 +330,7 @@
                       <v-list-item-title
                         style="color: #000"
                         :style="{
-                          color: colortext === 'logout' ? '#ffff00' : '#000',
+                          color: colortext === 'logout' ? '#804d00' : '#000',
                         }"
                       >
                       <span class="custom-font">{{ en ? 'ອອກຈາກລະບົບ' : 'Getout'}}</span><v-icon>mdi-exit-to-app</v-icon>
@@ -354,8 +354,9 @@
           z-index: 100;
           background-color: rgb(255, 255, 230);
         "
+        @mouseleave="openMenuItem('website')"
       >
-        <div>
+        <!-- <div>
           <v-card-text class="py-0 pr-8 pl-0 text-right"
             ><v-btn
               fab
@@ -367,7 +368,7 @@
               <v-icon size="25">mdi-close-circle</v-icon>
             </v-btn></v-card-text
           >
-        </div>
+        </div> -->
         <pageWebsite />
       </v-card>
       <div
@@ -392,11 +393,11 @@
           <div v-for="(item, index) in pageMenu" :key="index">
             <v-btn
               class="pa-0 rounded-0"
-              :text="colortext === 'One Screen' + index ? false : true"
+              :text="colortext === 'CRM' + index ? false : true"
               width="100%"
               style="background-color: transparent; color: transparent"
               @click="toggleItemStatus(item.path)"
-              @mouseenter="colortext = 'One Screen' + index"
+              @mouseenter="colortext = 'CRM' + index"
               @mouseleave="colortext = false"
             >
               <v-card-text
@@ -404,8 +405,8 @@
                 width="100%"
                 :style="{
                   color:
-                    colortext === 'One Screen' + index
-                      ? 'rgb(230, 230, 0)'
+                    colortext === 'CRM' + index
+                      ? '#804d00'
                       : '#000',
                 }"
               >
@@ -420,7 +421,7 @@
           </div>
         </v-card>
       </div>
-      <v-divider style="background-color: #ffff00"></v-divider>
+      <v-divider style="background-color: #804d00"></v-divider>
       <v-card-text class="text-left pa-2" style="position: fixed; z-index: 150; bottom: 0px; left: 0px;">
         <Tooltip placement="top" :content=" en ? 'Lao to English' : 'English to Lao'" :delay="600">
           <Button class="language-button custom-font" @click="toggleLanguage">{{ en ? 'ລາວ' : 'English'}}</Button>
@@ -434,7 +435,7 @@
     <v-footer
       v-if="token || tokenShow"
       padless
-      style="background-color: #ffff00"
+      style="background-color: #804d00"
     >
       <v-card
         flat
@@ -455,9 +456,9 @@
           </v-btn>
         </v-card-text>
         <v-card-text class="white--text pt-0">
-          <span style="color: #ffff00"> TPLUS</span> Digital Sole Co, Ltd
+          <span style="color: #804d00"> TPLUS</span> Digital Sole Co, Ltd
           formerly known as VimpelcomLao Co, Ltd. officially on July, 13, 2019
-          announced as <span style="color: #ffff00"> TPLUS</span> Digital Co,
+          announced as <span style="color: #804d00"> TPLUS</span> Digital Co,
           Ltd is one of the world’s largest integrated telecommunications
           services operators providing voice and data services through a range
           of traditional and broadband mobile and fixed technologies and TPLUS
@@ -487,8 +488,8 @@ export default {
       imenu: false,
       pageMenu: [
         {
-          nameEn: 'One Screen',
-          nameLa: 'ໜ້າຫຼອມ',
+          nameEn: 'CRM',
+          nameLa: 'CRM',
           icon: 'mdi-monitor-screenshot',
           path: '../one_million',
         },
@@ -575,16 +576,12 @@ export default {
     },
   },
   mounted() {
-    // Update 'show' property on component mount
     this.updateShowProperty()
-    // Listen for window resize events and update 'show' property accordingly
     window.addEventListener('resize', this.updateShowProperty)
   },
   methods: {
     toggleLanguage() {
-      // Update the 'en' variable when the button is clicked
       this.en = !this.en;
-      // Also, commit the mutation to update the language state in the store if needed
       this.$store.commit('setLanguage', this.en);
     },
     openMenuItem(item) {
@@ -597,10 +594,8 @@ export default {
       }
     },
     toggleItemStatus(ToPath) {
-      // Navigate to the specified path and pass the menuItem value as a query parameter
       this.$router.push({
         path: ToPath,
-        // query: { menuItem: false }, // Pass the menuItem parameter as false
       })
       this.website = false
       this.imenu = false
@@ -618,21 +613,19 @@ export default {
     startTimer() {
       this.colortext = 'number'
       this.tooltipTimer = setTimeout(() => {
-        this.$refs.tooltip.classList.add('visible') // Add a class to make the tooltip visible
-      }, 700) // 2000 milliseconds = 2 seconds
+        this.$refs.tooltip.classList.add('visible')
+      }, 700);
     },
     clearTimer() {
       this.colortext = false
       clearTimeout(this.tooltipTimer)
-      this.$refs.tooltip.classList.remove('visible') // Remove the class to hide the tooltip
+      this.$refs.tooltip.classList.remove('visible');
     },
     updateShowProperty() {
-      // Update 'show' property based on window width
       this.show = window.innerWidth > 1200
     },
   },
   beforeDestroy() {
-    // Remove the window resize event listener to prevent memory leaks
     window.removeEventListener('resize', this.updateShowProperty)
   },
 }
@@ -651,13 +644,11 @@ export default {
     display: none;
   }
 
-  /* Update the 'show' property to false for screen width less than or equal to 1600px */
   :root {
     --show-value: false;
   }
 }
 
-/* Use the custom property to set the 'show' property */
 .grid {
   display: var(--show-value, grid);
 }
@@ -666,14 +657,13 @@ export default {
 }
 .custom-font {
   font-family: 'Noto Sans Lao', sans-serif;
-  /* You can specify additional styles here */
 }
 .language-button {
-  color: none; /* Default state */
+  color: none;
 }
 
 .language-button:hover {
-  background-color: #ffff00;
-  color: #333333; /* Hover state */
+  background-color: #804d00;
+  color: #333333;
 }
 </style>
