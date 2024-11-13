@@ -12,7 +12,7 @@
         "
       >
         <v-card
-          height="508px"
+          height="548px"
           fixed-header
           flat
           class="elevation-1 custom-font table-container"

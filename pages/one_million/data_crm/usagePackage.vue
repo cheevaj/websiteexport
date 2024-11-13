@@ -38,12 +38,12 @@
                 </tr>
             </template>
             <template v-slot:footer>
-                <v-card-actions class="pa-0">
+                <v-card-actions class="pa-0" s style="background-color: #e6e6e6;">
                     <v-spacer />
                     <tr>
                         <td :colspan="visibleHeaders.length" class="text-left px-4">
                             <div class="d-flex justify-space-between align-center w-100" style="height: 50px; width: 100%;">
-                                <h2 class="text_color">Total: <span style="color: #804d00;">{{ usePackage.totalMb }}MB</span></h2>
+                                <h2 style="color: #404040;">Total: <span style="color: #804d00;">{{ usePackage.totalMb }}MB</span></h2>
                             </div>
                         </td>
                     </tr>
