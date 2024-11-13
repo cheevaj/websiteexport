@@ -793,15 +793,16 @@
                     packagesCount !== 0 ? showData('Data-Package') : false
                   "
                 >
-                  <v-icon color="#737373">mdi-network-strength-3</v-icon
-                  >&nbsp;&nbsp;<span
+                  <v-icon color="#737373">mdi-store</v-icon
+                  >&nbsp;<span
                     class="text-color"
                     :class="[{ 'custom-font': en }, { font_size_14: en }]"
-                    >{{ en ? 'ຂໍ້ມູນອີນເຕິເນັດ:' : 'Data Package:' }}</span
+                    >{{ en ? 'ຂໍ້ມູນຊື້ອີນເຕິເນັດ:' : 'Data Package:' }}</span
                   >
                   <v-spacer />
                   <div
-                    class="px-2 py-1"
+                    class="py-1"
+                    :class="checkData.query_pk_log.length <= 0 ? 'px-2' : 'px-1'"
                     style="border-radius: 2px; color: #ffff"
                     :style="{
                       backgroundColor:
@@ -811,6 +812,37 @@
                     }"
                   >
                     {{ checkData.query_pk_log.length }}
+                  </div>
+                </v-btn>
+                <v-divider />
+                <v-btn
+                  class="rounded-0 px-1 py-0"
+                  width="100%"
+                  small
+                  text
+                  :disabled="packagesCount === 0"
+                  @click="
+                    packagesCount !== 0 ? showData('usage-Package') : false
+                  "
+                >
+                  <v-icon color="#737373">mdi-network-strength-3</v-icon
+                  >&nbsp;<span
+                    class="text-color"
+                    :class="[{ 'custom-font': en }, { font_size_14: en }]"
+                    >{{ en ? 'ຂໍ້ມູນໃຊ້ອີນເຕິເນັດ:' : 'Usage Package:' }}</span
+                  >
+                  <v-spacer />
+                  <div
+                    class="px-1 py-1"
+                    style="border-radius: 2px; color: #ffff"
+                    :style="{
+                      backgroundColor:
+                        packagesCount === 0
+                          ? 'rgb(179, 179, 179)'
+                          : 'rgb(0, 230, 0)',
+                    }"
+                  >
+                    {{ usePackage.data.length }}
                   </div>
                 </v-btn>
                 <v-divider />
@@ -1758,6 +1790,7 @@
                     :text="text"
                   />
                   <QueueService v-else-if="text === 'Queue'" />
+                  <UsagePackage v-else-if="text === 'usage-Package'" :usePackage="usePackage" />
                 </div>
                 <v-card
                   v-if="text === 'image'"
@@ -1826,6 +1859,7 @@ import smsOneScreen from '../data_crm/smsOneScreen'
 import borrowMoney from '../data_crm/borrowMoney'
 import Byepackage from './Byepackage.vue'
 import QueueService from './queueService.vue'
+import UsagePackage from './usagePackage.vue'
 export default {
   middleware: 'auth', 
   Currency: 'index',
@@ -1843,6 +1877,7 @@ export default {
     checkData: Object,
     SMS: Array,
     statusIR: Object,
+    usePackage: Object,
   },
   components: {
     DataSet,
@@ -1856,6 +1891,7 @@ export default {
     borrowMoney,
     Byepackage,
     QueueService,
+    UsagePackage,
   },
   data() {
     return {
@@ -2023,7 +2059,7 @@ export default {
     },
     async OffInternet(value) {
       const valueInternet = value === 'valueSwitch4G' ? 'OFF4G' : 'OFF3G'
-      console.log(valueInternet)
+      // console.log(valueInternet)
       try {
         const res = await this.$axios.post(
           'http://172.28.17.102:3455/active4G/Active4GHLR',
@@ -2041,7 +2077,7 @@ export default {
     },
     async OnInternet(value) {
       const valueInternet = value === 'valueSwitch4G' ? 'ON4G' : 'ON3G'
-      console.log(valueInternet)
+      // console.log(valueInternet)
       try {
         const res = await this.$axios.post(
           'http://172.28.17.102:3455/active4G/Active4GHLR',
@@ -2067,7 +2103,7 @@ export default {
       return `${year}${month}`
     },
     async dataOfCCare() {
-      console.log('data-U:', this.checkData)
+      // console.log('data-U:', this.usePackage)
       const Month = this.monthAndYear()
       const month = Number(Month)
       const apiCalls = [

@@ -159,6 +159,7 @@
                   :checkData="checkData"
                   :SMS="SMS"
                   :statusIR="statusIR"
+                  :usePackage="usePackage"
                 />
                 <!--@switch="receiveSwitchData"-->
               </div>
@@ -203,6 +204,7 @@ export default {
       debtMoney: {},
       simType:{},
       checkData:{},
+      usePackage:{},
       loading: false,
       numberPhon: '',
       numberPhonSend: '',
@@ -306,7 +308,7 @@ export default {
       const currentDate = new Date();
       const stopdate = currentDate.toISOString().slice(0, 16);
       const firstDayNextMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1);
-      const startdate = new Date(firstDayNextMonth.setMonth(firstDayNextMonth.getMonth() - 2)).toISOString().slice(0, 16);
+      const startdate = new Date(firstDayNextMonth.setMonth(firstDayNextMonth.getMonth() - 3)).toISOString().slice(0, 16);
       const apiCalls = [
         this.$axios.post('http://172.28.26.23:3400/ltc-smart-reward/ReadPointDetail', { userIdData: Num }),
         this.$axios.post('http://172.28.17.102:9970/data/findnumbersoxay', { telephone: num }),
@@ -327,6 +329,11 @@ export default {
           }
         }),
         this.$axios.$post('http://172.28.26.23:3200/Ir/checkstatus', { ISDN: Num }),
+        this.$axios.post('http://172.28.17.102:3455/active4G/logpackage', {isdn: Num, sdate: startdate, edate: stopdate, }).catch(error => {
+          if (error.response && error.response.status === 500) {
+            console.log('Not Response');
+          }
+        }),
       ];
       try {
         const responses = await Promise.all(apiCalls);
@@ -342,6 +349,7 @@ export default {
           checkData,
           smsDetailResponse,
           statusIR,
+          usePackage,
         ] = responses;
         this.dataPoint = pointDetailResponse.data.data;
         this.dataSoXay = soXayResponse ? soXayResponse.data : {};
@@ -359,7 +367,8 @@ export default {
         this.checkData = checkData ? checkData.data : {};
         this.SMS = smsDetailResponse && smsDetailResponse.data !== 'Not found data!' ? smsDetailResponse.data : [];
         this.statusIR = statusIR ? statusIR.data : {};
-        console.log(this.vasSerVices)
+        this.usePackage = usePackage ? usePackage.data : {};
+        console.log('l:', this.usePackage);
       } catch (error) {
         console.error('Error fetching data:', error);
       } finally {
