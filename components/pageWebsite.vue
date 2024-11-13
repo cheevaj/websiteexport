@@ -126,6 +126,13 @@ export default {
           subtitle: this.en ? 'ການກວດສອບການຢືນຂອງສະແຕມການຄ້າຕ່າງໆ.' : 'Checking the standing of various commercial stamps.',
           link: 'http://172.28.17.102:5555/cbs',
         },
+        {
+          avatar:
+            'http://172.28.17.137:7789/Services/asset/images//logo-round.png',
+          title: 'website Queue',
+          subtitle: this.en ? "ເວັບໄຊຄິວ ສໍາລັບ C'Care." : "website Queue of C'Care.",
+          link: 'http://172.28.17.102:3334',
+        },
       ];
     },
   },
@@ -144,6 +151,5 @@ export default {
 <style>
 .custom-font {
   font-family: 'Noto Sans Lao', sans-serif;
-  /* You can specify additional styles here if needed */
 }
 </style>

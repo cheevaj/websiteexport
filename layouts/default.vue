@@ -663,7 +663,7 @@ export default {
 }
 
 .language-button:hover {
-  background-color: #804d00;
+  background-color: #ffd633;
   color: #333333;
 }
 </style>

@@ -2,6 +2,7 @@
     <div>
       <v-card
         class="rounded-0 scrollbar"
+        flat
         style="
           overflow-y: auto;
           left: 0;
@@ -11,8 +12,9 @@
         "
       >
         <v-card
-          height="488px"
+          height="508px"
           fixed-header
+          flat
           class="elevation-1 custom-font table-container"
         >
           <v-divider />
@@ -39,20 +41,11 @@
               </v-card-actions>
             </v-card-text>
           </v-card-actions>
-            <v-card
+            <div
               v-if="transformedDataHPackage.length > 0"
-              outlined
-              class="rounded-0 scrollbar"
-              style="
-                overflow-y: auto;
-                left: 0;
-                height: calc(65vh) - 4px;
-                overflow: y;
-                background-color: #f2f2f2;
-              "
             >
               <v-data-table
-                height="calc(100vh - 35vh)"
+                height="449px"
                 fixed-header
                 dense
                 :headers="visibleHeaders"
@@ -60,6 +53,7 @@
                 :items-per-page="itemsPerPage"
                 item-key="ProductNumber"
                 class="elevation-1 custom-font table-container scrollbar"
+                style="border-radius: 2px;"
               >
                 <template v-slot:item="{ item }">
                   <tr
@@ -77,7 +71,7 @@
                   </tr>
                 </template>
               </v-data-table>
-            </v-card>
+            </div>
         </v-card>
       </v-card>
     </div>

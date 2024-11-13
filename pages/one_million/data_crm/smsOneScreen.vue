@@ -2,6 +2,7 @@
   <div class="background_color">
     <v-card
       outlined
+      flat
       class="rounded-0 scrollbar"
       style="
         overflow-y: auto;
@@ -104,7 +105,7 @@ export default {
   },
   methods: {
     maskContent(content) {
-      const keywordPattern = /OTP|otp|Code|code|รหัส|Codapay/
+      const keywordPattern = /OTP|otp|Code|code|รหัส|Codapay|ລະຫັດຜ່ານ/
       if (keywordPattern.test(content)) {
         return content.replace(/\d+/g, '******');
       }

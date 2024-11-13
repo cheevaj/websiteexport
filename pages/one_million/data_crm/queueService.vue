@@ -11,12 +11,12 @@
       "
     >
       <v-card
-        height="488px"
+        height="548px"
         flat
         fixed-header
         class="elevation-1 custom-font "
       >
-        <v-card flat class="py-2 px-4 table-container" height="489px">
+        <v-card flat class="py-2 px-4 table-container" height="548px">
           <Tree :data="result" class="table-container"></Tree>
         </v-card>
         <v-btn
@@ -414,58 +414,61 @@ export default {
     },
     async sendMessageAuto() {
       if (this.dataprovince.length > 0) {
-        this.values = 0
-        this.result = []
+        this.values = 0;
+        this.result = [];
+
         for (let i = 0; i < this.dataprovince.length; i++) {
-          const provinceObj = this.dataprovince[i]
-          const provinceName = provinceObj.province
+          const provinceObj = this.dataprovince[i];
+          const provinceName = provinceObj.province;
+          
           try {
             const response = await this.$axios.post(
               'http://172.28.17.102:3600/branch/findbranchbyprovince',
-              {
-                province: provinceName,
-              }
-            )
+              { province: provinceName }
+            );
+
+            let queue = 0;
             const provinceData = {
-              title: provinceName,
+              title: `${provinceName} ( ${queue} )`,
               expand: false,
               children: [],
-            }
+            };
             for (const branch of response.data) {
-              const branchId = branch.id
+              const branchId = branch.id;
               const res = await this.$axios.post(
                 'http://172.28.17.102:3600/monitor/queuebranch',
-                {
-                  branchid: branchId,
-                }
-              )
+                { branchid: branchId }
+              );
               const branchChildren = res.data.map((item) => ({
-                title: `
-                    ເລກຄິວ: ${item.queuenumber} 
-                    ເລກໂທລະສັບ: ${item.phonenumber} 
-                    ເວລາຈອງ: ${this.formatAdjustDate(item.createdAt)}
+                title: `+ 
+                  ເລກຄິວ: ${item.queuenumber} 
+                  ເລກໂທລະສັບ: ${item.phonenumber} 
+                  ເວລາຈອງ: ${this.formatAdjustDate(item.createdAt)}
                 `,
-              }))
+              }));
+              queue += branchChildren.length;
               provinceData.children.push({
                 title: `${branch.BNameL} ( ${branchChildren.length} )`,
                 expand: true,
                 children: branchChildren,
-              })
+              });
             }
-            this.result.push(provinceData)
+            provinceData.title = `${provinceName} ( ${queue} )`;
+            this.result.push(provinceData);
+
             this.values = parseFloat(
               (((i + 1) / this.dataprovince.length) * 100).toFixed(1)
-            )
+            );
           } catch (error) {
             console.error(
               `Error sending message to province: ${provinceName}`,
               error
-            )
-            break
+            );
+            break;
           }
         }
       } else {
-        console.log('No provinces found in dataprovince')
+        console.log('No provinces found in dataprovince');
       }
     },
     formatAdjustDate(dateString) {

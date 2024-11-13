@@ -50,7 +50,7 @@
                           <span
                             class="text-color custom-font"
                             :class="[{ 'custom-font': en }]"
-                            >{{ en ? 'ເບີໂທ' : 'Number' }}</span
+                            >{{ en ? 'ເບີໂທ' : 'SIM' }}</span
                           >:
                           <v-spacer />
                           <h6 class="font_size_14">{{ numberPhonSend }}</h6>
@@ -533,10 +533,10 @@
                       v-if="valueSwitchIRService"
                       class="text-color"
                       :class="{ 'custom-font': en }"
-                      >{{ en ? 'ເປີດ' : 'Off' }}</span
+                      >{{ en ? 'ເປີດ' : 'On' }}</span
                     >
                     <span v-else :class="{ 'custom-font': en }">{{
-                      en ? 'ປິດ' : 'On'
+                      en ? 'ປິດ' : 'Off'
                     }}</span>
                   </v-card-actions>
                   <v-card-actions class="pa-1">
@@ -546,10 +546,10 @@
                       v-if="valueSwitchIRService"
                       class="text-color"
                       :class="{ 'custom-font': en }"
-                      >{{ en ? 'ເປີດ' : 'Off' }}</span
+                      >{{ en ? 'ເປີດ' : 'On' }}</span
                     >
                     <span v-else :class="{ 'custom-font': en }">{{
-                      en ? 'ປິດ' : 'On '
+                      en ? 'ປິດ' : 'Off '
                     }}</span>
                   </v-card-actions>
                   <v-card-actions class="pa-1">
