@@ -12,44 +12,69 @@
         background-color: #f2f2f2;
       "
     >
-        <v-data-table
-            height="496px"
-            fixed-header
-            dense
-            hide-default-footer
-            :headers="visibleHeaders"
-            :items="transformedDataHPackage"
-            :items-per-page="itemsPerPage"
-            item-key="ProductNumber"
-            :footer-props="{ showFirstLastPage: false }"
-            class="elevation-1 custom-font table-container scrollbar"
-            >
-            <template v-slot:item="{ item }">
-                <tr
-                class="text_color"
-                :style="{
-                    backgroundColor:
-                    item.index % 2 !== 0 ? 'rgb(255, 255, 230)' : 'rgb(255, 255, 255)',
-                }"
+      <v-data-table
+        height="496px"
+        fixed-header
+        dense
+        hide-default-footer
+        :headers="visibleHeaders"
+        :items="transformedDataHPackage"
+        :items-per-page="itemsPerPage"
+        item-key="ProductNumber"
+        :footer-props="{ showFirstLastPage: false }"
+        class="elevation-1 custom-font table-container scrollbar"
+      >
+        <template v-slot:loading>
+          <v-progress-linear
+            indeterminate
+            color="rgb(255, 204, 0)"
+            height="4"
+          ></v-progress-linear>
+        </template>
+        <template v-slot:item="{ item }">
+          <tr
+            class="text_color"
+            :style="{
+              backgroundColor:
+                item.index % 2 !== 0
+                  ? 'rgb(255, 255, 230)'
+                  : 'rgb(255, 255, 255)',
+            }"
+          >
+            <td v-for="header in visibleHeaders" :key="header.text">
+              <span class="font_size_12">{{ item[header.value] }}</span>
+            </td>
+          </tr>
+        </template>
+
+        <template v-slot:footer>
+          <v-card-actions class="pa-0" style="background-color: #e6e6e6">
+            <v-spacer />
+            <DatePicker
+              v-model="dateRange"
+              type="daterange"
+              placement="bottom-end"
+              placeholder="Select date"
+              style="width: 200px"
+            />
+            <tr>
+              <td :colspan="visibleHeaders.length" class="text-left px-4">
+                <div
+                  class="d-flex justify-space-between align-center w-100"
+                  style="height: 50px; width: 100%"
                 >
-                <td v-for="header in visibleHeaders" :key="header.text">
-                    <span class="font_size_12">{{ item[header.value] }}</span>
-                </td>
-                </tr>
-            </template>
-            <template v-slot:footer>
-                <v-card-actions class="pa-0" s style="background-color: #e6e6e6;">
-                    <v-spacer />
-                    <tr>
-                        <td :colspan="visibleHeaders.length" class="text-left px-4">
-                            <div class="d-flex justify-space-between align-center w-100" style="height: 50px; width: 100%;">
-                                <h2 style="color: #404040;">Total: <span style="color: #804d00;">{{ usePackage.totalMb }}MB</span></h2>
-                            </div>
-                        </td>
-                    </tr>
-                </v-card-actions>
-            </template>
-        </v-data-table>
+                  <h2 style="color: #404040">
+                    Total:
+                    <span style="color: #804d00">
+                      {{ localUsePackage.totalMb }}MB
+                    </span>
+                  </h2>
+                </div>
+              </td>
+            </tr>
+          </v-card-actions>
+        </template>
+      </v-data-table>
     </v-card>
   </div>
 </template>
@@ -57,11 +82,10 @@
 export default {
   middleware: 'auth',
   Currency: 'index',
-  props: {
-    usePackage: Object,
-  },
   data() {
     return {
+      localUsePackage: {},
+      dateRange: [],
       columns: [
         { key: 'index', title: 'Index' },
         { key: 'MSMIDN', title: 'MSMIDN' },
@@ -85,9 +109,13 @@ export default {
         { text: 'start', value: 'start' },
         { text: 'stop', value: 'stop' },
       ],
+      loading: false,
     }
   },
   computed: {
+    dateTime() {
+      return this.$store.state.dateTime
+    },
     visibleHeaders() {
       return this.headers.filter((header) =>
         this.columns.some(
@@ -102,10 +130,13 @@ export default {
         : 10
     },
     transformedDataHPackage() {
-      if (!this.usePackage.data || !Array.isArray(this.usePackage.data)) {
+      if (
+        !this.localUsePackage.data ||
+        !Array.isArray(this.localUsePackage.data)
+      ) {
         return []
       }
-      return this.usePackage.data.map((item, index) => {
+      return this.localUsePackage.data.map((item, index) => {
         return {
           ...item,
           index: item.index,
@@ -117,12 +148,60 @@ export default {
           servicename: item.servicename,
           start: item.start,
           stop: item.stop,
-          volMB: item.volMB + "MB",
+          volMB: item.volMB + 'MB',
         }
       })
     },
   },
-  methods: {},
+  watch: {
+    dateRange() {
+      if (this.dateRange[0] !== '' && this.dateRange[1] !== '') {
+        this.OnInternet()
+      }
+    },
+  },
+  mounted() {
+    if (this.dateTime.length >= 2) {
+      this.dateRange = [this.dateTime[0], this.dateTime[1]]
+    }
+  },
+  methods: {
+    async OnInternet() {
+      this.loading = true;
+      this.localUsePackage = { data: [], totalMb: 0 }
+      try {
+        const formattedStartDate = this.dateRange[0]
+          ? new Date(this.dateRange[0]).toISOString().slice(0, 16)
+          : null
+        const formattedEndDate = this.dateRange[1]
+          ? new Date(this.dateRange[1]).toISOString().slice(0, 16)
+          : null
+        if (formattedStartDate === formattedEndDate) {
+          this.loading = false
+          this.messageModal('error')
+          return
+        }
+        const res = await this.$axios.post(
+          'http://172.28.17.102:3455/active4G/logpackage',
+          {
+            isdn: this.dateTime[2],
+            sdate: formattedStartDate,
+            edate: formattedEndDate,
+          }
+        )
+        this.localUsePackage = res.data ? res.data : {}
+      } catch (error) {
+        console.error(error)
+      }
+      this.loading = false;
+    },
+    messageModal(type) {
+      this.$Message[type]({
+        background: true,
+        content: `<span class="custom-font">${'ວັນທີ່ຕ້ອງຕ່າງກັນ.'}<span>`,
+      })
+    },
+  },
 }
 </script>
 

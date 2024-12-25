@@ -20,9 +20,11 @@
           <Tree :data="result" class="table-container"></Tree>
         </v-card>
         <v-btn
+          :loading="loading"
           text
           fab
           x-small
+          :disabled="loading"
           class="custom-font custom-btn"
           style="
             position: absolute;
@@ -30,7 +32,7 @@
             top: 8px;
           "
           @click="province"
-          ><v-icon color="rgb(255, 204, 0)">mdi-restore</v-icon></v-btn
+          ><v-icon v-if="!loading" color="#ff9933">mdi-restore</v-icon></v-btn
         >
         <v-btn
           text
@@ -286,6 +288,7 @@ export default {
   data() {
     return {
       e1: 1,
+      loading:false,
       addqueqeue: false,
       taskqueue: [],
       provincetplus: {},
@@ -383,6 +386,7 @@ export default {
       }
     },
     async province() {
+      this.loading = true;
       try {
         const response = await this.$axios
           .post('http://172.28.17.102:3600/branch/findallbranch')
@@ -402,8 +406,7 @@ export default {
             return null
           })
         this.dataprovince = response.data ? response.data : []
-        // console.log('Data province:', this.dataprovince)
-        this.sendMessageAuto()
+        this.sendMessageAuto();
       } catch (error) {
         console.error('Error fetching data:', error.message)
         if (error.response) {
@@ -411,6 +414,9 @@ export default {
           console.error('Status:', error.response.status)
         }
       }
+      setTimeout(() => {
+        this.loading = false;
+      }, 800);
     },
     async sendMessageAuto() {
       if (this.dataprovince.length > 0) {

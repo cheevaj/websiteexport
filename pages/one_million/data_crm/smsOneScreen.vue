@@ -97,20 +97,20 @@ export default {
           SMID: item.SMID,
           OriginalNum: item.OriginalNum,
           Result: item.Result,
-          content: this.maskContent(item.content),
+          content: item.content,
           datetime: item.datetime,
         }
       });
     },
   },
   methods: {
-    maskContent(content) {
-      const keywordPattern = /OTP|otp|Code|code|รหัส|Codapay|ລະຫັດຜ່ານ/
-      if (keywordPattern.test(content)) {
-        return content.replace(/\d+/g, '******');
-      }
-      return content;
-    },
+    // maskContent(content) {
+    //    const keywordPattern = /OTP|otp|Code|code|รหัส|Codapay|ລະຫັດຜ່ານ/
+    //   if (keywordPattern.test(content)) {
+    //     return content.replace(/\d+/g, '******');
+    //   }
+    //   return content;
+    // },
   },
 }
 </script>

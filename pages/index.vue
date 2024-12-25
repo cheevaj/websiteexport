@@ -191,7 +191,7 @@ export default {
   data() {
     return {
       link: [
-        'https://onelink.to/py4z9c', // [0 app play stop]
+        'https://onelink.to/py4z9c',
         'http://bit.ly/BeelineApp-iOS', // [1 ios app]
         'https://tplus.la/', // [2 website Tplus ]
         'https://tplus.la/packages/category-post/1', // [3 package ]

@@ -45,7 +45,7 @@
               v-if="transformedDataHPackage.length > 0"
             >
               <v-data-table
-                height="449px"
+                height="489px"
                 fixed-header
                 dense
                 :headers="visibleHeaders"

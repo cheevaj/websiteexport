@@ -250,7 +250,7 @@
                         en ? 'ປະເພດບັດ:' : 'Card Type:'
                       }}</span>
                       <v-spacer />
-                      {{ vasSerVices.result3.CardType }}
+                      {{ vasSerVices.result3.CardType ? vasSerVices.result3.CardType : '' }}
                     </v-card-actions>
                     <!-- <v-divider /> -->
                   </v-card>
@@ -282,7 +282,7 @@
                         }}
                       </span>
                       <v-spacer />
-                      {{ vasSerVices.result.MainOfferingID }}
+                      {{ vasSerVices.result.MainOfferingID ? vasSerVices.result.MainOfferingID : '' }}
                     </v-card-actions>
                     <v-divider />
                     <v-card-actions class="pa-1 mt-1">
@@ -358,7 +358,7 @@
                     {{ en ? 'ເປີດໃຊ້ງານທໍາອິດ:' : 'First Active:' }}
                   </span>
                   <v-spacer />
-                  {{ vasSerVices.result3.ActiveDate }}
+                  {{ vasSerVices.result3.ActiveDate ? vasSerVices.result3.ActiveDate : '' }}
                 </v-card-actions>
                 <v-divider />
                 <v-card-actions class="py-1 pl-2 pr-1">
@@ -366,7 +366,7 @@
                     {{ en ? 'ເບີໂທຖືກບຣາ:' : 'Call Barring:' }}
                   </span>
                   <v-spacer />
-                  {{ vasSerVices.result4.CallBarring }}
+                  {{ vasSerVices.result4.CallBarring ? vasSerVices.result4.CallBarring : '' }}
                 </v-card-actions>
                 <v-divider />
                 <v-card-actions class="py-1 pl-2 pr-1">
@@ -374,7 +374,7 @@
                     {{ en ? 'ວັນທີ່ໝົດອາຍຸ:' : 'Expire Date:' }}
                   </span>
                   <v-spacer />
-                  {{ vasSerVices.result4.ExpireDate }}
+                  {{ vasSerVices.result4.ExpireDate ? vasSerVices.result4.ExpireDate : '' }}
                 </v-card-actions>
                 <v-divider />
                 <v-card-actions class="py-1 pl-2 pr-1">
@@ -382,7 +382,7 @@
                     {{ en ? 'ໂຈະໃຊ້ງານ:' : 'Suspend:' }}
                   </span>
                   <v-spacer />
-                  {{ vasSerVices.result4.Suspend }}
+                  {{ vasSerVices.result4.Suspend ? vasSerVices.result4.Suspend : '' }}
                 </v-card-actions>
                 <v-divider />
               </v-card>
@@ -788,9 +788,9 @@
                   width="100%"
                   small
                   text
-                  :disabled="packagesCount === 0"
+                  :disabled="checkData.query_pk_log.length <= 0"
                   @click="
-                    packagesCount !== 0 ? showData('Data-Package') : false
+                    checkData.query_pk_log.length !== 0 ? showData('Data-Package') : false
                   "
                 >
                   <v-icon color="#737373">mdi-store</v-icon
@@ -806,12 +806,12 @@
                     style="border-radius: 2px; color: #ffff"
                     :style="{
                       backgroundColor:
-                        packagesCount === 0
+                        checkData.query_pk_log.length === 0
                           ? 'rgb(179, 179, 179)'
                           : 'rgb(0, 230, 0)',
                     }"
                   >
-                    {{ checkData.query_pk_log.length }}
+                    {{ checkData.query_pk_log.length > 0 ? checkData.query_pk_log.length : 0 }}
                   </div>
                 </v-btn>
                 <v-divider />
@@ -834,15 +834,9 @@
                   <v-spacer />
                   <div
                     class="px-1 py-1"
-                    style="border-radius: 2px; color: #ffff"
-                    :style="{
-                      backgroundColor:
-                        packagesCount === 0
-                          ? 'rgb(179, 179, 179)'
-                          : 'rgb(0, 230, 0)',
-                    }"
+                    style="border-radius: 2px; color: #ffff; background-color: rgb(0, 230, 0);"
                   >
-                    {{ usePackage.data.length }}
+                  <v-icon size="16">mdi-calendar-range-outline</v-icon>
                   </div>
                 </v-btn>
                 <v-divider />
@@ -1790,7 +1784,7 @@
                     :text="text"
                   />
                   <QueueService v-else-if="text === 'Queue'" />
-                  <UsagePackage v-else-if="text === 'usage-Package'" :usePackage="usePackage" />
+                  <UsagePackage v-else-if="text === 'usage-Package'" />
                 </div>
                 <v-card
                   v-if="text === 'image'"
@@ -1877,7 +1871,6 @@ export default {
     checkData: Object,
     SMS: Array,
     statusIR: Object,
-    usePackage: Object,
   },
   components: {
     DataSet,
