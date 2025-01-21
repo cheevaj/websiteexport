@@ -38,7 +38,6 @@ export default {
   css: ['iview/dist/styles/iview.css'],
   plugins: ['~/plugins/chartjs.js', '@/plugins/iview'],
   components: true,
-
   buildModules: [
     '@nuxtjs/eslint-module',
     '@nuxtjs/google-fonts',
@@ -69,13 +68,22 @@ export default {
           property: 'user',
         },
         endpoints: {
-          login: { url: 'http://172.28.26.23:3100/users/login', method: 'post' },
-          logout: { url: 'http://172.28.26.23:3100/users/logout', method: 'delete' },
+          login: {
+            url: 'http://172.28.26.23:3100/users/login',
+            method: 'post',
+          },
+          logout: {
+            url: 'http://172.28.26.23:3100/users/logout',
+            method: 'delete',
+          },
           user: { url: 'http://172.28.26.23:3100/users/me', method: 'get' },
         },
       },
     },
   },
+  // axios: {
+  //   baseURL: 'https://47f5-115-84-113-224.ngrok-free.app',
+  // },
   googleFonts: {
     families: {
       'Noto+Sans+Lao': true,

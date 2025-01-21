@@ -271,24 +271,24 @@
                 <v-progress-linear indeterminate color="#4d3d00"></v-progress-linear>
               </v-card-text>
               <v-data-table
-  width="100%"
-  :height="heightPx + 'px'"
-  fixed-header
-  dense
-  :headers="visibleHeaders"
-  :items="desserts"
-  :items-per-page="computedItemsPerPage"
-  item-key="TICKETID"
-  class="elevation-1 custom-font font_size_12"
->
-  <template v-slot:item="{ item }">
-    <tr class="text_color custom-font">
-      <td v-for="header in visibleHeaders" :key="header.text">
-        <span class="font_size_12 custom-font">{{ item[header.value] }}</span>
-      </td>
-    </tr>
-  </template>
-</v-data-table>
+                width="100%"
+                :height="heightPx + 'px'"
+                fixed-header
+                dense
+                :headers="visibleHeaders"
+                :items="desserts"
+                :items-per-page="computedItemsPerPage"
+                item-key="TICKETID"
+                class="elevation-1 custom-font font_size_12"
+              >
+                <template v-slot:item="{ item }">
+                  <tr class="text_color custom-font">
+                    <td v-for="header in visibleHeaders" :key="header.text">
+                      <span class="font_size_12 custom-font">{{ item[header.value] }}</span>
+                    </td>
+                  </tr>
+                </template>
+              </v-data-table>
             </v-card>
           </v-col>
         </v-card-actions>

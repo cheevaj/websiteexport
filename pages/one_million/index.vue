@@ -19,14 +19,62 @@
             <div v-show="buttonanime" class="transition-box">
               <v-card-actions v-if="colorMenu !== 2" class="pa-0">
                 <div style="display: flex">
+                  <!-- <v-icon
+                    class="hover-center"
+                    size="20"
+                    style="
+                      background-color: #ffd633;
+                      color: #ffff;
+                      border-radius: 50%;
+                      height: 32px;
+                      width: 32px;
+                      margin-top: 1px;
+                    "
+                    @click="modal = true"
+                  >
+                    mdi-cog-outline
+                  </v-icon> -->
+                  <Modal
+                    v-model="modal"
+                    draggable
+                    scrollable
+                    :mask="false"
+                    :title="en ? 'ຕັ້ງຄ່າການຄົ້ນຫາ' : 'Setting Search'"
+                    class="custom-font"
+                  >
+                    <div>Can be dragged off the screen</div>
+                    <template #footer>
+                      <v-card-actions style="padding: 0px">
+                        <v-spacer />
+                        <Button
+                          type="text"
+                          color="error"
+                          class="custom-btn-cancel"
+                          @click="modal = false"
+                        >
+                          <h3>cancel</h3>
+                        </Button>
+                        <Button
+                          style="background-color: #ff9900; color: #ffff"
+                          @click="settingPackage"
+                        >
+                          <h3>save</h3>
+                        </Button>
+                      </v-card-actions>
+                    </template>
+                  </Modal>
                   <form @submit.prevent="handleSearch">
                     <Input
                       class="custom-font"
                       v-model="numberPhon"
                       type="number"
-                      :placeholder="en ? 'ກະລຸນາປ້ອມເບີໂທລະສັບ (20789... )' : 'Enter number ( 20789... )'"
+                      :placeholder="
+                        en
+                          ? 'ກະລຸນາປ້ອມເບີໂທລະສັບ (20789... )'
+                          : 'Enter number ( 20789... )'
+                      "
                       clearable
-                      style="width: 300px; height: 34px; margin-top: 1px;"
+                      style="width: 300px; height: 34px; margin-top: 1px"
                       @keydown.enter="handleSearch"
                     />
                   </form>
@@ -45,7 +93,7 @@
                       padding-right: 4px;
                     "
                   >
-                    <h4 class="custom-font">{{en ? 'ຄົ້ນຫາ' : 'Search'}}</h4>
+                    <h4 class="custom-font">{{ en ? 'ຄົ້ນຫາ' : 'Search' }}</h4>
                   </v-btn>
                   <v-btn
                     text
@@ -166,7 +214,11 @@
                 <Card />
               </div>
               <div v-if="colorMenu === 3">
-                <User :numberPhonSend="numberPhonSend" :dataUser="dataUser" :numberNull="numberNull" />
+                <User
+                  :numberPhonSend="numberPhonSend"
+                  :dataUser="dataUser"
+                  :numberNull="numberNull"
+                />
               </div>
             </div>
           </template>
@@ -191,18 +243,18 @@ export default {
   },
   data() {
     return {
-      statusIR:{},
-      SMS:[],
+      statusIR: {},
+      SMS: [],
       dataPoint: {},
       dataHPackage: [],
-      vasSerVices: {}, 
-      selectInform:{},
+      vasSerVices: {},
+      selectInform: {},
       dataSoXay: [],
       dataUser: [],
       uRegister: [],
       debtMoney: {},
-      simType:{},
-      checkData:{},
+      simType: {},
+      checkData: {},
       loading: false,
       numberPhon: '',
       numberPhonSend: '',
@@ -210,6 +262,7 @@ export default {
       numberNull: false,
       mouseHover: 0,
       buttonanime: true,
+      modal: false,
       colorMenu: 0,
       split: 0.07,
       minSplit: 0,
@@ -233,10 +286,14 @@ export default {
   },
   computed: {
     en() {
-      return this.$store.state.en;
+      return this.$store.state.en
     },
   },
   methods: {
+    settingPackage(){
+      console.log('settingPackage::')
+      this.modal = false;
+    },
     slipMenu(index) {
       if (index === 4) {
         this.$router.go(-1)
@@ -245,7 +302,7 @@ export default {
       }
     },
     setSheetHeight() {
-      const screen = document.querySelector('.screen');
+      const screen = document.querySelector('.screen')
       if (screen) {
         const screenHeight = window.innerHeight - 64
         screen.style.height = screenHeight + 'px'
@@ -262,8 +319,12 @@ export default {
         this.colorMenu = 0
         this.mouseHover = 0
         this.$Notice.error({
-          title: this.en ? `<span class="custom-font">${'ກະລຸນາກອດເບີ'}</span>` : 'Check Phone Number',
-          desc: this.en ? `<span class="custom-font">${'ກະລຸນາກອດເບີ, ເບີໂທມີເລກເກິນ ຫຼື ບໍ່ເຖີງ 10 ຕົວເລກ.'}</span>` : 'Check your phone number, your number Phone must be at least 10 characters long.',
+          title: this.en
+            ? `<span class="custom-font">${'ກະລຸນາກອດເບີ'}</span>`
+            : 'Check Phone Number',
+          desc: this.en
+            ? `<span class="custom-font">${'ກະລຸນາກອດເບີ, ເບີໂທມີເລກເກິນ ຫຼື ບໍ່ເຖີງ 10 ຕົວເລກ.'}</span>`
+            : 'Check your phone number, your number Phone must be at least 10 characters long.',
         })
         this.loading = false
       }
@@ -302,36 +363,71 @@ export default {
       }
     },
     async dataResponseAll(Num) {
-      const num = Number(Num);
-      const currentDate = new Date();
-      const stopdate = currentDate.toISOString().slice(0, 16);
-      const firstDayNextMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1);
-      const startdate = new Date(firstDayNextMonth.setMonth(firstDayNextMonth.getMonth() - 3)).toISOString().slice(0, 16);
+      const num = Number(Num)
+      const currentDate = new Date()
+      const stopdate = currentDate.toISOString().slice(0, 16)
+      const firstDayNextMonth = new Date(
+        currentDate.getFullYear(),
+        currentDate.getMonth() + 1,
+        2 // Set date ( date start 01 of month )
+      )
+      const startdate = new Date(
+        firstDayNextMonth.setMonth(firstDayNextMonth.getMonth() - 2)
+      )
+        .toISOString()
+        .slice(0, 16)
       const apiCalls = [
-        this.$axios.post('http://172.28.26.23:3400/ltc-smart-reward/ReadPointDetail', { userIdData: Num }),
-        this.$axios.post('http://172.28.17.102:9970/data/findnumbersoxay', { telephone: num }),
-        this.$axios.post('http://172.28.17.102:9980/adjust/getadjustment', { telephone: Num }),
-        this.$axios.post('http://172.28.26.23:3200/checksim/register', { msisdn: num }),
-        this.$axios.post('http://172.28.26.23:3100/debit/getdetailforbank', { tel: Num }),
-        this.$axios.post('http://172.28.26.23:3200/masternumber/info', { msisdn: Num }),
-        this.$axios.post('http://172.28.26.23:3200/vasservices/info', { msisdn: Num }),
-        this.$axios.post('http://172.28.26.23:3200/vasservices/simtype', { msisdn: Num }),
-        this.$axios.post('http://172.28.26.23:3200/checksim/checkdata', { msisdn: Num }).catch(error => {
-          if (error.response && error.response.status === 500) {
-            console.log('Not Response Package');
-          }
+        this.$axios.post(
+          'http://172.28.26.23:3400/ltc-smart-reward/ReadPointDetail',
+          { userIdData: Num }
+        ),
+        this.$axios.post('http://172.28.17.102:9970/data/findnumbersoxay', {
+          telephone: num,
         }),
-        this.$axios.post('http://172.28.26.23:3200/sms/smslog', {isdn: Num, sdate: startdate, edate: stopdate, }).catch(error => {
-          if (error.response && error.response.status === 500) {
-            console.log('Not Response');
-          }
+        this.$axios.post('http://172.28.17.102:9980/adjust/getadjustment', {
+          telephone: Num,
         }),
-        this.$axios.$post('http://172.28.26.23:3200/Ir/checkstatus', { ISDN: Num }),
-      ];
+        this.$axios.post('http://172.28.26.23:3200/checksim/register', {
+          msisdn: num,
+        }),
+        this.$axios.post('http://172.28.26.23:3100/debit/getdetailforbank', {
+          tel: Num,
+        }),
+        this.$axios.post('http://172.28.26.23:3200/masternumber/info', {
+          msisdn: Num,
+        }),
+        this.$axios.post('http://172.28.26.23:3200/vasservices/info', {
+          msisdn: Num,
+        }),
+        this.$axios.post('http://172.28.26.23:3200/vasservices/simtype', {
+          msisdn: Num,
+        }),
+        this.$axios
+          .post('http://172.28.26.23:3200/checksim/checkdata', { msisdn: Num })
+          .catch((error) => {
+            if (error.response && error.response.status === 500) {
+              console.log('Not Response Package')
+            }
+          }),
+        this.$axios
+          .post('http://172.28.26.23:3200/sms/smslog', {
+            isdn: Num,
+            sdate: startdate,
+            edate: stopdate,
+          })
+          .catch((error) => {
+            if (error.response && error.response.status === 500) {
+              console.log('Not Response')
+            }
+          }),
+        this.$axios.$post('http://172.28.26.23:3200/Ir/checkstatus', {
+          ISDN: Num,
+        }),
+      ]
       const dataNum = [startdate, stopdate, Num]
-      this.$store.commit('SET_DATE', dataNum);
+      this.$store.commit('SET_DATE', dataNum)
       try {
-        const responses = await Promise.all(apiCalls);
+        const responses = await Promise.all(apiCalls)
         const [
           pointDetailResponse,
           soXayResponse,
@@ -344,30 +440,36 @@ export default {
           checkData,
           smsDetailResponse,
           statusIR,
-        ] = responses;
-        this.dataPoint = pointDetailResponse.data.data;
-        this.dataSoXay = soXayResponse ? soXayResponse.data : {};
-        if (Array.isArray(adjustResponse.data) && adjustResponse.data.length > 0) {
-          const adjustDate = adjustResponse.data[0].ADJUSTDATE;
-          this.cutMoney3K = this.formatAdjustDate(adjustDate);
+        ] = responses
+        this.dataPoint = pointDetailResponse.data.data
+        this.dataSoXay = soXayResponse ? soXayResponse.data : {}
+        if (
+          Array.isArray(adjustResponse.data) &&
+          adjustResponse.data.length > 0
+        ) {
+          const adjustDate = adjustResponse.data[0].ADJUSTDATE
+          this.cutMoney3K = this.formatAdjustDate(adjustDate)
         } else {
-          this.cutMoney3K = '';
+          this.cutMoney3K = ''
         }
-        this.uRegister = userRegisterResponse ? userRegisterResponse.data : {};
-        this.debtMoney = debtMoneyResponse ? debtMoneyResponse.data : {};
-        this.selectInform = selectInform ? selectInform.data : {};
-        this.vasSerVices = vasSerVices ? vasSerVices.data : {};
-        this.simType = simType ? simType.data : {};
-        this.checkData = checkData ? checkData.data : {};
-        this.SMS = smsDetailResponse && smsDetailResponse.data !== 'Not found data!' ? smsDetailResponse.data : [];
-        this.statusIR = statusIR ? statusIR.data : {};
+        this.uRegister = userRegisterResponse ? userRegisterResponse.data : {}
+        this.debtMoney = debtMoneyResponse ? debtMoneyResponse.data : {}
+        this.selectInform = selectInform ? selectInform.data : {}
+        this.vasSerVices = vasSerVices ? vasSerVices.data : {}
+        this.simType = simType ? simType.data : {}
+        this.checkData = checkData ? checkData.data : {}
+        this.SMS =
+          smsDetailResponse && smsDetailResponse.data !== 'Not found data!'
+            ? smsDetailResponse.data
+            : []
+        this.statusIR = statusIR ? statusIR.data : {}
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error('Error fetching data:', error)
       } finally {
-        this.numberNull = this.numberPhon !== '';
-        this.colorMenu = this.colorMenu === 0 ? 1 : this.colorMenu;
-        this.mouseHover = this.mouseHover === 0 ? 1 : this.mouseHover;
-        this.loading = false;
+        this.numberNull = this.numberPhon !== ''
+        this.colorMenu = this.colorMenu === 0 ? 1 : this.colorMenu
+        this.mouseHover = this.mouseHover === 0 ? 1 : this.mouseHover
+        this.loading = false
       }
     },
     formatAdjustDate(dateString) {
@@ -422,5 +524,14 @@ export default {
 }
 .custom-font {
   font-family: 'Noto Sans Lao', sans-serif;
+}
+.hover-center {
+  cursor: pointer;
+}
+.custom-btn-cancel {
+  color: #ff8080;
+}
+.custom-btn-cancel:hover {
+  color: #ff0000;
 }
 </style>

@@ -13,6 +13,7 @@
       "
     >
       <v-data-table
+        :loading="loading"
         height="496px"
         fixed-header
         dense
@@ -167,7 +168,7 @@ export default {
   },
   methods: {
     async OnInternet() {
-      this.loading = true;
+      this.loading = true
       this.localUsePackage = { data: [], totalMb: 0 }
       try {
         const formattedStartDate = this.dateRange[0]
@@ -193,7 +194,7 @@ export default {
       } catch (error) {
         console.error(error)
       }
-      this.loading = false;
+      this.loading = false
     },
     messageModal(type) {
       this.$Message[type]({
