@@ -24,14 +24,9 @@ export default {
     data: Object,
   },
   data: () => ({
-    dialog: false,
     loading: false,
-    snackbar: false,
     resendCode: true,
-    snackbarColor: 'default',
     otp: '',
-    text: '',
-    expectedOtp: '133707',
     countdown: 0,
     timer: null,
   }),
@@ -54,6 +49,7 @@ export default {
       } catch (err) {
         this.messageModal('error', 'OTP does not match.')
       } finally {
+        this.otp = '';
         this.loading = false
       }
     },
@@ -69,7 +65,10 @@ export default {
       } catch (err) {
         console.error('Error:', err)
       }
-      this.startCountdown()
+      finally {
+        this.otp = '';
+        this.startCountdown();
+      }
     },
     startCountdown() {
       clearInterval(this.timer)

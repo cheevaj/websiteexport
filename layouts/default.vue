@@ -15,19 +15,32 @@
               >mdi-alert-circle-outline</v-icon
             >
             <v-card-text class="text-h8 a text-center">
-              <h4 class="custom-font">{{ en ? 'ທ່ານຕ້ອງການອອກຈາກລະບົບບໍ?' : 'Are you leaving?'}}</h4>
+              <h4 class="custom-font">
+                {{ en ? 'ທ່ານຕ້ອງການອອກຈາກລະບົບບໍ?' : 'Are you leaving?' }}
+              </h4>
               <p class="custom-font">
-                {{ en ? 'ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການອອກຈາກລະບົບ? ຂໍ້ມູນທັງຫມົດທີ່ບໍ່ໄດ້ບັນທຶກໄວ້ຂອງທ່ານຈະສູນເສຍ.' : 'Are you sure want to log out ? All your unsaved data will bet lost.'}}
+                {{
+                  en
+                    ? 'ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການອອກຈາກລະບົບ? ຂໍ້ມູນທັງຫມົດທີ່ບໍ່ໄດ້ບັນທຶກໄວ້ຂອງທ່ານຈະສູນເສຍ.'
+                    : 'Are you sure want to log out ? All your unsaved data will bet lost.'
+                }}
               </p>
             </v-card-text>
             <v-divider></v-divider>
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-card-actions>
-                <v-btn class="custom-font" color="error" text @click="dialog = false">
-                  {{ en ? 'ຍົກເລີກ' : 'cancel'}}
+                <v-btn
+                  class="custom-font"
+                  color="error"
+                  text
+                  @click="dialog = false"
+                >
+                  {{ en ? 'ຍົກເລີກ' : 'cancel' }}
                 </v-btn>
-                <v-btn class="custom-font" color="yellow" @click="logOut"> {{ en ? 'ອອກຈາກລະບົບ' : 'Getout'}} </v-btn>
+                <v-btn class="custom-font" color="yellow" @click="logOut">
+                  {{ en ? 'ອອກຈາກລະບົບ' : 'Getout' }}
+                </v-btn>
               </v-card-actions>
             </v-card-actions>
           </v-card>
@@ -60,82 +73,52 @@
               </v-btn>
               <v-btn
                 height="100%"
-                @mouseenter="colortext = 'tplus'"
                 class="pa-0"
                 text
                 style="background-color: transparent; color: transparent"
                 @click="toggleItemStatus('/')"
               >
                 <v-card-actions class="pa-0">
-                  <v-card-text
-                    class="px-0"
-                    :style="{
-                      color: colortext === 'tplus' ? '#804d00' : '#000',
-                    }"
-                  >
-                    TPLUS
-                  </v-card-text>
+                  <v-card-text class="px-0 custom-cursor"> TPLUS </v-card-text>
                 </v-card-actions>
               </v-btn>
             </v-list-item>
           </v-col>
-          <v-col
-            :cols="show ? 1 : 2"
-            class="px-0 text-center"
-            @mouseleave="colortext = false"
-          >
+          <v-col :cols="show ? 1 : 2" class="px-0 text-center">
             <v-btn
               height="100%"
               width="100%"
               class="pa-0"
               text
               style="background-color: transparent; color: transparent"
-              @mouseenter="colortext = 'web'"
               @click="openMenuItem('website')"
             >
               <v-card-actions class="pa-0">
-                <v-card-text class="custom-font"
-                  :style="{ color: colortext === 'web' ? '#804d00' : '#000' }"
-                >
+                <v-card-text class="custom-font custom-cursor">
                   <v-icon style="bottom: 2px"> mdi-web-sync </v-icon>
-                  {{ en ? 'ເວັບໄຊທ໌' : 'Web'}}
+                  {{ en ? 'ເວັບໄຊທ໌' : 'Web' }}
                 </v-card-text>
               </v-card-actions>
             </v-btn>
           </v-col>
-          <v-col
-            :cols="show ? 1 : 2"
-            class="px-0 text-center"
-            @mouseleave="colortext = false"
-          >
+          <v-col :cols="show ? 1 : 2" class="px-0 text-center">
             <v-btn
               height="100%"
               width="100%"
               class="pa-0"
               text
               style="background-color: transparent; color: transparent"
-              @mouseenter="colortext = 'MenuAll'"
               @click="openMenuItem('menu')"
             >
               <v-card-actions class="pa-0">
-                <v-card-text
-                  class="custom-font"
-                  :style="{
-                    color: colortext === 'MenuAll' ? '#804d00' : '#000',
-                  }"
-                >
+                <v-card-text class="custom-font custom-cursor">
                   <v-icon style="bottom: 2px"> mdi-layers-triple</v-icon>
-                  {{ en ? 'ເມນູ' : 'Menu'}}
+                  {{ en ? 'ເມນູ' : 'Menu' }}
                 </v-card-text>
               </v-card-actions>
             </v-btn>
           </v-col>
-          <v-col
-            cols="8"
-            v-if="show"
-            class="text-right"
-            @mouseleave="colortext = false"
-          >
+          <v-col cols="8" v-if="show" class="text-right">
             <v-card-text class="pa-0 text-right">
               <v-tooltip bottom class="px-4">
                 <template #activator="{ on, attrs }">
@@ -151,36 +134,26 @@
                     @click="toggleItemStatus('/pagetable')"
                   >
                     <v-card-actions class="pa-0">
-                      <v-card-text
-                        class="custom-font"
-                        :style="{
-                          color: colortext === 'number' ? '#804d00' : '#000',
-                        }"
-                      >
-                        {{ en ? 'ເບີ່ງ TICKET' : 'view TICKET'}}
+                      <v-card-text class="custom-font custom-cursor">
+                        {{ en ? 'ເບີ່ງ TICKET' : 'view TICKET' }}
                       </v-card-text>
                     </v-card-actions>
                   </v-btn>
                 </template>
-                <span class="tooltip custom-font" ref="tooltip"
-                  >{{en ? 'ເບີ່ງ ຫຼື ດາວໂຫຼດໄຟລ໌ TICKET' : 'View or Download TICKET File'}}</span
-                >
+                <span class="tooltip custom-font" ref="tooltip">{{
+                  en
+                    ? 'ເບີ່ງ ຫຼື ດາວໂຫຼດໄຟລ໌ TICKET'
+                    : 'View or Download TICKET File'
+                }}</span>
               </v-tooltip>
               <v-btn
                 height="100%"
                 text
                 style="background-color: transparent; color: transparent"
                 @click="openLinkInNewTab(link[0])"
-                @mouseenter="colortext = 'about'"
-                @mouseleave="colortext = false"
               >
                 <v-card-actions class="pa-0">
-                  <v-card-text
-                    class="custom-font"
-                    :style="{
-                      color: colortext === 'about' ? '#804d00' : '#000',
-                    }"
-                  >
+                  <v-card-text class="px-0 custom-font custom-cursor">
                     {{ en ? 'ກ່ຽວກັບພອກເຮົາ' : 'about us' }}
                   </v-card-text>
                 </v-card-actions>
@@ -191,17 +164,11 @@
                 class="pa-0"
                 text
                 style="background-color: transparent; color: transparent"
-                @mouseenter="colortext = 'message'"
                 @click="toggleItemStatus('/chart/pagewhatsapp')"
               >
                 <v-card-actions class="pa-0">
-                  <v-card-text
-                    class="custom-font"
-                    :style="{
-                      color: colortext === 'message' ? '#804d00' : '#000',
-                    }"
-                  >
-                    {{en ? 'ສົ່ງຂໍ້ຄວາມ' : 'messages'}}
+                  <v-card-text class="px-0 custom-font custom-cursor">
+                    {{ en ? 'ສົ່ງຂໍ້ຄວາມ' : 'messages' }}
                   </v-card-text>
                 </v-card-actions>
               </v-btn>
@@ -210,16 +177,10 @@
                 class="pa-0"
                 text
                 style="background-color: transparent; color: transparent"
-                @mouseenter="colortext = 'product'"
                 @click="openLinkInNewTab(link[1])"
               >
                 <v-card-actions class="pa-0">
-                  <v-card-text
-                    class="custom-font"
-                    :style="{
-                      color: colortext === 'product' ? '#804d00' : '#000',
-                    }"
-                  >
+                  <v-card-text class="px-0 custom-font custom-cursor">
                     {{ en ? 'ສີນຄ້າ' : 'Products' }}
                   </v-card-text>
                 </v-card-actions>
@@ -229,34 +190,26 @@
                 class="pa-0"
                 text
                 style="background-color: transparent; color: transparent"
-                @mouseenter="colortext = 'services'"
                 @click="openLinkInNewTab(link[2])"
               >
                 <v-card-actions class="pa-0">
-                  <v-card-text
-                    class="custom-font"
-                    :style="{
-                      color: colortext === 'services' ? '#804d00' : '#000',
-                    }"
-                  >
-                    {{ en ? 'ຕິດຕໍ່ພອກເຮົາ' :'Contact us'}}
+                  <v-card-text class="px-0 custom-font custom-cursor">
+                    {{ en ? 'ຕິດຕໍ່ພອກເຮົາ' : 'Contact us' }}
                   </v-card-text>
                 </v-card-actions>
               </v-btn>
               <v-btn
                 height="100%"
-                class="pa-0 pl-12"
+                class="pa-0"
                 text
-                style="background-color: transparent; color: transparent"
-                @mouseenter="colortext = 'logout'"
+                style="background-color: transparent; color: transparent; margin-left: 20px;"
                 @click="dialog = true"
               >
-                <v-card-text
-                  :style="{
-                    color: colortext === 'logout' ? '#804d00' : '#000',
-                  }"
-                >
-                  <span class="custom-font">{{ en ? 'ອອກຈາກລະບົບ' : 'Getout'}}</span><v-icon>mdi-exit-to-app</v-icon>
+                <v-card-text class="px-0 custom-cursor">
+                  <span class="custom-font">{{
+                    en ? 'ອອກຈາກລະບົບ' : 'Getout'
+                  }}</span
+                  ><v-icon>mdi-exit-to-app</v-icon>
                 </v-card-text>
               </v-btn>
             </v-card-text>
@@ -272,14 +225,10 @@
                     v-bind="attrs"
                     v-on="on"
                     style="background-color: transparent; color: transparent"
-                    @mouseenter="colortext = 'menu'"
-                    @mouseleave="colortext = false"
                   >
                     <v-card-actions class="pa-0">
                       <v-card-text
-                        :style="{
-                          color: colortext === 'menu' ? '#804d00' : '#000',
-                        }"
+                        class="custom-cursor"
                       >
                         <v-icon>mdi-menu</v-icon>
                       </v-card-text>
@@ -293,8 +242,6 @@
                       class="pa-0"
                       text
                       style="background-color: transparent; color: transparent"
-                      @mouseenter="colortext = 'menu' + index"
-                      @mouseleave="colortext = false"
                       @click="
                         index === 0 || index === 2
                           ? index === 0
@@ -304,11 +251,7 @@
                       "
                     >
                       <v-list-item-title
-                        style="color: #000"
-                        :style="{
-                          color:
-                            colortext === 'menu' + index ? '#804d00' : '#000',
-                        }"
+                        class="custom-cursor"
                       >
                         {{ item.title }}
                         <v-divider
@@ -323,17 +266,15 @@
                       class="pa-0"
                       text
                       style="background-color: transparent; color: transparent"
-                      @mouseenter="colortext = 'logout'"
-                      @mouseleave="colortext = false"
                       @click="dialog = true"
                     >
                       <v-list-item-title
-                        style="color: #000"
-                        :style="{
-                          color: colortext === 'logout' ? '#804d00' : '#000',
-                        }"
+                        class="custom-cursor"
                       >
-                      <span class="custom-font">{{ en ? 'ອອກຈາກລະບົບ' : 'Getout'}}</span><v-icon>mdi-exit-to-app</v-icon>
+                        <span class="custom-font">{{
+                          en ? 'ອອກຈາກລະບົບ' : 'Getout'
+                        }}</span
+                        ><v-icon>mdi-exit-to-app</v-icon>
                       </v-list-item-title>
                     </v-btn>
                   </v-list-item>
@@ -356,19 +297,6 @@
         "
         @mouseleave="openMenuItem('website')"
       >
-        <!-- <div>
-          <v-card-text class="py-0 pr-8 pl-0 text-right"
-            ><v-btn
-              fab
-              x-small
-              text
-              style="position: fixed; z-index: 100"
-              @click="openMenuItem('website')"
-            >
-              <v-icon size="25">mdi-close-circle</v-icon>
-            </v-btn></v-card-text
-          >
-        </div> -->
         <pageWebsite />
       </v-card>
       <div
@@ -388,7 +316,9 @@
           width="300"
           @mouseleave="openMenuItem('menu')"
         >
-          <v-card-title class="py-2 custom-font">{{ en ? 'ເມນູ' : 'Menu'}} </v-card-title>
+          <v-card-title class="py-2 custom-font"
+            >{{ en ? 'ເມນູ' : 'Menu' }}
+          </v-card-title>
           <v-divider></v-divider>
           <div v-for="(item, index) in pageMenu" :key="index">
             <v-btn
@@ -404,16 +334,15 @@
                 class="px-4 py-0 rounded-0"
                 width="100%"
                 :style="{
-                  color:
-                    colortext === 'CRM' + index
-                      ? '#804d00'
-                      : '#000',
+                  color: colortext === 'CRM' + index ? '#804d00' : '#000',
                 }"
               >
                 <v-card-actions class="pa-0 ma-0" width="100%">
                   <v-icon style="bottom: 2px" size="20">{{ item.icon }}</v-icon
                   >&nbsp;
-                  <span class="custom-font">{{ en ? item.nameLa : item.nameEn }}</span>
+                  <span class="custom-font">{{
+                    en ? item.nameLa : item.nameEn
+                  }}</span>
                 </v-card-actions>
               </v-card-text>
             </v-btn>
@@ -422,9 +351,18 @@
         </v-card>
       </div>
       <v-divider style="background-color: #804d00"></v-divider>
-      <v-card-text class="text-left pa-2" style="position: fixed; z-index: 150; bottom: 0px; left: 0px;">
-        <Tooltip placement="top" :content=" en ? 'Lao to English' : 'English to Lao'" :delay="600">
-          <Button class="language-button custom-font" @click="toggleLanguage">{{ en ? 'ລາວ' : 'English'}}</Button>
+      <v-card-text
+        class="text-left pa-2"
+        style="position: fixed; z-index: 150; bottom: 0px; left: 0px"
+      >
+        <Tooltip
+          placement="top"
+          :content="en ? 'Lao to English' : 'English to Lao'"
+          :delay="600"
+        >
+          <Button class="language-button custom-font" @click="toggleLanguage">{{
+            en ? 'ລາວ' : 'English'
+          }}</Button>
         </Tooltip>
         <!-- <Tooltip v-else placement="top" content="Lao to English" :delay="600">
           <Button class="language-button " @click="toggleLanguage"></Button>
@@ -481,7 +419,6 @@ export default {
   data() {
     return {
       en: this.$store.state.en,
-      selectedItem: 1,
       show: true,
       dialog: false,
       website: false,
@@ -581,8 +518,8 @@ export default {
   },
   methods: {
     toggleLanguage() {
-      this.en = !this.en;
-      this.$store.commit('setLanguage', this.en);
+      this.en = !this.en
+      this.$store.commit('setLanguage', this.en)
     },
     openMenuItem(item) {
       if (item === 'menu') {
@@ -614,12 +551,12 @@ export default {
       this.colortext = 'number'
       this.tooltipTimer = setTimeout(() => {
         this.$refs.tooltip.classList.add('visible')
-      }, 700);
+      }, 700)
     },
     clearTimer() {
       this.colortext = false
       clearTimeout(this.tooltipTimer)
-      this.$refs.tooltip.classList.remove('visible');
+      this.$refs.tooltip.classList.remove('visible')
     },
     updateShowProperty() {
       this.show = window.innerWidth > 1200
@@ -665,5 +602,12 @@ export default {
 .language-button:hover {
   background-color: #ffd633;
   color: #333333;
+}
+.custom-cursor {
+  color: #000;
+}
+.custom-cursor:hover {
+  cursor: pointer;
+  color: #804d00;
 }
 </style>
