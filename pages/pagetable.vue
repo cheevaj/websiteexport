@@ -1,132 +1,48 @@
 <template>
   <div ref="pdfContent">
-    <!-- start button download----------------------------------------------------------------------------------------------->
-    <div class="shrink ">
-      <!-- Sta slid baton Download------------------------------------------------------------------------------------------------------------------->
-      <div class="text-right" style="
-          min-height: 1px;
-          max-width: 180px;
-          position: fixed;
-          z-index: 100;
-          top: 90px;
-          right: 20px;
-        " @mouseleave="expand = false">
-        <v-btn v-if="(!expand && !overlay)" fab small color="#000" @mouseenter="expand = true">
-          <div>
-            <v-icon color="#ffff00">mdi-tray-arrow-up</v-icon>
-          </div>
-        </v-btn>
-        <v-btn v-else-if="(expand && overlay)" fab small color="#000" @mouseenter="expand = true">
-          <div>
-            <v-icon color="#ffff00">mdi-close</v-icon>
-          </div>
-        </v-btn>
-        <v-expand-x-transition v-else>
-          <v-card v-show="expand" class="mt-1">
-            <v-btn style="
-                border-bottom-left-radius: 0%;
-                border-bottom-right-radius: 0%;
-              " width="100%" color="#000" @mouseenter="expand = true">
-              <div style="display: fixed; align-items: start" @click="expand = false">
-                <v-icon style="color: #ffff00">mdi-tray-arrow-up</v-icon>
-              </div>
-              <div :class="{ 'custom-font': en }" style="color: #ffff00" @click="expand = false">{{ en ? 'ດາວໂຫຼດ' : 'Download' }}</div>
-            </v-btn>
-          </v-card>
-        </v-expand-x-transition>
-        <!-- Sta slid baton Download------------------------------------------------------------------------------------------------------------------->
-        <v-expand-transition>
-          <v-card v-show="expand" style="
-              border-top-left-radius: 0%;
-              border-top-right-radius: 0%;
-              background-color: #ffffcc;
-            " outlined>
-            <v-col>
-              <!-- Sta slid baton Download Excel------------------------------------------------------------------------------------------------------------------->
-              <v-btn class="mt-2" :style="{
-          boxShadow: show ? '#00ff55' : 'rgb(217, 217, 217)',
-        }" text height="25%" width="100%" small color="#009933" :outlined="show === 'button1' ? false : true"
-                @mouseenter="setOutlined('button1')" @mouseleave="detOutlined(true)" @click="someAsyncFunction()">
-                <v-icon style="background-color: #009933; border-radius:50%" size="35"
-                  color="#ffffff">mdi-microsoft-excel</v-icon>
-                <v-card-text :style="{
-          color: show === 'button1' ? '#009933' : '#000',
-        }">Excel</v-card-text>
-              </v-btn>
-
-              <!-- Sta slid baton Download CSV------------------------------------------------------------------------------------------------------------------->
-
-              <v-tooltip bottom>
-                <template #activator="{ on, attrs }">
-                  <v-btn v-bind="attrs" class="mt-2" text height="25%" width="100%" small :style="{
-          boxShadow: show ? '#00ff55' : 'rgb(217, 217, 217)',
-        }" color="#ff3333" :outlined="show === 'button2' ? false : true" v-on="on"
-                    @mouseenter="setOutlined('button2')" @mouseleave="detOutlined(true)">
-                    <v-icon style="background-color: #ff3333; border-radius:50%" size="35"
-                      color="#ffffff">mdi-file-pdf-box</v-icon>
-                    <v-card-text :style="{
-          color: show === 'button2' ? '#ff3333' : '#000',
-        }">
-                      PDF</v-card-text>
-                  </v-btn>
-                </template>
-                <span :class="{ 'custom-font': en }">{{ en ? 'PDF ຍັງບໍ່ສາມາດດາວໂຫລດໄດ້' : 'PDF can not download' }}</span>
-              </v-tooltip>
-            </v-col>
-          </v-card>
-        </v-expand-transition>
-      </div>
-    </div>
-    <!-- stop button download-->
-
-    <!--Sta title page------------------------------------------------------------------------------------------------------->
-
     <v-row :dark="dark" style="margin-top: 0px">
       <v-col class="pt-1" style="background-color: hsl(0, 0%, 96%)">
-        <v-card-text class="py-0">
+        <v-card-text class="pt-0">
           <v-row>
             <!--Sta title table-->
-            <v-col cols="12" sm="4" class="py-1">
-              <div>
-                <v-card-actions class="py-0">
+            <v-col cols="12" sm="4" class="py-0">
+                <v-card-actions class="py-0 mt-2" style="height: 45px;">
                   <v-btn fab x-small text style="background-color: #ffff00" @click="$router.go(-1)">
                     <v-icon color="#000" size="25">mdi-arrow-left</v-icon>
                   </v-btn>
-                  <v-card-title>
+                  <v-card-title class="py-0">
                     <v-spacer></v-spacer>
-                    <h3 :class="{ 'custom-font': en }" style="color: #595959">
-                      <span :class="{ 'custom-font': en }" style="color: #ffff00">{{ en ? '' : 'P' }}</span>{{ en ? 'ໜ້າ Ticket' : 'age Ticket' }}
-                    </h3>
+                    <h4 :class="{ 'custom-font': en }" style="color: #595959">
+                      <span :class="{ 'custom-font': en }" style="color: #ffff00">{{ en ? '' : 'P' }}</span>{{ en ? 'ໜ້າ Ticket' : 'page Ticket' }}
+                    </h4>
                   </v-card-title>
-                  <div class="mt-4">
-                    <v-btn small fab outlined color="#ffff00" @mouseenter="dateshow = true">
-                      <v-icon size="30" :color="buttonColor">mdi-calendar-search</v-icon>
-                    </v-btn>
-                  </div>
                 </v-card-actions>
-                <v-card-text class="py-0" style="color: #595959">
+                <!-- <v-card-text class="py-0" style="color: #595959">
                   {{ date }}-{{ dates }}
-                </v-card-text>
-              </div>
+                </v-card-text> -->
             </v-col>
             <!--Sto title table-->
 
             <!--Sta date range----------------------------------------------------------------------------------------------------------->
             <v-col cols="12" sm="6" class="py-0">
-              <div v-if="dateshow">
-                <v-card outlined class="my-3 px-0" flat style="background-color: #ffffbc">
-                  <v-card-text class="pa-0 text-center" style="background-color: #ffff00">
-                    <!-- <v-btn text x-small @click="dateshow = false">
-                      <v-icon size="20">mdi-close</v-icon>
-                    </v-btn> -->
-                    <h5 :class="{ 'custom-font': en }">{{ en ? 'ວັນທີ່ໃຊ້ຄົ້ນຫາ' : 'Search date' }}</h5>
+              <div v-if="dateshow" class="mt-2" style="height: 45px;">
+                <v-card-actions outlined class="px-0" flat style="background-color: transparent; height: 45px;">
+                  <v-spacer />
+                  <h4 :class="{ 'custom-font': en }">{{ en ? 'ວັນທີ່ໃຊ້ຄົ້ນຫາ:' : 'Search date:' }}</h4>
+                  <DatePicker
+                    v-model="dateRange"
+                    type="daterange"
+                    placement="bottom-end"
+                    :placeholder=" en ? 'ວັນທີ່ໃຊ້ຄົ້ນຫາ...' : 'Select date...'"
+                    class="custom-font ml-1"
+                    style="width: 200px"
+                  />
+                  <!-- <v-card-text class="pa-0 text-center" style="background-color: #ffff00">
                   </v-card-text>
                   <v-row>
-                    <!--Sta date Start-------------------------------------------------------------------------------->
                     <v-col cols="12" sm="4" md="4" class="pl-4" style="z-index: 11;">
                       <v-menu ref="menu" v-model="menu" :close-on-content-click="false" :return-value.sync="date"
                         transition="scale-transition" offset-y min-width="auto">
-
                         <template #activator="{ on, attrs }">
                           <v-text-field :class="{ 'custom-font': en }" v-model="date" :label=" en ? 'ວັນທີ່ເລີ່ມຕົ້ນ' : 'Start Date'" prepend-icon="mdi-calendar" readonly
                             v-bind="attrs" v-on="on"></v-text-field>
@@ -142,13 +58,11 @@
                         </v-date-picker>
                       </v-menu>
                     </v-col>
-                    <!--Sto Date start-->
                     <v-col cols="12" sm="1" md="1">
                       <v-card-text style="color: #404040" class="px-0 mt-2">
                         <h2 :class="{ 'custom-font': en }" >{{ en ? 'ຫາ' : 'To' }}</h2>
                       </v-card-text>
                     </v-col>
-                    <!--Sta Date stop------------------------------------------------------------------------------------------------->
                     <v-col cols="12" sm="4" md="4" style="z-index: 11;">
                       <v-menu ref="menus" v-model="menus" :close-on-content-click="false" :return-value.sync="dates"
                         transition="scale-transition" offset-y min-width="auto">
@@ -168,8 +82,6 @@
                         </v-date-picker>
                       </v-menu>
                     </v-col>
-                    <!--Sto Date stop-->
-                    <!-- Sta baton search date------------------------------------------------------------------------------------>
                     <v-col cols="12" sm="4" md="3" style="z-index: 11;">
                       <v-overlay class="text-center" :class="{ 'custom-font': en }" :absolute="absolute" :value="overlay">
                         <p :class="{ 'custom-font': en }">{{ en ? 'ວັນທີເລີ່ມຕົ້ນຄວນຈະນ້ອຍກວ່າວັນທີ່ສີນສຸດ.' : 'Date start should lower than Date stop.' }}
@@ -192,21 +104,17 @@
                         </span>
                       </v-card-text>
                     </v-col>
-                    <!--sto baton search date-->
-                  </v-row>
-                </v-card>
+                  </v-row> -->
+                </v-card-actions>
               </div>
             </v-col>
             <!--Sto date range-->
-
-            <v-col cols="12" sm="2" class="py-1">
-              <v-card-text v-if="(!expand && !overlay)" class="text-center mt-4" style="
-                 min-height: 1px;
-                  z-index: 100;
+            <v-col cols="12" sm="2" class="py-0">
+              <v-card-actions class="pa-0 mt-2" style="height: 45px;">
+                <v-card-text v-if="(!expand && !overlay)" class="px-1" style="
                   bottom: 1px;
                   right: 90px;">
                 <v-tooltip v-if="loading" bottom class="px-4">
-
                   <template #activator="{ on, attrs }">
                     <v-btn text style=" background-color: transparent; color: transparent;" v-bind="attrs" v-on="on"
                       @mouseenter="colWidth = true" @mouseleave="colWidth = false">
@@ -215,84 +123,178 @@
                   </template>
                   <span class="tooltip" :class="{ 'custom-font': en }" ref="tooltip">{{ en ? 'ກຳລັງໂຫຼດກຣາຟ' : 'Loading Graph' }}</span>
                 </v-tooltip>
-                <v-tooltip v-else bottom class="px-4">
-
+                <v-tooltip v-else bottom class="px-4 py-0 pink">
                   <template #activator="{ on, attrs }">
-                    <v-btn text style=" background-color: transparent; color: transparent;" v-bind="attrs" v-on="on"
+                    <v-btn text style=" background-color: transparent; color: transparent; " v-bind="attrs" v-on="on"
                       @click="showgraph = !showgraph" @mouseenter="colWidth = true" @mouseleave="colWidth = false">
-                      <v-icon v-if="!showgraph" size="45" :color="colWidth ? '#ffff00' : '#000'">mdi-chart-bar</v-icon>
-                      <v-icon v-else size="45" :color="colWidth ? '#ffff00' : '#000'">mdi-table-large</v-icon>
+                      <v-icon v-if="!showgraph" size="35" :color="colWidth ? '#ffff00' : '#000'">mdi-chart-bar</v-icon>
+                      <v-icon v-else size="35" :color="colWidth ? '#ffff00' : '#000'">mdi-table-large</v-icon>
                     </v-btn>
                   </template>
                   <span v-if="!showgraph" class="tooltip" :class="{ 'custom-font': en }" ref="tooltip">{{ en ? 'ສະເເດງກຣາຟ' : 'Display Graph' }}</span>
                   <span v-else class="tooltip" :class="{ 'custom-font': en }" ref="tooltip">{{ en ? 'ສະແດງຂໍ້ມູນຕາຕະລາງ' : 'Display Table Data' }}</span>
                 </v-tooltip>
               </v-card-text>
+              <v-spacer />
+                <div class="shrink ">
+                  <div class="text-right" style="
+                      min-height: 1px;
+                      position: absolute;
+                      max-width: 180px;
+                      z-index: 90;
+                      right: 45px;
+                      top: 6px;
+                    " @mouseleave="expand = false">
+                    <v-btn v-if="(!expand && !overlay)" fab elevation height="34" width="34" color="#000" @mouseenter="expand = true">
+                      <div>
+                        <v-icon size="26" color="#ffff00">mdi-tray-arrow-up</v-icon>
+                      </div>
+                    </v-btn>
+                    <v-btn v-else-if="(expand && overlay)" fab small color="#000" @mouseenter="expand = true">
+                      <div>
+                        <v-icon color="#ffff00">mdi-close</v-icon>
+                      </div>
+                    </v-btn>
+                    <v-expand-x-transition v-else>
+                      <v-card v-show="expand" class="mt-1">
+                        <v-btn style="
+                            border-bottom-left-radius: 0%;
+                            border-bottom-right-radius: 0%;
+                          " width="100%" color="#000" @mouseenter="expand = true">
+                          <div style="display: fixed; align-items: start" @click="expand = false">
+                            <v-icon style="color: #ffff00">mdi-tray-arrow-up</v-icon>
+                          </div>
+                          <div :class="{ 'custom-font': en }" style="color: #ffff00" @click="expand = false">{{ en ? 'ດາວໂຫຼດ' : 'Download' }}</div>
+                        </v-btn>
+                      </v-card>
+                    </v-expand-x-transition>
+                    <!-- Sta slid baton Download------------------------------------------------------------------------------------------------------------------->
+                    <v-expand-transition>
+                      <v-card v-show="expand" style="
+                          border-top-left-radius: 0%;
+                          border-top-right-radius: 0%;
+                          background-color: #ffffcc;
+                        " outlined>
+                        <v-col>
+                          <!-- Sta slid baton Download Excel------------------------------------------------------------------------------------------------------------------->
+                          <v-btn class="mt-2" :style="{
+                      boxShadow: show ? '#00ff55' : 'rgb(217, 217, 217)',
+                    }" text height="25%" width="100%" small color="#009933" :outlined="show === 'button1' ? false : true"
+                            @mouseenter="setOutlined('button1')" @mouseleave="detOutlined(true)" @click="someAsyncFunction()">
+                            <v-icon style="background-color: #009933; border-radius:50%" size="35"
+                              color="#ffffff">mdi-microsoft-excel</v-icon>
+                            <v-card-text :style="{
+                      color: show === 'button1' ? '#009933' : '#000',
+                    }">Excel</v-card-text>
+                          </v-btn>
+
+                          <!-- Sta slid baton Download CSV------------------------------------------------------------------------------------------------------------------->
+
+                          <v-tooltip bottom>
+                            <template #activator="{ on, attrs }">
+                              <v-btn v-bind="attrs" class="mt-2" text height="25%" width="100%" small :style="{
+                      boxShadow: show ? '#00ff55' : 'rgb(217, 217, 217)',
+                    }" color="#ff3333" :outlined="show === 'button2' ? false : true" v-on="on"
+                                @mouseenter="setOutlined('button2')" @mouseleave="detOutlined(true)">
+                                <v-icon style="background-color: #ff3333; border-radius:50%" size="35"
+                                  color="#ffffff">mdi-file-pdf-box</v-icon>
+                                <v-card-text :style="{
+                      color: show === 'button2' ? '#ff3333' : '#000',
+                    }">
+                                  PDF</v-card-text>
+                              </v-btn>
+                            </template>
+                            <span :class="{ 'custom-font': en }">{{ en ? 'PDF ຍັງບໍ່ສາມາດດາວໂຫລດໄດ້' : 'PDF can not download' }}</span>
+                          </v-tooltip>
+                        </v-col>
+                      </v-card>
+                    </v-expand-transition>
+                  </div>
+                </div>
+            </v-card-actions>
             </v-col>
           </v-row>
         </v-card-text>
         <!--Sto title page-->
         <!--Sta table---------------------------------------------------------------------------------------------------------------------->
-        <v-card-actions v-if="!showgraph" class="expandable-row pt-0 px-0" style="width: 100%;
-          position: fixed;
-          height: calc(100vh - 30vh);
-          left: 0;
-          overflow: y;
-          z-index: 10;">
-          <div ref="resizableCol2" @mousedown="startResize">
-            <v-card class="rounded-0" width="100%" :height="heightPx + 'px'" :style="{ width: col1Width + 'px' }" color="#ffff00"
-              outlined>
-              <v-toolbar color="#000" dark>
-                <v-toolbar-title style="color: #ffff00">
-                  <div :class="{ 'custom-font': en }">{{ en ? 'ສະແດງຕາຕະລາງ' : 'Table display' }}</div>
-                  <input v-model="col1Width" class="resizable" type="range" color="#ffff00" :min="minCol1Width"
-                    :max="maxCol1Width" />
-                </v-toolbar-title>
-              </v-toolbar>
-              <v-list class="table-container" subheader two-line flat :height="heightPx + 'px'">
-                <v-list-item-group class="table-title-hiegth table-container">
-                  <v-list-item v-for="item in columns" :key="item.key">
-                    <template #default="{ active }">
-                      <v-list-item-action>
-                        <v-checkbox v-model="item.active" :input-value="active"></v-checkbox>
-                      </v-list-item-action>
-                      <v-list-item-content>
-                        <v-list-item-title>{{ item.title }}</v-list-item-title>
-                      </v-list-item-content>
-                    </template>
-                  </v-list-item>
-                </v-list-item-group>
-              </v-list>
-            </v-card>
-          </div>
-          <v-col class="py-0 pl-0 pr-0 pt-6">
-            <v-card outlined style="background-color: #ffff00;" :height="heightPx + 'px'" class=" table-container text-center" :style="{ 'max-width': 'calc(100% - ' + col1Width + 'px)' }">
-              <v-card-text v-if="loading" class="pa-0">
-                <v-progress-linear indeterminate color="#4d3d00"></v-progress-linear>
-              </v-card-text>
-              <v-data-table
-                width="100%"
-                :height="heightPx + 'px'"
-                fixed-header
-                dense
-                :headers="visibleHeaders"
-                :items="desserts"
-                :items-per-page="computedItemsPerPage"
-                item-key="TICKETID"
-                class="elevation-1 custom-font font_size_12"
-              >
-                <template v-slot:item="{ item }">
-                  <tr class="text_color custom-font">
-                    <td v-for="header in visibleHeaders" :key="header.text">
-                      <span class="font_size_12 custom-font">{{ item[header.value] }}</span>
-                    </td>
-                  </tr>
-                </template>
-              </v-data-table>
-            </v-card>
-          </v-col>
-        </v-card-actions>
-        <!-- page graph------------------------>
+        <div v-if="!showgraph" class="demo-split">
+          <Split v-model="split" min="0" max="1000">
+            <template #left>
+              <div class="demo-split-pane">
+                <v-card
+                  class="rounded-0"
+                  width="100%"
+                  height="100%"
+                  color="#ffff00"
+                  outlined
+                >
+                  <v-toolbar color="#000" dark>
+                    <v-toolbar-title style="color: #ffff00">
+                      <div :class="{ 'custom-font': en }">
+                        {{ en ? 'ສະແດງຕາຕະລາງ' : 'Table display' }}
+                      </div>
+                    </v-toolbar-title>
+                  </v-toolbar>
+                  <v-list
+                    class="table-container"
+                    subheader
+                    two-line
+                    flat
+                    :height="heightPx + 'px'"
+                  >
+                    <v-list-item-group class="table-title-hiegth table-container">
+                      <v-list-item
+                        v-for="item in columns"
+                        :key="item.key"
+                        class="px-0"
+                      >
+                        <template #default="{ active }">
+                          <v-list-item-action>
+                            <v-checkbox
+                              v-model="item.active"
+                              :input-value="active"
+                            ></v-checkbox>
+                          </v-list-item-action>
+                          <v-list-item-content class="px-0">
+                            <v-list-item-title>{{ item.title }}</v-list-item-title>
+                          </v-list-item-content>
+                        </template>
+                      </v-list-item>
+                    </v-list-item-group>
+                  </v-list>
+                </v-card>
+              </div>
+            </template>
+            <template #right>
+              <div class="demo-split-pane-r">
+                  <v-card outlined style="background-color: #ffff00;" height="100%" class=" table-container text-center">
+                    <v-card-text v-if="loading" class="pa-0">
+                      <v-progress-linear indeterminate color="#4d3d00"></v-progress-linear>
+                    </v-card-text>
+                    <v-data-table
+                      width="100%"
+                      height="calc(73vh + 5px)"
+                      fixed-header
+                      dense
+                      :headers="visibleHeaders"
+                      :items="desserts"
+                      :items-per-page="computedItemsPerPage"
+                      item-key="TICKETID"
+                      class="elevation-1 custom-font font_size_12"
+                    >
+                      <template v-slot:item="{ item }">
+                        <tr class="text_color custom-font">
+                          <td v-for="header in visibleHeaders" :key="header.text">
+                            <span class="font_size_12 custom-font">{{ item[header.value] }}</span>
+                          </td>
+                        </tr>
+                      </template>
+                    </v-data-table>
+                  </v-card>
+              </div>
+            </template>
+          </Split>
+        </div>
         <v-card v-if="showgraph" class="my-4">
           <v-progress-linear v-if="loading" indeterminate color="#4d3d00"></v-progress-linear>
           <chartgraph :desserts="desserts" />
@@ -322,9 +324,15 @@ export default {
       overlay: false,
       loading: false,
       colWidth: false,
-      buttonColor: '#ffff00',
+      split: 0.025,
       iconColor: '#fff',
       desserts: [],
+      dateRange: [
+        new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
+          .toISOString()
+          .substr(0, 16),
+        new Date(Date.now()).toISOString().substr(0, 16),
+      ],
       // column show of table
       columns: [
         { key: 'TICKETID', title: 'TICKETID', active: true },
@@ -412,9 +420,6 @@ export default {
         { text: 'TIME_CLOSE_BY_CENTER', value: 'TIME_CLOSE_BY_CENTER' },
 
       ],
-      col1Width: 80,
-      minCol1Width: 60,
-      maxCol1Width: 250,
       resizing: false,
       shows: false,
       dark: true,
@@ -464,9 +469,15 @@ export default {
       })
     },
   },
+  watch: {
+    dateRange() {
+      if (this.dateRange[0] !== '' && this.dateRange[1] !== '') {
+        this.OnInternet()
+      }
+    },
+  },
   mounted() {
     this.getData()
-    this.coloricon()
     this.setSheetHeight()
       window.addEventListener('resize', this.setSheetHeight)
   },
@@ -504,16 +515,17 @@ export default {
         }
       })
     },
-
     // ------------- function create name file excel 
     async someAsyncFunction() {
+      if(this.desserts.length <= 0){
+        console.log(this.desserts.length)
+        return
+      }
       try {
         const exportedFileName = await this.exportToExcel()
-
         console.log(`File exported successfully: ${exportedFileName}`)
 
       } catch (error) {
-
         const errors = (error === 'undefined' || null) ? '' : error;
         console.error('Error exporting file:', error)
         this.alert = errors;
@@ -546,6 +558,42 @@ export default {
       }
     },
     // ------------- function Get data in api
+    async OnInternet() {
+      // this.loading = true
+      console.log('Date::', this.date, this.dates )
+       console.log('dateRange::', this.dateRange)
+      const formattedStartDate = this.dateRange[0]
+        ? new Date(this.dateRange[0]).toISOString().slice(0, 16)
+        : null
+      const formattedEndDate = this.dateRange[1]
+        ? new Date(this.dateRange[1]).toISOString().slice(0, 16)
+        : null
+      await console.log('dateRange::', formattedStartDate, formattedEndDate )
+      // try {
+      //   const formattedStartDate = this.dateRange[0]
+      //     ? new Date(this.dateRange[0]).toISOString().slice(0, 16)
+      //     : null
+      //   const formattedEndDate = this.dateRange[1]
+      //     ? new Date(this.dateRange[1]).toISOString().slice(0, 16)
+      //     : null
+      //   if (formattedStartDate === formattedEndDate) {
+      //     this.loading = false
+      //     this.messageModal('error')
+      //     return
+      //   }
+      //   const res = await this.$axios.post(
+      //     'http://172.28.17.102:3455/active4G/logpackage',
+      //     {
+      //       isdn: this.dateTime[2],
+      //       sdate: formattedStartDate,
+      //       edate: formattedEndDate,
+      //     }
+      //   )
+      //   this.localUsePackage = res.data ? res.data : {}
+      // } catch (error) {
+      // }
+      // this.loading = false
+    },
     async getData() {
       // console.log('date::',this.date)
       this.showgraph = false;
@@ -628,7 +676,6 @@ export default {
             }
             const [day, month, year] = dateParts[0].split('-')
             const [hours, minutes, seconds] = dateParts[1].split(':')
-
             return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`
           }
           const inprogressItemQUEUEDOWNER = inprogressItem && inprogressItem.QUEUED_OWNER ? inprogressItem.QUEUED_OWNER : '';
@@ -829,15 +876,6 @@ export default {
         return ID;
       }
     },
-    // goto page graph and send desserts data to page graph
-    coloricon() {
-      // Change button and icon colors every second
-      setInterval(() => {
-        this.buttonColor = this.getRandomColor(['#ffff00', '#000'])
-        this.iconColor = this.getRandomColor(['#ffff00', '#ffff', 'blue'])
-        // Update text every second (optional)
-      }, 1000)
-    },
     getRandomColor(colorOptions) {
       // Function to select a random color from the provided options
       const randomIndex = Math.floor(Math.random() * colorOptions.length)
@@ -900,12 +938,21 @@ export default {
 
 .custom-font {
   font-family: 'Noto Sans Lao', sans-serif;
-  /* You can specify additional styles here */
 }
 .font_size_12 {
   font-size: 14px;
 }
 .hover-pointer {
   cursor: pointer;
+}
+.demo-split {
+  height: calc(82vh + 6px);
+  border: 1px solid #dcdee2;
+}
+.demo-split-pane {
+  padding: 0px;
+}
+.demo-split-pane-r {
+  padding-left: 8px;
 }
 </style>
