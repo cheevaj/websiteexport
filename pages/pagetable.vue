@@ -6,18 +6,28 @@
           <v-row>
             <!--Sta title table-->
             <v-col cols="12" sm="4" class="py-0">
-                <v-card-actions class="py-0 mt-2" style="height: 45px;">
-                  <v-btn fab x-small text style="background-color: #ffff00" @click="$router.go(-1)">
-                    <v-icon color="#000" size="25">mdi-arrow-left</v-icon>
-                  </v-btn>
-                  <v-card-title class="py-0">
-                    <v-spacer></v-spacer>
-                    <h4 :class="{ 'custom-font': en }" style="color: #595959">
-                      <span :class="{ 'custom-font': en }" style="color: #ffff00">{{ en ? '' : 'P' }}</span>{{ en ? 'ໜ້າ Ticket' : 'page Ticket' }}
-                    </h4>
-                  </v-card-title>
-                </v-card-actions>
-                <!-- <v-card-text class="py-0" style="color: #595959">
+              <v-card-actions class="py-0 mt-2" style="height: 45px">
+                <v-btn
+                  fab
+                  x-small
+                  text
+                  style="background-color: #ffff00"
+                  @click="$router.go(-1)"
+                >
+                  <v-icon color="#000" size="25">mdi-arrow-left</v-icon>
+                </v-btn>
+                <v-card-title class="py-0">
+                  <v-spacer></v-spacer>
+                  <h4 :class="{ 'custom-font': en }" style="color: #595959">
+                    <span
+                      :class="{ 'custom-font': en }"
+                      style="color: #ffff00"
+                      >{{ en ? '' : 'P' }}</span
+                    >{{ en ? 'ໜ້າ Ticket' : 'page Ticket' }}
+                  </h4>
+                </v-card-title>
+              </v-card-actions>
+              <!-- <v-card-text class="py-0" style="color: #595959">
                   {{ date }}-{{ dates }}
                 </v-card-text> -->
             </v-col>
@@ -25,15 +35,22 @@
 
             <!--Sta date range----------------------------------------------------------------------------------------------------------->
             <v-col cols="12" sm="6" class="py-0">
-              <div v-if="dateshow" class="mt-2" style="height: 45px;">
-                <v-card-actions outlined class="px-0" flat style="background-color: transparent; height: 45px;">
+              <div v-if="dateshow" class="mt-2" style="height: 45px">
+                <v-card-actions
+                  outlined
+                  class="px-0"
+                  flat
+                  style="background-color: transparent; height: 45px"
+                >
                   <v-spacer />
-                  <h4 :class="{ 'custom-font': en }">{{ en ? 'ວັນທີ່ໃຊ້ຄົ້ນຫາ:' : 'Search date:' }}</h4>
+                  <h4 :class="{ 'custom-font': en }">
+                    {{ en ? 'ວັນທີ່ໃຊ້ຄົ້ນຫາ:' : 'Search date:' }}
+                  </h4>
                   <DatePicker
                     v-model="dateRange"
                     type="daterange"
                     placement="bottom-end"
-                    :placeholder=" en ? 'ວັນທີ່ໃຊ້ຄົ້ນຫາ...' : 'Select date...'"
+                    :placeholder="en ? 'ວັນທີ່ໃຊ້ຄົ້ນຫາ...' : 'Select date...'"
                     class="custom-font ml-1"
                     style="width: 200px"
                   />
@@ -42,108 +59,254 @@
             </v-col>
             <!--Sto date range-->
             <v-col cols="12" sm="2" class="py-0">
-              <v-card-actions class="pa-0 mt-2" style="height: 45px;">
-                <v-card-text v-if="(!expand && !overlay)" class="px-1" style="
-                  bottom: 1px;
-                  right: 90px;">
-                <v-tooltip v-if="loading" bottom class="px-4">
-                  <template #activator="{ on, attrs }">
-                    <v-btn text style=" background-color: transparent; color: transparent;" v-bind="attrs" v-on="on"
-                      @mouseenter="colWidth = true" @mouseleave="colWidth = false">
-                      <v-progress-circular :size="35" color="yellow" indeterminate></v-progress-circular>
-                    </v-btn>
-                  </template>
-                  <span class="tooltip" :class="{ 'custom-font': en }" ref="tooltip">{{ en ? 'ກຳລັງໂຫຼດກຣາຟ' : 'Loading Graph' }}</span>
-                </v-tooltip>
-                <v-tooltip v-else bottom class="px-4 py-0 pink">
-                  <template #activator="{ on, attrs }">
-                    <v-btn text style=" background-color: transparent; color: transparent; " v-bind="attrs" v-on="on"
-                      @click="showgraph = !showgraph" @mouseenter="colWidth = true" @mouseleave="colWidth = false">
-                      <v-icon v-if="!showgraph" size="35" :color="colWidth ? '#ffcc00' : '#000'">mdi-chart-bar</v-icon>
-                      <v-icon v-else size="35" :color="colWidth ? '#ffcc00' : '#000'">mdi-table-large</v-icon>
-                    </v-btn>
-                  </template>
-                  <span v-if="!showgraph" class="tooltip" :class="{ 'custom-font': en }" ref="tooltip">{{ en ? 'ສະເເດງກຣາຟ' : 'Display Graph' }}</span>
-                  <span v-else class="tooltip" :class="{ 'custom-font': en }" ref="tooltip">{{ en ? 'ສະແດງຂໍ້ມູນຕາຕະລາງ' : 'Display Table Data' }}</span>
-                </v-tooltip>
-              </v-card-text>
-              <v-spacer />
-                <div class="shrink ">
-                  <div class="text-right" style="
+              <v-card-actions class="pa-0 mt-2" style="height: 45px">
+                <v-card-text
+                  v-if="!expand && !overlay"
+                  class="px-1"
+                  style="bottom: 1px; right: 90px"
+                >
+                  <v-tooltip v-if="loading" bottom class="px-4">
+                    <template #activator="{ on, attrs }">
+                      <v-btn
+                        text
+                        style="
+                          background-color: transparent;
+                          color: transparent;
+                        "
+                        v-bind="attrs"
+                        v-on="on"
+                        @mouseenter="colWidth = true"
+                        @mouseleave="colWidth = false"
+                      >
+                        <v-progress-circular
+                          :size="35"
+                          color="yellow"
+                          indeterminate
+                        ></v-progress-circular>
+                      </v-btn>
+                    </template>
+                    <span
+                      class="tooltip"
+                      :class="{ 'custom-font': en }"
+                      ref="tooltip"
+                      >{{ en ? 'ກຳລັງໂຫຼດກຣາຟ' : 'Loading Graph' }}</span
+                    >
+                  </v-tooltip>
+                  <v-tooltip v-else bottom class="px-4 py-0 pink">
+                    <template #activator="{ on, attrs }">
+                      <v-btn
+                        text
+                        style="
+                          background-color: transparent;
+                          color: transparent;
+                        "
+                        v-bind="attrs"
+                        v-on="on"
+                        @click="showgraph = !showgraph"
+                        @mouseenter="colWidth = true"
+                        @mouseleave="colWidth = false"
+                      >
+                        <v-icon
+                          v-if="!showgraph"
+                          size="35"
+                          :color="colWidth ? '#ffcc00' : '#000'"
+                          >mdi-chart-bar</v-icon
+                        >
+                        <v-icon
+                          v-else
+                          size="35"
+                          :color="colWidth ? '#ffcc00' : '#000'"
+                          >mdi-table-large</v-icon
+                        >
+                      </v-btn>
+                    </template>
+                    <span
+                      v-if="!showgraph"
+                      class="tooltip"
+                      :class="{ 'custom-font': en }"
+                      ref="tooltip"
+                      >{{ en ? 'ສະເເດງກຣາຟ' : 'Display Graph' }}</span
+                    >
+                    <span
+                      v-else
+                      class="tooltip"
+                      :class="{ 'custom-font': en }"
+                      ref="tooltip"
+                      >{{
+                        en ? 'ສະແດງຂໍ້ມູນຕາຕະລາງ' : 'Display Table Data'
+                      }}</span
+                    >
+                  </v-tooltip>
+                </v-card-text>
+                <v-spacer />
+                <div class="shrink">
+                  <div
+                    class="text-right"
+                    style="
                       min-height: 1px;
                       position: absolute;
                       max-width: 180px;
                       z-index: 90;
                       right: 45px;
                       top: 6px;
-                    " @mouseleave="expand = false">
-                    <v-btn v-if="(!expand && !overlay)" fab elevation height="34" width="34" color="#000" @mouseenter="expand = true">
+                    "
+                    @mouseleave="expand = false"
+                  >
+                    <v-btn
+                      v-if="!expand && !overlay"
+                      fab
+                      elevation
+                      height="34"
+                      width="34"
+                      color="#000"
+                      @mouseenter="expand = true"
+                    >
                       <div>
-                        <v-icon size="26" color="#ffcc00">mdi-tray-arrow-up</v-icon>
+                        <v-icon size="26" color="#ffcc00"
+                          >mdi-tray-arrow-up</v-icon
+                        >
                       </div>
                     </v-btn>
-                    <v-btn v-else-if="(expand && overlay)" fab small color="#000" @mouseenter="expand = true">
+                    <v-btn
+                      v-else-if="expand && overlay"
+                      fab
+                      small
+                      color="#000"
+                      @mouseenter="expand = true"
+                    >
                       <div>
                         <v-icon color="#ffcc00">mdi-close</v-icon>
                       </div>
                     </v-btn>
                     <v-expand-x-transition v-else>
                       <v-card v-show="expand" class="mt-1">
-                        <v-btn style="
+                        <v-btn
+                          style="
                             border-bottom-left-radius: 0%;
                             border-bottom-right-radius: 0%;
-                          " width="100%" color="#000" @mouseenter="expand = true">
-                          <div style="display: fixed; align-items: start" @click="expand = false">
-                            <v-icon style="color: #ffcc00">mdi-tray-arrow-up</v-icon>
+                          "
+                          width="100%"
+                          color="#000"
+                          @mouseenter="expand = true"
+                        >
+                          <div
+                            style="display: fixed; align-items: start"
+                            @click="expand = false"
+                          >
+                            <v-icon style="color: #ffcc00"
+                              >mdi-tray-arrow-up</v-icon
+                            >
                           </div>
-                          <div :class="{ 'custom-font': en }" style="color: #ffcc00" @click="expand = false">{{ en ? 'ດາວໂຫຼດ' : 'Download' }}</div>
+                          <div
+                            :class="{ 'custom-font': en }"
+                            style="color: #ffcc00"
+                            @click="expand = false"
+                          >
+                            {{ en ? 'ດາວໂຫຼດ' : 'Download' }}
+                          </div>
                         </v-btn>
                       </v-card>
                     </v-expand-x-transition>
                     <!-- Sta slid baton Download------------------------------------------------------------------------------------------------------------------->
                     <v-expand-transition>
-                      <v-card v-show="expand" style="
+                      <v-card
+                        v-show="expand"
+                        style="
                           border-top-left-radius: 0%;
                           border-top-right-radius: 0%;
                           background-color: #ffffcc;
-                        " outlined>
+                        "
+                        outlined
+                      >
                         <v-col>
                           <!-- Sta slid baton Download Excel------------------------------------------------------------------------------------------------------------------->
-                          <v-btn class="mt-2" :style="{
-                      boxShadow: show ? '#00ff55' : 'rgb(217, 217, 217)',
-                    }" text height="25%" width="100%" small color="#009933" :outlined="show === 'button1' ? false : true"
-                            @mouseenter="setOutlined('button1')" @mouseleave="detOutlined(true)" @click="someAsyncFunction()">
-                            <v-icon style="background-color: #009933; border-radius:50%" size="35"
-                              color="#ffffff">mdi-microsoft-excel</v-icon>
-                            <v-card-text :style="{
-                      color: show === 'button1' ? '#009933' : '#000',
-                    }">Excel</v-card-text>
+                          <v-btn
+                            class="mt-2"
+                            :style="{
+                              boxShadow: show
+                                ? '#00ff55'
+                                : 'rgb(217, 217, 217)',
+                            }"
+                            text
+                            height="25%"
+                            width="100%"
+                            small
+                            color="#009933"
+                            :outlined="show === 'button1' ? false : true"
+                            @mouseenter="setOutlined('button1')"
+                            @mouseleave="detOutlined(true)"
+                            @click="someAsyncFunction()"
+                          >
+                            <v-icon
+                              style="
+                                background-color: #009933;
+                                border-radius: 50%;
+                              "
+                              size="35"
+                              color="#ffffff"
+                              >mdi-microsoft-excel</v-icon
+                            >
+                            <v-card-text
+                              :style="{
+                                color: show === 'button1' ? '#009933' : '#000',
+                              }"
+                              >Excel</v-card-text
+                            >
                           </v-btn>
 
                           <!-- Sta slid baton Download CSV------------------------------------------------------------------------------------------------------------------->
 
                           <v-tooltip bottom>
                             <template #activator="{ on, attrs }">
-                              <v-btn v-bind="attrs" class="mt-2" text height="25%" width="100%" small :style="{
-                      boxShadow: show ? '#00ff55' : 'rgb(217, 217, 217)',
-                    }" color="#ff3333" :outlined="show === 'button2' ? false : true" v-on="on"
-                                @mouseenter="setOutlined('button2')" @mouseleave="detOutlined(true)">
-                                <v-icon style="background-color: #ff3333; border-radius:50%" size="35"
-                                  color="#ffffff">mdi-file-pdf-box</v-icon>
-                                <v-card-text :style="{
-                      color: show === 'button2' ? '#ff3333' : '#000',
-                    }">
-                                  PDF</v-card-text>
+                              <v-btn
+                                v-bind="attrs"
+                                class="mt-2"
+                                text
+                                height="25%"
+                                width="100%"
+                                small
+                                :style="{
+                                  boxShadow: show
+                                    ? '#00ff55'
+                                    : 'rgb(217, 217, 217)',
+                                }"
+                                color="#ff3333"
+                                :outlined="show === 'button2' ? false : true"
+                                v-on="on"
+                                @mouseenter="setOutlined('button2')"
+                                @mouseleave="detOutlined(true)"
+                              >
+                                <v-icon
+                                  style="
+                                    background-color: #ff3333;
+                                    border-radius: 50%;
+                                  "
+                                  size="35"
+                                  color="#ffffff"
+                                  >mdi-file-pdf-box</v-icon
+                                >
+                                <v-card-text
+                                  :style="{
+                                    color:
+                                      show === 'button2' ? '#ff3333' : '#000',
+                                  }"
+                                >
+                                  PDF</v-card-text
+                                >
                               </v-btn>
                             </template>
-                            <span :class="{ 'custom-font': en }">{{ en ? 'PDF ຍັງບໍ່ສາມາດດາວໂຫລດໄດ້' : 'PDF can not download' }}</span>
+                            <span :class="{ 'custom-font': en }">{{
+                              en
+                                ? 'PDF ຍັງບໍ່ສາມາດດາວໂຫລດໄດ້'
+                                : 'PDF can not download'
+                            }}</span>
                           </v-tooltip>
                         </v-col>
                       </v-card>
                     </v-expand-transition>
                   </div>
                 </div>
-            </v-card-actions>
+              </v-card-actions>
             </v-col>
           </v-row>
         </v-card-text>
@@ -174,7 +337,9 @@
                     flat
                     :height="heightPx + 'px'"
                   >
-                    <v-list-item-group class="table-title-hiegth table-container">
+                    <v-list-item-group
+                      class="table-title-hiegth table-container"
+                    >
                       <v-list-item
                         v-for="item in columns"
                         :key="item.key"
@@ -188,7 +353,9 @@
                             ></v-checkbox>
                           </v-list-item-action>
                           <v-list-item-content class="px-0">
-                            <v-list-item-title>{{ item.title }}</v-list-item-title>
+                            <v-list-item-title>{{
+                              item.title
+                            }}</v-list-item-title>
                           </v-list-item-content>
                         </template>
                       </v-list-item>
@@ -199,36 +366,63 @@
             </template>
             <template #right>
               <div class="demo-split-pane-r">
-                  <v-card outlined style="background-color: #ffff00; border-top-left-radius: 0px; border-top-right-radius: 0px; border-bottom-right-radius: 1px;" height="100%" class=" table-container text-center">
-                    <v-card-text v-if="loading" class="pa-0">
-                      <v-progress-linear indeterminate color="#4d3d00"></v-progress-linear>
-                    </v-card-text>
-                    <v-data-table
-                      width="100%"
-                      height="calc(73vh + 5px)"
-                      fixed-header
-                      dense
-                      :headers="visibleHeaders"
-                      :items="desserts"
-                      :items-per-page="computedItemsPerPage"
-                      item-key="TICKETID"
-                      class="elevation-1 custom-font font_size_12"
-                    >
-                      <template v-slot:item="{ item }">
-                        <tr class="text_color custom-font">
-                          <td v-for="header in visibleHeaders" :key="header.text">
-                            <span class="font_size_12 custom-font">{{ item[header.value] }}</span>
-                          </td>
-                        </tr>
-                      </template>
-                    </v-data-table>
-                  </v-card>
+                <v-card
+                  outlined
+                  style="
+                    background-color: #ffff00;
+                    border-top-left-radius: 0px;
+                    border-top-right-radius: 0px;
+                    border-bottom-right-radius: 1px;
+                  "
+                  height="100%"
+                  class="table-container text-center"
+                >
+                  <v-card-text v-if="loading" class="pa-0">
+                    <v-progress-linear
+                      indeterminate
+                      color="#4d3d00"
+                    ></v-progress-linear>
+                  </v-card-text>
+                  <v-data-table
+                    width="100%"
+                    height="calc(73vh + 5px)"
+                    fixed-header
+                    dense
+                    :headers="visibleHeaders"
+                    :items="desserts"
+                    :items-per-page="computedItemsPerPage"
+                    item-key="TICKETID"
+                    class="elevation-1 custom-font font_size_12"
+                  >
+                    <template v-slot:item="{ item, index }">
+                      <tr
+                        class="text_color custom-font"
+                        :style="{
+                          backgroundColor:
+                            index % 2 === 0
+                              ? 'rgb(255, 255, 235)'
+                              : 'rgb(255, 255, 255)',
+                        }"
+                      >
+                        <td v-for="header in visibleHeaders" :key="header.text">
+                          <span class="font_size_12 custom-font">{{
+                            item[header.value]
+                          }}</span>
+                        </td>
+                      </tr>
+                    </template>
+                  </v-data-table>
+                </v-card>
               </div>
             </template>
           </Split>
         </div>
         <v-card v-if="showgraph" class="my-4">
-          <v-progress-linear v-if="loading" indeterminate color="#4d3d00"></v-progress-linear>
+          <v-progress-linear
+            v-if="loading"
+            indeterminate
+            color="#4d3d00"
+          ></v-progress-linear>
           <chartgraph :desserts="desserts" />
         </v-card>
       </v-col>
@@ -242,14 +436,14 @@
 import * as XLSX from 'xlsx'
 import chartgraph from './chartgraph.vue'
 export default {
-  middleware:'auth',
+  middleware: 'auth',
   Currency: 'DefaultLayout',
   components: {
     chartgraph,
   },
   data() {
     return {
-      heightPx:0,
+      heightPx: 0,
       showgraph: false,
       absolute: true,
       overlay: false,
@@ -279,26 +473,54 @@ export default {
         { key: 'TIME_CARE_TPLUS', title: 'TIME_CARE_TPLUS', active: true },
         { key: 'RESOLVE_OWNER', title: 'RESOLVE_OWNER', active: true },
         { key: 'RESOLVE_DATE', title: 'RESOLVE_DATE', active: true },
-        { key: 'TIME_DO_TPLUS', title: 'TIME_DO_TPLUS', active: true, },
-        { key: 'CLOSE_BY_OWNER', title: 'CLOSE_BY_OWNER', active: true, },
+        { key: 'TIME_DO_TPLUS', title: 'TIME_DO_TPLUS', active: true },
+        { key: 'CLOSE_BY_OWNER', title: 'CLOSE_BY_OWNER', active: true },
         { key: 'CLOSE_DATE', title: 'CLOSE_DATE', active: true },
-        { key: 'TIME_CLOSE_BY_CENTER', title: 'TIME_CLOSE_BY_CENTER', active: true },
-        { key: 'STATUS_TICKET', title: 'STATUS_TICKET', active: true, },
+        {
+          key: 'TIME_CLOSE_BY_CENTER',
+          title: 'TIME_CLOSE_BY_CENTER',
+          active: true,
+        },
+        { key: 'STATUS_TICKET', title: 'STATUS_TICKET', active: true },
         { key: 'VILLAGE', title: 'VILLAGE', active: true },
         { key: 'DISTRICT', title: 'DISTRICT', active: true },
         { key: 'PROVINCE', title: 'PROVINCE', active: true },
-        { key: 'ROOT_CAUSE_BY_DEPARTMENT', title: 'ROOT_CAUSE_BY_DEPARTMENT', active: true },
+        {
+          key: 'ROOT_CAUSE_BY_DEPARTMENT',
+          title: 'ROOT_CAUSE_BY_DEPARTMENT',
+          active: true,
+        },
         { key: 'SOLUTION_SHOT', title: 'SOLUTION_SHOT', active: true },
-        { key: 'ROOT_CAUSE_BY_STATUS', title: 'ROOT_CAUSE_BY_STATUS', active: true },
-        { key: 'ROOT_CAUSE_BY_TIER', title: 'ROOT_CAUSE_BY_TIER', active: true },
+        {
+          key: 'ROOT_CAUSE_BY_STATUS',
+          title: 'ROOT_CAUSE_BY_STATUS',
+          active: true,
+        },
+        {
+          key: 'ROOT_CAUSE_BY_TIER',
+          title: 'ROOT_CAUSE_BY_TIER',
+          active: true,
+        },
         { key: 'CODE', title: 'CODE', active: true },
-        { key: 'ROOT_CAUSE_DESCRIPTIONS', title: 'ROOT_CAUSE_DESCRIPTIONS', active: true },
+        {
+          key: 'ROOT_CAUSE_DESCRIPTIONS',
+          title: 'ROOT_CAUSE_DESCRIPTIONS',
+          active: true,
+        },
         { key: 'DESCRIPTION', title: 'DESCRIPTION', active: true },
         { key: 'OWNER_GROUP', title: 'OWNER_GROUP', active: true },
         { key: 'CREATED_BY', title: 'CREATED_BY', active: true },
         { key: 'CREATED_AT', title: 'CREATED_AT', active: true },
-        { key: 'PENDING_CREATED_BY', title: 'PENDING_CREATED_BY', active: true },
-        { key: 'PENDING_CREATED_AT', title: 'PENDING_CREATED_AT', active: true },
+        {
+          key: 'PENDING_CREATED_BY',
+          title: 'PENDING_CREATED_BY',
+          active: true,
+        },
+        {
+          key: 'PENDING_CREATED_AT',
+          title: 'PENDING_CREATED_AT',
+          active: true,
+        },
         { key: 'FIRST_NAME', title: 'FIRST_NAME', active: true },
         { key: 'LAST_NAME', title: 'LAST_NAME', active: true },
       ],
@@ -353,8 +575,8 @@ export default {
       color: '#e5e5e5',
       date: new Date(
         Date.now() -
-        (7 * 24) * 60 * 60 * 1000 -
-        new Date().getTimezoneOffset() * 60000
+          7 * 24 * 60 * 60 * 1000 -
+          new Date().getTimezoneOffset() * 60000
       )
         .toISOString()
         .substr(0, 10), // + 'T00:00:00.000Z',
@@ -368,12 +590,12 @@ export default {
   },
   computed: {
     en() {
-      return this.$store.state.en;
+      return this.$store.state.en
     },
     computedItemsPerPage() {
-      return this.desserts.length > 0 ? this.desserts.length : 50;
+      return this.desserts.length > 0 ? this.desserts.length : 50
     },
-    // -- header table 
+    // -- header table
     visibleHeaders() {
       return this.headers.filter((header) => {
         const column = this.columns.find((col) => col.key === header.value)
@@ -401,15 +623,15 @@ export default {
     },
   },
   mounted() {
-    this.OnInternet();
+    this.OnInternet()
     this.setSheetHeight()
-      window.addEventListener('resize', this.setSheetHeight)
+    window.addEventListener('resize', this.setSheetHeight)
   },
   methods: {
     setSheetHeight() {
-        // Get the height of the computer screen
-        this.heightPx = window.innerHeight - 230
-      },
+      // Get the height of the computer screen
+      this.heightPx = window.innerHeight - 230
+    },
     setOutlined(value) {
       this.show = value
     },
@@ -434,17 +656,16 @@ export default {
         }
       })
     },
-    // ------------- function create name file excel 
+    // ------------- function create name file excel
     async someAsyncFunction() {
-      if(this.desserts.length <= 0){
+      if (this.desserts.length <= 0) {
         return this.messageModal('warning', 'Not data.')
       }
       try {
         const exportedFileName = await this.exportToExcel()
         console.log(`File exported successfully: ${exportedFileName}`)
-
       } catch (error) {
-        const errors = (error === 'undefined' || null) ? '' : error;
+        const errors = error === 'undefined' || null ? '' : error
         console.error('Error exporting file:', errors)
       }
     },
@@ -465,31 +686,30 @@ export default {
       const datestop = new Date(this.dates)
       const datelang = datestop - datestart
       if (datelang >= 0) {
-        this.overlay = false;
-      }
-      else {
-        this.overlay = true;
+        this.overlay = false
+      } else {
+        this.overlay = true
       }
     },
     // ------------- function Get data in api
     async OnInternet() {
       this.desserts = []
-      this.loading = true;
+      this.loading = true
       try {
         const formattedStartDate = this.dateRange[0]
           ? new Date(this.dateRange[0]).toISOString().slice(0, 16)
-          : null;
+          : null
         const formattedEndDate = this.dateRange[1]
           ? new Date(this.dateRange[1]).toISOString().slice(0, 16)
-          : null;
+          : null
         const res = await this.$axios.post(
           `http://172.28.17.101:9981/ticket/gotdata?startDate=${formattedStartDate}&endDate=${formattedEndDate}`
-        );
-        console.log('res::',res.data.results)
+        )
+        console.log('res::', res.data.results)
         if (!Array.isArray(res.data.results) || res.data.results.length === 0) {
-          console.warn("No data received.");
-          this.desserts = [];
-          return;
+          console.warn('No data received.')
+          this.desserts = []
+          return
         }
         this.desserts = res.data.results.map((item) => ({
           TICKETID: item.id || null,
@@ -501,15 +721,35 @@ export default {
           TICKET_TYPE: item.ticket_type || null,
           CREATED_BY_OWNER: item.created_by_owner || null,
           QUEUED_BY: item.created_by || null,
-          QUEUED_DATE: item.created_at ? new Date(item.created_at).toISOString().slice(0, 19).replace("T", " ") : null,
+          QUEUED_DATE: item.created_at
+            ? new Date(item.created_at)
+                .toISOString()
+                .slice(0, 19)
+                .replace('T', ' ')
+            : null,
           INPROGRESS_OWNER: item.inprogress_created_by || null,
-          INPROGRESS_DATE: item.inprogress_created ? new Date(item.inprogress_created).toISOString().slice(0, 19).replace("T", " ") : null,
+          INPROGRESS_DATE: item.inprogress_created
+            ? new Date(item.inprogress_created)
+                .toISOString()
+                .slice(0, 19)
+                .replace('T', ' ')
+            : null,
           TIME_CARE_TPLUS: item.time_care_tplus || null,
           RESOLVE_OWNER: item.resolved_created_by || null,
-          RESOLVE_DATE: item.resolved_created ? new Date(item.resolved_created).toISOString().slice(0, 19).replace("T", " ") : null,
+          RESOLVE_DATE: item.resolved_created
+            ? new Date(item.resolved_created)
+                .toISOString()
+                .slice(0, 19)
+                .replace('T', ' ')
+            : null,
           TIME_DO_TPLUS: item.time_do_tplus || null,
           CLOSE_BY_OWNER: item.closed_created_by || null,
-          CLOSE_BY_DATE: item.closed_created ? new Date(item.closed_created).toISOString().slice(0, 19).replace("T", " ") : null,
+          CLOSE_BY_DATE: item.closed_created
+            ? new Date(item.closed_created)
+                .toISOString()
+                .slice(0, 19)
+                .replace('T', ' ')
+            : null,
           TIME_CLOSE_BY_CENTER: item.time_close_by_center || null,
           STATUS_TICKET: item.status || null,
           VILLAGE: item.village || null,
@@ -526,23 +766,32 @@ export default {
           DOWN_TIME: item.down_time || null,
           OWNER_GROUP_CREATE: item.to_owner_group_created || null,
           CREATED_BY: item.new_created_by || null,
-          CREATED_AT: item.new_created ? new Date(item.new_created).toISOString().slice(0, 19).replace("T", " ") : null,
+          CREATED_AT: item.new_created
+            ? new Date(item.new_created)
+                .toISOString()
+                .slice(0, 19)
+                .replace('T', ' ')
+            : null,
           PENDING_CREATED_BY: item.pending_created_by || null,
-          PENDING_CREATED_AT: item.pending_created ? new Date(item.pending_created).toISOString().slice(0, 19).replace("T", " ") : null,
+          PENDING_CREATED_AT: item.pending_created
+            ? new Date(item.pending_created)
+                .toISOString()
+                .slice(0, 19)
+                .replace('T', ' ')
+            : null,
           FIRST_NAME: item.first_name || null,
           LAST_NAME: item.last_name || null,
-        }));
+        }))
       } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-      finally {
-        this.loading = false;
+        console.error('Error fetching data:', error)
+      } finally {
+        this.loading = false
       }
     },
     messageModal(type, content) {
       this.$Message[type]({
         background: true,
-        content: `<span class="custom-font">${ content }<span>`,
+        content: `<span class="custom-font">${content}<span>`,
       })
     },
   },

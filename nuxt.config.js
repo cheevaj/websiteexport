@@ -81,9 +81,9 @@ export default {
       },
     },
   },
-  // axios: {
-  //   baseURL: 'https://47f5-115-84-113-224.ngrok-free.app',
-  // },
+  axios: {
+    baseURL: 'http://172.28.26.23:3100',
+  },
   googleFonts: {
     families: {
       'Noto+Sans+Lao': true,

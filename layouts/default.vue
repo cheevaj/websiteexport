@@ -148,19 +148,6 @@
               </v-tooltip>
               <v-btn
                 height="100%"
-                text
-                style="background-color: transparent; color: transparent"
-                @click="openLinkInNewTab(link[0])"
-              >
-                <v-card-actions class="pa-0">
-                  <v-card-text class="px-0 custom-font custom-cursor">
-                    {{ en ? 'ກ່ຽວກັບພອກເຮົາ' : 'about us' }}
-                  </v-card-text>
-                </v-card-actions>
-              </v-btn>
-
-              <v-btn
-                height="100%"
                 class="pa-0"
                 text
                 style="background-color: transparent; color: transparent"
@@ -169,32 +156,6 @@
                 <v-card-actions class="pa-0">
                   <v-card-text class="px-0 custom-font custom-cursor">
                     {{ en ? 'ສົ່ງຂໍ້ຄວາມ' : 'messages' }}
-                  </v-card-text>
-                </v-card-actions>
-              </v-btn>
-              <v-btn
-                height="100%"
-                class="pa-0"
-                text
-                style="background-color: transparent; color: transparent"
-                @click="openLinkInNewTab(link[1])"
-              >
-                <v-card-actions class="pa-0">
-                  <v-card-text class="px-0 custom-font custom-cursor">
-                    {{ en ? 'ສີນຄ້າ' : 'Products' }}
-                  </v-card-text>
-                </v-card-actions>
-              </v-btn>
-              <v-btn
-                height="100%"
-                class="pa-0"
-                text
-                style="background-color: transparent; color: transparent"
-                @click="openLinkInNewTab(link[2])"
-              >
-                <v-card-actions class="pa-0">
-                  <v-card-text class="px-0 custom-font custom-cursor">
-                    {{ en ? 'ຕິດຕໍ່ພອກເຮົາ' : 'Contact us' }}
                   </v-card-text>
                 </v-card-actions>
               </v-btn>
@@ -445,10 +406,7 @@ export default {
       ],
       menu: [
         { title: 'Ticket' },
-        { title: 'Contact us' },
         { title: 'Message ' },
-        { title: 'Products' },
-        { title: 'Contact us' },
       ],
       link: [
         'https://tplus.la/tplus/about-us',
