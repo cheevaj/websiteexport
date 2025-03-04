@@ -392,7 +392,7 @@
                     :items="desserts"
                     :items-per-page="computedItemsPerPage"
                     item-key="TICKETID"
-                    class="elevation-1 custom-font font_size_12"
+                    class="elevation-1 custom-font font_size_12 text-left"
                   >
                     <template v-slot:item="{ item, index }">
                       <tr
@@ -475,7 +475,7 @@ export default {
         { key: 'RESOLVE_DATE', title: 'RESOLVE_DATE', active: true },
         { key: 'TIME_DO_TPLUS', title: 'TIME_DO_TPLUS', active: true },
         { key: 'CLOSE_BY_OWNER', title: 'CLOSE_BY_OWNER', active: true },
-        { key: 'CLOSE_DATE', title: 'CLOSE_DATE', active: true },
+        { key: 'CLOSE_BY_DATE', title: 'CLOSE_BY_DATE', active: true },
         {
           key: 'TIME_CLOSE_BY_CENTER',
           title: 'TIME_CLOSE_BY_CENTER',
@@ -509,6 +509,7 @@ export default {
         },
         { key: 'DESCRIPTION', title: 'DESCRIPTION', active: true },
         { key: 'OWNER_GROUP', title: 'OWNER_GROUP', active: true },
+        { key: 'DOWN_TIME', title: 'DOWN_TIME', active: true },
         { key: 'CREATED_BY', title: 'CREATED_BY', active: true },
         { key: 'CREATED_AT', title: 'CREATED_AT', active: true },
         {
@@ -541,6 +542,7 @@ export default {
         { text: 'QUEUED_CREATED_BY', value: 'QUEUED_BY' },
         { text: 'QUEUED_DATE', value: 'QUEUED_DATE' },
         { text: 'INPROGRESS_OWNER', value: 'INPROGRESS_OWNER' },
+        { text: 'INPROGRESS_DATE', value: 'INPROGRESS_DATE' },
         { text: 'TIME_CARE_TPLUS', value: 'TIME_CARE_TPLUS' },
         { text: 'RESOLVE_OWNER', value: 'RESOLVE_OWNER' },
         { text: 'RESOLVE_DATE', value: 'RESOLVE_DATE' },
@@ -560,6 +562,7 @@ export default {
         { text: 'ROOT_CAUSE_DESCRIPTIONS', value: 'ROOT_CAUSE_DESCRIPTIONS' },
         { text: 'DESCRIPTION', value: 'DESCRIPTION' },
         { text: 'OWNER_GROUP', value: 'OWNER_GROUP' },
+        { text: 'DATE_DOWN_TIME', value: 'DOWN_TIME' },
         { text: 'NEW_CREATED_BY', value: 'CREATED_BY' },
         { text: 'NEW_CREATED_AT', value: 'CREATED_AT' },
         { text: 'PENDING_CREATED_BY', value: 'PENDING_CREATED_BY' },
@@ -567,12 +570,9 @@ export default {
         { text: 'FIRST_NAME', value: 'FIRST_NAME' },
         { text: 'LAST_NAME', value: 'LAST_NAME' },
       ],
-      resizing: false,
-      shows: false,
       dark: true,
       expand: false,
       show: null,
-      color: '#e5e5e5',
       date: new Date(
         Date.now() -
           7 * 24 * 60 * 60 * 1000 -
@@ -584,7 +584,6 @@ export default {
       dates: new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
         .toISOString()
         .substr(0, 10), // + 'T00:00:00.000Z',
-      menus: false,
       dateshow: true,
     }
   },
@@ -629,7 +628,6 @@ export default {
   },
   methods: {
     setSheetHeight() {
-      // Get the height of the computer screen
       this.heightPx = window.innerHeight - 230
     },
     setOutlined(value) {
@@ -638,15 +636,11 @@ export default {
     detOutlined(value) {
       this.show = value
     },
-    //  function export file excel
     exportToExcel() {
       const workbook = XLSX.utils.book_new()
       const worksheet = XLSX.utils.json_to_sheet(this.desserts)
-
       XLSX.utils.book_append_sheet(workbook, worksheet, 'Currency Data')
-      // Generate a unique filename or use a timestamp for the file
       const filename = `Ticket data ${Date.now()}.xlsx`
-      // Wrap the writeFile function in a Promise
       return new Promise((resolve, reject) => {
         try {
           XLSX.writeFile(workbook, filename)
@@ -656,7 +650,6 @@ export default {
         }
       })
     },
-    // ------------- function create name file excel
     async someAsyncFunction() {
       if (this.desserts.length <= 0) {
         return this.messageModal('warning', 'Not data.')
@@ -669,29 +662,6 @@ export default {
         console.error('Error exporting file:', errors)
       }
     },
-    // sta function alert file download success---------------------------------------------------------------->
-    formatDate(date) {
-      if (!date) return null
-      const [year, month, day] = date.split('-')
-      return `${month}/${day}/${year}` //
-    },
-    parseDate(date) {
-      if (!date) return null
-      const [month, day, year] = date.split('/')
-      return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
-    },
-    // function check date start and date stop
-    datelang() {
-      const datestart = new Date(this.date)
-      const datestop = new Date(this.dates)
-      const datelang = datestop - datestart
-      if (datelang >= 0) {
-        this.overlay = false
-      } else {
-        this.overlay = true
-      }
-    },
-    // ------------- function Get data in api
     async OnInternet() {
       this.desserts = []
       this.loading = true
@@ -763,7 +733,12 @@ export default {
           ROOT_CAUSE_DESCRIPTIONS: item.root_cause || null,
           DESCRIPTION: item.description || null,
           OWNER_GROUP: item.to_owner_group || null,
-          DOWN_TIME: item.down_time || null,
+          DOWN_TIME: item.down_time
+            ? new Date(item.down_time)
+                .toISOString()
+                .slice(0, 19)
+                .replace('T', ' ')
+            : null,
           OWNER_GROUP_CREATE: item.to_owner_group_created || null,
           CREATED_BY: item.new_created_by || null,
           CREATED_AT: item.new_created

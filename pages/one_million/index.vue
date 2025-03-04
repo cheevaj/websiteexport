@@ -290,9 +290,8 @@ export default {
     },
   },
   methods: {
-    settingPackage(){
-      console.log('settingPackage::')
-      this.modal = false;
+    settingPackage() {
+      this.modal = false
     },
     slipMenu(index) {
       if (index === 4) {

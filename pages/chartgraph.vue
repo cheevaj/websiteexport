@@ -693,7 +693,6 @@ export default {
             checkTargetDo: '',
             checkTargetCare: '',
             expand: 'btn-1',
-            datacang: true,
             showstrygraph: true,
             loading: true,
             percentTimeC: 0,
