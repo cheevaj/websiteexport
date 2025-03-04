@@ -452,7 +452,7 @@ export default {
       split: 0.025,
       desserts: [],
       dateRange: [
-        new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
+        new Date(Date.now() - 6 * 24 * 60 * 60 * 1000)
           .toISOString()
           .substr(0, 16),
         new Date(Date.now()).toISOString().substr(0, 16),
@@ -573,17 +573,7 @@ export default {
       dark: true,
       expand: false,
       show: null,
-      date: new Date(
-        Date.now() -
-          7 * 24 * 60 * 60 * 1000 -
-          new Date().getTimezoneOffset() * 60000
-      )
-        .toISOString()
-        .substr(0, 10), // + 'T00:00:00.000Z',
       menu: false,
-      dates: new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
-        .toISOString()
-        .substr(0, 10), // + 'T00:00:00.000Z',
       dateshow: true,
     }
   },
@@ -617,6 +607,7 @@ export default {
   watch: {
     dateRange() {
       if (this.dateRange[0] !== '' && this.dateRange[1] !== '') {
+        console.log('1||', this.dateRange)
         this.OnInternet()
       }
     },
@@ -666,12 +657,27 @@ export default {
       this.desserts = []
       this.loading = true
       try {
+        console.log('2||', this.dateRange)
         const formattedStartDate = this.dateRange[0]
-          ? new Date(this.dateRange[0]).toISOString().slice(0, 16)
+          ? new Date(this.dateRange[0])
+              .toLocaleString('en-CA', {
+                timeZone: 'Asia/Bangkok',
+                hour12: false,
+              })
+              .replace(',', '')
           : null
+
         const formattedEndDate = this.dateRange[1]
-          ? new Date(this.dateRange[1]).toISOString().slice(0, 16)
+          ? new Date(this.dateRange[1])
+              .toLocaleString('en-CA', {
+                timeZone: 'Asia/Bangkok',
+                hour12: false,
+              })
+              .replace(',', '')
           : null
+
+        console.log('HH:', formattedStartDate, 'STOP::', formattedEndDate)
+
         const res = await this.$axios.post(
           `http://172.28.17.101:9981/ticket/gotdata?startDate=${formattedStartDate}&endDate=${formattedEndDate}`
         )

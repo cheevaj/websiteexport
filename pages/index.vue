@@ -47,8 +47,6 @@
                     </v-item>
                   </v-item-group>
                   <v-btn
-                    @mouseenter="colorIcon"
-                    @mouseleave="colorIcon"
                     style="
                       height: 100%;
                       width: 15%;
@@ -61,7 +59,7 @@
                     text
                     @click="next(item)"
                   >
-                    <v-icon size="55" :color="color">mdi-chevron-right</v-icon>
+                    <v-icon size="55" color="#FFFF">mdi-chevron-right</v-icon>
                   </v-btn>
                 </v-card-actions>
               </v-img>
@@ -354,13 +352,6 @@ export default {
     },
     detOutlined(value) {
       this.show = value
-    },
-    colorIcon() {
-      if (this.color !== '#ffffff') {
-        this.color = '#ffffff'
-      } else {
-        this.color = '#e5e5e5'
-      }
     },
     openLinkInNewTab(link) {
       window.open(link, '_blank')
