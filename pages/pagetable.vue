@@ -427,8 +427,6 @@
         </v-card>
       </v-col>
     </v-row>
-
-    <!--Sto title table-->
   </div>
 </template>
 
@@ -436,7 +434,7 @@
 import * as XLSX from 'xlsx'
 import chartgraph from './chartgraph.vue'
 export default {
-  middleware: 'auth',
+  middleware: 'auth', 
   Currency: 'DefaultLayout',
   components: {
     chartgraph,
@@ -507,6 +505,11 @@ export default {
           title: 'ROOT_CAUSE_DESCRIPTIONS',
           active: true,
         },
+        {
+          key: 'ForRootCuase',
+          title: 'For_Root_Cause',
+          active: true,
+        },
         { key: 'DESCRIPTION', title: 'DESCRIPTION', active: true },
         { key: 'OWNER_GROUP', title: 'OWNER_GROUP', active: true },
         { key: 'DOWN_TIME', title: 'DOWN_TIME', active: true },
@@ -560,6 +563,7 @@ export default {
         { text: 'ROOT_CAUSE_BY_TIER', value: 'ROOT_CAUSE_BY_TIER' },
         { text: 'CODE', value: 'CODE' },
         { text: 'ROOT_CAUSE_DESCRIPTIONS', value: 'ROOT_CAUSE_DESCRIPTIONS' },
+        { text: 'For_Root_Cause', value: 'ForRootCuase' },
         { text: 'DESCRIPTION', value: 'DESCRIPTION' },
         { text: 'OWNER_GROUP', value: 'OWNER_GROUP' },
         { text: 'DATE_DOWN_TIME', value: 'DOWN_TIME' },
@@ -607,7 +611,6 @@ export default {
   watch: {
     dateRange() {
       if (this.dateRange[0] !== '' && this.dateRange[1] !== '') {
-        console.log('1||', this.dateRange)
         this.OnInternet()
       }
     },
@@ -657,7 +660,6 @@ export default {
       this.desserts = []
       this.loading = true
       try {
-        console.log('2||', this.dateRange)
         const formattedStartDate = this.dateRange[0]
           ? new Date(this.dateRange[0])
               .toLocaleString('en-CA', {
@@ -675,13 +677,9 @@ export default {
               })
               .replace(',', '')
           : null
-
-        console.log('HH:', formattedStartDate, 'STOP::', formattedEndDate)
-
         const res = await this.$axios.post(
-          `http://172.28.17.101:9981/ticket/gotdata?startDate=${formattedStartDate}&endDate=${formattedEndDate}`
+          `http://172.28.17.101:9989/ticket/gotdata?startDate=${formattedStartDate}&endDate=${formattedEndDate}`
         )
-        console.log('res::', res.data.results)
         if (!Array.isArray(res.data.results) || res.data.results.length === 0) {
           console.warn('No data received.')
           this.desserts = []
@@ -710,7 +708,7 @@ export default {
                 .slice(0, 19)
                 .replace('T', ' ')
             : null,
-          TIME_CARE_TPLUS: item.time_care_tplus || null,
+          TIME_CARE_TPLUS: item.time_care_tplus || 0,
           RESOLVE_OWNER: item.resolved_created_by || null,
           RESOLVE_DATE: item.resolved_created
             ? new Date(item.resolved_created)
@@ -718,7 +716,7 @@ export default {
                 .slice(0, 19)
                 .replace('T', ' ')
             : null,
-          TIME_DO_TPLUS: item.time_do_tplus || null,
+          TIME_DO_TPLUS: item.time_do_tplus || 0,
           CLOSE_BY_OWNER: item.closed_created_by || null,
           CLOSE_BY_DATE: item.closed_created
             ? new Date(item.closed_created)
@@ -726,7 +724,7 @@ export default {
                 .slice(0, 19)
                 .replace('T', ' ')
             : null,
-          TIME_CLOSE_BY_CENTER: item.time_close_by_center || null,
+          TIME_CLOSE_BY_CENTER: item.time_close_by_center || 0,
           STATUS_TICKET: item.status || null,
           VILLAGE: item.village || null,
           DISTRICT: item.district_name || null,
@@ -737,6 +735,7 @@ export default {
           ROOT_CAUSE_BY_TIER: item.RootCausebyTier || null,
           CODE: item.Code || null,
           ROOT_CAUSE_DESCRIPTIONS: item.root_cause || null,
+          ForRootCuase: item.ForRootCuase || null,
           DESCRIPTION: item.description || null,
           OWNER_GROUP: item.to_owner_group || null,
           DOWN_TIME: item.down_time

@@ -67,7 +67,7 @@
                     class="pa-0"
                     width="45px"
                     style="border-radius: 50%"
-                    :src="image"
+                    src="https://api.tplus.la/images/defaultTplusLogo.jpg"
                   />
                 </v-card-actions>
               </v-btn>
@@ -120,32 +120,37 @@
           </v-col>
           <v-col cols="8" v-if="show" class="text-right">
             <v-card-text class="pa-0 text-right">
-              <v-tooltip bottom class="px-4">
-                <template #activator="{ on, attrs }">
-                  <v-btn
-                    height="100%"
-                    class="pa-0"
-                    text
-                    v-bind="attrs"
-                    v-on="on"
-                    style="background-color: transparent; color: transparent"
-                    @mouseenter="startTimer"
-                    @mouseleave="clearTimer"
-                    @click="toggleItemStatus('/pagetable')"
-                  >
-                    <v-card-actions class="pa-0">
-                      <v-card-text class="custom-font custom-cursor">
-                        {{ en ? 'ເບີ່ງ TICKET' : 'view TICKET' }}
-                      </v-card-text>
-                    </v-card-actions>
-                  </v-btn>
-                </template>
-                <span class="tooltip custom-font" ref="tooltip">{{
-                  en
-                    ? 'ເບີ່ງ ຫຼື ດາວໂຫຼດໄຟລ໌ TICKET'
-                    : 'View or Download TICKET File'
-                }}</span>
-              </v-tooltip>
+              <!-- <v-btn
+                height="100%"
+                class="pa-0"
+                text
+                style="background-color: transparent; color: transparent"
+                @mouseenter="startTimer"
+                @mouseleave="clearTimer"
+                @click="toggleItemStatus('/pagetable')"
+              >
+                <v-card-actions class="pa-0">
+                  <v-card-text class="custom-font custom-cursor">
+                    {{ en ? 'TICKET' : 'TICKET' }}
+                  </v-card-text>
+                </v-card-actions>
+              </v-btn> -->
+
+              <v-btn
+                height="100%"
+                class="pa-0"
+                text
+                style="background-color: transparent; color: transparent"
+                @click="toggleItemStatus('/pagetable')"
+              >
+                <v-card-actions class="pa-0">
+                  <v-card-text class="px-0 custom-font custom-cursor">
+                    {{ en ? 'TICKET' : 'TICKET' }}
+                  </v-card-text>
+                </v-card-actions>
+              </v-btn>
+
+
               <v-btn
                 height="100%"
                 class="pa-0"
@@ -163,7 +168,11 @@
                 height="100%"
                 class="pa-0"
                 text
-                style="background-color: transparent; color: transparent; margin-left: 20px;"
+                style="
+                  background-color: transparent;
+                  color: transparent;
+                  margin-left: 20px;
+                "
                 @click="dialog = true"
               >
                 <v-card-text class="px-0 custom-cursor">
@@ -188,9 +197,7 @@
                     style="background-color: transparent; color: transparent"
                   >
                     <v-card-actions class="pa-0">
-                      <v-card-text
-                        class="custom-cursor"
-                      >
+                      <v-card-text class="custom-cursor">
                         <v-icon>mdi-menu</v-icon>
                       </v-card-text>
                     </v-card-actions>
@@ -211,9 +218,7 @@
                           : openLinkInNewTab(link[index])
                       "
                     >
-                      <v-list-item-title
-                        class="custom-cursor"
-                      >
+                      <v-list-item-title class="custom-cursor">
                         {{ item.title }}
                         <v-divider
                           style="background-color: #804d00"
@@ -229,9 +234,7 @@
                       style="background-color: transparent; color: transparent"
                       @click="dialog = true"
                     >
-                      <v-list-item-title
-                        class="custom-cursor"
-                      >
+                      <v-list-item-title class="custom-cursor">
                         <span class="custom-font">{{
                           en ? 'ອອກຈາກລະບົບ' : 'Getout'
                         }}</span
@@ -404,10 +407,7 @@ export default {
           path: '../exportExcelfile',
         },
       ],
-      menu: [
-        { title: 'Ticket' },
-        { title: 'Message ' },
-      ],
+      menu: [{ title: 'Ticket' }, { title: 'Message ' }],
       link: [
         'https://tplus.la/tplus/about-us',
         'https://tplus.la/new-number/sim/',
@@ -438,7 +438,6 @@ export default {
         },
       ],
       colortext: false,
-      image: 'https://api.tplus.la/images/defaultTplusLogo.jpg', // ~/static/Tpluslogo.png
       items: [
         {
           img: 'https://api.tplus.la/images/defaultTplusLogo.jpg',
@@ -454,7 +453,6 @@ export default {
       mini: true,
       rightDrawer: false,
       title: 'Vuetify.js',
-      tooltipTimer: null,
     }
   },
   computed: {
@@ -504,17 +502,6 @@ export default {
     },
     openLinkInNewTab(link) {
       window.open(link, '_blank')
-    },
-    startTimer() {
-      this.colortext = 'number'
-      this.tooltipTimer = setTimeout(() => {
-        this.$refs.tooltip.classList.add('visible')
-      }, 700)
-    },
-    clearTimer() {
-      this.colortext = false
-      clearTimeout(this.tooltipTimer)
-      this.$refs.tooltip.classList.remove('visible')
     },
     updateShowProperty() {
       this.show = window.innerWidth > 1200

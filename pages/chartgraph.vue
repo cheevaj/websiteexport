@@ -297,7 +297,7 @@
                                                                 Row Labels
                                                             </th>
                                                             <th class="text-center" style="color:#ffff00;">
-                                                                Count of SERVICE
+                                                                Counts
                                                             </th>
                                                             <th class="text-center" style="color:#ffff00;">
                                                                 percentages(%)
@@ -348,7 +348,7 @@
                                                                 Row Labels
                                                             </th>
                                                             <th class="text-center" style="color:#ffff00;">
-                                                                Count of SERVICE GROUP
+                                                                Counts
                                                             </th>
                                                             <th class="text-center" style="color:#ffff00;">
                                                                 percentages(%)
@@ -422,13 +422,12 @@
                                                             </td>
                                                             <td style="color: #000;">
                                                                 <h4>
-
-                                                                    L(20m):{{ percentTimeDoTa }}
+                                                                    {{ percentTimeDoTa }}
                                                                 </h4>
                                                             </td>
                                                             <td style="color: #000;">
                                                                 <h4>
-                                                                    H(20m):{{ percentTimeDo }}
+                                                                    {{ percentTimeDo }}
                                                                 </h4>
                                                             </td>
                                                             <td style="color: #000;">
@@ -766,7 +765,6 @@ export default {
     methods: {
         receiveChartData(data, allData) {
             this.dataDates = data;
-            console.log(allData)
             this.DataAll = allData;
         },
         showgraph(name) {
@@ -860,9 +858,6 @@ export default {
                         nameCountTimeC[name] = (nameCountTimeC[name] || 0) + 1;
                     });
                     const allNames = new Set([...Object.keys(nameCount), ...Object.keys(nameCountTimeC)]);
-                    // console.log(allNames)
-
-                    // Initialize the userTarget array
                     // Loop through each unique name
                     const allvalue = [];
                     allNames.forEach(name => {
@@ -872,7 +867,6 @@ export default {
                         // Push an object with name, timeDo, and timeCare to the userTarget array
                         allvalue.push({ name, Time_Do: timeDo, Time_Care: timeCare });
                     });
-
                     // Calculate the sums for Time_Do and Time_Care
                     let sumTimeDo = 0;
                     let sumTimeCare = 0;
@@ -880,7 +874,6 @@ export default {
                         sumTimeDo += item.Time_Do;
                         sumTimeCare += item.Time_Care;
                     });
-
                     // Add summary entry with total values to userTarget array
                     this.userTarget = [
                         ...allvalue, // Individual entries
@@ -987,8 +980,6 @@ export default {
                         // arrow function find value max to min  
                         dataObjects.sort((a, b) => b.value - a.value); // Sort dataObjects based on value in descending order
                         // get data to use graph 
-                        // this.names = dataObjects.map((item) => item.name); // get data to use graph (graph names)
-                        // this.value = dataObjects.map((item) => item.value); // get data to use graph (graph values)
                         this.names = dataObjects.filter(item => item.value > 0).map(item => item.name); // get data to use graph (graph names)
                         this.value = dataObjects.filter(item => item.value > 0).map(item => item.value);
                         const percentages = this.value.map((value) => ((value / this.tabledataall) * 100).toFixed(2));
@@ -1184,7 +1175,6 @@ export default {
                         const d4Sum = d4Entries.reduce((sum, entry) => sum + entry.value, 0);
                         const d5Sum = d5Entries.reduce((sum, entry) => sum + entry.value, 0);
                         const dDSum = dDEntries.reduce((sum, entry) => sum + entry.value, 0);
-
                         // Create a new entry with combined values
                         const combinedEntryD1 = {
                             name: 'D1_CONNCET INTERNET ບໍ່ໄດ້',
@@ -1389,7 +1379,6 @@ export default {
                 if (this.selectedItem === 5) {
                     const dataallvalue = this.calculateDataValue(this.desserts, 'VOICE', 'DA');
                     if (this.tabledisplay === 'Root Cause Report') {
-
                         const uniqueNames = this.loopname(this.desserts, 'DATA', 'CHAN');
                         const dataObjects = uniqueNames.map(name => ({
                             name,
@@ -1470,7 +1459,6 @@ export default {
         // -------- Function loop Data of table SERVICE GROUP
         // Define a function named calculateDataValue that takes three parameters: data, serviceGroup, and status
         calculateDataValue(data, serviceGroup, status, tyle) {
-            // Use the reduce function to iterate over the data array and accumulate a sum based on the specified conditions
             return data.reduce((sum, entry) => {
                 // Use a switch statement to handle different cases based on the provided 'status'
                 switch (status) {
@@ -1486,10 +1474,12 @@ export default {
                         if (entry.CLASSIFICATION === serviceGroup) sum++;
                         break;
                     case 'Cause':
-                        if (entry.ROOT_CAUSE_DESCRIPTIONS === serviceGroup) sum++;
+                    if (entry.CODE && entry.CODE === serviceGroup) sum++;
+                    if (entry.ForRootCuase && entry.ForRootCuase === serviceGroup) sum++;
                         break;
                     case 'DATARoot':
-                        if (entry.ROOT_CAUSE_DESCRIPTIONS === serviceGroup && entry.SERVICE_GROUP === tyle) sum++;
+                        if (entry.CODE === serviceGroup && entry.SERVICE_GROUP === tyle) sum++;
+                        if (entry.ForRootCuase === serviceGroup && entry.SERVICE_GROUP === tyle) sum++;
                         break;
                     // If 'status' is 'DP', check if the ROOT_CAUSE_BY_DEPARTMENT property of the entry matches the provided 'serviceGroup'
                     case 'DP':
@@ -1509,7 +1499,7 @@ export default {
                         break;
                     // If 'status' is 'CHAN', check if the CREATEDBY property of the entry starts with the provided 'serviceGroup'
                     case 'CHAN':
-                        if (entry.CREATEDBY.startsWith(serviceGroup)) sum++;
+                        if (entry.CREATED_BY_OWNER.startsWith(serviceGroup)) sum++;
                         break;
                 }
                 // Return the accumulated sum
@@ -1518,11 +1508,8 @@ export default {
         },
         // -------- Function loop Data similar 
         loopname(data, serviceGroup, status) {
-            // Initialize a Set to store unique names
             const uniqueNames = new Set();
-
             let namesArray;
-            // Helper function to add adjusted names to the uniqueNames set
             const addAdjustedName = (entry, key, length) => {
                 if (typeof entry[key] === 'string') {
                     const n = length ? entry[key].substring(0, length) : entry[key];
@@ -1581,7 +1568,7 @@ export default {
                 case 'CHAN':
                     // Filter data based on CREATEDBY with substring and adjust
                     data.forEach((entry) => {
-                        addAdjustedName(entry, 'CREATEDBY', 8);
+                        addAdjustedName(entry, 'CREATED_BY_OWNER', 50);
                     });
                     // Assign the value to namesArray
                     namesArray = Array.from(uniqueNames);
@@ -1593,51 +1580,33 @@ export default {
                         addAdjustedName(entry, 'PROVINCE');
                     });
                     break;
-
                 case 'Root':
                     // Filter data based on SERVICE_GROUP and WORKLONG_DESCRIPTOIN
                     data.forEach((entry) => {
-                        if (entry.SERVICE_GROUP === serviceGroup && typeof entry.ROOT_CAUSE_DESCRIPTIONS === 'string') {
-                            addAdjustedName(entry, 'ROOT_CAUSE_DESCRIPTIONS');
+                        if (entry.SERVICE_GROUP === serviceGroup && typeof entry.ForRootCuase === 'string') {
+                            addAdjustedName(entry, 'ForRootCuase');
                         }
                     });
                     break;
-
                 // Add more cases as needed
                 case 'Cause':
                     // Filter data based on SERVICE_GROUP and WORKLONG_DESCRIPTOIN
                     data.forEach((entry) => {
-                        if (typeof entry.ROOT_CAUSE_DESCRIPTIONS === 'string') {
-                            addAdjustedName(entry, 'ROOT_CAUSE_DESCRIPTIONS');
+                        if (typeof entry.ForRootCuase === 'string') {
+                            addAdjustedName(entry, 'ForRootCuase');
                         }
                     });
                     break;
-
                 default:
                     // Handle unknown status
                     console.error('Unknown status:', status);
                     break;
             }
-
             // Convert the uniqueNames set to an array and return
             return Array.from(uniqueNames);
         },
         adjustName(name) {
-            if (typeof name === 'string') {
-                const text = name.substring(0, 7);
-                for (let i = 0; i < text.length; i++) {
-                    const a = text.substring(i, i + 1);
-                    if (!text.startsWith('Tier_')) {
-                        if (a === '_') {
-                            const id = name.substring(0, i + 1);
-                            return id.substring(0, 2) === 'TP' ? (id.substring(2, 3) === '0' ? id.substring(0, 2) + id.substring(3) : id.substring(0)) : name.substring(0, i + 1);
-                        }
-                    }
-                }
-                return name;
-            } else {
-                return name;
-            }
+            return name;
         },
         // -------- Function look Data of Customer Complaint tables
         calculateDataD1Value(data, serviceGroup, serviceGroupD1) {
@@ -1679,7 +1648,9 @@ export default {
             // Assuming "SERVICE_GROUP" is the key you want to filter on
             return data.reduce((sum, entry) => {
                 if (threshold === 20) {
-                    if (entry.SERVICE_GROUP === serviceGroup && entry.TIME_DO_TPLUS <= threshold) {
+                    // console.log('DATA::',entry.TIME_DO_TPLUS, entry.TICKETID, entry.TIME_DO_TPLUS < threshold)
+                    if (entry.SERVICE_GROUP === serviceGroup && entry.TIME_DO_TPLUS!== null && entry.TIME_DO_TPLUS <= threshold) {
+                        console.log(entry.TIME_DO_TPLUS,threshold, entry.TICKETID )
                         return sum + 1;
                     }
                 }
@@ -1694,12 +1665,10 @@ export default {
         calculateuserName(data, threshold) {
             // Check the threshold value and select the appropriate field to compare
             const fieldToCheck = threshold === 20 ? 'TIME_DO_TPLUS' : 'TIME_CARE_TPLUS';
-
             // Use map to directly create an array of names based on the condition
             const names = data
                 .filter(entry => entry[fieldToCheck] > threshold)
                 .map(entry => entry.RESOLVE_OWNER);
-
             return names; // Return the array of names
         },
         // -------- Function Graph 
@@ -1824,7 +1793,6 @@ export default {
             // ----- Graph value dataset.percentage
             const filteredValueCare = this.value.filter(value => value > 0);
             const valueAll = Math.max(...filteredValueCare);
-            // console.log(valueAll)
             this.myChart = new Chart(ctx, {
                 type: this.graphform,
                 data: chartData,
