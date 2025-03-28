@@ -57,7 +57,7 @@
             style="
               height: 31px;
               background-color: #000;
-              color:  #804d00;
+              color: #ffcc00;
               margin-top: 0px;
               margin-left: 1px;
               padding-left: 4px;
@@ -193,7 +193,15 @@ export default {
       this.selectedMenuItem = name
     },
     handleSearch() {
-      this.loading = !this.loading
+      this.loading = true;
+      this.messageModal('error', 'ຍັງບໍ່ມີຂໍ້ມູນ.')
+      this.loading = false;
+    },
+    messageModal(type, conten) {
+      this.$Message[type]({
+        background: true,
+        content: `<span class="custom-font">${conten}<span>`,
+      })
     },
   },
 }

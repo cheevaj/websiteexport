@@ -51,7 +51,10 @@
                 border-bottom-right-radius: 0px;
               "
             >
-              <v-card-text class="pb-0 pl-0 text-center" :class=" { 'custom-font' : en } ">
+              <v-card-text
+                class="pb-0 pl-0 text-center"
+                :class="{ 'custom-font': en }"
+              >
                 <h2 style="color: rgb(102, 102, 0)">
                   {{ item.title }}
                 </h2>
@@ -61,12 +64,16 @@
                 style="background-color: rgb(102, 102, 0)"
               />
             </div>
-            <v-card-text class="pt-1pb-2" :class=" { 'custom-font' : en } " style="height: 100px">
+            <v-card-text
+              class="pt-1pb-2"
+              :class="{ 'custom-font': en }"
+              style="height: 100px"
+            >
               {{ truncateText(item.subtitle, 60) }}
             </v-card-text>
             <v-btn
               class="mt-2"
-              :class=" { 'custom-font' : en } "
+              :class="{ 'custom-font': en }"
               :outlined="buttonWeb === index ? false : true"
               style="color: rgb(230, 230, 0)"
               :style="{
@@ -88,11 +95,11 @@ export default {
   data() {
     return {
       buttonWeb: false,
-    };
+    }
   },
   computed: {
     en() {
-      return this.$store.state.en;
+      return this.$store.state.en
     },
     itemsss() {
       return [
@@ -108,12 +115,13 @@ export default {
           avatar:
             'https://tse4.mm.bing.net/th?id=OIP.Es4Sc4gJqjV7Lh9BDs21WwHaEK&pid=Api&P=0&h=220',
           title: 'Vas Service',
-          subtitle:this.en ? 'TPLUS has been developed and remains an important part of VimpelCom.' : 'TPLUS has been developed and remains an important part of VimpelCom.',
+          subtitle: this.en
+            ? 'TPLUS has been developed and remains an important part of VimpelCom.'
+            : 'TPLUS has been developed and remains an important part of VimpelCom.',
           link: 'http://10.30.6.94:9999/Hlred.php',
         },
         {
-          avatar:
-            'http://172.28.17.137:7789/Services/asset/images//logo-round.png',
+          avatar: '/checkSim.png',
           title: 'TPLUS',
           subtitle:
             'TPLUS has been developed and remains an important part of VimpelCom.standing of various commercial stamps',
@@ -123,29 +131,33 @@ export default {
           avatar:
             'http://172.28.17.137:7789/Services/asset/images//logo-round.png',
           title: 'Check Bills',
-          subtitle: this.en ? 'ການກວດສອບການຢືນຂອງສະແຕມການຄ້າຕ່າງໆ.' : 'Checking the standing of various commercial stamps.',
+          subtitle: this.en
+            ? 'ການກວດສອບການຢືນຂອງສະແຕມການຄ້າຕ່າງໆ.'
+            : 'Checking the standing of various commercial stamps.',
           link: 'http://172.28.17.102:5555/cbs',
         },
         {
           avatar:
-            'http://172.28.17.137:7789/Services/asset/images//logo-round.png',
+            '/queTplus.png',
           title: 'website Queue',
-          subtitle: this.en ? "ເວັບໄຊຄິວ ສໍາລັບ C'Care." : "website Queue of C'Care.",
+          subtitle: this.en
+            ? "ເວັບໄຊຄິວ ສໍາລັບ C'Care."
+            : "website Queue of C'Care.",
           link: 'http://172.28.17.102:3334',
         },
-      ];
+      ]
     },
   },
   methods: {
     openLinkInNewTab(link) {
-      window.open(link, '_blank');
+      window.open(link, '_blank')
     },
     truncateText(text, maxLength) {
-      if (text.length <= maxLength) return text;
-      return text.substring(0, maxLength) + '...';
+      if (text.length <= maxLength) return text
+      return text.substring(0, maxLength) + '...'
     },
   },
-};
+}
 </script>
 
 <style>

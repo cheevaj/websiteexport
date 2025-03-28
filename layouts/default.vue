@@ -327,6 +327,9 @@
           <Button class="language-button custom-font" @click="toggleLanguage">{{
             en ? 'ລາວ' : 'English'
           }}</Button>
+          <Button class="language-button custom-font" @click="$router.push('/newPage')">
+            Packages
+          </Button>
         </Tooltip>
         <!-- <Tooltip v-else placement="top" content="Lao to English" :delay="600">
           <Button class="language-button " @click="toggleLanguage"></Button>

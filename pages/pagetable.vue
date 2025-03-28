@@ -659,6 +659,7 @@ export default {
     async OnInternet() {
       this.desserts = []
       this.loading = true
+      this.showgraph = false;
       try {
         const formattedStartDate = this.dateRange[0]
           ? new Date(this.dateRange[0])

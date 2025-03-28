@@ -18,7 +18,7 @@
           <transition name="move-right">
             <div v-show="buttonanime" class="transition-box">
               <v-card-actions v-if="colorMenu !== 2" class="pa-0">
-                <div style="display: flex">
+                <div v-if="colorMenu <= 1" style="display: flex">
                   <!-- <v-icon
                     class="hover-center"
                     size="20"
@@ -350,7 +350,6 @@ export default {
             PageSize: 200,
           }
         )
-        // console.log(response)
         if (response.data && response.data.Detail) {
           this.dataHPackage = response.data.Detail
         } else {

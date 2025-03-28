@@ -250,7 +250,11 @@
                         en ? 'ປະເພດບັດ:' : 'Card Type:'
                       }}</span>
                       <v-spacer />
-                      {{ vasSerVices.result3.CardType ? vasSerVices.result3.CardType : '' }}
+                      {{
+                        vasSerVices.result3.CardType
+                          ? vasSerVices.result3.CardType
+                          : ''
+                      }}
                     </v-card-actions>
                     <!-- <v-divider /> -->
                   </v-card>
@@ -282,7 +286,11 @@
                         }}
                       </span>
                       <v-spacer />
-                      {{ vasSerVices.result.MainOfferingID ? vasSerVices.result.MainOfferingID : '' }}
+                      {{
+                        vasSerVices.result.MainOfferingID
+                          ? vasSerVices.result.MainOfferingID
+                          : ''
+                      }}
                     </v-card-actions>
                     <v-divider />
                     <v-card-actions class="pa-1 mt-1">
@@ -358,7 +366,11 @@
                     {{ en ? 'ເປີດໃຊ້ງານທໍາອິດ:' : 'First Active:' }}
                   </span>
                   <v-spacer />
-                  {{ vasSerVices.result3.ActiveDate ? vasSerVices.result3.ActiveDate : '' }}
+                  {{
+                    vasSerVices.result3.ActiveDate
+                      ? vasSerVices.result3.ActiveDate
+                      : ''
+                  }}
                 </v-card-actions>
                 <v-divider />
                 <v-card-actions class="py-1 pl-2 pr-1">
@@ -366,7 +378,11 @@
                     {{ en ? 'ເບີໂທຖືກບຣາ:' : 'Call Barring:' }}
                   </span>
                   <v-spacer />
-                  {{ vasSerVices.result4.CallBarring ? vasSerVices.result4.CallBarring : '' }}
+                  {{
+                    vasSerVices.result4.CallBarring
+                      ? vasSerVices.result4.CallBarring
+                      : ''
+                  }}
                 </v-card-actions>
                 <v-divider />
                 <v-card-actions class="py-1 pl-2 pr-1">
@@ -374,7 +390,11 @@
                     {{ en ? 'ວັນທີ່ໝົດອາຍຸ:' : 'Expire Date:' }}
                   </span>
                   <v-spacer />
-                  {{ vasSerVices.result4.ExpireDate ? vasSerVices.result4.ExpireDate : '' }}
+                  {{
+                    vasSerVices.result4.ExpireDate
+                      ? vasSerVices.result4.ExpireDate
+                      : ''
+                  }}
                 </v-card-actions>
                 <v-divider />
                 <v-card-actions class="py-1 pl-2 pr-1">
@@ -382,7 +402,11 @@
                     {{ en ? 'ໂຈະໃຊ້ງານ:' : 'Suspend:' }}
                   </span>
                   <v-spacer />
-                  {{ vasSerVices.result4.Suspend ? vasSerVices.result4.Suspend : '' }}
+                  {{
+                    vasSerVices.result4.Suspend
+                      ? vasSerVices.result4.Suspend
+                      : ''
+                  }}
                 </v-card-actions>
                 <v-divider />
               </v-card>
@@ -790,11 +814,12 @@
                   text
                   :disabled="checkData.query_pk_log.length <= 0"
                   @click="
-                    checkData.query_pk_log.length !== 0 ? showData('Data-Package') : false
+                    checkData.query_pk_log.length !== 0
+                      ? showData('Data-Package')
+                      : false
                   "
                 >
-                  <v-icon color="#737373">mdi-store</v-icon
-                  >&nbsp;<span
+                  <v-icon color="#737373">mdi-store</v-icon>&nbsp;<span
                     class="text-color"
                     :class="[{ 'custom-font': en }, { font_size_14: en }]"
                     >{{ en ? 'ຂໍ້ມູນຊື້ອີນເຕິເນັດ:' : 'Data Package:' }}</span
@@ -802,7 +827,9 @@
                   <v-spacer />
                   <div
                     class="py-1"
-                    :class="checkData.query_pk_log.length <= 0 ? 'px-2' : 'px-1'"
+                    :class="
+                      checkData.query_pk_log.length <= 0 ? 'px-2' : 'px-1'
+                    "
                     style="border-radius: 2px; color: #ffff"
                     :style="{
                       backgroundColor:
@@ -811,7 +838,11 @@
                           : 'rgb(0, 230, 0)',
                     }"
                   >
-                    {{ checkData.query_pk_log.length > 0 ? checkData.query_pk_log.length : 0 }}
+                    {{
+                      checkData.query_pk_log.length > 0
+                        ? checkData.query_pk_log.length
+                        : 0
+                    }}
                   </div>
                 </v-btn>
                 <v-divider />
@@ -820,10 +851,7 @@
                   width="100%"
                   small
                   text
-                  :disabled="packagesCount === 0"
-                  @click="
-                    packagesCount !== 0 ? showData('usage-Package') : false
-                  "
+                  @click="showData('usage-Package')"
                 >
                   <v-icon color="#737373">mdi-network-strength-3</v-icon
                   >&nbsp;<span
@@ -834,9 +862,13 @@
                   <v-spacer />
                   <div
                     class="px-1 py-1"
-                    style="border-radius: 2px; color: #ffff; background-color: rgb(0, 230, 0);"
+                    style="
+                      border-radius: 2px;
+                      color: #ffff;
+                      background-color: rgb(0, 230, 0);
+                    "
                   >
-                  <v-icon size="16">mdi-calendar-range-outline</v-icon>
+                    <v-icon size="16">mdi-calendar-range-outline</v-icon>
                   </div>
                 </v-btn>
                 <v-divider />
@@ -1354,7 +1386,12 @@
                       @click="showData('Soxay-App')"
                     >
                       <v-icon color="#737373">mdi-weight-gram</v-icon
-                      >&nbsp;&nbsp;<span class="text-color" :class="[{ 'custom-font': en }, { font_size_12: en }]"> Soxay-App: </span>
+                      >&nbsp;&nbsp;<span
+                        class="text-color"
+                        :class="[{ 'custom-font': en }, { font_size_12: en }]"
+                      >
+                        Soxay-App:
+                      </span>
                       <v-spacer />
                       <div
                         class="py-1"
@@ -1416,7 +1453,7 @@
                     <v-card-actions
                       class="py-1 pl-1 pr-2 hover-pointer"
                       @click="showData('Queue')"
-                      >
+                    >
                       <v-icon>mdi-human-queue</v-icon>&nbsp;&nbsp;
                       <span
                         class="text-color"
@@ -1471,7 +1508,7 @@
                                 </div>
                                 <p class="text-color">Normal Package</p>
                               </v-col>
-                              <v-col cols="6" class="text-center" >
+                              <v-col cols="6" class="text-center">
                                 <div class="d-flex justify-center align-center">
                                   <v-btn
                                     class="custom-btn hover-cursor"
@@ -1707,7 +1744,7 @@
               class="scrollbar"
               :persistent="text === 'image' ? false : true"
               :width="text === 'image' ? '600' : '80%'"
-              style="height: 670px;"
+              style="height: 670px"
             >
               <v-card
                 class="scrollbar"
@@ -1721,15 +1758,27 @@
                 "
               >
                 <v-card-actions
-                  v-if="(text !== 'image')"
+                  v-if="text !== 'image'"
                   class="pa-0 BK_color_YL color_Iconclose scrollbar text-center"
                 >
                   <v-spacer />
-                  <v-card-title v-if="(text !== 'Queue')" class="py-1" :class="{ 'custom-font': en }">
+                  <v-card-title
+                    v-if="text !== 'Queue'"
+                    class="py-1"
+                    :class="{ 'custom-font': en }"
+                  >
                     <h3>{{ en ? 'ຂໍ້ມູນທັງໝົດ' : 'All information' }}</h3>
                   </v-card-title>
-                  <v-card-title v-else class="py-1" :class="{ 'custom-font': en }">
-                    <h3>{{ en ? 'ຈອງຄິວໃຫ້ລູກຄ້າ' : 'Book a queue for customers' }}</h3>
+                  <v-card-title
+                    v-else
+                    class="py-1"
+                    :class="{ 'custom-font': en }"
+                  >
+                    <h3>
+                      {{
+                        en ? 'ຈອງຄິວໃຫ້ລູກຄ້າ' : 'Book a queue for customers'
+                      }}
+                    </h3>
                   </v-card-title>
                   <v-spacer />
                   <v-btn
@@ -1827,14 +1876,10 @@
           {{ en ? 'ກະລຸນາປ້ອມເບີໂທລະສັບ' : 'Enter your number phone.' }}
         </h3>
         <br />
-        <v-icon size="85" color="#ffd633"
-          >mdi-monitor-dashboard</v-icon
-        >
+        <v-icon size="85" color="#ffd633">mdi-monitor-dashboard</v-icon>
         <br />
         <h2 :class="{ 'custom-font': en }">
-          <span :class="{ 'custom-font': en }" style="color: #ffd633"
-            >CRM</span
-          >
+          <span :class="{ 'custom-font': en }" style="color: #ffd633">CRM</span>
           {{ en ? 'ບໍ່ມີຂໍ້ມູນ' : 'data not found' }}
         </h2>
       </v-card>
@@ -1855,7 +1900,7 @@ import Byepackage from './Byepackage.vue'
 import QueueService from './queueService.vue'
 import UsagePackage from './usagePackage.vue'
 export default {
-  middleware: 'auth', 
+  middleware: 'auth',
   Currency: 'index',
   props: {
     numberPhonSend: String,

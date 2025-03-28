@@ -336,7 +336,7 @@ export default {
           this.messageModal('success', 'ຈອງຄິວສໍາເລັດເເລ້ວ')
           this.province();
           this.dialog = true
-          console.log(this.BillQueue)
+          // console.log(this.BillQueue)
         }
       } catch (error) {
         if (error.response) {

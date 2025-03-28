@@ -18,7 +18,7 @@
       >
         <v-data-table
           v-if="text === 'Normal-Package'"
-          height="calc(100vh - 28vh - 4px)"
+          height="calc(100vh - 26vh - 4px)"
           fixed-header
           dense
           :headers="visibleHeaders"
@@ -65,7 +65,7 @@
         </v-data-table>
         <v-data-table
           v-else
-          height="calc(100vh - 28vh - 4px)"
+          height="calc(100vh - 26vh - 4px)"
           fixed-header
           dense
           :headers="visibleHeadersRoaming"
@@ -140,7 +140,7 @@
             "
           >
             <h4>{{ numberPhonSend }}</h4>
-            <p>Code: {{ items.PackageCode }}</p>
+            <p>Code: {{ items.PackageName }}</p>
             <p>Data: {{ items.Net }}</p>
             <p>Price: {{ items.Price }}</p>
           </v-card>
@@ -160,7 +160,6 @@
     </Modal>
   </div>
 </template>
-
 <script>
 export default {
   props: {
@@ -292,14 +291,14 @@ export default {
         const [pointDetailResponse, soXayResponse] = responses
         this.packageNormal = pointDetailResponse.data.Detail || []
         this.packageRoaming = soXayResponse.data.Detail || []
-        console.log(this.packageRoaming)
+        // console.log(this.packageRoaming)
       } catch (error) {
         console.error('Error fetching data:', error)
       }
     },
     buyPackage(item) {
       this.items = item
-      console.log(this.items)
+      // console.log(this.items)
       this.modal = true
     },
     formatPrice(value) {
@@ -330,8 +329,8 @@ export default {
       //     }
       //   )
       //   res.statusText === 'OK'
-      //     ? this.messageModal('success')
-      //     : this.messageModal('error')
+      //     ? this.messageModal('success') :
+           this.messageModal('error')
       // } catch (error) {
       //   console.error(error)
       // }

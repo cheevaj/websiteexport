@@ -104,7 +104,7 @@
                   @click="selectionItem = i"
                 >
                   <v-list-item-content>
-                    <v-list-item-title class="custom-font">
+                    <v-list-item-title :class="{ 'custom-font': en }">
                       {{ en ? item.titleLao : item.titleEn }}
                     </v-list-item-title>
                   </v-list-item-content>
@@ -154,13 +154,23 @@
                   </template>
                 </v-data-table>
               </v-card>
-              <img
-                v-else-if="dataResponse.length === 0 && !loading"
-                width="680px"
-                height="280px"
-                src="~/static/Downloads.png"
-                style="display: block"
-              />
+              <div v-else height="240" width="240">
+                <v-progress-circular
+                  v-if="loading"
+                  :size="70"
+                  :width="7"
+                  color="yellow darken-1"
+                  indeterminate
+                ></v-progress-circular>
+                <h3
+                  v-else
+                  class="grey lighten-3 px-2"
+                  style="font-style: italic"
+                  :class="{ 'custom-font': en }"
+                >
+                  {{ en ? 'ກະລຸນາປ້ອນປີແລະເດືອນ. ຕົວຢ່າງ: ປີ 2025 ເດືອນ 03 ປ້ອນ: 202503.' : 'Please enter the year and month. Example: year 2025, month 03, enter: 202503.' }}
+                </h3>
+              </div>
             </v-card>
           </div>
         </template>
@@ -193,6 +203,11 @@ export default {
         },
       ],
     }
+  },
+  inject: {
+    theme: {
+      default: { isDark: false },
+    },
   },
   computed: {
     en() {
@@ -271,7 +286,7 @@ export default {
       }
     },
     async handleSearchCCare() {
-      this.dataResponse = [];
+      this.dataResponse = []
       this.loading = true
       try {
         const response = await this.$axios.post(
@@ -458,5 +473,8 @@ export default {
   overflow: y;
   z-index: 10;
   background-color: #f2f2f2;
+}
+.v-progress-circular {
+  margin: 1rem;
 }
 </style>

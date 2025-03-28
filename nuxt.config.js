@@ -36,7 +36,7 @@ export default {
     ],
   },
   css: ['iview/dist/styles/iview.css'],
-  plugins: ['~/plugins/chartjs.js', '@/plugins/iview'],
+  plugins: ['~/plugins/chartjs.js', '@/plugins/iview.js'],
   components: true,
   buildModules: [
     '@nuxtjs/eslint-module',
