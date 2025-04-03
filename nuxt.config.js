@@ -1,10 +1,10 @@
 import colors from 'vuetify/es5/util/colors'
 
 export default {
-  // server: {
-  //   port: 3333, // default: 3000
-  //   host: '172.28.17.102', // default: localhost
-  // },
+  server: {
+    port: 3333, // default: 3000
+    host: '0.0.0.0', // default: localhost ServerIP: 172.28.17.102
+  },
 
   ssr: false,
   head: {

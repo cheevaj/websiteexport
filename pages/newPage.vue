@@ -43,6 +43,7 @@
                 v-for="(item, index) in filteredType"
                 :key="index"
                 :value="item.typeId"
+                
                 class="custom-option"
               >
                 {{ item.name }}
@@ -66,11 +67,11 @@
         </v-row>
         <v-row>
           <v-col cols="3" class="pa-0"></v-col>
-          <v-col cols="9" class="pa-0" style="padding-left: 4px">
+          <v-col cols="9" class="pa-0">
             <v-btn
               :disabled="!isFormValid"
               width="300"
-              style="background-color: #332900; color: #ffcc00"
+              style="background-color: #332900; color: #ffcc00; margin-left: 4px;"
               @click="AddPackage"
             >
               Add Packages

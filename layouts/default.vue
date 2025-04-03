@@ -65,9 +65,9 @@
                 <v-card-actions class="pa-0">
                   <v-img
                     class="pa-0"
-                    width="45px"
-                    style="border-radius: 50%"
-                    src="https://api.tplus.la/images/defaultTplusLogo.jpg"
+                    width="55px"
+                    style="border-radius: 50%; background-color: #000;"
+                    src="/Tpluslogo.png"
                   />
                 </v-card-actions>
               </v-btn>
@@ -327,13 +327,10 @@
           <Button class="language-button custom-font" @click="toggleLanguage">{{
             en ? 'ລາວ' : 'English'
           }}</Button>
+        </Tooltip>
           <Button class="language-button custom-font" @click="$router.push('/newPage')">
             Packages
           </Button>
-        </Tooltip>
-        <!-- <Tooltip v-else placement="top" content="Lao to English" :delay="600">
-          <Button class="language-button " @click="toggleLanguage"></Button>
-        </Tooltip> -->
       </v-card-text>
       <Nuxt />
     </v-main>
