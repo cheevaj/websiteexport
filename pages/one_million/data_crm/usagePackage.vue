@@ -117,7 +117,7 @@ export default {
   },
   computed: {
     dateTime() {
-      return this.$store.state.dateTime
+      return this.$store.state.dateTime // fist date or auto date form page index of folder one_million "SET_DATE" 
     },
     visibleHeaders() {
       return this.headers.filter((header) =>

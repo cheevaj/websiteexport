@@ -201,7 +201,7 @@
                       </h5>
                     </v-card-actions>
                     <v-divider />
-                    <v-card-actions class="pa-1">
+                    <v-card-actions class="pa-1 hover-pointer" @click="showData('check-Internet')">
                       <v-icon>mdi-access-point-network</v-icon>&nbsp;&nbsp;<span
                         class="text-color"
                         :class="{ 'custom-font': en }"
@@ -812,12 +812,7 @@
                   width="100%"
                   small
                   text
-                  :disabled="checkData.query_pk_log.length <= 0"
-                  @click="
-                    checkData.query_pk_log.length !== 0
-                      ? showData('Data-Package')
-                      : false
-                  "
+                  @click="showData('Data-Package')"
                 >
                   <v-icon color="#737373">mdi-store</v-icon>&nbsp;<span
                     class="text-color"
@@ -833,15 +828,13 @@
                     style="border-radius: 2px; color: #ffff"
                     :style="{
                       backgroundColor:
-                        checkData.query_pk_log.length === 0
+                      checkData.query_pk_log.length + checkData.errorData.length === 0
                           ? 'rgb(179, 179, 179)'
                           : 'rgb(0, 230, 0)',
                     }"
                   >
                     {{
-                      checkData.query_pk_log.length > 0
-                        ? checkData.query_pk_log.length
-                        : 0
+                      checkData.query_pk_log.length + checkData.errorData.length
                     }}
                   </div>
                 </v-btn>
@@ -1834,6 +1827,7 @@
                   />
                   <QueueService v-else-if="text === 'Queue'" />
                   <UsagePackage v-else-if="text === 'usage-Package'" />
+                  <checkInternet v-else-if="text === 'check-Internet'" :data="checkData.processedData.packages" />
                 </div>
                 <v-card
                   v-if="text === 'image'"
@@ -1899,6 +1893,7 @@ import borrowMoney from '../data_crm/borrowMoney'
 import Byepackage from './Byepackage.vue'
 import QueueService from './queueService.vue'
 import UsagePackage from './usagePackage.vue'
+import checkInternet from './chekInternet.vue'
 export default {
   middleware: 'auth',
   Currency: 'index',
@@ -1930,6 +1925,7 @@ export default {
     Byepackage,
     QueueService,
     UsagePackage,
+    checkInternet,
   },
   data() {
     return {

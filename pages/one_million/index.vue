@@ -370,7 +370,7 @@ export default {
         2 // Set date ( date start 01 of month )
       )
       const startdate = new Date(
-        firstDayNextMonth.setMonth(firstDayNextMonth.getMonth() - 2)
+        firstDayNextMonth.setMonth(firstDayNextMonth.getMonth() - 1)
       )
         .toISOString()
         .slice(0, 16)
