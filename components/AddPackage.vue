@@ -1,7 +1,6 @@
 <template>
   <div>
-    <v-icon class="mt-1 ml-1" size="34" color="#000" @click="$router.go(-1)" style="position: absolute; z-index: 90; background-color: transparent;">mdi-arrow-left-circle</v-icon>
-    <v-card-text class="card-text">
+    <v-card-text>
       <div class="custom-div">
         <v-row>
           <v-col cols="3" class="d-flex align-center justify-end pa-0">
@@ -43,7 +42,6 @@
                 v-for="(item, index) in filteredType"
                 :key="index"
                 :value="item.typeId"
-                
                 class="custom-option"
               >
                 {{ item.name }}
@@ -71,7 +69,11 @@
             <v-btn
               :disabled="!isFormValid"
               width="300"
-              style="background-color: #332900; color: #ffcc00; margin-left: 4px;"
+              style="
+                background-color: #332900;
+                color: #ffcc00;
+                margin-left: 4px;
+              "
               @click="AddPackage"
             >
               Add Packages
@@ -159,14 +161,6 @@ export default {
 }
 .custom-option:hover {
   background-color: #ffcc00;
-}
-.card-text {
-  background: linear-gradient(to bottom right, #ffff4d, #ffcc00);
-  height: calc(100vh - 2px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
 }
 .custom-div {
   display: flex;

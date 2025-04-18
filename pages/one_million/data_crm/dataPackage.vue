@@ -107,7 +107,11 @@
                   height="58"
                   @click="resetData(true)"
                 >
-                  <v-badge color="green" :content="data?.query_pk_log?.length || '0'"><h4>Scess</h4></v-badge>
+                  <v-badge
+                    color="green"
+                    :content="data?.query_pk_log?.length || '0'"
+                    ><h4>Scess</h4></v-badge
+                  >
                 </v-btn>
                 <v-btn
                   outlined
@@ -116,7 +120,11 @@
                   height="58"
                   @click="resetData(false)"
                 >
-                  <v-badge color="red lighten-1" :content="data?.errorData?.length || '0'"><h4>Err</h4></v-badge>
+                  <v-badge
+                    color="red lighten-1"
+                    :content="data?.errorData?.length || '0'"
+                    ><h4>Err</h4></v-badge
+                  >
                 </v-btn>
               </v-card-actions>
             </template>
@@ -187,7 +195,7 @@ export default {
             Charge: item.Charge,
             PK_Code: item.PK_Code,
             Chanel: item.Chanel,
-            Date: item.Date,
+            Date: this.formatResultDesc(item.Date),
             Description: item.Description,
             SystemDesc: item.SystemDesc,
           }
@@ -197,10 +205,24 @@ export default {
   },
   methods: {
     formatResultDesc(value) {
+      // Check if the value is a valid ISO date
+      const date = new Date(value)
+      if (!isNaN(date.getTime())) {
+        const pad = (n) => (n < 10 ? '0' + n : n)
+        const day = pad(date.getDate())
+        const month = pad(date.getMonth() + 1)
+        const year = date.getFullYear()
+        const hours = pad(date.getHours())
+        const minutes = pad(date.getMinutes())
+        const seconds = pad(date.getSeconds())
+        return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`
+      }
+      // If it's a number, format it with comma
       const num = Number(value)
       if (!isNaN(num)) {
         return new Intl.NumberFormat().format(num)
       }
+      // Fallback: return original
       return value
     },
     resetData(value) {

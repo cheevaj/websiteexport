@@ -328,7 +328,7 @@
             en ? 'ລາວ' : 'English'
           }}</Button>
         </Tooltip>
-          <Button class="language-button custom-font" @click="$router.push('/newPage')">
+          <Button class="language-button custom-font" @click="$router.push('/addpackagedata')">
             Packages
           </Button>
       </v-card-text>

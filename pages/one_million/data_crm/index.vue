@@ -201,7 +201,10 @@
                       </h5>
                     </v-card-actions>
                     <v-divider />
-                    <v-card-actions class="pa-1 hover-pointer" @click="showData('check-Internet')">
+                    <v-card-actions
+                      class="pa-1 hover-pointer"
+                      @click="showData('check-Internet')"
+                    >
                       <v-icon>mdi-access-point-network</v-icon>&nbsp;&nbsp;<span
                         class="text-color"
                         :class="{ 'custom-font': en }"
@@ -828,7 +831,9 @@
                     style="border-radius: 2px; color: #ffff"
                     :style="{
                       backgroundColor:
-                      checkData.query_pk_log.length + checkData.errorData.length === 0
+                        checkData.query_pk_log.length +
+                          checkData.errorData.length ===
+                        0
                           ? 'rgb(179, 179, 179)'
                           : 'rgb(0, 230, 0)',
                     }"
@@ -1455,6 +1460,18 @@
                       >
                     </v-card-actions>
                     <v-divider />
+                    <v-card-actions
+                      class="py-1 pl-1 pr-2 hover-pointer"
+                      @click="showData('Add_PK')"
+                    >
+                      <v-icon>mdi-package-variant-plus</v-icon>&nbsp;&nbsp;
+                      <span
+                        class="text-color"
+                        :class="[{ 'custom-font': en }, { font_size_14: en }]"
+                        >{{ en ? 'ສະໝັດ Packages' : 'Queue Service' }}</span
+                      >
+                    </v-card-actions>
+                    <v-divider />
                     <v-list class="pa-0">
                       <v-list-group
                         :value="false"
@@ -1827,7 +1844,16 @@
                   />
                   <QueueService v-else-if="text === 'Queue'" />
                   <UsagePackage v-else-if="text === 'usage-Package'" />
-                  <checkInternet v-else-if="text === 'check-Internet'" :data="checkData.processedData.packages" />
+                  <checkInternet
+                    v-else-if="text === 'check-Internet'"
+                    :data="checkData.processedData.packages"
+                  />
+                  <v-card-text
+                    v-else-if="text === 'Add_PK'"
+                    class="add-package-card"
+                  >
+                    <AddPackage />
+                  </v-card-text>
                 </div>
                 <v-card
                   v-if="text === 'image'"
@@ -2289,5 +2315,13 @@ export default {
 .hover-cursor {
   cursor: pointer;
   background-color: none;
+}
+.add-package-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: calc(82vh);
+  background-color:rgb(242, 242, 242);
 }
 </style>

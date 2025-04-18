@@ -439,7 +439,7 @@ export default {
           smsDetailResponse,
           statusIR,
         ] = responses
-        console.log('pointDetailResponse.data.data::',pointDetailResponse.data.data)
+        // console.log('pointDetailResponse.data.data::',pointDetailResponse.data.data) 
         this.dataPoint = pointDetailResponse.data.data ? pointDetailResponse.data.data : {};
         this.dataSoXay = soXayResponse ? soXayResponse.data : {};
         if (
